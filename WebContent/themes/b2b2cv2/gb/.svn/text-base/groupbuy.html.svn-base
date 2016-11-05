@@ -1,0 +1,153 @@
+<#include '/common/header.html' />
+<!-- 团购活动 -->
+<#assign groupBuyActTag=newTag("groupBuyActTag")>
+<#assign groupBuyAct=groupBuyActTag()>
+<#if groupBuyAct!="">
+	<!-- 团购时间 -->
+	<#assign groupBuyActSurplusTag=newTag("groupBuyActSurplusTag")>
+	<#assign groupBuyActSurplus=groupBuyActSurplusTag("{'end_time':${groupBuyAct.end_time} }")>
+</#if>
+<link type="text/css" rel="stylesheet" href="${ctx}/themes/b2b2cv2/gb/promotion.css" />
+
+<div>
+ <div class="promotion-logo">
+	 <a href="${ctx}/index.html" target="_blank">
+	 	<img src="${ctx}/themes/b2b2cv2/gb/img/discountlogo.jpg" width="264" height="67" />
+	 </a>
+ </div>
+ <div class="promotion-banner"></div>
+ <div class="promotion-time">
+    <div class="promotion-time_name">До окончания акции осталось</div>
+    <div class="promotion-time_countdown"></div>
+    <#if groupBuyAct!="">
+		 <!-- 倒计时 距离本期结束 -->
+			 <!-- <h5>距离本期结束</h5> -->
+				<p style="margin:20px auto 0px;text-align:center; width:100%; font-size:28px;">
+				  <span id="d1" style="padding:5px 15px; background:#eee; border-radius:5px;"></span><strong>:</strong>
+				  <span id="h1" style="padding:5px 15px; background:#eee; border-radius:5px;"></span><strong>:</strong>
+				  <span id="m1" style="padding:5px 15px;background:#eee; border-radius:5px;"></span><strong>:</strong>
+				  <span id="s1" style="padding:5px 15px;background:#eee; border-radius:5px;"></span><strong></strong>
+				 </p>
+				 <p style="margin:10px auto 0px;text-align:center; width:100%; font-size:18px;"> 
+				   <span style="padding:0px 10px">дней</span>
+				   <span style="padding:0px 10px">часов</span>
+				   <span style="padding:0px 10px">минут</span>
+				   <span style="padding:0px 10px">секунд</span>
+				 
+				 </p>
+			 <script type="text/javascript">
+			       tms[tms.length] = "${groupBuyActSurplus.cha}";
+			       day[day.length] = "d1";
+			       hour[hour.length] = "h1";
+			       minute[minute.length] = "m1";
+			       second[second.length] = "s1";
+			 </script> 
+	<#else>
+				<p style="margin:20px auto 0px;text-align:center; width:100%; font-size:28px;">
+				  <span id="d1" style="padding:5px 15px; background:#eee; border-radius:5px;"></span><strong>:</strong>
+				  <span id="h1" style="padding:5px 15px; background:#eee; border-radius:5px;"></span><strong>:</strong>
+				  <span id="m1" style="padding:5px 15px;background:#eee; border-radius:5px;"></span><strong>:</strong>
+				  <span id="s1" style="padding:5px 15px;background:#eee; border-radius:5px;"></span><strong></strong>
+				 </p>
+				 <p style="margin:10px auto 0px;text-align:center; width:100%; font-size:18px;"> 
+				   <span style="padding:0px 10px">дней</span>
+				   <span style="padding:0px 10px">часов</span>
+				   <span style="padding:0px 10px">минут</span>
+				   <span style="padding:0px 10px">секунд</span>
+				 </p>
+			 <script type="text/javascript">
+			       tms[tms.length] = "0";
+			       day[day.length] = "d1";
+			       hour[hour.length] = "h1";
+			       minute[minute.length] = "m1";
+			       second[second.length] = "s1";
+			 </script>
+	</#if>
+ </div>
+ <div class="promotion-center">
+   <div class="promotion-center-top">
+       <div class="promotion-center-top-one">
+         
+         
+        
+         <a href="${ctx}/goods.html?goodsid=22420" target="_blank">
+         	<input  type="button" value="подробнее" class="top-one-price-button"/>
+         </a>
+       </div>
+        <div class="promotion-center-top-two">
+         
+         <a href="${ctx}/goods.html?goodsid=22427" target="_blank">
+        	 <input  type="button" value="подробнее" class="top-one-price-button"/>
+         </a>
+       </div>
+       <div style="clear:both;"></div>
+       <div class="promotion-center-top-three">
+         
+         <a href="${ctx}/goods.html?goodsid=22424" target="_blank">
+        	 <input  type="button" value="подробнее" class="top-one-price-button"/>
+         </a> 
+       </div>
+       <div class="promotion-center-top-four">
+        
+         <a href="${ctx}/goods.html?goodsid=22425" target="_blank">
+         	<input  type="button" value="подробнее" class="top-one-price-button"/>
+         </a>
+       </div>
+   </div>
+   <div class="promotion-center-center">
+   
+    <div class="promotion-center-center-tittle">
+     
+         
+         
+         <a href="${ctx}/goods.html?goodsid=22399" target="_blank">
+         	<input  type="button" value="подробнее" class="top-one-price-button center-tittle-price-button"/>
+      	  </a>
+    
+    </div>
+    
+   
+   </div>
+   <div style="clear:both;"></div>
+   <div class="promotion-center-bottom">
+      <div class="promotion-center-left">
+       <div class="promotion-center-left-continter">
+         
+         <a href="${ctx}/goods.html?goodsid=22470" target="_blank">
+        	 <input  type="button" value="подробнее" class="top-one-price-button center-tittle-price-button"/>
+     	 </a>
+       </div>
+      </div>
+      <div class="promotion-center-right">
+         
+         <div class="promotion-center-right-right">
+            <div class="promotion-center-right-right-continter">
+              
+              <a href="${ctx}/goods.html?goodsid=22469" target="_blank">
+              	<input  type="button" value="подробнее" class="top-one-price-button center-tittle-price-button"/>
+           	 </a>
+            </div>
+         </div>
+              
+      
+      
+      </div>
+   
+   
+   
+   </div>
+ </div>
+
+ 
+ <div class="promotion-foot">
+   <div>Количество товара ограничено. Срок проведения акции с 3 по 5 ноября 2015 г. Подробности уточняйте </div>
+   <div>у продавцов-консультантов на сайте www.tradeease.net Организатор акции: ООО PayEasy (Beijing) Technology, 100037 </div>
+   <div>Китай, Пекин, Район Сичэн, ул. Фученмэн, д. 22, Кабинет 620-626. Номер рег.: 110108010780857</div>
+ 
+ </div>
+
+
+
+</div>
+
+<#include '/common/footer.html'/>

@@ -1,0 +1,165 @@
+<#include '/admin/header.html' >
+<script type="text/javascript" src="js/AdColumn.js"></script>
+<div class="main">
+	<div class="buttonArea">
+ 		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" onclick="append()">新增积分抵押</a>
+ 		<a href="javascript:void(0)" class="button" data-options="iconCls:'icon-remove',plain:true" onclick="del()">删除</a>
+ 		<span>添加人民币请输入CNY，添加卢布请输入RUB</span>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id='consumeform'>
+			<table class="easyui-datagrid" 
+				data-options="url:'${ctx}/shop/admin/member!consumeListJson.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'" 
+				pagination="true" id="consumedata">
+				    <thead>
+					    <tr>
+					    	<th  data-options="field:'consume_id',checkbox:true"></th>
+					    	<th  data-options="field:'consume_num',width:200">积分数量</th>
+					   	 	<th  data-options="field:'consume_currency',width:200" formatter="formatCurrency">币种</th>
+					    	<th  data-options="field:'consume_amount',width:300" >金额</th>
+					    	<th  data-options="field:'action',width:100,align:'center'" formatter="formatOperation">操作</th>
+					    </tr>
+				    </thead>
+			 </table>
+		</form>
+		<div id="divdia" style="display: none;"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function append(id){
+	var map = {}; // Map map = new HashMap();
+	if(!id){
+		map["href"] ="member!addConsume.do";
+		map["formId"] ="#addConsumeForm";
+		map["url"] ="member!addConsumeJson.do?ajax=yes";
+		map["title"]="添加积分消费抵押";
+		map["loadshow"]="正在添加......";
+	}else{
+		map["href"] ="member!getSingleConsume.do?consumeId="+id;
+		map["formId"] ="#editConsumeForms";
+		map["url"] ="member!editConsumeAmount.do?ajax=yes";
+		map["title"]="修改积分消费抵押金额";
+		map["loadshow"]="正在修改......";
+	}
+	map["divDialog"]="#divdia";
+	map["gridreload"]="#consumedata";
+	
+	addDialog(map);
+}
+function addDialog(map){
+	$(map["divDialog"]).show();
+	$(map["divDialog"]).dialog({
+		title: map["title"],
+		width: 500,
+		height: 300,
+		closed: false,
+		cache: false,
+		href: map["href"],
+		modal: true,
+		buttons: [{
+			 text:'保存',
+			 iconCls:'icon-ok',
+			 handler:function(){
+			 	var savebtn = $(this);
+　　				var disabled=savebtn.hasClass("l-btn-disabled");
+　　				if(!disabled){
+					submitForm(map,savebtn);
+				}
+　　			}
+		},{
+			 text:'清空',
+			 handler:function(){
+				 clearForm(map);
+			 }
+		}]
+	});
+}
+function submitForm(map,saveBtn) {
+	var formflag = $(map["formId"]).form().form('validate');
+	if(formflag){
+		$.Loading.show(map["loadshow"]);
+		saveBtn.linkbutton("disable"); //禁用	
+		var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result){
+					$.Loading.hide();
+					if(result.result==1){
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+						$.Loading.success(result.message);
+					}
+					if(result.result==0){ 
+						$.Loading.error(result.message);
+					}
+					saveBtn.linkbutton("enable"); //禁用	
+				
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+					saveBtn.linkbutton("enable"); //禁用	
+				}
+			};
+		$(map["formId"]).ajaxSubmit(options);
+	}
+	saveBtn.linkbutton("enable"); 
+}
+function clearForm(map) {
+	$(map["formId"]).form('clear');
+}
+
+
+function formatOperation(value,row,index){
+	var val="<a class='edit' title='修改' href='javascript:void(0);' onclick='append("+row.consume_id+")' ></a>";
+	return val;
+}
+
+function formatCurrency(value,row,index){
+	var val;
+	if(value=='CNY'){
+		val="人民币";
+	}else if(value=='RUB'){
+		val="卢布";
+	}else {
+		val=value;
+	}
+	return val;
+}
+function del(){
+	var rows = $('#consumedata').datagrid("getSelections"); 
+		if(rows.length<1){
+			$.Loading.error("请选择删除积分抵押");
+			return;
+		}
+		if(!confirm("确认删除？")){	
+		return ;
+	}
+		$.Loading.show("正在删除......");
+	 var options = {
+			url : "member!deleteConsume.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					var rows = $('#consumedata').datagrid("getSelections"); 
+					for(var i =0;i<rows.length;i++){      
+			 			var index = $('#consumedata').datagrid('getRowIndex',rows[i]); 
+			 			$('#consumedata').datagrid('deleteRow',index);    
+			 		}
+				}
+				if(result.result==0){
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+	};
+	$('#consumeform').ajaxSubmit(options);
+};
+</script>
+<#include '/admin/footer.html' >
+ 

@@ -1,0 +1,56 @@
+<#assign  title="修改邮箱" />
+<#include '/store/store_header.html' />
+<div class="store_center">
+<#include '/store/left_menu.html' />
+<div id="sotre_right_content" class="sotre_right_content">
+	
+	<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			<a href="#">帐号中心</a><span>></span>修改邮箱
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;">修改邮箱</a>
+					</li>
+				</ul>
+			</div>
+	
+	<div class="password_change">
+		<form class="validate" action="" method="post">
+			<dl>
+				<dt>新邮箱地址：</dt>
+				<dd><input type="text" name="email"	isrequired="true" class="input_text"  fun="checkEmail" id="email"/></dd>
+			</dl>
+			<dl class="table_bottom">
+				<dt>&nbsp;</dt>
+				<dd><input type="button" name="btnReg" class="yellow_btn" value="确定修改" class="submit to_save" /></dd>
+			</dl>
+		</form>
+	</div>
+</div>	
+</div>
+<script>
+	$(function(){
+		$(".yellow_btn").click(function(){
+			var email = $("#email").val();
+			$(".validate").ajaxSubmit({
+				url:"${ctx}/api/b2b2c/buyerMember!changeEmail.do?ajax=yes",
+				dataType : 'json',
+				success:function(result){
+					if(result.result==1){
+						alert("修改邮箱成功");
+					}
+					else{
+						$.alert(result.message);
+					}
+				}
+			})
+		})
+	})
+</script>
+
+</div>
+<#include '/common/seller_footer.html' />

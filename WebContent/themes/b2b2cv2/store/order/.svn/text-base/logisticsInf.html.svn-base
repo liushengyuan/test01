@@ -1,0 +1,49 @@
+<#include '/store/store_header.html' />
+<#assign logisticsTag = newTag("logisticsTag")> <#assign logistics
+=logisticsTag()> <#assign warehouseInfTag = newTag("warehouseInfTag")>
+<#assign warehouseIfn =
+warehouseInfTag('{"warehouse_id":"${logistics.warehouse_id}"}')>
+<link type="text/css" rel="stylesheet"
+	href="${ctx}/themes/b2b2cv2/css/logistics.css" />
+<script>
+	window.onload = function() {
+		var trackingNumber = getQueryString("ship_no");
+		document.getElementById("referenceNumber").innerHTML = getQueryString("ship_no");
+		document.getElementById("download").href = "http://label.ruston.cc/orderprint/1CF7CD6D264C10582BCFC61E61234920/"
+				+ trackingNumber + "?printMode=v&printWhich=all"
+	}
+	function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null)
+			return unescape(r[2]);
+		return null;
+	}
+</script>
+
+<body>
+	<div class="logi_main">
+		<div class="fl"></div>
+		<!--内容-->
+		<div class="logi_content">
+			<div class="logi_cess">
+				<div class="cess_a">
+					俄速通小包已经发货成功！<br />物流跟踪号：<a id="referenceNumber"></a><a href="#"
+						id="download" target="_blank">（点击下载面单）</a>
+				</div>
+				<div class="cess_b">
+					<h2>请您尽快将货物发往${warehouseIfn.warehouse_name}</h2>
+					<h2>仓库地址：${warehouseIfn.shipperStateOrProvince}&nbsp;${warehouseIfn.shipperCity}&nbsp;${warehouseIfn.shipperAddress}&nbsp;&nbsp;邮编：${warehouseIfn.shipperPostCode}</h2>
+				</div>
+				<div class="cess_b">
+					<h2>请您尽快将货物发往指定仓库，收到货物后，俄速通将反馈您最终的国际物流运费。</h2>
+					<p>
+						<font color="red">运费将从您的平台账户余额中扣除，如果您需要取消发货，请尽快联系俄速通。</font>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="fl"></div>
+	</div>
+</body>
+<#include '/common/footer.html'/>

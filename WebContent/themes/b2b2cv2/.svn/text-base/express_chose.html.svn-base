@@ -1,0 +1,58 @@
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<#assign selectCountryTag=newTag("selectCountryTag") > 
+<#assign countryList=selectCountryTag() >
+
+<div class="" style="padding: 0; margin: 0;">
+	<div style="text-align: left;">
+		<@uiLabel text='goods.SendGoodsTo'/>： 
+		<select id="send2country"> 
+			<#list countryList as country >
+				<option value="${country.country_code}">${country.country_name}</option>
+			</#list>
+		</select>
+	</div>
+	<div class=" "></div>
+	<div class=" " style="width: 400px;">
+		<table class="" width="400px" id="expressdata">
+			<thead style="border-top: 2px solid #666; background: #eee;">
+				<tr>
+					<th></th>
+					<th><@uiLabel text='goods.ExpressName'/></th>
+					<th><@uiLabel text='goods.ExpressTime'/></th>
+					<th><@uiLabel text='goods.ExpressCost'/></th>
+				</tr>
+			</thead>
+			<tbody id="expressTbody">
+			</tbody>
+		</table>
+	</div>
+</div>
+<script>
+	$(function() {
+		$.ajax({
+			url : "/api/b2b2c/goodsLogi!getLogi.do?code=CHN",
+			cache : false,
+			success : function(html) {
+				$("#expressTbody").empty();
+				$("#expressTbody").append(html);
+			},
+			error : function() {
+				$.alert("<@uiLabel text='goods.chuxiancuowuqingchongshi'/>!");
+			}
+		});
+	});
+	$("#send2country").change(function() {
+		var country = $("#send2country").val();
+		$.ajax({
+			url : "/api/b2b2c/goodsLogi!getLogi.do?code=" + country,
+			cache : false,
+			success : function(html) {
+				$("#expressTbody").empty();
+				$("#expressTbody").append(html);
+			},
+			error : function() {
+				$.alert("<@uiLabel text='goods.chuxiancuowuqingchongshi'/>!");
+			}
+		});
+	});
+</script>

@@ -1,0 +1,132 @@
+<#assign  title="平台模板" />
+<#include '/store/store_header.html' />
+<!-- 获取店铺信息  -->
+<#assign myStoreDetailTag=newTag("myStoreDetailTag")/> 
+<#assign myStoreDetail=myStoreDetailTag()>
+<!--创建"平台模板列表"标签-->
+<#assign logisModelTag=newTag("logisModelTag")>           
+<#assign logisssmodel=logisModelTag('{"store_id":"${myStoreDetail.store_id}"}')>	
+
+<div class="store_center">
+<#include '/store/left_menu.html' />
+<div id="sotre_right_content" class="sotre_right_content">
+<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			<a href="#">物流管理</a><span>></span>运费模板管理
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;">运费模板管理 </a>
+					</li>
+					<div class="address">
+		
+		<a href="logismodel.html" class="add_address"><span>新增运费模板</span></a>
+	</div>
+				</ul>
+			</div>
+	<div class="address_list">
+	    <form class="validate" id="goodsStoreForm">
+		 <table cellpadding="0" cellspacing="0" align="center" class="dd">
+			<thead >
+				<tr >
+					<th class="a2"  style="text-align:center;">模版名称</th>
+					<th class="a2"  style="text-align:center;">操作</th>
+				</tr>
+			</thead>
+			<tbody >
+			 <#if logisssmodel?size gt 0>
+			  <#list logisssmodel as logis>
+				<tr >
+				     <th class="a1" style="text-align:center;">${logis.model_name}</th>
+
+	　　　　　　　　　　　　<th class="a1" style="text-align:center;">
+	                     <#if logis.model_name=="customerName"> 
+		                <a href="logisdetail.html?model_name=${logis.model_name}" class="button"  >查看详情</a>
+		                <#else>
+		                <a href="selectlogs.html?model_name=${logis.model_name}&store_id=${myStoreDetail.store_id}"  class="button blueButton" >修改</a> 
+		                <a href="logisdetail.html?model_name=${logis.model_name}&store_id=${myStoreDetail.store_id}" class="button"  >查看详情</a>
+		                </#if>
+	                </th>
+				</tr>
+				</#list>
+			 </#if>
+			</tbody>
+		</table>
+		<input type="hidden" name="store_id" value="${myStoreDetail.store_id}"/>
+		</form>
+	<!-- </div>
+	添加会员地址。使用js load方法调用member/address_add.html页面 
+	<div class="address_add" style="overflow:hidden;">
+	</div>
+	修改会员地址 。使用js load方法调用member/address_edit.html页面
+	<div class="address_edit" style="overflow:hidden;"> -->
+	</div>
+	
+</div>
+
+</div>
+<script type="text/javascript">
+
+function dianji(){
+	alert("2222"); 
+	 dialog = $.dialog({
+		title : "修改运费模板信息",
+		lock : true,
+		min : false,
+		max : false,
+	});
+	$.ajax({
+		url : "selectlogs.html?model_name="+$(this).attr("model_name"),
+		success : function(html) {
+			dialog.content(html);
+			dialog.button([ {
+				name : '修改',
+				callback : function() {
+					editStore();
+					return false;
+				}
+			}]);
+		},
+		error : function() {
+			$.alert("出现错误，请重试");
+		},
+		cache : false
+	});	
+ }; 
+/* function editStore(){
+	var reg=/^[0-9]*$/;
+	if($(".one_storenum").val()!=undefined){
+		if(!reg.test($(".one_storenum").val())){
+			alert("请填写正确的数字");
+			return false;
+		}
+	}
+	if($(".more_storenum").val()!=undefined){
+		if(!reg.test($(".more_storenum").val())){
+			alert("请填写正确的数字");
+			return false;
+		}
+	}
+	
+	var options = {
+			url : "${ctx}/api/b2b2c/goods!saveGoodsStore.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {	
+				alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+		};
+	$("#goodsStoreForm").ajaxSubmit(options);
+}
+}) */
+
+</script>

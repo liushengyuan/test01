@@ -1,0 +1,414 @@
+<#if locale=="zh">
+	<#assign  title="订单详细" />
+<#elseif locale=="ru">
+	<#assign  title="Подробности заказа" />
+</#if>
+<#include 'member_header.html' />
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+<!--用户地址标签-->
+<#assign myMemberAddressTag = newTag("myMemberAddressTag")>
+<#assign memberAddress = myMemberAddressTag('{"address_id":"${orderDetail.address_id}"}')>
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>   
+<!-- 获取会员订单日志标签 -->
+<#assign orderDetailLogTag = newTag("orderDetailLogTag")>
+<!-- 调用订单日志标签 -->
+<#assign orderDetailLog = orderDetailLogTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 获取会员订单详细快递信息 -->
+<#assign orderDeliveryListTag = newTag("orderDeliveryListTag")>
+<!-- 调用会员订单详细快递信息 -->
+<#assign orderDelivery = orderDeliveryListTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 使用关键字"deliveryList"得到会员订单详细快递信息MAP集合 -->
+<#assign orderSend = orderDelivery.deliveryList>
+<!-- 该商品是否在秒伤活动内 -->
+<#assign showGoodSkillTag= newTag("showGoodSkillTag")>
+<!--创建“订单货物列表”标签-->
+<#assign orderItemListTag = newTag("orderItemListTag")>
+<!--调用“订单货物列表”标签，并传递参数-->
+<#assign orderItemList = orderItemListTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 获得商品META（快递、运费）信息 --><!-- 会员优惠券等与王峰商量后在弄。 -->
+<#assign orderMetaTag = newTag("orderMetaTag")>
+<!-- 调用商品META（快递、运费）信息 --><!-- 会员优惠券等与王峰商量后在弄。 -->
+<#assign orderMeta = orderMetaTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 创建“发票标签” -->
+<#assign receiptTag = newTag("receiptTag")>
+<!-- 创建商品详情标签 -->
+<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+<!-- 调用发票标签 -->
+<#assign orderreceipt = receiptTag("{'orderid':${orderDetail.order_id}}")>
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<!-- 
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/button.css" />
+ -->
+<#if locale=="zh">
+<script  src="${ctx}/themes/b2b2cv2/js/Order.js"  ></script>
+<#elseif locale=="ru">
+<script  src="${ctx}/themes/b2b2cv2/js/Order_ru.js"  ></script>
+</#if>
+<style>
+.ui_content{min-width:100px;}
+</style>
+<div class="user_order">
+	<div class="order_detail">
+		<div class="order_intro">
+			<h1><@uiLabel text="index.PortalUserOrderInformation" /></h1>
+			<div class="detail_list">
+				<dl>
+					<dt><@uiLabel text="index.PortalUserPayShipAddress" />：</dt>
+					<dd>${memberAddress.province!''}-${memberAddress.city!''}-${memberAddress.region!''}-${memberAddress.addr!''}${memberAddress.addr!''}</dd>
+<!-- 					<!-- <dd>${orderDetail.shipping_area!''}-${orderDetail.ship_addr!''}-${orderDetail.ship_name!''}</dd> -->
+				</dl>
+				<!-- <dl>
+					<dt><@uiLabel text="index.PortalUserInvoice" />:</dt>
+					<dd>
+						${orderreceipt.title!'无'}
+					</dd>
+				</dl>
+				<dl>
+					<dt><@uiLabel text="index.PortalInvoiceContents" />:</dt>
+					<dd>
+						${orderreceipt.content!'无'}
+					</dd>
+				</dl> -->
+				<dl>
+					<dt><@uiLabel text="index.PortalInvoiceFeedback" />：</dt>
+					<dd>${orderDetail.remark!'无'}</dd>
+				</dl>
+				<dl class="online">
+					<dt><@uiLabel text="index.PortalUserOrderNumber" />：</dt>
+					<dd>${orderDetail.sn}</dd>
+				</dl>
+				<!-- 订单总金额 -->
+<!--  			<dl>
+					<dt><@uiLabel text="index.PortalUserOrderAmount" />：</dt>
+					<dd><#if orderDetail.currency=="CNY">
+							${orderDetail.order_amount?string.currency}
+						<#elseif orderDetail.currency=="RUB">
+							${orderDetail.order_amount!0.00}р.
+						</#if>
+					</dd>
+				</dl>-->
+				<!-- 订单需要支付的金额 -->
+				<dl>
+					<dt><@uiLabel text="index.NeedToPay" />：</dt>
+					<dd><#if orderDetail.currency=="CNY">
+							${orderDetail.need_pay_money?string.currency}
+						<#elseif orderDetail.currency=="RUB">
+							${orderDetail.need_pay_money!0.00}р.
+						</#if>
+					</dd>
+				</dl>
+				<dl>
+					<dt>优惠金额：</dt>
+					<dd><#if orderDetail.currency=="CNY">
+							${orderDetail.discount?string.currency}
+						<#elseif orderDetail.currency=="RUB">
+							${orderDetail.discount!0.00}р.
+						</#if>
+					</dd>
+				</dl>
+				<dl>
+					<dt><@uiLabel text="index.PortalUserPaymentMethod" />：</dt>
+					<dd>${orderDetail.payment_name!''}</dd>
+				</dl>
+				<#if orderDetail.ship_status==3>
+					<dl>
+					<dt><@uiLabel text="index.OrderShipNo" />：</dt>
+					<dd>${orderDetail.ship_no!''}</dd>
+				</dl> 
+				</#if>
+				
+				<dl>
+					<dt><@uiLabel text="index.PortalUserOrderTime" />：</dt>
+					<dd><@dateformat time="${orderDetail.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></dd>
+				</dl>
+			</div>
+		</div>
+		<div class="intro_staus">
+			<div class="orderdetail">
+				<i class="<#if orderDetail.status==8>order_no<#else> order_ok</#if>"></i>
+				<@uiLabel text="index.PortalUserOrderStatus" />：
+				<#if locale=="zh">
+				<@orderstatus status="${orderDetail.status}" type="order" />
+				</#if>
+				<#if locale=="ru">
+				<#-- <#if orderDetail.status=-7>Есть замену</#if>
+				<#if orderDetail.status=-4>Применить для замены</#if>
+				<#if orderDetail.status=-3>Возвращает применения</#if>
+				<#if orderDetail.status=-2>возвращение</#if>
+				<#if orderDetail.status=-1>возврат</#if>
+				<#if orderDetail.status=0>В ожидании оплаты</#if>
+				<#if orderDetail.status=1>Платные быть подтверждены</#if>
+				<#if orderDetail.status=2>платный</#if>
+				<#if orderDetail.status=5>Поставляется</#if>
+				<#if orderDetail.status=6>Он Прием</#if>
+				<#if orderDetail.status=7>Завершен</#if>
+				<#if orderDetail.status=8>Отменен</#if>
+				<#if orderDetail.status=4>неотправленный</#if>
+				<#if orderDetail.status=9>Заказать в силу</#if>
+				<#if orderDetail.status=3>Выбор в</#if>
+				<#if orderDetail.status=-6>Мент отвергается</#if>
+				<#if orderDetail.status=-5>Вернуться отвергается</#if> -->
+				<#-- 新状态翻译--->
+				<#if orderDetail.status=-7>Уже заменен</#if>
+				<#if orderDetail.status=-4>Попросить замену</#if>
+				<#if orderDetail.status=-3>Попросить вернуть деньги</#if>
+				<#if orderDetail.status=-2>Возврат товара</#if>
+				<#if orderDetail.status=-1>Возврат денег</#if>
+				<#if orderDetail.status=0>Подтвержден</#if>
+				<#if orderDetail.status=1>В ожидании подтверждения оплаты</#if>
+				<#if orderDetail.status=2>Уже оплачен</#if>
+				<#if orderDetail.status=5>Уже отправлен</#if>
+				<#if orderDetail.status=6>Заказ получен</#if>
+				<#if orderDetail.status=7>Завершен</#if>
+				<#if orderDetail.status=8>Отменен</#if>
+				<#if orderDetail.status=4>В ожидании отправки</#if>
+				<#if orderDetail.status=9>Заказа в силе</#if>
+				<#if orderDetail.status=3>Заказ в стадии подготовки</#if>
+				<#if orderDetail.status=-6>Отказано в замене</#if>
+				<#if orderDetail.status=-5>Отказано в возврате денег</#if>
+				</#if>
+			</div>	
+				<ul>
+					<li>
+						1. <@uiLabel text="index.PortalUserInvoiceTipsOne" />
+						<strong>
+							<#if orderDetail.status == orderState.ORDER_NOT_PAY >
+								<#if !orderDetail.isCod && orderDetail.pay_status==orderState.PAY_NO||!orderDetail.isCod && orderDetail.pay_status == orderState.PAY_PARTIAL_PAYED> 
+									<a href="${ctx}/api/shop/payment.do?orderid=${orderDetail.order_id}" class="order_pay"><@uiLabel text="index.PortalUserInvoiceTipsOneAppend" /></a>
+								<#else>
+									<@uiLabel text="index.PortalUserInvoiceTipsOneAppend" />
+								</#if>
+							</#if> 
+						</strong>
+						<@uiLabel text="index.PortalUserInvoiceTipsOneAppendAgain" />
+					</li>
+					<li>
+						2. <@uiLabel text="index.PortalUserInvoiceTipsTwo" />
+						<strong>
+							<#if orderDetail.status == orderState.ORDER_NOT_PAY >
+								<a href="javascript:;" sn="${orderDetail.sn}" class="cancelBtn order_delno"><@uiLabel text="index.PortalUserCancelOrder" /></a>
+							<#else>
+								<@uiLabel text="index.PortalUserCancelOrder" />
+							</#if> 
+						</strong>
+						<@uiLabel text="index.PortalUserOrderOperation" />
+					</li>
+					<li>
+						3. <@uiLabel text="index.PortalUserInvoiceTipsThree" />
+						<strong>
+	
+						<#if orderDetail.status==orderState.ORDER_SHIP> 
+							<a href="javascript:;" orderid="${orderDetail.order_id}" class="orderdetail_ok rogBtn"><@uiLabel text="index.PortalUserConfirmReceipt" /></a>
+						<#else>
+							<@uiLabel text="index.PortalUserConfirmReceipt" />	
+						</#if> 
+						</strong>
+						<@uiLabel text="index.PortalUserOrderOperation" />
+					</li>
+				</ul>
+<!-- 				<div class="order_help"> -->
+<!-- 					<a href="help-27-1.html"><@uiLabel text="index.PortalUserInvoiceHelp" /></a> -->
+<!-- 				</div> -->
+		</div>
+	</div>
+	<!-- 流程图 -->
+	<div class="flow ">
+		<div class="status${orderDetail.status} no_arrive_order"></div>
+	</div>
+	<!-- 商品列表 -->
+	<div class="detail_goodslist">
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th class="dt7">商品图片</th>
+					<th class="dt1" ><@uiLabel text="index.PortalUserProductName" /></th>	
+					<th class="dt6">商品分类</th>
+					<th class="dt7">店铺名称</th>
+					<th class="dt2"><@uiLabel text="index.PortalUserProductsPrice" /></th>
+					<th class="dt2"><@uiLabel text="goods.Carriage" /></th>	
+					<th class="dt3"><@uiLabel text="index.PortalUserProductsNumber" /></th>	
+					<th class="dt4"><@uiLabel text="index.PortalUserPaySubtotals" /></th>		
+					<th class="dt5"><@uiLabel text="index.PortalUserPayStatus" /></th>	
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="d1" colspan="8" style="padding:0px;border-bottom:0px none;">
+						<table>
+						<#list orderItemList as item>
+							<tr>
+								<td class="dt7">
+									<a  target="_blank" href="/goods-${item.goods_id}.html">
+										<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+									</a>	
+								</td>
+								
+								<td class="dt1">
+									<#assign product = goodsBaseDataTag("{'goodsid':"+item.goods_id+"}")>
+									<a target="_blank" href="/goods-${item.goods_id}.html">
+								<#-- 	${item.name} ${item.goods_id} -->
+									<#if locale=="zh">
+                                		<#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+							                         <#if showGoodSkill?size  gt   0>
+							                            <#list showGoodSkill as a>
+							                               <#if a.start_time  gt a.nowtime>
+							                              ${product.name!""}#${item.goods_id!}<span ><a style="margin-left: 15px;font-size: 11px;color: red; text-decoration:underline" href="../newSkill20160701/seckill_activity.html"><u>秒杀商品,即将开始前往活动主页</u></a></span>
+							                              <#elseif a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+							                               ${product.name!""}#${item.goods_id!}<span ><a style="margin-left: 10px;font-size: 11px;color: red; text-decoration:underline" style="margin-left: 15px;font-size: 15px;color: red " href="../newSkill20160701/seckill_activity.html"><ul>秒杀商品,正在抢购中前往活动主页</ul></a></span>
+							                              </#if>
+							                            </#list>
+							                         <#else>
+							                            ${product.name!""}#${item.goods_id!}
+							                         </#if>
+                                	<#elseif locale=="ru">
+                                		${product.name_ru!""}#${item.goods_id!}
+                                	</#if>
+                                	<#if item.addon?exists>
+                                		<#assign data=item.addon?eval />
+                                		<#if data??>
+                                		(<span>
+                                		<#list data as spec>
+                                		<#if locale=="zh">
+                                			${spec.name}:
+                            			<#elseif locale=="ru">
+                                			${spec.name_ru}:
+                            			</#if>
+                            			<em style="color:#ED7108">
+                            			<#if locale=="zh">
+                                			${spec.value}
+                            			<#elseif locale=="ru">
+                                			${spec.value_ru!''}
+                            			</#if>
+                            			</em>,
+                                		</#list>
+                                		)
+                                		</#if>
+                                	</#if>
+									<#--  <#if item.other?? >(${item.other!''})</#if> -->
+									</a>	
+								</td>
+								<td id="cat_id" class="dt6">
+								<#assign product = goodsBaseDataTag("{'goodsid':"+item.goods_id+"}")>
+									${product.cat_name!}
+								</td>
+								<td  class="dt7">
+								<#assign product = goodsBaseDataTag("{'goodsid':"+item.goods_id+"}")>
+									${product.store_name!}
+								</td>
+								<td  class="dt2">
+									<!-- ${item.currency} -->
+									<#if item.currency=="CNY">
+									                         <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+						                         <#if showGoodSkill?size  gt   0>
+							                           <#list showGoodSkill as a>
+							                           			<#if a.start_time  gt a.nowtime>
+							                           			<span style="text-decoration: line-through;font-family: Meiryo;font-size: 11px;color: red" >秒杀价：&yen;${a.activity_price}</span>
+							                           			</br><span style="font-size: 11px;color: red">原价：${item.price?string.currency}</span>
+							                           			 <#elseif a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+							                           			 <span style="text-decoration: line-through;font-family: Meiryo;font-size: 11px;color: red" >原价：&yen;${a.original_price}</span>
+							                           			</br><span style="font-size: 11px;color: red;width:110px;line-height: 20px;display: block;">秒杀价：${item.price?string.currency}</span>
+							                           			 </#if>	
+							                           </#list>
+						                         <#else>
+						                           ${item.price?string.currency}
+						                        </#if>
+									<#elseif item.currency=="RUB">
+										${item.price!0.00}р.
+									</#if>
+								</td>
+								<td class="dt2">
+									<#if item.currency=="CNY">
+										${item.sendprice!''}
+									<#elseif item.currency=="RUB">
+										${item.sendprice!''}р.
+									</#if>
+								</td> 
+								<td class="dt3">
+									${item.num}
+								</td>
+								<td class="dt4">
+								<#if item.sendprice??>
+									<#if item.currency=="CNY">
+									${(item.num * item.price +item.sendprice )?string.currency}
+									<#elseif item.currency=="RUB">
+									${(item.num * item.price +item.sendprice)!0.00}р.
+									</#if>
+								<#else>
+									<#if item.currency=="CNY">
+										${(item.num * item.price)?string.currency}
+									<#elseif item.currency=="RUB">
+										${(item.num * item.price)!0.00}р.
+									</#if>
+								</#if>
+								</td>
+								
+							</tr>
+						</#list>
+						</table>
+					</td>
+					<td class="d2">
+						<#if locale=="zh">
+							<@orderstatus status="${orderDetail.status}" type="order" />
+						</#if>
+						<#if locale=="ru">
+							<#-- <#if orderDetail.status=-7>Есть замену</#if>
+							<#if orderDetail.status=-4>Применить для замены</#if>
+							<#if orderDetail.status=-3>Возвращает применения</#if>
+							<#if orderDetail.status=-2>возвращение</#if>
+							<#if orderDetail.status=-1>возврат</#if>
+							<#if orderDetail.status=0>В ожидании оплаты</#if>
+							<#if orderDetail.status=1>Платные быть подтверждены</#if>
+							<#if orderDetail.status=2>платный</#if>
+							<#if orderDetail.status=5>Поставляется</#if>
+							<#if orderDetail.status=6>Он Прием</#if>
+							<#if orderDetail.status=7>Завершен</#if>
+							<#if orderDetail.status=8>Отменен</#if>
+							<#if orderDetail.status=4>неотправленный</#if>
+							<#if orderDetail.status=9>Заказать в силу</#if>
+							<#if orderDetail.status=3>Выбор в</#if>
+							<#if orderDetail.status=-6>Мент отвергается</#if>
+							<#if orderDetail.status=-5>Вернуться отвергается</#if> -->
+							<#-- 订单状态新翻译-->
+							<#if orderDetail.status=-7>Уже заменен</#if>
+							<#if orderDetail.status=-4>Попросить замену</#if>
+							<#if orderDetail.status=-3>Попросить вернуть деньги</#if>
+							<#if orderDetail.status=-2>Возврат товара</#if>
+							<#if orderDetail.status=-1>Возврат денег</#if>
+							<#if orderDetail.status=0>Подтвержден</#if>
+							<#if orderDetail.status=1>В ожидании подтверждения оплаты</#if>
+							<#if orderDetail.status=2>Уже оплачен</#if>
+							<#if orderDetail.status=5>Уже отправлен</#if>
+							<#if orderDetail.status=6>Заказ получен</#if>
+							<#if orderDetail.status=7>Завершен</#if>
+							<#if orderDetail.status=8>Отменен</#if>
+							<#if orderDetail.status=4>В ожидании отправки</#if>
+							<#if orderDetail.status=9>Заказа в силе</#if>
+							<#if orderDetail.status=3>Заказ в стадии подготовки</#if>
+							<#if orderDetail.status=-6>Отказано в замене</#if>
+							<#if orderDetail.status=-5>Отказано в возврате денег</#if>
+						</#if>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<#include 'order_cancel.html'/>
+<!-- 浮动窗口 取消订单结束 -->
+<script>
+$(function(){
+	Order.init();
+})
+function showRogInfo(logino,logicode){
+ 	$("#store_content").load('${ctx}/api/shop/order!orderKuaidi.do?ajax=yes&logino='+logino+'&code='+logicode,function(){});
+}
+</script>
+</div>
+<#include '../common/footer.html'/>
+

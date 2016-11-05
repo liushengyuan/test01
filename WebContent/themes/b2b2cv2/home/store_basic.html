@@ -1,0 +1,138 @@
+<#-- 创建商品分类标签 -->
+<#assign storeGoodsCatListTag= newTag("storeGoodsCatListTag") > 
+<#-- 查询商品分类列表 0表示查子分类 --> 
+<#assign storeGoodsCatList= storeGoodsCatListTag("{'type':0,'storeid':${store_id!0}}")!''>
+
+<div class="nc-s-c-s1 ncs-top-bar">
+    <div class="title">
+    	 <#if locale=="zh">
+         	<h4><@uiLabel text="goods.SellerBestsellers" /></h4>
+         <#elseif locale=="ru">
+         	<h2 style="font-weight: bold;"><@uiLabel text="goods.SellerBestsellers" /></h2>
+         </#if>
+        
+    </div>
+    <div class="content">
+        <!-- <ul class="ncs-top-tab pngFix">
+    <li class="current"><a
+        href="#">热销商品排行</a>
+    </li>
+    <li><a
+        href="#">热门收藏排行</a>
+    </li>
+</ul> -->
+
+		<#-- 按销量获取店铺内商品列表 -->
+<#-- 	<#assign storeSearchGoodsListTag = newTag("storeSearchGoodsListTag") >
+	<#assign storeSearchGoodsList = storeSearchGoodsListTag("{'storeid':${store_id!0},'key':1,'order':'desc','num':5}") /> -->
+	<#assign storeTagsGoodsTag=newTag("storeTagsGoodsTag") >
+	<#assign storeTagsGoods=storeTagsGoodsTag("{'mark':'hot','storeid':${store_id!0},'num':5}")!''>
+        <div class="ncs-top-panel">
+            <ol>
+			<#-- <#if storeSearchGoodsList?? && storeSearchGoodsList.storegoods?? && storeSearchGoodsList.storegoods.result?size!=0 >
+				<#list storeSearchGoodsList.storegoods.result as st> -->
+			<#if storeTagsGoods?size!=0>
+				<#list storeTagsGoods.list as st>
+                    <li>
+                        <dl>
+                            <dt>
+                                <a href="goods-${st.goods_id}.html">
+                                <#if locale=="zh">
+                                	${st.name!''}
+                                <#elseif locale=="ru">
+                                	${st.name_ru!""}
+                                </#if>
+                                </a>
+                            </dt>
+                            <dd class="goods-pic">
+                                <a href="goods-${st.goods_id}.html">
+								<span class="thumb size40"><i></i> <@image src="${st.thumbnail!''}"
+								onload="javascript:DrawImage(this,40,40);" /> </span>
+                                </a>
+                                <p>
+								<span class="thumb size100"><i></i>
+									<@image src="${st.thumbnail!''}"
+									onload="javascript:DrawImage(this,100,100);" title="sda12" /> <big></big><small></small>
+								</span>
+                                </p>
+                            </dd>
+                            <dd class="price pngFix" style="background-image: none;">
+                                <#if locale=="zh">
+                                 	￥${st.price!''}
+                                <#elseif locale=="ru">
+                                 	${st.price_ru!''}р.
+                                </#if>
+                            </dd>
+                            <dd class="selled pngFix" style="padding-left:10px">
+                                <@uiLabel text="goods.Sold" />:<strong>${st.buy_num!0}</strong><@uiLabel text="goods.Pen" />
+                            </dd>
+                        </dl>
+                    </li>
+				</#list>
+			</#if>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="nc-s-c-s1 ncs-top-bar mt10">
+    <div class="title">
+    	 <#if locale=="zh">
+         	<h4><@uiLabel text="goods.MerchandiseSeller" /></h4>
+         <#elseif locale=="ru">
+         <h2  style="font-weight: bold;"><@uiLabel text="goods.SellerBestsellers" /></h2>
+         </#if>
+        
+    </div>
+    <div class="content">
+	<#-- 按时间获取店铺内商品列表 -->
+	<#-- <#assign storeSearchGoodsListTag = newTag("storeSearchGoodsListTag") >
+	<#assign storeSearchGoodsList = storeSearchGoodsListTag("{'storeid':${store_id!0},'key':3,'order':'desc','num':5}") /> -->
+	<#assign storeTagsGoodsTag=newTag("storeTagsGoodsTag") >
+	<#assign storeTagsGoods=storeTagsGoodsTag("{'mark':'new','storeid':${store_id!0},'num':5}")!''>
+        <div class="ncs-top-panel">
+            <ol>
+			<#-- <#if storeSearchGoodsList?? && storeSearchGoodsList.storegoods?? && storeSearchGoodsList.storegoods.result?size!=0 >
+				<#list storeSearchGoodsList.storegoods.result as st> -->
+			<#if storeTagsGoods?size!=0>
+				<#list storeTagsGoods.list as st>
+                    <li>
+                        <dl>
+                            <dt>
+                                <a href="goods-${st.goods_id}.html">
+                                <#if locale=="zh">
+                                	${st.name!''}
+                                <#elseif locale=="ru">
+                                	${st.name_ru!""}
+                                </#if>
+                                </a>
+                            </dt>
+                            <dd class="goods-pic">
+                                <a href="goods-${st.goods_id}.html">
+								<span class="thumb size40"><i></i> <@image src="${st.thumbnail!''}"
+								onload="javascript:DrawImage(this,40,40);" /> </span>
+                                </a>
+                                <p>
+								<span class="thumb size100"><i></i>
+									<@image src="${st.thumbnail!''}"
+									onload="javascript:DrawImage(this,100,100);" title="sda12" /> <big></big><small></small>
+								</span>
+                                </p>
+                            </dd>
+                            <dd class="price pngFix" style="background-image: none;">
+                                <#if locale=="zh">
+                                 	￥${st.price!''}
+                                <#elseif locale=="ru">
+                                 	${st.price_ru!''}р.
+                                </#if>
+                            </dd>
+                            <dd class="selled pngFix" style="padding-left:10px">
+                                <@uiLabel text="goods.Sold" />:<strong>${st.buy_num!0}</strong><@uiLabel text="goods.Pen" />
+                            </dd>
+                        </dl>
+                    </li>
+				</#list>
+			</#if>
+            </ol>
+        </div>
+    </div>
+</div>

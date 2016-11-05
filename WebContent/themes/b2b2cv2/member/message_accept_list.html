@@ -1,0 +1,140 @@
+<#if locale=="zh">
+   <#assign  title="收到信息"/>
+ <#elseif locale=="ru">
+     <#assign title="получение  информации"/>
+ </#if>
+<#include 'member_header.html'/>
+<!-- 获取买家消息列表标签 -->
+<#assign acceptMessageTag = newTag("acceptMessageTag")>
+<!-- 调用买家列表标签 -->
+<#assign acceptMessage = acceptMessageTag()>
+<!-- 将调用的结果赋值给变量 -->
+<#assign acceptMessageList = acceptMessage.result>
+
+<link rel="stylesheet" href="${ctx}/themes/b2b2cv2/css/easydialog.css" type="text/css"/>
+
+<#if locale=="zh">
+   <script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/easydialog.js"></script>
+   <script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/easydialog.min.js"></script> 
+<#elseif locale=="ru">
+  	<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/easydialog_ru.js"></script>
+  	<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/easydialog_ru.min.js"></script> 
+</#if>
+
+<div class="member_center">
+			<div class="order_title_nav">
+                <form method="basic-form" id="messageSearch" action="">
+                    <table class="search_form">
+                        <tbody>
+                        <tr>
+                        	<td style="width:18px">&nbsp;</td>
+			  				<th style="border-bottom: 1px solid #e7e7e7; width:127px;"><@uiLabel text="index.InformationStatus" /></th>			  				
+                            <td>
+                                <select id="message_state" name="message_state" style="width:55px;position: relative;left:-66px;" class="input_text">
+                                    <option selected="selected" value=""><@uiLabel text="index.ProtalMesAll" /></option>
+                                    <option value="CHECKED">
+                                      <@uiLabel text="index.ProtalMesHasRead" />
+                                    </option>
+                                    <option value="NO_CHECK">
+                                      <@uiLabel text="index.ProtalMesUnread" />
+                                    </option>
+                                </select>
+                            </td>
+                            <td style="width:120px">&nbsp;</td>
+                            <th style="border-bottom: 1px solid #e7e7e7; width:100px;"><@uiLabel text="index.PortalUserStartTime" /></th>
+                            <td>
+                                <input name="start_message_time" id="start_message_time" class="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd '})" readonly="readonly" type="text">
+                                –
+                                <input name="end_message_time" id="end_message_time" class="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd '})" readonly="readonly" type="text">
+                            </td>
+                            <td style="width:68px">&nbsp;</td>
+                            <td>
+                                <label class="submit-border">
+                                    <input id="yellow_btn" style="width:70px;" class="yellow_btn" value="<@uiLabel text="index.Searchfor" />" type="button">
+                                </label>
+                            </td>
+                            <td style="width:55px">&nbsp;</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+                </div>
+                 <div class="address_list">
+					<table cellpadding="0" cellspacing="0" style="TABLE-LAYOUT: fixed;border:2px solid #eee;" cellspacing="0" cellpadding="0" width="200">
+						<thead>
+							<tr>
+								<th class="a1"><@uiLabel text="index.ProtalMesMessageID" /></th>
+								<th class="a2"><@uiLabel text="index.ProtalMesMessageTitle" /></th>
+								<th class="a3" style="text-align:center"><@uiLabel text="index.ContentCf" /></th>
+								<#-- <th class="a5"><@uiLabel text="index.MessageType" /></th> -->
+								<th class="a3"><@uiLabel text="index.Senddate" /></th>
+								<th style="width:120px"><@uiLabel text="index.CommOper" /></th>
+							</tr>
+						</thead>
+						<tbody id="scroll-box">
+						<#list acceptMessageList as message>
+						<tr>
+						   <td>${message.message_id!}</td>
+						   <td id="t${message.message_id!}" style="WORD-WRAP: break-word" width="20">${message.message_title!}</td>
+						   <td id="c${message.message_id!}" style="WORD-WRAP: break-word;width:20px;">
+						   <@substring title="${message.message_text!''}" length="50" dot="..." />
+						   <span id="o${message.message_id!}" style="display: none;">
+						   ${message.message_text!''}
+						   </span>
+						   <#-- <td>${(message.message_type)!}</td> -->
+						   <td><@dateformat time="${(message.send_date)!}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+						   <#if locale=="zh">
+   							 <td><button style="margin-left:31px" class='yellow_btn' onclick=lookMessage(${message.message_id!})><@uiLabel text="index.PortalUserCheckOut" /></button></td>
+							<#elseif locale=="ru">
+  							<td><button style="margin-left:13px" class='yellow_btn' onclick=lookMessage(${message.message_id!})><@uiLabel text="index.PortalUserCheckOut" /></button></td>
+							</#if>
+						</tr>
+						</#list>
+						</tbody>
+					</table>
+				</div>
+	<@pager pageno="${page!'1'}" pagesize="${acceptMessage.pageSize}" totalcount="${acceptMessage.totalCount}"/>
+</div>
+<script type="text/javascript">
+	// 	查看消息
+	var memberEmail = "";
+	function openMessage(messageId){
+	    $.ajax({
+	        url : "../api/b2b2c/sellerMessage!openMessage.do?ajax=yes&message_id=" + messageId,//要访问的后台地址
+	        data : "json",//要发送的数据
+	        dataType :'json',
+	        async : false,
+	        success : function(member){
+	        	memberEmail = member.email
+	        	//alert(memberEmail);
+	        }
+	    });
+	}
+	//查看收到的消息
+	function lookMessage(messageId){
+		openMessage(messageId);
+		//alert(memberEmail);
+		easyDialog.open({
+			container:{
+			header:'<@uiLabel text="index.DialogNewsDetails"/>',
+			content:'&nbsp;&nbsp;<@uiLabel text="index.ProtalMesMessageTitle"/>&nbsp;&nbsp; : &nbsp;&nbsp;'+$("#t"+messageId).html()+'<br/><br/>&nbsp;&nbsp;&nbsp;发件人&nbsp;&nbsp; : &nbsp;&nbsp;'+memberEmail+'<br/><br/>&nbsp;&nbsp;<@uiLabel text="index.DialogMessageContent"/>&nbsp; : &nbsp;'+$("#o"+messageId).html(),
+			noFn:true
+			}
+		});
+	}
+
+	function messagesearch(){
+		var start_message_time = $("#start_message_time").val();
+		var end_message_time = $("#end_message_time").val();
+		var message_state = $("#message_state").val();
+		location.href="message_accept_list.html?start_message_time=" + start_message_time +"&end_message_time=" + end_message_time +"&message_state=" + message_state;
+	}
+
+	$(function(){
+		$("#yellow_btn").click(function(){
+			messagesearch();
+		})
+	})
+</script>
+</div>
+<#include '../common/footer.html'/>

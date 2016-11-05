@@ -1,0 +1,51 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="editLogiForm" method="post" class="validate" >
+		    <input type="hidden" name="cid" value="${logi.id }"/>
+			<table>
+				<tr>
+					<td align="right">中文名称:</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="name" id="name" maxlength="60" data-options="required:true" dataType="string" isrequired="true" value="${logi.name}"/>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">英文名称:</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="ename" id="ename" maxlength="60" data-options="required:true" dataType="string" isrequired="true" value="${logi.ename}"/>
+					</td>
+				</tr>
+				<tr>
+				    <th><label class="text">物流产品: </label></th>
+                   <td>
+	               <input class="easyui-validatebox input_text" type="text" name="type" id="type" maxlength="60" data-options="required:true" dataType="string" isrequired="true" value="${logi.type}"/>
+		           </td>
+				</tr>
+				<tr>
+					<td align="right">时效:</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="time" id="time" maxlength="40" data-options="required:true" dataType="string" isrequired="true" value="${logi.time}" style="width: 160px;"/>
+					  <span>时效要求格式为xx-xx天</span>
+					</td>
+					<td align="left"></td>
+				</tr>
+				<tr>
+					<th>上传图片文件：</th>
+					<td colspan="3"><input type="button" class="button blueButton" onclick="setTeamImage()" value="上传图片"></input></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td><img alt="" src="${logi.url!''}" id="show_team_picture" height="120px" width="150px;">
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" name="url" id="update_team_image" class="easyui-validatebox" data-options="required:true" value="${logi.url}">
+		</form>
+	</div>
+</div>
+<script language="javascript">
+getImage=function getTeamImage(obj){
+	$("#show_team_picture").attr("src",obj);
+	$("#update_team_image").val(obj);
+}
+function setTeamImage(){
+	openImgDlg(getImage);
+}
+</script>

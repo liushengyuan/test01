@@ -1,0 +1,152 @@
+<#if locale=="zh">
+    <#assign  title="我的积分" />
+ <#elseif locale=="ru">
+     <#assign title="Я интеграл" />
+ </#if>
+<#include 'member_header.html' />
+<!-- 获取会员积分标签 -->
+<#assign memberPointTag = newTag("memberPointTag")>
+<!-- 调用会员积分标签 -->
+<#assign memberPoint = memberPointTag()>
+<!-- 当action=list后，获取会员积分"pointHistoryList"MAP集合 -->
+<#assign pointList = memberPoint.pointHistoryList>
+<!-- 获取关键字“member”会员MAP集合 -->
+<#assign mp = memberPoint.member>
+<!-- 获取关键字“memberLv”会员当前级别MAP集合 -->
+<#assign mplv = memberPoint.memberLv>
+<!-- 获取人民币有效订单次数 -->
+<#assign mum = memberPoint.mum>
+<!-- 获取卢布有效订单次数 -->
+<#assign mum_ru = memberPoint.mum_ru>
+
+<!-- 获取会员积分标签 -->
+<#assign orderNumTag = newTag("orderNumTag")>
+
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class="selected"><a href="point_list.html?action=list"><span><@uiLabel text="member.jifenmingxi" /></span></a></li>
+			<!--<li class=""><a href="point.html"><span>我的积分</span></a></li>-->
+			<!--<li class=""><a href="point_freeze.html?action=freeze"><span>冻结明细</span></a></li>-->
+		</ul>
+	</div>
+	<div class="point_list">
+		<div class="point_this">
+			<ul>
+				<li>
+					<!--<h4>会员等级</h4>  -->
+					<p><@uiLabel text="member.huiyuandengji" />：<strong>${mplv.name}</strong>，<@uiLabel text="member.dengjijifen" />：<strong>${mp.point}</strong></strong>，<@uiLabel text="member.xiaofeijifen" />：<strong>${mp.mp}</strong></p>
+					<#if locale=="zh">
+	       				 <p><@uiLabel text="member.youxiaocishu" />：${mum!''}</p>
+						 <p style="color:red;"><@uiLabel text="member.jifenzhushi" /></p>
+	    			<#elseif locale=="ru">
+	       				 <p><@uiLabel text="member.youxiaocishu" />：${mum_ru!''}</p>
+						 <p style="color:red;"><@uiLabel text="member.jifenzhushiru" /></p>
+	    			</#if>
+				</li>
+			</ul>
+		</div>
+			<#if pointList?size gt 0 >
+			<table  style="width:100%" cellspacing="0" cellpadding="0">
+				<tr>
+					<th><@uiLabel text="index.PortalUserOrderNumber" /></th>
+					<th><@uiLabel text="member.jifenfashenriqi" /></th>
+					<th><@uiLabel text="member.jifenleixing" /></th>
+	       			<th><@uiLabel text="member.jine" /></th>
+					<th><@uiLabel text="member.huodedengjijifen" /></th>
+					<th><@uiLabel text="member.huodexiaofenjifen" /></th>
+					<th><@uiLabel text="member.zhichujifen" /></th>
+					<th><@uiLabel text="member.jifenyouxiaoqi" /></th>
+				</tr>
+				<#list pointList as pointHistory>
+					<#assign order = orderNumTag('{"order_id":${pointHistory.order_id!0}}')>
+			        <tr >
+			        	<td >
+			        		<#if pointHistory.order_id=0>
+			        			-
+			        		<#else>
+			        			${order.sn}
+			        		</#if>			      
+			        	</td>
+				        <td>
+				        	<@dateformat time="${pointHistory.time?c}" pattern="yyyy-MM-dd HH:mm"/>
+				        </td>
+				        <td >
+				        	<#if pointHistory.order_id=0>
+			        			<#if pointHistory.reason="成功注册">
+			        				<@uiLabel text="member.zhucezengsong" />
+			        			<#elseif pointHistory.reason="管理员手工修改">
+			        				<@uiLabel text="member.guanliyuanzengsong" />
+			        			<#else>
+			        				-
+			        			</#if>
+			        		<#else>
+			        			<#if pointHistory.reason="取消订单返回">
+			        				<@uiLabel text="member.tuihuanjifen" />
+			        			<#else>
+			        				<@uiLabel text="member.xiaofei" />
+			        			</#if>
+			        		</#if>	
+				        </td>
+				        <td>
+				        	<#if pointHistory.order_id=0>
+			        			-
+			        		<#else>
+			        			<#if order.currency=="CNY">
+	       							 ￥${order.need_pay_money}
+	    						<#elseif order.currency=="RUB">
+	       							${order.need_pay_money}p.
+	    						</#if>
+			        		</#if>
+				        </td>
+				        <td>
+				       		 <#if pointHistory.type=1>
+			        			<span class="status-gain">${pointHistory.point!0}</span></span>
+			        		<#else>
+			        			<#if pointHistory.reason="管理员手工修改">
+			        				<span class="status-gain">${pointHistory.point!0}</span></span>
+			        			<#else>
+			        				-
+			        			</#if>
+			        		</#if>
+				        </td>
+						<td>
+							<#if pointHistory.type=1>
+			        			<span class="status-gain">${pointHistory.mp!0}</span></span>
+			        		<#else>
+			        			<#if pointHistory.reason="管理员手工修改">
+			        				<span class="status-gain">${pointHistory.mp!0}</span></span>
+			        			<#else>
+			        				-
+			        			</#if>
+			        		</#if>
+						</td>
+						<td>
+							<#if pointHistory.type=0>
+			        			<span class="status-gain">${pointHistory.mp!0}</span></span>
+			        		<#else>
+			        			-
+			        		</#if>
+						</td>
+						<td>
+							<#if pointHistory.endtime=0>
+			        			-
+			        		<#else>
+			        			<@dateformat time="${pointHistory.endtime?c}" pattern="yyyy-MM-dd HH:mm"/>
+			        		</#if>
+						</td>
+				      </tr>
+			    </#list>    
+			</table>
+			<div class="pager_border">
+				<@pager pageno="${memberPoint .pageNo}" 	pagesize="${memberPoint .pageSize}" totalcount="${memberPoint.totalCount}" />
+				<div class="clear"></div>
+			</div>
+			<#else>
+			<div class="empty" ><@uiLabel text="member.jifenjilu" /></div>
+			</#if>
+	</div>
+</div>	
+
+	</div>
+<#include '../common/footer.html'/>

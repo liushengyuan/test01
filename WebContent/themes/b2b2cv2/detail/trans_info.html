@@ -1,0 +1,37 @@
+
+<div style="margin-top: 8px; ">
+	<table border="1px solid red" style="width:950px;text-align:center">
+		<tr style="text-align:center">
+			<th style="text-align:center"><@uiLabel text="goods.yunshugs" /></th>
+			<th style=" width: 180px;text-align:center"><@uiLabel text="goods.yunshufangshi" /></th>
+			<th style=" width: 180px;text-align:center"><@uiLabel text="goods.yunshujiage" /></th>
+			<th style="text-align:center"><@uiLabel text="goods.yunshushijian" /></th>
+		</tr>
+		<#if locale=="zh" >
+		<tr height="60" width="130" style="font-weight:bold;">
+			<td style="font-weight:bold;width: 250px;"><img width="247px" height="80px" src="${ctx}/themes/b2b2cv2/images/shunfeng.png"></td>
+			<td style="font-weight:bold;"><@uiLabel text="goods.Shunfeng" /></td>
+	
+			<td style="font-weight:bold;color:green;"><@uiLabel text="goods.CarriageFree" /></td> 
+			<#if locale=="zh">
+				<td style="font-weight:bold;">2-5天</td> 
+			<#elseif locale=="ru">
+				<td style="font-weight:bold;">28-30 день</td> 
+			</#if>
+		</tr>
+		<#elseif locale=="ru">
+		<tr height="60" width="130" style="font-weight:bold;">
+			<td style="font-weight:bold;"><img src="${ctx}/themes/b2b2cv2/images/yunshu.png"></td>
+			<td style="font-weight:bold;"><@uiLabel text="goods.AirParcel" /></td>
+	
+			<td style="font-weight:bold;color:green;"><@uiLabel text="goods.CarriageFree" /></td> 
+			<#if locale=="zh">
+				<td style="font-weight:bold;">28-30天</td> 
+			<#elseif locale=="ru">
+				<td style="font-weight:bold;">28-30 день</td> 
+			</#if>
+		</tr>
+		</#if>
+	</table>
+</div>
+

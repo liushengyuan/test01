@@ -1,0 +1,192 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+		<div style="display: block;" class="searchAdvanced" >
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+					<td width="70" align="right">商品名称</td>
+					<td>
+						<input type="text" value="${name!''}" id="name"  class="input_text" style="width: 95%;" >
+					</td>
+					<td width="70" align="right">商品编号</td>
+					<td>
+						<input type="text" value="${sn!''}" id="sn"class="input_text" style="width: 95%;">
+					</td>
+					<td width="70" align="right">搜索分类</td>
+					<td>
+						<input class="easyui-combotree" name="cat.parent_id" id="catid"
+						data-options="url:'cat!addlistJson.do',method:'get'" style="width: 200px;height: 28px;" />
+					</td>
+					<td>
+						<a id="searchAdvance" class="button blueButton" onclick="serchGoods()">开始搜索</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"  url="${ctx}/shop/admin/allActivityProduct!goodsListJson.do?allActivity_id=${allActivity_id}" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="goodsdata"
+				>
+				<thead>
+					<tr>
+						<th data-options="field:'goods_id',checkbox:'true',width:100" ></th>
+						<th data-options="field:'sn',width:200,sortable:'true'" >商品编号</th>
+						<th data-options="field:'name',width:500">商品名称</th>
+						<th data-options="field:'cat_name',sortable:'true',width:100" >类别</th>
+						<th data-options="field:'price',sortable:'true',width:100" formatter="formatMoney">原始价格</th>
+						<th data-options="field:'enable_store',sortable:'true',width:100">当前剩余数量</th>
+						<th data-options="field:'is_discount',sortable:'true',width:100" formatter="formatDiscount">是否折扣</th>
+						<th data-options="field:'action',width:200,align:'center'" formatter="formatAdd">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="addActivityProduct" style="display:none;"></div>
+</div>
+<script type="text/javascript">
+//活动id
+var allactivity_id = ${allActivity_id};
+function formatAdd(value,row,index){
+	var val="<a title='添加' href='javascript:void(0);' onclick='add("+row.goods_id+","+row.price+","+row.enable_store+","+row.cost_price+")'>添加</a>";
+	return val;
+}
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+function formatDiscount(value,row,index){
+	var val="";
+	if(value==0){
+		val="否";
+	}else{
+		val="是"
+	}
+	return val;
+}
+
+function formatTime(value,row,index){
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+//搜索
+function serchGoods(){
+	var name = $("#name").val();
+	var sn = $("#sn").val();
+	var catid = $("#catid").combo('getValue');
+	$('#goodsdata').datagrid('load', {
+		 name:name,
+		 sn:sn,
+		 cat_id:catid,
+		 page:1
+    }); 
+}
+function add(goods_id,price,count,cost_price){
+	 $("#addActivityProduct").show();
+	　　	$('#addActivityProduct').dialog({
+	　　		title: "添加活动商品",
+	　　		width: 750,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/allActivityProduct!addProduct.do?goods_id='+goods_id+'&allActivity_id='+allactivity_id+'&original_price='+price+'&count='+count+'&cost_price='+cost_price, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:"保存",
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var disabled=  $(this).hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					var addbtn = $(this);
+		　　				addProductForm(addbtn);		
+		　　			}
+				 }
+			 },{
+	　　			 text:"还原",
+	　　			 handler:function(){
+	　　				 $('#addProduct')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	}); 
+}
+function addProductForm(addbtn){
+	$("#c1").attr("disabled",false);
+	$("#c2").attr("disabled",false);
+	$("#c3").attr("disabled",false);
+	var formflag= $("#addProduct").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍后…");
+		addbtn.linkbutton("disable");
+		var activity_price = $("#activity_price").val();
+		var original_price = $("#original_price").val();
+		if(eval(activity_price)>=eval(original_price)){
+			$.Loading.error("活动价格必须小于原价格");
+			addbtn.linkbutton("enable");
+			return;
+		}
+		if(eval(activity_price)==0){
+			$.Loading.error("活动价格必须大于0");
+			addbtn.linkbutton("enable");
+			return;
+		}
+		var options = {
+				url : "${ctx}/shop/admin/allActivityProduct!saveAdd.do?ajax=yes",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+						$("#addActivityProduct").dialog('close');
+						$('#goodsdata').datagrid('reload');
+					}else{
+						$.Loading.error(result.message);
+					}
+					addbtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error("出现错误，请重试");	
+			 		addbtn.linkbutton("enable");
+				}
+		};
+		$('#addProduct').ajaxSubmit(options);
+	}
+}
+function append(){
+	var rows = $('#goodsdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择要添加商品");
+		return;
+	}
+	$.Loading.show("正在添加商品...");
+	var options = {
+			url : "goodsShow!batchAddForTeam.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					//location.reload();
+					location.href = "${ctx}/shop/admin/goodsShow!teamlist.do";
+				}
+				if(result.result==0){
+					$.Loading.success(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误，请重试");
+			}
+		};
+		$('#gridform').ajaxSubmit(options);	
+}
+</script>
+
+<#include '/admin/footer.html' >
+
+

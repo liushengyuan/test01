@@ -1,0 +1,303 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+		<div class='buttonArea'>
+			<a href="${ctx}/shop/admin/goods!exportGoods.do" class="button b_fr" id="export">导出商品</a>
+			<span id="searchbtn" style="float:left;display:block">	
+			<@permssion actid="goods,super_admin">		
+				<a href="javascript:void(0)" class="button"  onclick="del()">删除</a>
+				<a href="javascript:void(0)" class="button"  onclick="newTab('商品回收站','${ctx}/shop/admin/goods!trash_list.do')">回收站</a>
+			</@permssion>
+			</span>
+			<span style="float: right;height:28px;"> 
+				<a href="javascript:void(0)" class="button b_fr" id="aAdvanced"  >高级搜索</a>
+				<a href="javascript:void(0)" class="button b_fr" onclick="searchGoods()">搜索</a>
+				<input id="searchKeyword" class="input_text b_fr mr5" type="text" value="" size="30" style="width: 100px; margin-left:5px;"	placeholder="请输入商品名称或编号" name="searchKeyWord"> 
+				剩余库存和规格总库存一致:<select class="button" id="c" style=" margin-left:5px;">
+							<option value="-1">全部</option>
+							<option value="0">是</option>
+							<option value="1">否</option>
+						</select>
+	 			是否获取初始单：<select id="store_initiallist"   class="inputSelect valid" style="width: 80px; margin-left:5px; margin-right: 10px;" >
+				<option value="0" selected="selected">---全部---</option>
+				<option value="1" >未获取</option>
+				<option value="2">已获取</option>
+				</select> 
+				<select name="searchTranslation" id="searchTranslation" style=" margin-left:5px;" class="button b_fr" onchange="searchGoods();" >
+					<option value="">全部</option>
+					<option value="1" >是</option>
+					<option value="0" >否</option>
+				</select>
+				<p class="button b_fr" >是否已翻译</p>
+				<a href="javascript:void(0)" class="button b_fr" id="translate"  >一键翻译</a>
+			</span>
+		</div>
+		
+		<div style="display: block;" class="searchAdvanced" >
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="-15px" cellpadding="-17px">
+				<tr>
+					<td width="50" align="right" ">商品名称</td>
+					<td width="120">
+						<input type="text" value="${name!''}" id="name"  class="input_text" style="width: 80%;" >
+					</td>
+					<td width="50" align="right"">商品编号</td>
+					<td width="120">
+						<input type="text" value="${name!''}" id="sn"class="input_text" style="width: 80%;">
+					</td>
+					<td width="50" align="right">店铺名称</td>
+					<td width="120">
+						<input type="text" value="${store_name!''}" id="storename"  class="input_text" style="width: 80%;" >
+					</td>
+					
+					<td width="50" align="right" >类别</td>
+					<td width="120">
+						<input class="easyui-combotree" name="cat.parent_id" id="catid"
+						data-options="url:'${ctx}/shop/admin/cat!addlistJson.do',method:'get'" style="width: 120px;height: 28px;display: block; " />
+					</td>
+					<td width="50" align="right" >状态</td>
+					<td>
+					 
+				     <select name="auditStatus" id="auditStatus" class="button">
+						<option value="">全部</option>
+						<option value="0">待审核</option>
+						<option value="1">通过</option>
+						<option value="2">不通过</option>
+						<option value="3">符合要求</option>
+					</select>
+					
+					<td>
+						<a id="searchAdvance" class="button blueButton" onclick="searchGoods()" href="javascript:;" style="position: relative;top:1px;">开始搜索</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"  url="${ctx}/shop/admin/goods!listJson.do" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="goodsdata"
+				sortName="goods_id" sortOrder="desc">
+				<thead>
+					<tr>
+						<th data-options="field:'goods_id',checkbox:true,width:100" ></th>
+						<th data-options="field:'sn',width:200,sortable:'true'" >商品编号</th>
+						<th data-options="field:'name',width:200" formatter="formatName">商品名称</th>
+						<th data-options="field:'store_name',sortable:'true',width:150">店铺名称</th>
+						<th data-options="field:'store_market',sortable:'true',width:150" formatter="formatMarket">店铺投向市场</th>
+						<th data-options="field:'cat_name',sortable:'true',width:100">分类</th>
+						<th data-options="field:'price',sortable:'true',width:100" formatter="formatMoney">销售价格</th>
+						<th data-options="field:'audit_status',width:100" formatter="market_enable3">状态</th>
+						<th data-options="field:'store_id',width:50" formatter="market_enable1">卖家状态</th>
+						<th data-options="field:'market_enable',sortable:'true',width:50" formatter="market_enable">上架</th>
+						<th data-options="field:'goods_translation',sortable:'true',width:50" formatter="market_enable2">翻译</th>
+						<th data-options="field:'store_initiallist',sortable:'true',width:50" formatter="is_ture">初始单</th>
+						<th data-options="field:'create_time',sortable:'true',width:230" formatter="formatChecktime" >创建时间</th>
+						<!--  <th data-options="field:'brand_name',sortable:'true',width:200">品牌</th>-->
+						<th data-options="field:'action',align:'center',width:100" formatter="formatAction">操作</th>
+						<th data-options="field:'title',align:'center',width:100" formatter="formatName3">修改</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+function formatMarket(value,row,index){
+    var val ;
+    if(value=="RUS"){
+    	return val="俄罗斯";
+    }else if(value=="CHN"){
+    	return val="中国";
+    }else{
+    	return val="";
+    }
+	
+}
+function formatName3(value,row,index){
+   
+   var name ="中译俄";
+   var name2="俄译中";
+   var val;
+	if (row.store_market=="RUS") {
+		return  val="<a href='#' onclick=\"newTab('翻译商品','${ctx}/b2b2c/admin/storeGoods!edit_ru.do?goodsId="+row.goods_id+"')\">"+name+"</a>"
+	} else if (row.store_market == "CHN" ) {
+		return  val="<a href='#' onclick=\"newTab('翻译商品','${ctx}/b2b2c/admin/storeGoods!edit_zh.do?goodsId="+row.goods_id+"')\">"+name2+"</a>"
+	}else{
+		//默认进入中译俄页面
+		return  val="<a href='#' onclick=\"newTab('翻译商品','${ctx}/b2b2c/admin/storeGoods!edit_ru.do?goodsId="+row.goods_id+"')\">"+name+"</a>"
+	}
+	
+}
+function market_enable2(value,row,index){
+	var val;
+	if(value==1){val="是";}else if(value==0||value==null){val="否";}
+	return val;
+}
+function is_ture(value,row,index){
+	var val;
+	if(value==1){
+		val="未获取";
+	}else if(value==2){
+		val="已获取";
+		}else{
+			val="全选"
+		}
+	return val;
+}
+function formatName(value,row,index){
+	var val="<a href=\"../../goods-"+row.goods_id+".html\"target=\"_blank\">"+row.name+"</a>";
+	return val;
+}
+function market_enable(value,row,index){
+	//-1 草稿  1通过（上架） 2 待审核
+	var val;
+	if(value==1){val="是";}else if(value==0||value==5){val="否";}else{val="否";}
+	return val;
+}
+function market_enable3(value,row,index){
+	var val;
+	if(value==1){val="通过";}else if(value==0 && row.market_enable==2){val="待审核";}else if(value==0 && row.market_enable==-1){val="草稿";}else if(row.market_enable==4 && value==4){val="审核未通过已删除";}else if(row.market_enable==5 && value==5){val="商品已下架删除";}else if(value==2){val="不通过";}else if(value==3){val="符合要求";}else{val=""}
+	return val;
+}
+function market_enable1(value,row,index){
+	var val1;
+	if(row.market_enable==5 || row.market_enable==4){val1="已删除";}
+	else{val1="未删除";}
+	return val1;
+}
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+function formatAction(value,row,index){
+	/* var val="<a class='edit' title='查看详细' href='#' onclick='newTab(\""+(row.name).substring(0,11)+"..\",\"${ctx}/b2b2c/admin/storeGoods!edit.do?goodsId="+row.goods_id+"\")' ></a>"; */
+	var val="<a title='查看详情' target='_blank' href='${ctx}/goods-"+row.goods_id+".html' >查看详情</a>";
+	return val;
+}
+function del(){ 
+	var rows = $('#goodsdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择删除商品");
+		return;
+	}
+	if(!confirm("确认要将这些商品放入回收站吗？")){	
+		return ;
+	}
+	$.Loading.show("正在删除......");
+ 	var options = {
+			url : "${ctx}/shop/admin/goods!delete.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+		 			$('#goodsdata').datagrid("reload");      
+				}
+				if(result.result==0){
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#gridform').ajaxSubmit(options);	
+}
+
+$(function(){
+	if("${optype}"=="stock"){
+		$("#searchbtn").hide();
+	};
+	$(".searchAdvanced").hide();
+	//高级查询按钮
+    $("#aAdvanced").click(function () {
+        if ($("#Advanced").val() == "0") {
+            $("#Advanced").val(1);
+            $("#simpleSearch").hide();
+            $("#aAdvanced").addClass("searchAdvancedS");
+        } else {
+            $("#Advanced").val(0);
+            $("#simpleSearch").show();
+            $("#aAdvanced").removeClass("searchAdvancedS");
+        }
+        $(".searchAdvanced").slideToggle("slow");
+    });
+})		
+$(function(){
+	//一键翻译按钮
+    $("#translate").click(function () {
+    	var options = {
+    			url : "${ctx}/b2b2c/admin/storeGoods!zh_productTranslate.do?ajax=yes",
+    			type : "POST",
+    			dataType : "json",
+    			success : function(result) {
+    				if(result.result==1){
+    					alert(result.message);
+    				}else{
+    					alert("一键翻译，失败！");
+    				}
+    			},
+    			error : function(e) {
+    				/* alert("受一键翻译影响，第一次修改操作不成功，请稍后重试！"); */
+    			}
+    		};
+    		$('#gridform').ajaxSubmit(options);
+    });
+})
+function formatChecktime(value, row, index) {	
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+//搜索
+function searchGoods(){
+	var store_initiallist=$("#store_initiallist").val();
+	var searchtype = $("#Advanced").val();
+	var auditStatus = $("#auditStatus").val();
+	var keyword = $.trim($("#searchKeyword").val());
+	var name = $.trim($("#name").val());
+	var sn = $.trim($("#sn").val());
+	var catid = $("#catid").combo('getValue');
+	var searchTranslation = $("#searchTranslation").val();
+	var storename = $("#storename").val();
+	var c = $("#c").val();
+	$('#goodsdata').datagrid('load', {
+		 store_initiallist:store_initiallist, 
+		 stype:searchtype,
+		 keyword:keyword,
+		 auditStatus:auditStatus,
+		 name:name,
+		 sn:sn,
+		 catid:catid,
+		 storeName:storename,
+		 c:c,
+		 page:1,
+		 searchTranslation:searchTranslation
+    }); 
+}
+
+$("#export").click(function(){
+	var searchtype = $("#Advanced").val();
+	var auditStatus = $("#auditStatus").val();
+	var keyword = $.trim($("#searchKeyword").val());
+	var name = $.trim($("#name").val());
+	var sn = $.trim($("#sn").val());
+	var catid = $("#catid").combo('getValue');
+	var searchTranslation = $("#searchTranslation").val();
+	var storename = $("#storename").val();
+	//alert("${ctx}/b2b2c/admin/storeOrder!exportOrder.do?keyword="+keyword+"&start_time="+start_time+"&end_time="+end_time+"&status="+status+"&store_name="+store_name);
+	var exportHref = "${ctx}/shop/admin/goods!exportGoods.do?stype="+searchtype+"&keyword="+keyword
+		+"&auditStatus="+auditStatus+"&name="+name+"&sn="
+		+sn+"&catid="+catid+"&searchTranslation="+searchTranslation+"&storeName="+storename;
+	$("#export").attr("href",exportHref);
+ }); 	
+</script>
+
+<#include '/admin/footer.html' >

@@ -1,0 +1,281 @@
+<script>
+    function load() {
+        location.href = "${ctx}/store/login.html";
+    }
+    <#if !member?? >
+    load();
+    </#if>
+</script>
+
+<script>
+    $(function() {
+        $(".side_menu h1").click(function () {
+            var changeclass = $(this).find("span").attr("class");
+            if (changeclass == "down") {
+                $(this).next("ul").hide();
+                $(this).find("span").removeClass("down").addClass("top");
+            } else {
+                $(this).next("ul").show();
+                $(this).find("span").removeClass("top").addClass("down");
+            }
+        })
+    });
+    function selectMenu(menu , index) {
+        $("#" + menu +" ul li").removeClass("selected").eq(index).addClass("selected");
+    }
+</script>
+<!-- 
+商品管理:store_goods/交易管理transaction/促销管理promotion/店铺管理store/客服管理server
+ -->
+<div class="store_left_menu">
+	<div class="sidebar" id="sidebar">
+		<ul class="sidebar left_same">
+<#--			<li class="side_menu" id="store_goods">
+				<h1>
+					商品管理<span class="down"></span>
+				</h1>
+				<ul>
+					<li><a href="${ctx}/goods/select_cat.html?menu=store_goods">商品发布</a>
+					</li>
+					<li><a
+						href="${ctx}/goods/store_goods_list.html?market_enable=1&menu=store_goods">出售中的商品</a>
+					</li>
+					<li><a
+						href="${ctx}/goods/store_goods_list.html?menu=store_goods">仓库中的商品</a>
+					</li>
+					<li><a href="${ctx}/goods/goods_cat.html?menu=store_goods">分类管理</a>
+					</li>
+					<li><a href="${ctx}/goods/goodsTags.html?menu=store_goods">标签列表</a>
+					</li>
+				</ul></li>
+			<li class="side_menu" id="transaction">
+				<h1>
+					交易管理<span class="down"></span>
+				</h1>
+				<ul>
+					<li><a
+						href="${ctx}/store/order/StoreOrder.html?order_state=all&menu=transaction">订单管理</a>
+					</li>
+					<li><a
+						href="${ctx}/store/order/StoreOrder.html?order_state=wait_ship&menu=transaction">待发货订单</a>
+					</li>
+					<li><a
+						href="${ctx}/store/ship/transaction/transport.html?menu=transaction">物流工具</a>
+					</li>
+					<li><a
+						href="${ctx}/store/comment/StoreEvaluateList.html?replyStatus=0&menu=transaction">评价管理</a>
+					</li>
+					<li><a
+						href="${ctx}/store/sellback/sellback_list.html?status=0&menu=transaction">退货申请</a>
+					</li>
+				</ul></li>
+			<li class="side_menu" id="promotion">
+				<h1>
+					促销管理<span class="down"></span>
+				</h1>
+				<ul>
+					<li><a
+						href="${ctx}/store/bonus/bonus_list.html?menu=promotion">优惠券管理</a>
+					</li>
+					<li><a
+						href="${ctx}/store/groupbuy/groupbuy_list.html?menu=promotion">团购管理</a>
+					</li>
+				</ul></li>
+			<li class="side_menu" id="store">
+				<h1>
+					店铺设置<span class="down"></span>
+				</h1>
+				<ul>
+					<li><a href="${ctx}/store/storeInfo.html?menu=store">店铺设置</a>
+					</li>
+					<li><a href="${ctx}/store/auth.html?menu=store">店铺认证设置</a>
+					</li>
+					<li><a href="${ctx}/store/store_slide.html?menu=store">店铺幻灯片设置</a>
+					</li>
+					<li><a
+						href="${ctx}/store/navigation/store_navigation.html?menu=store">导航管理</a>
+					</li>
+				</ul></li>
+			<li class="side_menu" id="server">
+				<h1>
+					客服管理<span class="down"></span>
+				</h1>
+				<ul>
+					<li><a
+						href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">咨询管理</a>
+					</li>
+				</ul></li>-->
+<#--			<li class="side_menu" id="server">
+				<h1>
+					报表管理<span class="down"></span>
+				</h1>
+				<ul>
+					<li><a href="${ctx}/store/cart_item.html">购物车商品</a>
+					</li>
+					<li><a
+						href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">购物车弃购商品</a>
+					</li>
+					<li><a
+						href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">商品销售额列表</a>
+					</li>
+					<li><a
+						href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">商品销售量列表</a>
+					</li>
+					<li><a
+						href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">我的买家列表</a>
+					</li>
+				</ul></li>-->
+			<li class="side_menu" id="server">
+			<#if locale=="zh">
+				<h1>
+					<@uiLabel text="seller.ProductManager" /><span class="down"></span>
+				</h1>
+			<#elseif locale=="ru">
+			<h1 style="height: 28px;">
+					<@uiLabel text="seller.ProductManager" /><span class="down"></span>
+				</h1>
+			</#if>
+				<ul>
+					<li><a target="_blank"
+						href="${ctx}/goods/select_cat.html?menu=store_goods"><@uiLabel text="seller.AddProduct" /></a>
+					</li>
+					<li><a
+						href="${ctx}/goods/goods_list.html?menu=store_goods&sort="><@uiLabel text="seller.ProductList" /></a>
+					</li>
+                    <li><a href="${ctx}/goods/goodsTags.html?menu=store_goods"><@uiLabel text="seller.TagList" /></a>
+                    </li>
+<!--                      <li><a href="${ctx}/store/goods_move.html?menu=store_goods">一键搬家</a> -->
+<!--                      </li> -->
+				</ul></li>
+    <li class="side_menu" id="server">
+        <h1>
+           <@uiLabel text="seller.TradeManager" /><span class="down"></span>
+        </h1>
+        <ul>
+            <li><a
+                    href="${ctx}/store/order/StoreOrder.html?order_state=all&menu=transaction"><@uiLabel text="seller.OrderList" /></a>
+            </li>
+            <li><a href="${ctx}/store/sellback/sellback_list.html?status=0&menu=transaction"><@uiLabel text="seller.BackApplyList" /></a>
+			</li>
+            <li><a
+                    href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server"><@uiLabel text="seller.CustomerConsult" /></a>
+            </li>
+
+            <li><a
+                    href="${ctx}/store/comment/StoreEvaluateList.html?replyStatus=0&menu=transaction"><@uiLabel text="seller.GoodsEvaluate" /></a>
+            </li>
+
+        </ul></li>
+    <li class="side_menu" id="server">
+        <h1>
+            <@uiLabel text="seller.ShopManager" /><span class="down"></span>
+        </h1>
+        <ul>
+            <li><a href="${ctx}/store/storeInfo.html?menu=store"><@uiLabel text="seller.ShopInfoManager" /></a>
+            </li>
+
+            <li><a href="${ctx}/store/seller_info.html"><@uiLabel text="seller.KeeperInfoManager" /></a>
+            </li>
+         	<li><a href="${ctx}/store/store_slide.html?menu=store"><@uiLabel text="seller.ShopSlideSet" /></a>
+			</li>
+
+        </ul></li>
+    <li class="side_menu" id="server">
+        <h1>
+           <@uiLabel text="seller.InsideLetter" /><span class="down"></span>
+        </h1>
+        <ul>
+            <li><a href="${ctx}/store/seller_message_send.html"><@uiLabel text="seller.HasBeenLetter" /></a>
+            </li>
+
+            <li><a href="${ctx}/store/seller_message_accept.html"><@uiLabel text="seller.ReceivedLetter" /></a>
+            </li>
+            <!-- 买赠优惠管理 系统消息  -->
+		<!-- 	<li><a href="${ctx}/store/eventMessage.html"><@uiLabel text="seller.SystemMessage" /></a> -->
+            </li>
+        </ul></li>
+    <li class="side_menu" id="server">
+        <h1>
+            <@uiLabel text="seller.AccountManager" /><span class="down"></span>
+        </h1>
+        <ul>
+        	<li><a href="${ctx}/store/withdrawal_account.html"><@uiLabel text="seller.BankManager" /></a>
+            </li>
+        	<#-- <li><a href="${ctx}/store/query_my_account.html"><@uiLabel text="seller.MyAccount" /></a>
+            </li> -->
+            <li><a href="${ctx}/store/query_account_details.html"><@uiLabel text="seller.AccountDetail" /></a>
+            </li>
+            <li><a href="${ctx}/store/query_trade.html"><@uiLabel text="seller.LoanDetail" /></a>
+            </li>
+            <li><a href="${ctx}/store/withdrawal.html"><@uiLabel text="seller.AcountQuery" /></a>
+                                </li>
+             <#-- <li><a href="${ctx}/store/withdrawal_edit.html">账户提现填写管理</a>
+                                </li> -->
+              <li><a href="${ctx}/store/withdrawal_detail.html"><@uiLabel text="seller.CashAccountDetail" /></a>
+                                </li>
+        </ul></li>
+    <li class="side_menu" id="server">
+    <#if locale=="zh">
+        <h1>
+            <@uiLabel text="seller.ExpressManager" /><span class="down"></span>
+        </h1>
+        <#elseif locale=="ru">
+         <h1 style="height: 28px;">
+            <@uiLabel text="seller.ExpressManager" /><span class="down"></span>
+        </h1>
+        </#if>
+        <ul>
+              <li>
+                  <li><a href="${ctx}/store/address.html">地址管理</a> </li>
+                 <li><a href="${ctx}/store/express_list.html">配送商管理</a></li>
+                 <!-- <li><a href="${ctx}/store/express_list.html">配送商管理</a></li> -->
+                  <li><a href="${ctx}/store/logispricemodel.html">运费模板管理</a></li>
+                  <li><a href="${ctx}/store/order/express_price.html">物流方案查询</a></li>
+              </li>
+        </ul>
+      </li>
+
+    <li class="side_menu" id="server">
+        <h1>
+           <@uiLabel text="seller.AccountCenter" /><span class="down"></span>
+        </h1>
+        <ul>
+            <li>
+            	<a href="${ctx}/store/security.html"><@uiLabel text="seller.ModifyPassword" /></a>
+            </li>
+ <!--       <li>
+ 				<a href="${ctx}/store/mail_edit.html">修改邮箱</a>
+            </li>
+            <li>
+            	<a href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">身份验证</a> 
+             </li> -->
+		</ul></li>
+<!-- <li class="side_menu" id="server">
+<#if locale=="zh">
+        <h1>
+            <@uiLabel text="seller.CashAccountManager" /><span class="down"></span>
+        </h1>
+  <#elseif locale=="ru">
+         <h1 style="height:28px;">
+            <@uiLabel text="seller.CashAccountManager" /><span class="down"></span>
+        </h1>
+  </#if>      
+        <ul>
+        	
+          
+        </ul></li> -->
+        <li class="side_menu" id="promotion">
+				<h1>
+					<@uiLabel text="seller.SaleManager" /><span class="down"></span>
+				</h1>
+				<ul>
+					<!-- <li>
+						<a href="${ctx}/store/bonus/bonus_list.html?menu=promotion"><@uiLabel text="seller.CouponsManager" /></a>
+					</li> -->
+					<li>
+						<a href="${ctx}/store/groupbuy/groupbuy_list.html?menu=promotion"><@uiLabel text="seller.tuangouguanli" /></a>
+					</li>
+				</ul></li>
+	</div>
+</div>
+

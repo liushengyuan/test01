@@ -1,0 +1,194 @@
+<#include '/store/store_header.html' />
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("storeOrderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${orderNo}"}')>
+<!--创建“订单货物列表”标签-->
+<#assign orderItemListTag = newTag("orderItemListTag")>
+<!--调用“订单货物列表”标签，并传递参数-->
+<#assign orderItemList =
+orderItemListTag("{'orderid':${orderDetail.order_id}}")>
+<link type="text/css" rel="stylesheet"
+	href="${ctx}/themes/b2b2cv2/css/logistics.css" />
+<script src="${ctx}/themes/b2b2cv2/js/express.js"></script>
+<script>
+	var size = 1;
+	function submit() {
+		var reg = /^[a-zA-z]+[\s]*[a-zA-z]+$/;
+		var matchReg = /^([0-9]|([1-9][0-9]{1,7}))((\.[0-9]{1,2})?)$/;
+		try {
+			var form = document.getElementById("formlist");
+			var i = form.ename.length;
+			if(i != undefined){
+				size = i;
+			}
+			var name;
+			var mctcode;
+			var count;
+			var unitPrice;
+			if (size <= 1) {
+				ename = form.ename.value;
+				name = form.name.value;
+				count = form.count.value;
+				unitPrice = form.unitPrice.value;
+				if (!reg.test($.trim(ename))) {
+					alert("<@uiLabel text='storeNextNumberOne.englishapplicationname' />");//英文申报名输入有误
+					return;
+				}
+				if ($.trim(name).length == 0) {
+					alert("<@uiLabel text='storeNextNumberOne.inputchinesename' />");//请输入中文报关名
+					return;
+				}
+				if (!matchReg.test(unitPrice)) {
+					alert("<@uiLabel text='storeNextNumberOne.inputrightvalue' />");//请正确输入申报价值
+					return;
+				}
+			} else {
+				var listEname = form.ename;
+				for ( var i = 0; i < listEname.length; i++) {
+					ename = listEname[i].value;
+					name = form.name[i].value;
+					count = form.count[i].value;
+					unitPrice = form.unitPrice[i].value;
+					if (!reg.test(ename)) {
+						alert("<@uiLabel text='storeNextNumberOne.inputenglishword' />");//请输入英文字母
+						return;
+					}
+					if ($.trim(name).length == 0) {
+						alert("<@uiLabel text='storeNextNumberOne.inputchineseapplicationname' />");//请输入中文申报名
+						return;
+					}
+					if (!matchReg.test(unitPrice)) {
+						alert("<@uiLabel text='storeNextNumberOne.inputrightvalue' />");//请正确输入申报价值
+						return;
+					}
+				}
+			}
+			  $("#productCode").attr("value","${productCode}");
+			var myproductCode = $("#productCode").val();
+			var actionUrl = "";
+			if(myproductCode=="A3" || myproductCode=="A2" || myproductCode=="A5"){
+				actionUrl = "${ctx}/api/b2b2c/express!generalLogistics.do?member_id="+${orderDetail.member_id} + "&order_sn=" +${orderDetail.sn} 
+				+ "&amount=" +${amount} +"&weight=" + ${weight} + "&warehouse_id=" +${warehouse_id};
+			}else if(myproductCode=="AE" || myproductCode=="AF" || myproductCode=="AC"){
+				actionUrl = "${ctx}/api/b2b2c/express2!generalLogistics.do?member_id="+${orderDetail.member_id} + "&order_sn=" +${orderDetail.sn} 
+				+ "&amount=" +${amount} +"&weight=" + ${weight} + "&warehouse_id=" +${warehouse_id};
+			}
+			var options = {
+				url : actionUrl,
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result == "0"){
+						alert(result.message);
+					}else{
+						window.location.href = "successful.html?ship_no="+ result.trackingNumber
+						+ "&referenceNumber="
+						+ result.referenceNumber+"&productCode="+myproductCode;
+					}
+				},
+				error : function(e) {
+					alert(e.statusText);
+					alert("<@uiLabel text='storeNextNumberOne.appearmistack' />");//出现错误请重试
+				}
+			};
+
+			$('#formlist').ajaxSubmit(options);
+		} catch (e) {
+			//alert("${productCode}");
+			window.location.reload(true);
+			alert(e);
+		}
+
+	}
+</script>
+
+<body>
+	<div class="logi_main">
+		<!--标题-->
+		<div class="logi_title">
+			<h2><@uiLabel text="storeNextNumberOne.goodsinfowrite" /></h2><!--货物信息填写  -->
+			<ul class="ul_bj2">
+				<li><@uiLabel text="storeNextNumberOne.selectlogisticssolution" /></li><!--选择物流方案  -->
+				<li class="li_colo"><@uiLabel text="storeNextNumberOne.goodsinfowrite" /></li><!--货物信息填写  -->
+				<li><@uiLabel text="storeNextNumberOne.applicationsuccessful" /></li><!--申请成功  -->
+			</ul>
+		</div>
+		<div class="fl"></div>
+		<!--内容-->
+		<div class="logi_content">
+			<div class="logi2_text">
+				<h2><@uiLabel text="storeNextNumberOne.produceinfo" /></h2><!--商品信息  -->
+				<@uiLabel text="storeNextNumberOne.shenbaoused" />
+			</div><!--俄速通小包限重2KG（不包括），以下信息将作为海关申报使用。  -->
+			<div class="logi_table">
+				<form id="formlist" name="form1" action="">
+					<#list orderItemList as item>
+					<table width="96%" border="0" id="tracks" align="center"
+						cellpadding="0" cellspacing="0" class="table1">
+						<tr class="tr_cle">
+							<!-- <td width="10%" align="center" valign="middle">是否交运</td> -->
+
+							<td width="200px" align="center" valign="middle"><@uiLabel text="storeNextNumberOne.producepicture" /></td><!--商品图片  -->
+							<td width="20%" align="center" valign="middle"><@uiLabel text="storeNextNumberOne.goodsapplicationname" /></td><!--货物申报名称  -->
+							<td align="center" valign="middle"><@uiLabel text="storeNextNumberOne.number" /></td><!--数量  -->
+							<!-- <td align="center" valign="middle"><@uiLabel text="storeNextNumberOne.service"/></td>  -->
+							<td align="center" valign="middle"><@uiLabel text="storeNextNumberOne.applicationvalue" /></td><!--申报价值  -->
+							<td align="center" valign="middle"><@uiLabel text="storeNextNumberOne.original" /></td><!--原产地  -->
+
+						<!-- 	<td width="200px" align="center" valign="middle">商品图片</td>
+							<td width="20%" align="center" valign="middle">货物申报名称</td>
+							<td align="center" valign="middle">数量</td>
+							<td align="center" valign="middle">服务</td>
+							<td align="center" valign="middle">申报价值</td>
+							<td align="center" valign="middle">原产地</td>
+ -->
+						</tr>
+						<tr class="tr_cle2">
+							<td width="100px" align="center" valign="middle"><p
+									class="img_logi" style="margin-left:70px;">
+									<!-- <img id="images"
+										src="fs:/attachment//store/1/goods/201506291618506545.jpg" /> -->
+									<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+								</p>
+							</td>
+							<input name="productCode2" id="productCode" type="hidden" />
+							<td valign="middle" width="30%" align="center">
+								<p class="input_p"><!--英文申报名：  -->
+									<@uiLabel text="storeNextNumberOne.englishappname" />：<input name="ename" id="ename" type="text" maxlength="30"
+										class="input_logi2" />
+								</p>
+								<p class="input_p"><!--中文申报名：  -->
+									<@uiLabel text="storeNextNumberOne.chineseappname"/>：<input name="name" id="name" type="text" maxlength="30"
+										class="input_logi2" />
+							</td>
+							<td align="center" valign="middle"><input name="count"
+								type="text" class="input_logi3" value="${item.num}" id="count"
+								readonly="readonly" />
+							</td>
+							<!-- <td align="center" valign="middle"><input name="count"
+								type="text" class="input_logi3" value="${item.num}" id="count"
+								 />
+							</td> -->
+							<td align="center" valign="middle">$<input name="unitPrice"
+								id="unitPrice" type="text" class="input_logi3" maxlength="10"
+								value="${item.price}" /> /<@uiLabel text="storeNextNumberOne.piece" /></td><!-- 件 -->
+							<td align="center" valign="middle"><@uiLabel text="storeNextNumberOne.china" /></td><!--中国  -->
+						</tr>
+					</table>
+					</#list>
+				</form>
+				<div class="text_logi">
+				     <!--预算运费：  -->
+				<@uiLabel text="storeNextNumberOne.preparefee" />：<span>￥<font id="amount">${amount}</font> </span>（<@uiLabel text="storeNextNumberOne.excludestariff" />）<!--（不含关税）  -->
+				</div>
+				<div class="an">
+					<input name="" type="button" class="button_long but1"
+						onclick="submit()" value="<@uiLabel text='storeNextNumberOne.confirmandsubmit' />" /><!--确认并提交  -->
+				</div>
+			</div>
+		</div>
+		<div class="fl"></div>
+	</div>
+</body>
+<#include '/common/footer.html'/>

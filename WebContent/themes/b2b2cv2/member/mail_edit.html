@@ -1,0 +1,49 @@
+<#if locale=="zh">
+   <#assign  title="修改邮箱" />
+ <#elseif locale=="ru">
+     <#assign title="Изменить почтовый ящик" />
+ </#if>
+<#include 'member_header.html' />
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class="selected"><a href="mail_edit.html"><span><@uiLabel text="index.ModifyMailbox" /></span></a></li>
+		</ul>
+	</div>
+	<div class="password_change">
+		<form class="validate" action="" method="post">
+			<dl>
+				<dt><@uiLabel text="index.NewE-mailAddress" />：</dt>
+				<dd><input type="text" name="email" dataType="string"	isrequired="true" class="input_text"  fun="isPasswd" id="email"/></dd>
+			</dl>
+			<dl class="table_bottom">
+				<dt>&nbsp;</dt>
+				<dd><input type="button" name="btnReg" value="<@uiLabel text="index.OKModification" />" class="yellow_btn change_ok" /></dd>
+			</dl>
+		</form>
+	</div>
+</div>	
+
+<script>
+	$(function(){
+		$(".yellow_btn").click(function(){
+			var email = $("#email").val();
+			$(".validate").ajaxSubmit({
+				url:"${ctx}/api/b2b2c/buyerMember!changeEmail.do?ajax=yes",
+				dataType : 'json',
+				success:function(result){
+					if(result.result==1){
+						alert("<@uiLabel text="index.BuyersCenterAlertG" />");
+						location.href="member.html";
+					}
+					else{
+						$.alert(result.message);
+					}
+				}
+			})
+		})
+	})
+</script>
+
+</div>
+<#include '../common/footer.html'/>

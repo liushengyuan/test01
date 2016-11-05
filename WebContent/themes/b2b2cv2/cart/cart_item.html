@@ -1,0 +1,758 @@
+<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+<#-- 创建购物车标签 -->
+<#assign cartTag= newTag("storeCartGoodsTag")>
+<#--通过购物车标签获取购物项列表 -->
+<#assign itemList = cartTag() >	
+<#-- 该商品是否在秒伤活动内 -->
+<#assign showGoodSkillTag= newTag("showGoodSkillTag")>
+<#-- 创建会员是否登录标签 -->
+<#assign memberIsLoginTag= newTag("memberIsLoginTag")>
+<#-- 获取是否登录  -->
+<#assign isLogin = memberIsLoginTag() >
+<#-- 获取会员当前可消费的积分  -->
+<!-- 调用会员积分标签 -->
+<#-- 获取积分比值  -->
+<#assign pointConsumeTag = newTag("pointConsumeTag")>
+<#assign consume = pointConsumeTag()>
+<#assign mp = consume.mp>
+<#assign lv = consume.lv>		
+<script type="text/javascript">
+	var isLogin = ${isLogin?string};
+</script>
+<div class="border">
+<input type="hidden" id="mpvalueId" value="${mp!0}">
+<#if itemList?exists && itemList?size gt 0>
+	<table class="storelist dd" >
+		<thead>
+		    <th style="width: 100px;"><input id="check1"  type="checkbox" onclick="check(this);"  checked="checked">&nbsp;全选
+		    </th>
+			<th>&nbsp;</th>
+			<th style="width: 280px;"><@uiLabel text="index.PortalUserCarProduct" /></th>
+			<th >所属馆</th>
+			<th class="w120"><@uiLabel text="index.PortalUserProductsPrice" /></th>
+			<th class="w120"><@uiLabel text="index.PortalUserProductsNumber" /></th>
+			<th class="w120">运输详细</th>
+			<th class="w80"><@uiLabel text="index.PortalUserPaySubtotals" /></th>
+			<th><@uiLabel text="index.CommOper" /></th>
+		</thead>
+		<#list itemList as store >
+			<tbody >
+				<tr>
+				   <th colspan="9">
+						<strong>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input id="orderitem" checked="checked" type="checkbox"  store_id=${store.store_id} onclick="checkAll(this);" ><a href="${ctx}/home.html?show_c=1&store_id=${store.store_id}" target="_blank"><@uiLabel text="goods.StoreName" />：${store.store_name}</a>
+						<strong>
+					</th>
+				</tr>
+				
+				<input type="hidden" id="cart_currency_p" value="${store.goodslist[0].currency!}" />
+ 			<#list store.goodslist as item >
+				<tr itemid="${item.id}" productid="${item.product_id}" price="${item.price}"><#--${item.coupPrice} -->
+						<td  ><input type="checkbox"  onchange="checkchanged(${item.goods_id!''})" checked="checked" name="orderIndexs" productid="${item.product_id}" store_id=${item.store_id}  id="tr_${item.goods_id!''}" goods_id="${item.goods_id!''}"  value="${item.goods_id!''}" />
+					<td>
+						<a target="_blank" href="goods-${item.goods_id}.html">
+							<span style="display: block;height: 50px;" class="cart-product-img">
+								<@image height="50" width="50" src="${item.image_default!''}" style="cursor: pointer;" />
+							</span>
+						</a>
+					</td>
+					<td class="cart_goodsname">
+						<#assign goodsBaseData = goodsBaseDataTag("{'goodsid':"+item.goods_id+"}")>
+						<a target="_blank" href="goods-${item.goods_id}.html">
+						<#-- ${item.name} -->
+						    <#if locale=="zh">
+						           <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+				                         <#if showGoodSkill?size  gt   0>
+				                            <#list showGoodSkill as a>
+				                               <#if a.start_time  gt a.nowtime>
+				                              ${goodsBaseData.name!''}<span ><a style="margin-left: 15px;font-size: 15px;color: red" href="../newSkill20160701/seckill_activity.html"><u>秒杀商品,即将开始前往活动主页</u></a></span>
+				                              <#elseif a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+				                               ${goodsBaseData.name!''}<span ><a style="margin-left: 15px;font-size: 15px;color: red" style="margin-left: 15px;font-size: 15px;color: red" href="../newSkill20160701/seckill_activity.html"><u>秒杀商品,正在抢购中前往活动主页</u></a></span>
+				                              </#if>
+				                            </#list>
+				                         <#else>
+				                            ${goodsBaseData.name!''}
+				                         </#if>
+                            <#elseif locale=="ru">
+                                ${goodsBaseData.name_ru!""}
+                            </#if>
+						</a>
+						<#if item.others?exists>
+							<#if item.others.specList?exists>
+								<span>
+									<#list item.others.specList as spec>
+										<#if spec_index!=0></#if><B style="color:black"><br/>
+										<!-- ${spec.name}: -->
+										<#if locale=="zh">
+                                			${spec.name}:
+                            			<#elseif locale=="ru">
+                                			${spec.name_ru}:
+                            			</#if>
+										<em style="color:black">
+									<!-- 	${spec.value} -->
+										<#if locale=="zh">
+                                		${spec.value}
+                            			<#elseif locale=="ru">
+                                			${spec.value_ru!''}
+                            			</#if>
+										</em></B>
+									</#list>
+								</span>
+							</#if>
+							<#if item.others.gys_name?exists>
+								<@uiLabel text="goods.Suppliers" />：${item.others.gys_name!''}
+							</#if>
+						</#if>
+					</td>
+					<td>
+					   <#assign goodsBaseData = goodsBaseDataTag("{'goodsid':"+item.goods_id+"}")>
+								  <#if goodsBaseData.is_belong==0>
+								               俄罗斯馆
+								  <#elseif goodsBaseData.is_belong==1>
+								               龙江物产
+								  <#elseif goodsBaseData.is_belong==2>
+								               澳大利亚馆
+								  <#elseif goodsBaseData.is_belong==3>
+								              新西兰馆
+								  <#elseif goodsBaseData.is_belong==4>
+								              韩国馆
+								  <#elseif goodsBaseData.is_belong==5>
+								             德国馆
+								  <#elseif goodsBaseData.is_belong==6>
+								             无
+								  </#if>
+					</td>
+					<td class="itemTotal_jg">
+					<#if locale=="zh">
+					<input type="hidden" class="goods_prices" id="whole_${item.id}" value="${item.whprice!''}"/>
+					<#else>
+					<input type="hidden" id="whole_${item.id}" value="${item.whprice_ru!''}"/>
+					</#if>
+					<input type="hidden" id="whoId_${item.id}" value="${item.wholesale_volume!0}"/>
+					<!-- ${item.currency} -->
+					<#if item.currency??>
+					<#if item.currency=="CNY">
+						<#if item.wholesale_volume??>
+							<#if item.num gte item.wholesale_volume && item.wholesale_volume gt 0>
+								￥${item.whprice!0.00}
+								<#else>
+									 <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+				                         <#if showGoodSkill?size  gt   0>
+					                           <#list showGoodSkill as a>
+					                           			<#if a.start_time  gt a.nowtime>
+					                           			<span style="text-decoration: line-through;font-family: Meiryo;font-size: 11px;color: red" >秒杀价：&yen;${a.activity_price}</span>
+					                           			</br><span style="font-size: 11px;color: red">原价：￥${item.price!0.00}</span>
+					                           			 <#elseif a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+					                           			 <span style="text-decoration: line-through;font-family: Meiryo;font-size: 11px;color: red" >原价：&yen;${a.original_price}</span>
+					                           			</br><span style="font-size: 11px;color: red">秒杀价：￥${item.price!0.00}</span>
+					                           			 </#if>	
+					                           </#list>
+				                         <#else>
+				                                                                        ￥${item.price!0.00}
+				                        </#if>
+							    </#if>
+						<#else>
+							       <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+				                         <#if showGoodSkill?size  gt   0>
+					                           <#list showGoodSkill as a>
+					                           			<#if a.start_time  gt a.nowtime>
+					                           			<span style="text-decoration: line-through;font-family: Meiryo;font-size: 11px;color: red" >秒杀价：&yen;${a.activity_price}</span>
+					                           			</br><span style="font-size: 11px;color: red">原价：￥${item.price!0.00}</span>
+					                           			 <#elseif a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+					                           			 <span style="text-decoration: line-through;font-family: Meiryo;font-size: 11px;color: red" >原价：&yen;${a.original_price}</span>
+					                           			</br><span style="font-size: 11px;color: red">秒杀价：￥${item.price!0.00}</span>
+					                           			 </#if>	
+					                           </#list>
+				                         <#else>
+				                                                                        ￥${item.price!0.00}
+				                        </#if>
+						</#if>
+					<#elseif item.currency=="RUB">
+						<#if item.wholesale_volume??>
+							<#if item.num gte item.wholesale_volume && item.wholesale_volume gt 0>
+								${item.whprice_ru!0.00}p.
+								<#else>
+								${item.price!0.00}р.
+							</#if>
+							<#else>
+							${item.price!0.00}р.
+						</#if>
+					</#if>
+					<#else>
+					<#if item.wholesale_volume??>
+						<#if item.num gte item.wholesale_volume && item.wholesale_volume gt 0 >
+							￥${item.whprice!0.00}
+							<#else>
+							 <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+				                         <#if showGoodSkill?size  gt   0>
+					                           <#list showGoodSkill as a>
+					                           			<#if a.start_time  gt a.nowtime>
+					                           			<span style="text-decoration: line-through;font-family: Meiryo;font-size: 11px;color: red" >秒杀价：&yen;${a.activity_price}</span>
+					                           			</br><span style="font-size: 11px;color: red">原价：￥${item.price!0.00}</span>
+					                           			 <#elseif a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+					                           			 <span style="text-decoration: line-through;font-family: Meiryo;font-size: 11px;color: red" >原价：&yen;${a.original_price}</span>
+					                           			</br><span style="font-size: 11px;color: red">秒杀价：￥${item.price!0.00}</span>
+					                           			 </#if>	
+					                           </#list>
+				                         <#else>
+				                                                                        ￥${item.price!0.00}
+				                        </#if>
+						</#if>
+					<#-- <#else>
+						￥${item.price!0.00} -->
+						</#if>
+					</#if>	
+					</td>
+					<#if item.goods_id??>
+					      <#assign goodsBaseDataTag= newTag("goodsBaseDataTag") >
+                          <#assign goods= goodsBaseDataTag("'goodsid':${item.goods_id!0}") >
+					</#if>
+					<td class="cart_quantity">
+					     <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+			                                        <#if showGoodSkill?size  gt   0>
+				                                          <#list showGoodSkill as a>
+				                                             <#if a.limitbuy==1>
+				                                              <div id="num" class="Numinput" value="${item.num}" nowtime="${a.nowtime!'0'}" end_time="${a.end_time!'0'}" start_time="${a.start_time!'0'}" limitnumber="${a.limitnumber!'0'}" limitbuy="${a.limitbuy!'0'}" sendprice="${item.sendprice}" itemid="${item.id}" mini_number="${goods.min_number}" productid="${item.product_id!''}" store_id="${item.store_id!''}" freight_id="${item.freight_id}" goods_id="${item.goods_id!''}">
+																	<span class="numadjust decrease">-</span>
+																	<input size="5" name="num" autocomplete="off" type="text" value="${item.num}" onkeyup="CtoH(this);">
+																	<span class="numadjust increase">+</span>
+																</div>
+				                                               <input type="hidden" id="limitbuy" value="${a.limitbuy!0}!'0'">     
+				                                               <input type="hidden" id="limitnumber" value="${a.limitnumber!'0'}">     
+				                                               <input type="hidden" id="start_time" value="${a.start_time!'0'}">     
+				                                               <input type="hidden" id="end_time" value="${a.end_time!'0'}">     
+				                                               <input type="hidden" id="nowtime" value="${a.nowtime!'0'}">   
+				                                                 <#if a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+				                                                   <font style="color: red;font-size:9px;width: 150px;line-height: 20px;display: inline-block;" >活动商品只限购买${a.limitnumber!'0'}件</font>
+				                                                 </#if>
+				                                             </#if>
+				                                          </#list>     
+				                                     <#else>
+				                                     <div id="num"  class="Numinput" value="${item.num}" limitbuy="0" sendprice="${item.sendprice}" itemid="${item.id}" mini_number="${goods.min_number}" productid="${item.product_id!''}" store_id="${item.store_id!''}" freight_id="${item.freight_id}" goods_id="${item.goods_id!''}">
+																	<span class="numadjust decrease">-</span>
+																	<input size="5" name="num" autocomplete="off" type="text" value="${item.num}" onkeyup="CtoH(this);">
+																	<span class="numadjust increase">+</span>
+												    </div>
+				                                  </#if>
+				                                             
+					</div>	
+					</td>
+							<td>
+					  
+					  <input type="hidden" id="store_id" value="${item.store_id}">
+					  <input type="hidden" id="goods_id" class="goods_id_class" name="${item.num}" value="${item.goods_id!''}">
+					  <input type="hidden" id="freight_id" value="${item.freight_id!1}">
+					  <input type="hidden" id="sendprice" value="${item.sendprice}"> 
+					  <input  type="hidden" id="weight" value="${item.weight!0.0}"> 
+					 <#if item.currency??>
+					      <#if item.freight_id!=-1>  
+					  <#if item.sendprice==0.0 && item.freight_id==0>
+					  
+					     <#else>
+					         <span><@uiLabel text="goods.freightlogisname" />:</span>
+					         
+					  </#if>
+					   </#if>
+					 </#if> 
+					    <a id="choseExpress" href="javascript:void(0);" onclick='add_wuliu(${item.goods_id},${item.freight_id!0},${item.num},${item.store_id})' 
+					              		style="background-image:url(${ctx}/themes/b2b2cv2/images/downArrow.png);background-repeat: no-repeat;background-position:right;; padding-right: 16px;display:inline-block;"" >
+					   <#if item.currency??>
+					     <#if item.freight_id!=-1>  
+					       <#if item.sendprice==0.0 && item.freight_id==0>
+					       
+					       <#else>
+					           <#assign cartFreightLogisTag=newTag("cartFreightLogisTag")>
+                               <#assign cartFreightLogis=cartFreightLogisTag("{'freight_id':${item.freight_id}}")>
+                             <span>
+                                <#if locale=="zh">
+                                     <#if cartFreightLogis.product_name?? && cartFreightLogis.product_name=="1">标准快递</#if>
+			                   <#elseif locale=="ru">
+			                         <#if cartFreightLogis.product_name?? && cartFreightLogis.product_name=="A5">RUSTON экспресс доставка мелких пакетов</#if>
+			                  </#if>
+                             </span>
+					       </#if>
+					      </#if>
+					   </#if> 
+					  </a>
+					  
+					    <#if item.freight_id==-1>
+					    <@uiLabel text="goods.freightlogisprice" />:
+							 <#if locale=="zh">
+							  &yen;${item.sendprice!0.0}
+							<#elseif locale=="ru">
+							  ${item.sendprice!0.0}p.
+							 </#if>
+	                      <#else>
+					      <#if item.sendprice==0.0>
+					       <span id="freightprice" ><@uiLabel text="goods.freightlogisprice" />:
+					         	  免邮
+					       </span> 
+					       <#else>
+					       <span><@uiLabel text="goods.freightlogisprice" />:</span><span id="freightprice">
+					                <#if locale=="zh">
+								           &yen;${item.sendprice!0.0}
+								     <#elseif locale=="ru">
+								           ${item.sendprice!0.0}p.
+								     </#if>
+					          </span> 
+					       </#if>
+					    </#if>
+					       <span style="width: 145px; display: block;">  
+					        <#if item.freight_id!=-1>  
+					         <#if item.sendprice==0.0 && item.freight_id==0>
+					         
+					         <#else>
+					            <@uiLabel text="goods.freightlogissendtime" />:${cartFreightLogis.validatedays}<@uiLabel text="goods.freightlogisday" />
+					       </#if>
+					      </#if> 
+					       </span>         		
+					</td>
+					<script type="text/javascript"> 
+							function CtoH(obj)
+							{ 
+							var str=obj.value;
+							var result="";
+							for (var i = 0; i < str.length; i++)
+							{
+							if (str.charCodeAt(i)==12288)
+							{
+							result+= String.fromCharCode(str.charCodeAt(i)-12256);
+							continue;
+							}
+							if (str.charCodeAt(i)>65280 && str.charCodeAt(i)<65375)
+							result+= String.fromCharCode(str.charCodeAt(i)-65248);
+							else result+= String.fromCharCode(str.charCodeAt(i));
+							} 
+							obj.value=result;
+							} 
+			         </script>
+					<td class="itemTotal">
+					<#if item.currency??>
+					<input type="hidden" id="currencyId" value="${item.currency!''}">
+					<#if item.currency=="CNY">
+						￥${item.subtotal!0.00}
+					<#elseif item.currency=="RUB">
+						${item.subtotal!0.00}р.
+						<#else>
+						￥${item.subtotal!0.00}
+					</#if>
+					</#if>
+					</td>
+					<td class="cart_last"><a href="javascript:;" class="delete"><@uiLabel text="index.PortalUserDelete" /></a></td>
+				</tr>
+				<tr>
+				<td style="padding:3px;background:#fff;" colspan="20" <#if !item_has_next>class="itemlast"</#if>></td>
+			</tr>
+			</#list>
+			</tbody>
+		</#list>
+	</table>	
+			<!-- 总价 -->
+			<div class="total_wrapper">
+				<#include 'cartTotal.html' />
+			</div>
+			<div class="button_wrapper">
+				<!-- <div class="btn btn1">
+					<i class="cleanbtn"></i>
+					<input type="button" class="clean_btn" value="<@uiLabel text='goods.EmptyShoppingCart' />">
+				</div>-->	
+				<div class="btn btn3" style="width:87px;height:20px;position:relative;" > 
+					<i class="checkoutbtn"></i>		
+					<input type="button"  class="checkout_btn" value="<@uiLabel text='goods.FillCheckShopping'  />" style="position:absolute;left:23px;"/>
+				</div>
+				<div class="btn btn2" >
+					<i class="returnbuybtn"></i>
+					<input type="button" class="returnbuy_btn" value="<@uiLabel text='goods.ContinueToShop' />"  />
+				</div> 
+			</div>
+			<div id="login_tip" style="display:none">
+				<div class="cart_tourist">
+					<div class="cart_message" style="width:365px">
+						<@uiLabel text="goods.Visitor" /><br><br>
+					</div>
+					<div class="button_wrapper">
+						<input type="button" class="tourist_btn to_login_btn" value="<@uiLabel text='goods.LoginNow' />">
+						
+						<input type="button" class="tourist_btn to_checkout_btn"  value="<@uiLabel text='index.PortalRegister' />" style="margin-top:10px">
+					</div>
+				</div>
+			</div>
+		<#else>
+			<div class="cartno">
+				<h1><@uiLabel text="goods.CartEmpty" /></h1>
+				<#if locale=="zh">
+    			<a href="index.html" style="width:164px;color: #FFF;background-color: #D93600;hight:45px" class="changeRed"><@uiLabel text="goods.ContinueShopping" /></a>
+				<#elseif locale=="ru">
+  	 			<a href="index.html" style="width:220px;color: #FFF;background-color: #D93600;hight:45px" class="changeRed"><@uiLabel text="goods.ContinueShopping" /></a>
+				</#if>
+				
+			</div>
+		</#if>
+		<div id="wuliu"></div>
+</div>
+<script>
+
+	$(function(){
+		$(".changeRed").hover(
+		  function () {
+			    $(this).css("background-color","#CC0000");
+			  },
+			  function () {
+			    $(this).css("background-color","#D93600");
+			  }
+			);
+		var locale="${locale}";
+		var currency=$("#currencyId").val();
+		var mpvalue = parseInt($("#mpvalueId").val());
+		if(currency=="CNY"){
+			if(mpvalue!=-1000){
+				var goodsPrice=$("#goodsPrice").val();//订单总金额
+			
+				/* alert(goodsPrice); */
+				var lv = $("#lvId").val();//当前会员消费抵值比例
+				/* alert(lv); */
+				var consumeprice = $("#consumeId").val();//积分比值
+				//积分数=订单总额*消费抵值比例/积分比值
+				if(consumeprice>0 && lv>0 ){
+					var lv1 = changeTwoDecimal_f(lv/100);
+					var availableamount = changeTwoDecimal_f(goodsPrice*lv1);
+					pointnum = changeTwoDecimal_f(availableamount/consumeprice);
+					if(pointnum>=mpvalue){
+						$("#pointSpanId").val(parseInt(mpvalue));
+						if(locale=="zh"){
+							$("#mpId").html("(当前会员等级可用 "+parseInt(mpvalue)+" 点)");
+						}else{
+							$("#mpId").html("(Текущие уровни статус доступные "+parseInt(mpvalue)+" точка )");
+						}
+					}else{
+						$("#pointSpanId").val(parseInt(pointnum));
+						if(locale=="zh"){
+							$("#mpId").html("(当前会员等级可用 "+parseInt(pointnum)+" 点)");
+						}else{
+							$("#mpId").html("(Текущие уровни статус доступные "+parseInt(pointnum)+" точка )");
+						}
+					}
+				}
+			}else{
+				if(locale=="zh"){
+					$("#mpId").html("(当前没有登录)");
+				}else{
+					$("#mpId").html("(В настоящее время не вошли)");
+				}
+				
+			}	
+		}else{
+			if(mpvalue!=-1000){
+				var goodsPrice=$("#goodsPrice").val();//订单总金额
+				var lv = $("#lvId").val();//当前会员消费抵值比例
+				var consumeprice = $("#consumerubId").val();//积分比值
+				if(consumeprice>0 && lv>0 ){
+					//积分数=订单总额*消费抵值比例/积分比值
+					var lv1 = changeTwoDecimal_f(lv/100);
+					var availableamount = changeTwoDecimal_f(goodsPrice*lv1);
+					pointnum = changeTwoDecimal_f(availableamount/consumeprice);
+					if(pointnum>=mpvalue){
+						$("#pointSpanId").val(parseInt(mpvalue));
+						if(locale=="zh"){
+							$("#mpId").html("(当前会员等级可用 "+parseInt(mpvalue)+" 点)");
+						}else{
+							$("#mpId").html("(Текущие уровни статус доступные "+parseInt(mpvalue)+" точка )");
+						}
+					}else{
+						$("#pointSpanId").val(parseInt(pointnum));
+						if(locale=="zh"){
+							$("#mpId").html("(当前会员等级可用 "+parseInt(pointnum)+" 点)");
+						}else{
+							$("#mpId").html("(Текущие уровни статус доступные "+parseInt(pointnum)+" точка )");
+						}
+					}
+				}
+			}else{
+				if(locale=="zh"){
+					$("#mpId").html("(当前没有登录)");
+				}else{
+					$("#mpId").html("(В настоящее время не вошли)");
+				}
+			}
+			
+		}
+	})
+	function calcutePoint(price){
+		var locale="${locale}";
+		var currency=$("#currencyId").val();
+		var mpvalue = parseInt($("#mpvalueId").val());
+		/* alert(mpvalue); */
+		if(currency=="CNY"){
+			if(mpvalue!=-1000){
+				var goodsPrice=price;//订单总金额
+				/* alert(goodsPrice); */
+				var lv = $("#lvId").val();//当前会员消费抵值比例
+				/* alert(lv); */
+				var consumeprice = $("#consumeId").val();//积分比值
+				/* alert(consumeprice); */
+				//积分数=订单总额*消费抵值比例/积分比值
+				if(consumeprice>0 && lv>0 ){
+					var lv1 = changeTwoDecimal_f(lv/100);
+					var availableamount = changeTwoDecimal_f(goodsPrice*lv1);
+					pointnum = changeTwoDecimal_f(availableamount/consumeprice);
+					if(pointnum>=mpvalue){
+						$("#pointSpanId").val(parseInt(mpvalue));
+						if(locale=="zh"){
+							$("#mpId").html("(当前会员等级可用 "+parseInt(mpvalue)+" 点)");
+						}else{
+							$("#mpId").html("(Текущие уровни статус доступные "+parseInt(mpvalue)+" точка )");
+						}
+					}else{
+						$("#pointSpanId").val(parseInt(pointnum));
+						if(locale=="zh"){
+							$("#mpId").html("(当前会员等级可用 "+parseInt(pointnum)+" 点)");
+						}else{
+							$("#mpId").html("(Текущие уровни статус доступные "+parseInt(pointnum)+" точка )");
+						}
+					}
+				}
+			}else{
+				if(locale=="zh"){
+					$("#mpId").html("(当前没有登录)");
+				}else{
+					$("#mpId").html("(В настоящее время не вошли)");
+				}
+				
+			}	
+		}else{
+			if(mpvalue!=-1000){
+				var goodsPrice=$("#goodsPrice").val();//订单总金额
+				var lv = $("#lvId").val();//当前会员消费抵值比例
+				var consumeprice = $("#consumerubId").val();//积分比值
+				if(consumeprice>0 && lv>0 ){
+					//积分数=订单总额*消费抵值比例/积分比值
+					var lv1 = changeTwoDecimal_f(lv/100);
+					var availableamount = changeTwoDecimal_f(goodsPrice*lv1);
+					pointnum = changeTwoDecimal_f(availableamount/consumeprice);
+					if(pointnum>=mpvalue){
+						$("#pointSpanId").val(parseInt(mpvalue));
+						if(locale=="zh"){
+							$("#mpId").html("(当前会员等级可用 "+parseInt(mpvalue)+" 点)");
+						}else{
+							$("#mpId").html("(Текущие уровни статус доступные "+parseInt(mpvalue)+" точка )");
+						}
+					}else{
+						$("#pointSpanId").val(parseInt(pointnum));
+						if(locale=="zh"){
+							$("#mpId").html("(当前会员等级可用 "+parseInt(pointnum)+" 点)");
+						}else{
+							$("#mpId").html("(Текущие уровни статус доступные "+parseInt(pointnum)+" точка )");
+						}
+					}
+				}
+			}else{
+				if(locale=="zh"){
+					$("#mpId").html("(当前没有登录)");
+				}else{
+					$("#mpId").html("(В настоящее время не вошли)");
+				}
+			}
+			
+		}
+	}
+	function pointcheck(){
+		if($("#pointId").attr("checked")=="checked"){
+			$("#pointdivId").attr("style","float:left;margin-left:10px;display:''");
+		}else{
+			var numprice=0.00;
+			var consume = parseFloat($("#consumeId").val()).toFixed(2);
+			 if(parseInt($("#pointInputId").val())>0){
+				 numprice = changeTwoDecimal_f( consume* parseInt($("#pointInputId").val()));
+				 numprice1 = changeTwoDecimal_f(numprice);
+				 var total=$("#MoneyId").html().replace('￥','');
+				 var ss=parseFloat(total)+ parseFloat(numprice1);
+				 var finalprice =changeTwoDecimal_f(ss);
+		         $("#MoneyId").html("￥"+finalprice);
+		         $("#pointMoneyId").html("");
+		         $("#pointInputId").val(0);
+		         $("#pointdivId").attr("style","display:none");
+		         location.reload();
+			 }else{
+				 $("#pointdivId").attr("style","display:none");
+			 }
+		}
+	}
+	
+	function changeTwoDecimal_f(x) {
+        var f_x = parseFloat(x);
+        if (isNaN(f_x)) {
+            alert('参数为非数字，无法转换！');
+            return false;
+        }
+        var f_x = Math.round(x * 100) / 100;
+        var s_x = f_x.toString();
+        var pos_decimal = s_x.indexOf('.');
+        if (pos_decimal < 0) {
+            pos_decimal = s_x.length;
+            s_x += '.';
+        }
+        while (s_x.length <= pos_decimal + 2) {
+            s_x += '0';
+        }
+        return s_x;
+    }
+	function checkchanged(obj){
+		var checkboxs=$("input:checked[name=orderIndexs][type='checkbox']");
+		var propertys="";
+		for ( var i = 0; ci = checkboxs[i]; i++) {
+			if (i >= 0) {
+			   propertys +=ci.value+",";
+			}
+		}	
+		 $.ajax({
+				url: "api/shop/cart!getDynaticCartData.do?ajax=yes&propertys="+propertys,
+				type : "POST",
+				async : false,
+				dataType : "json",
+				success : function(result) {
+					if(result!=null){
+						if(result.result==1){
+							$("#logisprice").html("￥"+result.data.pricesum);
+							$("#MoneyId").html("￥"+result.data.orderprice.goodsPrice);
+							$("#totalchoose").html(result.data.count);
+							$("#goodsPrice").attr("value",result.data.orderprice.goodsPrice);
+							calcutePoint(result.data.orderprice.goodsPrice);
+						}else{
+							alert("失败");
+						}
+					}
+				}
+			});
+		 
+	}
+	$(function(){
+		$("#check1").trigger("onclick");
+	})
+	function checkAll(obj) {
+		var self=$(obj);
+		var store_id=self.attr("store_id");
+		$(".dd").find("input[name=orderIndexs][type='checkbox']").each(
+				function(i) {
+					var self2=$(this);
+					if(self2.attr("store_id")==store_id){
+						this.checked = obj.checked;
+					}
+				});
+		var checkboxs=$("input:checked[name=orderIndexs][type='checkbox']");
+		var propertys="";
+		for ( var i = 0; ci = checkboxs[i]; i++) {
+			if (i >= 0) {
+			   propertys +=ci.value+",";
+			}
+		}	
+		  $.ajax({
+				url: "api/shop/cart!getDynaticCartData.do?ajax=yes&propertys="+propertys,
+				type : "POST",
+				async : false,
+				dataType : "json",
+				success : function(result) {
+					if(result!=null){
+						if(result.result==1){
+							$("#logisprice").html("￥"+result.data.pricesum);
+							$("#MoneyId").html("￥"+result.data.orderprice.goodsPrice);
+							$("#totalchoose").html(result.data.count);
+							$("#goodsPrice").attr("value",result.data.orderprice.goodsPrice);
+							calcutePoint(result.data.orderprice.goodsPrice);
+						}else{
+							alert("失败");
+						}
+					}
+				}
+			});
+	}
+	function check(obj) {
+		$(".dd").find("input[id=orderitem][type='checkbox']").each(
+				function(i) {
+					this.checked = obj.checked;
+				});
+		$(".dd").find("input[name=orderIndexs][type='checkbox']").each(
+				function(i) {
+					var self2=$(this);
+					this.checked = obj.checked;
+				});
+		var checkboxs=$("input:checked[name=orderIndexs][type='checkbox']");
+		var propertys="";
+		for ( var i = 0; ci = checkboxs[i]; i++) {
+			if (i >= 0) {
+			   propertys +=ci.value+",";
+			}
+		}	
+		 $.ajax({
+				url: "api/shop/cart!getDynaticCartData.do?ajax=yes&propertys="+propertys,
+				type : "POST",
+				async : false,
+				dataType : "json",
+				success : function(result) {
+					if(result!=null){
+						if(result.result==1){
+							$("#logisprice").html("￥"+result.data.pricesum);
+							$("#MoneyId").html("￥"+result.data.orderprice.goodsPrice);
+							$("#totalchoose").html(result.data.count);
+							$("#goodsPrice").attr("value",result.data.orderprice.goodsPrice);
+							calcutePoint(result.data.orderprice.goodsPrice);
+						}else{
+							alert("失败");
+						}
+					}
+				}
+			});
+	} 
+	function add_wuliu(goods_id,freight_id,num,store_id){
+		$("#wuliu").empty();
+		$("#wuliu").append("<div id='wuliu_div' value='1'></div>");
+		var html = $("#wuliu_div").load("checkout/express_cart_chose.html",{"goods_id":goods_id,"freight_id":freight_id,"num":num,"store_id":store_id});
+		var dialog = $.dialog({ 
+			title:"<@uiLabel text='goods.freightlogischooselogis'/>",
+			width:450,
+			top:150,
+			content:html,
+			lock:true,
+			init:function(){
+				//alert("12121212");
+		}});
+		//dialog.content("url:checkout/new_address.html");
+	}
+</script>
+<script type="text/javascript">
+//获取价格字符串数组
+var price=document.getElementsByClassName('itemTotal_jg');
+/* console.log(price); */
+var itemsprice = [];
+$.each(price,function(i,item2){
+	var ss=price[i].innerText;
+	var arr = new Array();
+	arr=ss.split("￥");
+	itemsprice.push(arr[1]);
+})
+
+//获取商品id，名称
+var ids=document.getElementsByClassName('goods_id_class');
+var itemsIdValue = [];
+var itemsCountValue = [];
+$.each(ids,function(i,item){
+	itemsIdValue.push(ids[i].value);
+	itemsCountValue.push(ids[i].name);
+})
+var money=0;
+$.each(ids,function(i,item){
+	money=money+itemsprice[i]*100*itemsCountValue[i];
+});
+var money2=money/100;
+//拼接数据
+var items = [];
+$.each(price,function(i,item2){
+	items.push({id:itemsIdValue[i],count:itemsCountValue[i],price:itemsprice[i]});
+})
+
+py('event','viewCart' ,{
+    'money':money2,
+    'items':items
+}).track('Qas.qEs.1vfp4kdfXq6hQlBNRB-AbP');
+</script>
+<!-- 获取总价 -->
+

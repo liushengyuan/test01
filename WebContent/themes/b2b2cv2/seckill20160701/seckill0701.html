@@ -1,0 +1,245 @@
+<#include '/common/header.html' />
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>
+<!--创建"商品基本信息"标签-->
+<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+<!-- 获取活动和活动商品参数 -->
+<#assign activityListTag= newTag("activityListTag")>
+<!-- 获取活动和活动商品参数 -->
+<#assign activityKillSecTag= newTag("activityKillSecTag")>
+<!-- 秒杀活动列表 -->
+<#assign activityMapSpike= activityListTag("'id':'0'")!''>
+<#assign dateformat= "com.enation.framework.directive.DateformateDirective"?new()>	
+<style type="text/css">
+   		.active-time{
+			width:1200px;
+			height:40px;
+			display: inline-block;
+		}
+		.active-time dl{display: inline-block;width: 1200px;height:40px;}
+		.active-time dl dd{font-size:14px;padding-left:20px;text-align:left;line-height:40px;color:#fff;width:918px;float:left;background: #666666;height:40px;display: inline-block;-webkit-margin-start: 0px;border-left:2px solid #dedede;}
+		.active-time dl dt{font-weight: bold;line-height:40px;font-size:16px;color:#fff;background: #f652a8;float:left;width:240px;height:40px;display: inline-block;}
+		.active-time dl dt span{    float: left;margin-left:20px;margin-top:10px;}
+		.active-time dl dt img{
+			
+		}
+		.test{float:left;display:inline-block;width:0; height:0; border-width:10px 10px; border-style:solid; border-color:#ffffff #f652a8 #ffffff #ffffff;margin-top:10px;}
+		.seckil-time{color:#fff;background:#666;border-radius:5px;height:20px;padding:0 5px;display:inline-block;}
+</style>
+<link type="text/css" rel="stylesheet" href="${ctx}/themes/b2b2cv2/seckill20160701/3active.css" />
+<div id="3active-banner">
+	<img  src="${ctx}/themes/b2b2cv2/seckill20160701/skillpicture.png" width="100%"/>
+</div>
+<div class="active3-continter">
+    	<#if activityMapSpike.activityList??>
+    	   <#list activityMapSpike.activityList as a>
+			<div class="active3-center" style="position:relative;">
+			     <div class="active-time">
+					<dl>
+					<span class="test"></span>
+						<dt >
+							<span><img src="${ctx}/themes/b2b2cv2/seckill20160701/time-icoa.png" alt="" width="20px"></span>
+						   <div><@dateformat time='${(a.start_time)}' pattern='yyyy年MM月dd日  E '/></div>
+						</dt>
+						<dd >
+						   <@dateformat time='${(a.start_time)}' pattern='HH时mm分 '/>开售
+						</dd>
+					</dl>
+				</div>
+				    <h3 id="an_1" class="product-tittle" style="position:absolute;top:20px;left:47%;color:#fff;">${a.name}</h3>
+				       <div style="margin-top:20px;" >
+				          <ul>
+				            <li>
+				               <div style="height:30px;">
+											      <!-- 倒计时 距离本期结束 -->
+											      <p id="activityTime${a_index}" style="float:right;height: 20px;margin-bottom:10px;font-size: 17px;">
+											      	<span id="d${a_index}" class="seckil-time"></span><strong>天</strong>
+											      	<span id="h${a_index}" class="seckil-time"></span><strong>时</strong>
+											      	<span id="m${a_index}" class="seckil-time"></span><strong>分</strong>
+											      	<span id="s${a_index}" class="seckil-time"></span><strong>秒</strong>
+											      </p>
+											       <h5 id="activityText${a_index}" style="float:right;line-height:22px;height: 20px;font-size: 17px;color:#6D6A6A">即将开始：&nbsp;</h5>
+											      <script type="text/javascript">
+												 	 <#assign groupBuyActSurplusTag=newTag("groupBuyActSurplusTag")>
+												  	 <#assign time=groupBuyActSurplusTag("{'end_time':${a.start_time!''} }")>
+												  	 <#assign end_time=groupBuyActSurplusTag("{'end_time':${a.end_time!''} }")>
+											      //倒计时
+											      	  var start${a_index}=${time.cha};
+											      	  var end${a_index} = ${end_time.cha};
+											      	  var startToEnd_time${a_index} = end${a_index}-start${a_index};
+											      	  var startOrEnd${a_index};
+												      var tms${a_index} = [];
+												      var day${a_index} = [];
+												      var hour${a_index} = [];
+												      var minute${a_index} = [];
+												      var second${a_index} = [];
+												      function takeCount${a_index}() {
+												          for (var i = 0, j = tms${a_index}.length; i < j; i++) {
+												              tms${a_index}[i] -= 1;
+												              //计算天、时、分、秒、
+												              var days${a_index} = Math.floor(tms${a_index}[i] / (1 * 60 * 60 * 24));
+												              var hours${a_index} = Math.floor(tms${a_index}[i] / (1 * 60 * 60)) % 24;
+												              var minutes${a_index} = Math.floor(tms${a_index}[i] / (1 * 60)) % 60;
+												              var seconds${a_index} = Math.floor(tms${a_index}[i] / 1) % 60;
+												              if (days${a_index} < 0) days${a_index} = 0;
+												              if (hours${a_index} < 0) hours${a_index} = 0;
+												              if (minutes${a_index} < 0) minutes${a_index} = 0;
+												              if (seconds${a_index} < 0) seconds${a_index} = 0;
+												              //将天、时、分、秒插入到html中
+												              if(startOrEnd${a_index}==1){
+												            	  $("#activityText${a_index}").html("距结束:&nbsp;");
+												              }
+												              if(days${a_index}==0&&hours${a_index}==0&minutes${a_index}==0&seconds${a_index}==0){
+												            	  if(startOrEnd${a_index}==0){
+												            		  tms${a_index}[i]=startToEnd_time${a_index};
+												            		  startOrEnd${a_index}=1;
+												            	  }else if(startOrEnd${a_index}==1){
+												            	  	  $("#activityTime${a_index}").html("");
+												            	      $("#activityText${a_index}").html("活动已结束&nbsp;");
+												            	  }
+												              }
+												                $("#d${a_index}").html(days${a_index});
+												                $("#h${a_index}").html(hours${a_index});
+												                $("#m${a_index}").html(minutes${a_index});
+												                $("#s${a_index}").html(seconds${a_index});
+												          }
+												          setTimeout("takeCount${a_index}()", 1000);
+												      }
+												  	  var tm${a_index} = ${time.cha};
+												  	  if(tm${a_index}<=0){
+												  		  tms${a_index}[tms${a_index}.length] = "${end_time.cha!}";
+												  		  startOrEnd${a_index}=1;
+												  	  }else{
+											              tms${a_index}[tms${a_index}.length] = "${time.cha!}";
+											              startOrEnd${a_index}=0;
+												  	  }
+										             day[${a_index}] = "d${a_index}";
+										             hour[${a_index}] = "h${a_index}";
+										             minute[${a_index}] = "m${a_index}";
+										             second[${a_index}] = "s${a_index}";
+										         </script> 
+										         <script>
+									             takeCount${a_index}();
+										         </script>
+										        <div> 
+										         <span class="line" style="width:1200px;display:inline-block;height:3px;background-color: #${a.line_color!''}" ></span>
+										     </li>
+										    </ul>     
+									    </div>
+					   <ul>
+					   <#assign activityKill=activityKillSecTag("'id':'${a.id}'")!''>
+						 <#if activityKill.activityProductList??>
+							      <#list activityKill.activityProductList as ap>
+								    <#assign product = goodsBaseDataTag("{'goodsid':"+ap.goods_id+"}")>
+								    <#if product??>
+						<li class="active3-product">
+						    <a href="${ctx}/goods-${product.goods_id}.html" target="_blank">
+						    	<@image src="${product.big!''}" alt="${product.name!''}" height="230" width="210"  class="active3-img"/>
+								<!-- <img src="active1.png" alt="" height="230" width="210"  class="active3-img"> -->
+								<h3 class="active3-title" >
+			                    <a href="${ctx}/goods-${product.goods_id}.html" target="_blank" class="active3-titlenr">
+			                    	${product.name!''}
+			                    </a>             			
+			                    </h3>
+			                   <div class="active3-price">
+				                    <ul >
+				                        <li class="active3_newprice">
+				                        	<#assign activity_price=ap.activity_price?number>
+		   								    ￥ ${activity_price?string('0.00')?default('0.00')} /件  
+				                    </li>
+				                         <li class="active3_oldprice">
+				                            <#assign original_price=ap.original_price?number>
+									              ￥ ${original_price?string('0.00')?default('0.00')} /件 
+				                        </li>
+				                    </ul>
+		               			</div>
+		               			<span class="line" style="width:1200px; background-color: #${a.line_color!''}"></span>
+		               			<#if product.enable_store==0>
+		               			 <a  target="_blank"  disabled="disabled"  class="active3_button active3_buttonOver">已售完</a> 
+		               			<#else>
+		               			    <#if a.start_time  gt a.nowtime>
+		               			       <a href="${ctx}/goods-${product.goods_id}.html"  target="_blank"    class="active3_button active3_buttonStart">即将开始</a> 
+		               			    <#elseif a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+		               			        <a href="${ctx}/goods-${product.goods_id}.html"   target="_blank"  class="active3_button">马上抢 </a>
+		               			    <#elseif  a.end_time lt a.nowtime>
+		               			      <a  target="_blank"  disabled="disabled"  class="active3_button active3_buttonOver">活动已结束</a> 
+		               			    </#if>  
+		               			</#if>
+						    </a>
+						  </li>
+						  </#if>
+						</#list>
+					  </#if>
+					</ul>
+			</div>
+			</#list>
+		</#if>
+		
+			<!-- 	<div class="menufloat" id="menufloat">
+                    <div style="margin-top:150px; width:145px;">
+                    	<a href="#dazhe1" class="an_title" >Женская одежда</a>	
+			       		<a href="#dazhe1" class="an_1" >ХИТ продаж</a>
+			       		<a href="#dazhe2" class="an_2" >Скидка 80%</a>
+			        	<a href="#an_1" class="an_1" >休闲食品</a>
+			        	<a href="#an_2" class="an_2" >糖果</a>
+			        	<a href="#an_3" class="an_3" >酒水&饮品</a>
+			        	<a href="#dazhe3" class="an_3" >Скидки до 50%</a>
+			        	<a href="#dazhe4" class="an_4" >Скидки до 30%</a>
+			        </div>
+                </div> -->
+</div>
+<!-- <div class="aactivebottom">
+<div>活动产品数量有限。活动时间5月31号至6月8号2016年。详细内容参见www.trade-ease.ru。活动机构：易智付科技（北京）有限公司，地址：北京西城区阜成门路22号620-626室，邮编：100037，营业执照：110108010780857</div>
+</div> -->
+<!-- <script type="text/javascript" src="jquery-1.5.1.min.js"></script> -->
+<script type="text/javascript">
+//四舍五入方法
+function changeTwoDecimal_f(x) {
+    var f_x = parseFloat(x);
+    var f_x = Math.round(x * 100) / 100;
+    var s_x = f_x.toString();
+    var pos_decimal = s_x.indexOf('.');
+    if (pos_decimal < 0) {
+        pos_decimal = s_x.length;
+        s_x += '.';
+    }
+    while (s_x.length <= pos_decimal + 2) {
+        s_x += '0';
+    }
+    return s_x;
+}
+function float_nav(dom){
+	var right_nav=$(dom);
+	var nav_height=right_nav.height();
+	function right_nav_position(bool){
+		var window_height=$(window).height();
+		var nav_top=(window_height-nav_height)/2;
+		if(bool){
+			right_nav.stop(true,false).animate({top:nav_top+$(window).scrollTop()},400);
+		}else{
+			right_nav.stop(true,false).animate({top:nav_top},300);
+		}	
+		right_nav.show();
+	}
+	
+	if(!+'\v1' && !window.XMLHttpRequest ){
+		$(window).bind('scroll resize',function(){
+			if($(window).scrollTop()>300){
+				right_nav_position(true);			
+			}else{
+				right_nav.hide();	
+			}
+		})
+	}else{
+		$(window).bind('scroll resize',function(){
+			if($(window).scrollTop()>300){
+				right_nav_position();
+			}else{
+				right_nav.hide();
+			}
+		})
+	}	
+}
+float_nav('#menufloat');
+</script>
+<#include '/common/footer.html'/>

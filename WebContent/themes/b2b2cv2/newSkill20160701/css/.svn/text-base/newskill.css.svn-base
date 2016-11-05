@@ -1,0 +1,164 @@
+*{
+	padding:0;
+	margin:0 auto;
+ }
+ul {
+  list-style: none; }
+
+a {
+  text-decoration: none; }
+img{border:none;}
+.active3-continter{
+	 width: 100%;
+	margin-top:40px;
+	text-align:center;}
+.active3-center {
+	width:1200px;
+  display: inline-block;
+  padding-top:20px;
+  padding-bottom:40px;
+  margin-left:-30px;
+  }
+
+.product-tittle {
+  color: #d71a5e;
+  font-family: "微软雅黑", "microsoft yahei", "宋体";
+  font-size: 28px;
+  text-align: center;
+  margin: 10px; }
+
+.active3-product {
+	margin:40px 0;
+	position:relative;
+  display: block;
+  float: left;
+  padding-top: 10px;
+  padding-right: 15px;
+  padding-bottom: 50px;
+  padding-left: 15px;
+  height: 320px;
+  width: 210px; }
+.active3-img:hover{ box-shadow:1px 1px 15px rgba(0,0,0,0.5);}
+.active3-title {
+  /* background: #fff; */
+  width: 210px;
+  text-align: center;
+  padding: 20px 0px 5px;
+  margin-top: -5px; 
+  height:85px;}
+
+.active3-titlenr {
+  word-wrap:break-word; 
+  word-break:break-all;
+  text-overflow:ellipsis; 
+  padding: 0px 5px 0px;
+  margin-left: 5px;
+  display: block;
+  font-size: 14px;
+  font-family: "微软雅黑", "microsoft yahei", "宋体";
+  color: #333; }
+
+.active3-price {
+  display: inline-block;
+  text-align: center;
+  line-height: 18px;
+  width: 210px;
+  font-family: "微软雅黑", "microsoft yahei", "宋体";
+  font-size: 14px;
+  }
+  .active3-price ul {
+	  display:inline-block;
+    margin-top: 5px;
+    margin-bottom: 5px; 
+    width: 239px;
+    text-align: center;
+    margin-left: -10px;}
+
+.active3_newprice {
+  color: #000;
+  font-weight: bold;
+  float:left; 
+  width:118px;
+  float:left; 
+  font-size:12px;}
+
+.active3_oldprice {
+	float:right;
+  font-size: 10px;
+  color: #000;
+  width:120px;
+  text-decoration: line-through; }
+
+.active3_discount {
+  color: #954021;
+  font-size: 12px; }
+.active3_button{
+	background:#88bb24;
+	font-family: "微软雅黑", "microsoft yahei", "宋体";
+	width:210px;
+	display:block;
+	height:40px;
+	font-size:14px;
+	line-height:40px;
+	color:#fff;
+	text-align:center;
+	margin-top:10px;}
+.active3-pr {
+	position:absolute;
+	top:-17px;
+	right:-6px;
+	background:url(3active-p.png) no-repeat top right;
+	width:56px;
+	height:56px;
+	}
+.active3-pr1{
+	background-position:0 0;}
+.active3-pr2{
+	background-position:-56px 0;}
+.active3-pr3{
+	background-position:-112px 0;}
+.active3-pr4{
+	background-position:-168px 0;}
+.active3-pr5{
+	background-position:-224px 0;}
+.active3-pr6{
+	background-position:-280px 0;}	
+.active3-pr7{
+	background-position:-336px 0;}
+.active3-pr8{
+	background-position:-392px 0;}
+.active3-pr9{
+	background-position:-448px 0;}
+.aactivebottom{ background:#ededed;
+background-size:100%;
+height:94px;
+width:100%;}
+.aactivebottom div{width:1220px;
+font-family: "微软雅黑", "microsoft yahei", "宋体";
+font-size:14px;padding-top:30px;}
+
+/* 左边导航 */
+.menufloat {
+  width: 140px;
+  height: 484px;
+  position: fixed;
+  right: 5px;
+  _position: absolute;
+  overflow: hidden;
+  z-index: 50;
+  background: url(../images/leftskill.png) no-repeat; }
+  .menufloat a {
+	  text-align:left;
+    display: inline-block;
+    width: 110px;
+	margin-left:10px;
+    border-bottom: 1px solid #fff; 
+    font-family: "微软雅黑", "microsoft yahei", "宋体";
+    font-size: 16px;
+    color: #fff; 
+    padding:20px 0 20px 0px;
+    text-align:center;
+ }
+.menufloat a.an_title{font-size:12px; font-weight:bold; color:#fff; padding-left:0;}
+
+/*# sourceMappingURL=3.8active.css.map */

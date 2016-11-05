@@ -1,0 +1,48 @@
+<table width="832" border="0" align="left" cellpadding="0"
+	cellspacing="0" style="margin-left: 25px; font-size: 12px;">
+	<tr>
+		<td height="60" style="border-bottom: 1px solid #c8c8c8;"><a
+			href="${domain!''}" target="_blank"><@image src="${logo!''}"
+				border="0" /></a>
+		</td>
+	</tr>
+	<tr>
+		<td height="10"></td>
+	</tr>
+	<tr>
+		<td height="30" style="line-height: 30px;">您好：</td>
+	</tr>
+	<tr>
+		<td height="30" align="left" style="line-height: 30px;">您的店铺<#if pass==1>通过<#else>未通过</#if>审核：</td>
+	</tr>
+	<tr>
+		<td height="15" align="left" style="line-height: 30px;"></td>
+	</tr>
+
+	<tr>
+		<td height="14" align="left"
+			style="line-height: 14px; color: #474747;">店铺名称：${store_name}</td>
+	</tr>
+	<tr>
+		<td height="14" align="left"
+			style="line-height: 14px; color: #474747;">卖家用户名：${store_member}</td>
+	</tr>
+	<tr>
+		<td height="14" align="left"
+			style="line-height: 14px; color: #474747;">审核时间：${send_time}</td>
+	</tr>
+	<tr>
+		<td height="14" align="left"
+			style="line-height: 14px; color: #474747;">审核意见：${check_description}</td>
+	</tr>
+	<tr>
+		<td height="30" align="left" style="line-height: 30px;">本邮件为${sitename}系统发出，请勿直接回复。</td>
+	</tr>
+	<tr>
+		<td height="40" align="left"
+			style="line-height: 30px; font-size: 14px; font-weight: bold;"><a
+			href="${domain!''}"
+			style="color: #da6d00; text-decoration: underline;">龙贸通电商平台</a>
+		</td>
+	</tr>
+</table>

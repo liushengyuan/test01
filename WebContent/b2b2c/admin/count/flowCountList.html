@@ -1,0 +1,113 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.input_text{
+	width: 95%;
+}
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="bonusform">
+	<div class='buttonArea' >
+		<span style="float: right;"> 
+		 	<span id="simpleSearch">
+		 		<span>用户IP:</span>
+				<input type="text"  id="user_ip" validtype="checkIp" class="input_text" style="width: 200px"/>&nbsp;&nbsp;&nbsp;
+		 		<span>用户ID:</span>
+				<input type="text"  id="user_name" class="input_text" style="width: 200px"/>&nbsp;&nbsp;&nbsp;
+		 		<span>是否完成订单</span>
+				<select width="200px" id="order_status">
+				 	<option value="">--请选择--</option>
+				 	<option value="是">是</option>
+				 	<option value="否">否</option>
+				</select>&nbsp;&nbsp;&nbsp;
+		 		<!-- <span>起始时间:</span>
+		 		<input class="easyui-datebox" type="text" data-options="required:true" name="start_time" id="start_time" data-options="formatter:myformatter,parser:myparser"/>&nbsp;&nbsp;&nbsp;
+		 		<input class="easyui-datebox" type="text" data-options="required:true" name="stop_time" id="stop_time" data-options="formatter:myformatter,parser:myparser"/>&nbsp;&nbsp;&nbsp; -->
+				<a href="javascript:void(0)" class="easyui-linkbutton" id="search" data-options="plain:true" onclick="searchAlliaction()">搜索</a>
+				<a href="${ctx}/b2b2c/admin/allianceCount!flowCountListExport.do" class="button b_fr" id="export">导出</a>
+			</span> 
+		</span>
+			<input id="user_addr" name="user_addr" type="hidden" value="${flowCount.user_addr!''}" />
+			<input id="start_time" name="start_time" type="hidden" value="${start_time!''}" />
+			<input id="stop_time" name="stop_time" type="hidden" value="${stop_time!''}" />
+		</div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'allianceCount!flowCountDetail.do?user_addr=${flowCount.user_addr!''}&start_time=${start_time!''}&stop_time=${stop_time!''}',pageList: [10,15,20,30],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="advertisedata">
+				<thead>
+					<tr>
+						<th data-options="field:'flow_id',checkbox:true,width:100" ></th>
+						
+						<th data-options="field:'user_ip',width:50" align="center">用户IP</th>
+						<th data-options="field:'come_time',width:50,sortable:true" align="center" formatter="formatDate">进入时间</th>
+						<th data-options="field:'go_time',width:60, sortable:true"" align="center" formatter="formatDate">离开时间</th>
+						<th data-options="field:'user_name',width:100" align="center">用户ID</th>
+						<th data-options="field:'order_status',width:40" align="center">是否完成订单</th>
+						
+						<th data-options="field:'action',width:40" formatter="formatOperation" align="center">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	
+	<div id="divdia" style="display: none;"></div>
+	
+</div>
+<script type="text/javascript">
+	$(function () {  
+	    
+	    //设置text需要验证  
+	    $('input[type=text]').validatebox();  
+	})
+	
+	$.extend($.fn.validatebox.defaults.rules, { 
+        checkIp : {// 验证IP地址  
+            validator : function(value) {  
+                var reg = /^((1?\d?\d|(2([0-4]\d|5[0-5])))\.){3}(1?\d?\d|(2([0-4]\d|5[0-5])))$/ ;  
+                return reg.test(value);  
+            },  
+            message : 'IP地址格式不正确'  
+   	 	}  
+	});
+
+	function formatOperation(value, row, index) {
+		var val = "";
+		var val="<a class='edit' title='查看详情' href='#' onclick=\"newTab('查看详情','${ctx}/b2b2c/admin/allianceCount!flowCountCheck.do?flow_id="+row.flow_id+"')\"></a>";
+		return val;
+	}
+
+	//搜索
+	function searchAlliaction(){
+		var user_ip = $("#user_ip").val();
+		var user_name = $("#user_name").val();
+		var order_status = $("#order_status").val();
+		$("#advertisedata").datagrid('load', {
+			user_ip:user_ip,
+			user_name:user_name,
+			order_status:order_status,
+			page:1
+   	 	});
+	}
+
+	$("#export").click(function(){
+		var user_ip = $("#user_ip").val();
+		var user_name = $("#user_name").val();
+		var order_status = $("#order_status").val();
+		var user_addr = $("#user_addr").val();
+		var exportHref = "${ctx}/b2b2c/admin/allianceCount!flowCountListExport.do?user_ip="+user_ip+"&user_name="+user_name+"&order_status="+order_status+"&user_addr="+user_addr;
+		$("#export").attr("href",exportHref);
+ 	});
+
+	function formatDate(value,row,index){
+		if(value==null||value==0){
+			return "";
+		}
+		else{
+			return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+		}
+	}
+</script>
+<#include '/admin/footer.html' >

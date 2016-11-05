@@ -1,0 +1,153 @@
+<#include '/store/store_header.html' />
+<#assign groupBuyListTag=newTag("myGroupBuyListTag")> 
+<#assign gbPage=groupBuyListTag()>
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;"><@uiLabel text="groupbuylist.nindeweizhi" />：</span><!-- 您的位置 -->
+			<span>></span>
+			<a href="#"><@uiLabel text="groupbuylist.cuxiaoguanli" /> </a><span>></span><@uiLabel text="groupbuylist.tuangouyi" /><!-- 促销管理 --><!-- 团购 -->
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="groupbuy_list.html?menu=promotion"><@uiLabel text="groupbuylist.tuangouliebiao" /></a><!-- 团购列表 -->
+					</li>
+					<li class="normal">
+						  <a href="groupbuy_add.html?menu=promotion"  title="新增团购"><@uiLabel text="groupbuylist.xizengtuangou" /></a><!-- 新增团购 -->
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!-- 评论搜索 -->
+		<div class="search_store_commont">
+	  		<table class="search_form"  id="detailFind">
+		  		<tbody>
+					<tr>
+		  				<td style="width:500px;">&nbsp;</td>
+       					<th><@uiLabel text="groupbuylist.tuangoumingcheng" />：</th><!-- 团购名称 -->
+       					<td><input class="text input_text" type="text" name="gb_name" value="${gb_name!''}"></td>
+		  				<th><@uiLabel text="groupbuylist.huodongzhuangtai" />：</th><!-- 活动状态 -->
+		  				<td style="width:60px;">
+		  				<#if !gb_status?? >  <#assign gb_status='-1'  />  </#if>
+				        <select name="gb_status" class="w90" id="gb_status">
+				               <option value="" ><@uiLabel text="groupbuylist.quanbutuangou" /></option><!-- 全部团购 -->
+				                <option value="0" <#if gb_status=='0'>selected="selected"</#if> ><@uiLabel text="groupbuylist.weishenhe" /></option><!-- 未审核 -->
+				                <option value="1" <#if gb_status=='1'>selected="selected"</#if>><@uiLabel text="groupbuylist.yitongguo" /></option><!-- 已通过 -->
+				                <option value="2" <#if gb_status=='2'>selected="selected"</#if>><@uiLabel text="groupbuylist.shenheshibai" /></option><!-- 审核失败 -->
+				                <option value="3" <#if gb_status=='3'>selected="selected"</#if>><@uiLabel text="groupbuylist.yijieshu" /></option><!-- 已结束 -->
+				         </select>
+		  				</td>
+						<td style="width:70px;text-align:right;"><input type="submit" class="submit" value="<@uiLabel text="groupbuylist.sousuo" />" id="search"></td><!-- 搜索 -->
+       				</tr>
+			  	</tbody>
+			  </table>
+		</div>
+		<!-- 团购列表 -->
+		<div class="s_commont_list">
+			 <#assign  gbList = gbPage.result />
+       			<#if gbList?size==0>
+       				<p class="no_blank"><@uiLabel text="groupbuylist.zanwufuhetiaojiandeshujujilu" /></p><!-- 暂无符合条件的数据记录 -->
+       			<#else>	
+				<table cellpadding="0" cellspacing="0" class="goodslist_bystore groupbuy_list_table" style="border:0px none;">
+					<thead>
+						<tr>
+							<th ><@uiLabel text="groupbuylist.shangpin" /></th><!-- 商品 -->
+							<th colspan="1" style=""><@uiLabel text="groupbuylist.mingcheng" /></th><!-- 名称 -->
+							<th ><@uiLabel text="groupbuylist.huodong" /></th><!-- 活动 -->
+							<th ><@uiLabel text="groupbuylist.yituangou" /></th><!-- 已团购 -->
+							<th ><@uiLabel text="groupbuylist.huodongzhuangtai" /></th><!-- 活动状态 -->
+							<th ><@uiLabel text="groupbuylist.caozuo" /></th><!-- 操作 -->
+						</tr>
+					</thead>	
+					   <#list gbList as gb >
+					       	<tr>
+					       		<td>
+					       			<a target="_blank" href="${ctx}/goods-${gb.goods_id}.html">
+					       				 <img width="60" height="60"  onload="javascript:DrawImage(this,60,60);" src="<@imgurl pic="${gb.img_url!''}" />" >
+					       			</a>
+					       		</td>
+					       		<td style="">
+					       			<a href="${ctx}/goods-${gb.goods_id}.html" target="_blank" style="color:#005ea6;display:block;line-height:23px;">${gb.gb_name!''}</a>
+					       			<a href="#" target="_blank" class="subtitle" style="color:#999;display:block;line-height:23px;">${gb.gb_title!''}</a>
+					       		</td>
+					       		<td>
+					       			<strong>${gb.act_name}</strong>
+							        <p class="goods-time">
+										<@dateformat time="${gb.start_time}" pattern="yyyy-MM-dd"/>-
+										<@dateformat time="${gb.end_time}" pattern="yyyy-MM-dd"/>
+									</p>
+					       		</td>
+					       		<td>${gb.buy_num!0}</td>
+						        <td>
+									<#if gb.gb_status==0 ><@uiLabel text="groupbuylist.weishenhe" /></#if><!-- 未审核 -->
+									<#if gb.gb_status==1 ><@uiLabel text="groupbuylist.yishenhe" /></#if><!-- 已审核 -->
+									<#if gb.gb_status==2 ><@uiLabel text="groupbuylist.yijujue" /></#if><!-- 已拒绝 -->
+									<#if gb.gb_status==3 ><@uiLabel text="groupbuylist.yijieshu" /></#if><!-- 已结束 -->
+								</td>
+								<td class="storegoodslist_tools" style="text-align:center;">
+									<#if gb.gb_status==0>
+							        	 <a href="groupbuy_edit.html?goodsid=${gb.goods_id}&menu=promotion" class="tool4"><i></i><@uiLabel text="groupbuylist.bianji" /></a><!-- 编辑 -->
+							         	 <!--  <a class="delete tool2" gbid="${gb.gb_id}" href="javascript:void(0);"><i></i>删除</a>-->
+							        </#if>	
+								</td>
+					       	</tr>
+					       	</#list>
+					    </tbody>
+						</table>
+						<@pager pageno="${gbPage.page!'1'}" pagesize="${gbPage.pageSize}" totalcount="${gbPage.totalCount}" />	
+						</#if>
+			</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+$(function(){
+	$(".delete").click(function(){
+		if( !confirm("<@uiLabel text='groupbuylist.querenshanchu' />?") ){/* 确认删除 */
+			return false ;
+		}
+		var gbid = $(this).attr("gbid");
+		$.Loading.show("<@uiLabel text='groupbuylist.zhengzaishanchu' />...");/* 正在删除 */
+		
+		$.ajax({
+			dataType:"json",
+			type:"post",
+			url:"${ctx}/api/b2b2c/groupBuy!delete.do",
+			data:"gb_id="+gbid,
+			success:function(json){
+				$.Loading.hide();
+				if(json.result==1){
+					alert("<@uiLabel text='groupbuylist.shanchuchenggong' />")/* 删除成功 */
+					location.href="groupbuy_list.html?menu=promotion";
+				}else{
+					alert(json.message);
+				}
+			},
+			error:function(){
+				$.Loading.hide();
+				alert("<@uiLabel text='groupbuylist.chuxianyiwaicuowu' />");/* 出现意外错误 */
+			}
+			
+		});
+
+		
+	});
+});
+$("#search").click(function(){	
+	var gb_name=$("input[name='gb_name']").val();
+	var gb_status=$("#gb_status").val();
+	var content=$("input[name='content']").val();
+		location.href="groupbuy_list.html?gb_name="+gb_name+"&gb_status="+gb_status+"&menu=promotion";
+	
+});
+</script>
+	<script>
+		$(function(){
+				selectMenu(1);
+		})
+	</script>
+<#include '/common/footer.html' />

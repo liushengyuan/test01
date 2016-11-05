@@ -1,0 +1,201 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton" data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
+		<a href="javascript:void(0)" class="button" data-options="iconCls:'icon-remove',plain:true" onclick="del()">删除</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="logiform">
+			<table class="easyui-datagrid"
+				data-options="url:'logi!list_freightJson.do',pageList: [5,10,15],pageSize:5,fitColumns:'true'"pagination="true" width="width" id="logidata">
+				<thead>
+				    <tr>
+				    	<th  data-options="field:'freight_id',checkbox:true,width:100"></th>
+				   	 	<th  data-options="field:'logis_name',width:40, align:'center'" >中文名称</th>
+				   	 	<th  data-options="field:'product_name',width:40,align:'center'" formatter="formatProduct">物流产品</th>
+				   	 	<th  data-options="field:'max_long',width:55,align:'center'" formatter="formatKG">重量限制(kg)</th>
+				   	 	<th  data-options="field:'extra_price',width:70,align:'center'" formatter="formatPrice">价格(元)</th>
+				   	 	<th  data-options="field:'min_long',width:115,align:'center'" formatter="formatSize" >尺寸要求(cm)</th>
+				   	 	<th  data-options="field:'validatedays',width:40,align:'center'">时效</th>
+				   	 	<th  data-options="field:'action',width:60,align:'center'" formatter="formatAction">操作</th>
+				   	 </tr>
+				</thead>
+			 </table>
+			<div id="dlytype_info" style="display: none;"></div>
+		</form>
+		<div id="logiinfo" style="display: none;"></div>
+	</div>
+</div>
+
+ <script type="text/javascript">
+function formatAction(value,row,index){
+	var val="<a title='修改' href='javascript:void(0);' onclick='edit("+row.freight_id+")'>修改</a>";
+	return val;
+}
+function formatProduct(value,row,index){
+	var val="";
+	if(row.product_name=="1"){
+		val = "标准快递";
+	}
+	return val;
+}
+function formatKG(value,row,index){
+	var val="";
+	val = row.min_weight+"≤重量<"+row.max_weight+"kg";
+	return val;
+}
+function formatPrice(value,row,index){
+	var val="";
+	val ="(重量-"+row.start_price_kg+")"+"*"+row.every_price_kg+"+"+row.start_price+"+"+row.extra_price;
+	return val;
+}
+function formatSize(value,row,index){
+	var val="";
+	val =row.min_long+"≤长<"+row.max_long+"&nbsp;;&nbsp;"+row.min_width+"≤宽<"+row.max_width+"&nbsp;;&nbsp;"+row.min_high+"≤高<"+row.max_high;
+	return val;
+} 
+function del(){ 
+	var rows = $('#logidata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择要删除的运费模板");
+		return;
+	}
+	if(!confirm("确认要将这些运费模板删除吗？")){	
+		return ;
+	}
+	 var options = {
+			url : "logi!deleteFreight.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					var rows = $('#logidata').datagrid("getSelections"); 
+					for(var i =0;i<rows.length;i++){      
+			 			var index = $('#logidata').datagrid('getRowIndex',rows[i]); 
+			 			$('#logidata').datagrid('deleteRow',index);      
+			 		}
+				}
+				if(result.result==0){
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误，请重试");
+			}
+	};
+	$('#logiform').ajaxSubmit(options);	
+}
+function append(){
+	 $("#logiinfo").show();
+	　　	$('#logiinfo').dialog({
+	　　		title: '添加运费标准',			
+	　　		width: 550,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: 'logi!add_freight.do', 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var savebtn = $(this);
+	　　				 var disabled=  savebtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+		　　				 addFreightForm(savebtn);
+		　　			}
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#addFreightForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+}
+function edit(logiId){
+	 $("#logiinfo").show();
+	　　	$('#logiinfo').dialog({
+	　　		title: '修改运费模板',			
+	　　		width: 550,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: 'logi!edit_freight.do?fid='+logiId, 	
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var editbtn = $(this);
+	　　				 var disabled=  editbtn.hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+		　　				 editFreightForm(editbtn);
+		　　			}
+	　　			 }
+	　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#editFreightForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	}); 
+}
+function addFreightForm(savebtn){
+	var formflag= $("#addFreightForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍后...");
+		savebtn.linkbutton("disable");	
+	 	var options = {
+			url : "logi!freightAdd.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$("#logiinfo").dialog('close');
+					$('#logidata').datagrid('reload');
+				}else{
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+			},
+			 error : function(e) {
+				 $.Loading.error("出现错误 ，请重试");	
+				 savebtn.linkbutton("enable");
+			}
+		};
+		$('#addFreightForm').ajaxSubmit(options);	
+	}
+}
+function editFreightForm(editbtn){
+	var formflag= $("#editFreightForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍后...");
+		editbtn.linkbutton("disable");	
+		var options = {
+			url : "logi!saveEditFreight.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					$("#logiinfo").dialog('close');
+					$('#logidata').datagrid('reload');
+					editbtn.linkbutton("enable");
+				}else{
+					$.Loading.error(result.message);
+					editbtn.linkbutton("enable");
+				}
+		 	},
+		 	error : function(e) {
+		 		$.Loading.error("出现错误 ，请重试");	
+		 		editbtn.linkbutton("enable");
+			}
+		};
+		$('#editFreightForm').ajaxSubmit(options);
+	}
+}
+ 
+</script>
+<#include '/admin/footer.html' >

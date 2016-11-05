@@ -1,0 +1,63 @@
+<#-- 创建订单价格标签 -->
+<#assign orderPiceTag= newTag("orderPriceTag") >
+<#--通过订单价标签获取订单价格 -->
+<#assign orderResult = orderPiceTag() >
+您共选择了
+<em id="totalchoose">
+      0
+</em>
+个商品
+&nbsp;&nbsp;&nbsp;&nbsp;
+<#if locale=="zh">
+      ${orderResult.currencyZh!''}:
+<#elseif locale=="ru">
+     ${orderResult.currencyRu!''}:
+</#if>
+<#if locale="zh">
+<div style=" float:left;margin-left:200px;">
+	<input type="checkbox" id="pointId" onclick="pointcheck()" ></input>使用积分:
+</div>
+<#elseif locale=="ru">
+<div style=" float:left;margin-left:200px;">
+	<input type="checkbox" id="pointId" onclick="pointcheck()" ></input>Мои баллы:
+</div>
+</#if>
+<div id="pointdivId" style=" float:left;margin-left:10px;display: none;">
+	<input type="hidden" id="consumeId" value="${consume.CNY}">
+	<#if mp !=-1000 >
+	<input type="hidden" id="pointSpanId" value="${mp!''}">
+	</#if>
+	<#if lv !=-1000 >
+	<input type="hidden" id="lvId" value="${lv!''}">
+	</#if>
+	<input type="hidden" id="consumerubId" value="${consume.RUB}">
+    <input type="hidden" id="goodsPrice" value="${orderResult.orderprice.goodsPrice!''}">
+	<#if mp gt 0>
+		<#if locale="zh">
+	  		<input type="text" id="pointInputId" style="width:40px; height:15px;box-shadow:none;" /><span id="mpId"  style="font-size:12px;color:#777;margin-left:5px;"></span><span id="pointMoneyId" style="color:#f00;margin-left:15px;font-weight:bold; font-size:14px; "></span>
+	  	<#elseif locale=="ru">
+	  		<input type="text" id="pointInputId" style="width:40px; height:15px;box-shadow:none;" /><span id="mpId"  style="font-size:12px;color:#777;margin-left:5px;"></span><span id="pointMoneyId" style="color:#f00;margin-left:15px;font-weight:bold; font-size:14px; "></span>
+	  	</#if>
+  	<#else>
+  		<span id="mpId"  style="font-size:12px;color:#777;margin-left:5px;"></span><span id="pointMoneyId" style="color:#f00;margin-left:15px;font-weight:bold; font-size:14px; "></span>
+  	</#if>
+</div>
+<em id="MoneyId">
+   ￥0
+<!-- <#if orderResult.currency=="CNY">
+ 	${orderResult.orderprice.goodsPrice?string("currency")}
+<#elseif orderResult.currency=="RUB">
+	${orderResult.orderprice.goodsPrice!''}р.
+</#if> -->
+</em>
+<@uiLabel text="goods.freightlogispricesum" />:
+  <em>
+     <span id="logisprice"> 
+                   ￥0
+      <!--  <#if locale=="zh">
+			                      ￥${orderResult.pricesum!''}
+      <#elseif locale=="ru">
+			    ${orderResult.pricesum!''}p.
+	    </#if> -->
+     </span>
+  </em>

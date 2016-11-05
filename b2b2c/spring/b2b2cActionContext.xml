@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd"
+	default-autowire="byName" default-lazy-init="false">
+	<!-- 定义此应用的组件扫描包 -->
+	<context:component-scan base-package="com.enation.app.b2b2c" />
+	<bean id="buyerMemberManager" class="com.enation.app.b2b2c.core.service.member.impl.BuyerMemberManager" parent="baseSupport"></bean>
+	<bean id="warehouse" class="com.enation.app.b2b2c.core.service.warehouse.Impl.Warehouse" parent="baseSupport"></bean>
+	<bean id="storeManager" class="com.enation.app.b2b2c.core.service.store.impl.StoreManager" parent="baseSupport"></bean>
+	<bean id="storeMemberManager" class="com.enation.app.b2b2c.core.service.member.impl.StoreMemberManager" parent="baseSupport"></bean>
+	
+	<!--卖家自定义配送商 -->
+	<bean id="sellerExpressManager" class="com.enation.app.b2b2c.core.service.impl.SellerExpressManager" parent="baseSupport"></bean>
+	
+	<!--国家物流关联管理 -->
+	<bean id="logiCountryManager" class="com.enation.app.b2b2c.core.service.impl.LogiCountryManager" parent="baseSupport"></bean>
+	
+	<!--国家管理 -->
+	<bean id="countryManager" class="com.enation.app.b2b2c.core.service.impl.CountryManager" parent="baseSupport"></bean>
+	
+	
+</beans>

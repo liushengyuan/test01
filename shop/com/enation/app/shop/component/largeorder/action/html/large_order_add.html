@@ -1,0 +1,166 @@
+<#assign dataformat="com.enation.framework.directive.DateformateDirective"?new()/>
+<style>
+.input_text{
+	width: 200px;
+}
+</style>
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 20px">
+		<form method="post" class="validate" id="bonusTypeForm">
+			<table>
+				<tr>
+					<th><label class="text">店铺名称：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.store_name" 
+						dataType="string"
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">商品名称：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.goods" maxlength="60" 
+						dataType="string"
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">商品数量：</label></th>
+					<td><input class="easyui-numberbox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.goods_num" dataType="int" isrequired="true" />
+					</td>
+				</tr>
+				<tr>
+					<th><label class="text">订单金额：</label></th>
+					<td><input class="easyui-numberbox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.order_amount" dataType="float" isrequired="true" />
+					</td>
+				</tr>
+				<tr>
+					<td style="padding-left: 30px;">订单货币：</td>
+					<td>
+						<select name="bigOrder.currency">
+							<option value="RUB">卢布</option>
+							<option value="CNY">人民币</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td style="padding-left: 30px;">支付方式：</td>
+					<td>
+						<select name="bigOrder.payment_type">
+							<option value="0">未支付</option>
+							<option value="1">Yandex Money</option>
+							<option value="2">首信易支付</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th><label class="text">收货人姓名：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.ship_name" maxlength="60" 
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">收货人地址：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.ship_addr" maxlength="60" 
+						dataType="string"
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">收货人邮件：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.ship_email" maxlength="60" 
+						dataType="email"
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">收货人电话：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.ship_tel" maxlength="60" 
+						dataType="string"
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">备注：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.remark" maxlength="60"
+						dataType="string" 
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<td style="padding-left: 30px;">订单状态</td>
+					<td>
+						<select name="bigOrder.status" 
+						data-options="required:true" isrequired="true"
+						class="inputSelect valid">
+							<option value="100">--请选择--</option>	
+							<#list statusMap?keys as key>
+								<option value="${key}">${statusMap.get(key)}</option> 
+							</#list>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td style="padding-left: 30px;">付款状态</td>
+					<td>
+						<select name="bigOrder.pay_status" 
+						data-options="required:true" isrequired="true"
+						class="inputSelect valid">
+							<option value="100">--请选择--</option>	
+							 <#list payStatusMap?keys as key>
+								<option value="${key}">${payStatusMap.get(key)}</option> 
+							</#list>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td style="padding-left: 30px;">货运状态</td>
+					<td>
+						<select name="bigOrder.ship_status" 
+						data-options="required:true" isrequired="true"
+						class="inputSelect valid">
+							<option value="100">--请选择--</option>		
+							 <#list shipMap?keys as key>
+								<option value="${key}">${shipMap.get(key)}</option>
+							 </#list>
+						</select>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	/*$(function() {
+		
+		//类型切换
+		$("input[type=radio]").click(
+				function() {
+					var value = this.value;
+					if (value == 1 || value == 2) {
+						$("input[name=sendTimeStart],input[name=sendTimeEnd]")
+								.attr("disabled", false);
+					} else {
+						$("input[name=sendTimeStart],input[name=sendTimeEnd]")
+								.attr("disabled", true);
+					}
+
+					if (value == 2) {
+						$("#min_tr").show();
+					} else {
+						$("#min_tr").hide();
+					}
+				});
+
+	});*/
+</script>

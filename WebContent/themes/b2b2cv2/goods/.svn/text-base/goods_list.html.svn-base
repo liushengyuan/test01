@@ -1,0 +1,556 @@
+<#include '/store/store_header.html' />
+<script src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"></script>
+<!-- 获取店铺订单标签 -->
+<#assign mySellerGoodsList=newTag("mySellerGoodsListTag")/> 
+<#assign sellerGoodsList=mySellerGoodsList()/>
+<#assign deliveryregion="${deliveryregion!8}">
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color: #999;"><@uiLabel text="sellerAccount.Location"/>：</span> <span>></span> <a href="#"><@uiLabel text="seller.ProductManager"/></a><span>></span><@uiLabel text="seller.ProductList"/>
+		</div>
+		<div class="store_goodslist">
+			<table class="search_form">
+				<tbody>
+					<tr>
+						<th><@uiLabel text="sellerProductList.productName"/>：</th><!--商品名称  -->
+						<td><input type="text" placeholder="输入商品名称" class="text" name=goods_name
+							value="">
+						</td>
+						<th><@uiLabel text="sellerProductList.productType"/>：</th><!--产品分类  -->
+						<td><input type="text" placeholder="输入产品分类" class="text" name="goods_cat"
+							value="">
+						</td>
+						<th>剩余库存和规格总库存一致：</th>
+						<td>
+						<select class="button"  id="good_id" value="{c!''}" >
+							<option value="-1" selected="selected">全部</option>
+							<option value="0">是</option>
+							<option value="1">否</option>
+						</select>
+						</td>
+						<th>库存：</th>
+						<td><input placeholder="输入最大库存数" type="text" class="text" name="goods_store" value="${goods_store!''}">
+						</td>
+						
+						<th>选择发货地：</th>
+						<td>
+							<select id="deliveryregion" value="${deliveryregion!''}">
+								 <option value="8" <#if deliveryregion=='8'>selected="selected"</#if>>全部</option>
+                                 <option value="0" <#if deliveryregion=='0'>selected="selected"</#if>>国内</option>
+                                 <option value="1" <#if deliveryregion=='1'>selected="selected"</#if>>保税仓</option>
+                                 <option value="2" <#if deliveryregion=='2'>selected="selected"</#if>>俄罗斯</option>
+                                 <option value="3" <#if deliveryregion=='3'>selected="selected"</#if>>澳大利亚</option>
+                                 <option value="4" <#if deliveryregion=='4'>selected="selected"</#if>>新西兰</option>
+                                 <option value="5" <#if deliveryregion=='5'>selected="selected"</#if>>韩国</option>
+                                 <option value="6" <#if deliveryregion=='6'>selected="selected"</#if>>德国</option>
+                                 <option value="7" <#if deliveryregion=='7'>selected="selected"</#if>>暂不存在</option>
+                             </select>
+						</td>
+						<td class=""><input type="button" class="submit"
+							id="btnSearch" value="<@uiLabel text="sellerProductList.ProductSearch"/>"><!-- 搜索 -->
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br/>
+			<div class="tabmenu">
+				<input type="hidden" id="audit_state"
+					value="" />
+				<input type="hidden" id="market_enable"
+					value="" />
+				<ul class="tab pngFix">
+		
+					<li<#if !market_enable?? && !audit_state?? || market_enable!="1" && market_enable!="0" && audit_state!="2" && audit_state!="0" && market_enable!="-1"> class="active" <#else>
+						class="normal" </#if> ><a href="javascript:void(0);"
+						audit_state="" name="audit_state"><@uiLabel text="sellerProductList.AllProuct"/>(${sellerGoodsList.totalCountSelect})</a><!--所有产品  -->
+				
+					</li>
+					<li<#if market_enable?? && market_enable=="1"> class="active"
+						<#else> class="normal" </#if> ><a href="javascript:void(0);"
+						market_enable="1" name="market_enable"><@uiLabel text="sellerProductList.HasShelves"/>(${sellerGoodsList.OneAll})</a><!-- 已上架 -->
+					</li>
+					<li<#if audit_state?? && audit_state=="0">
+						class="active" <#else> class="normal" </#if> ><a
+						href="javascript:void(0);" audit_state="0"
+						name="audit_state"><@uiLabel text="sellerProductList.PendingPeview"/>(${sellerGoodsList.TwoAll})</a><!--待审核  -->
+					</li>
+					<li<#if audit_state?? && audit_state=="2">
+						class="active" <#else> class="normal" </#if> ><a
+						href="javascript:void(0);" audit_state="2"
+						name="audit_state"><@uiLabel text="sellerProductList.AuditNotPass"/>(${sellerGoodsList.Unapprove})</a><!--审核未通过  -->
+					</li>
+					<li<#if market_enable?? && market_enable=="0">
+						class="active" <#else> class="normal" </#if> ><a
+						href="javascript:void(0);" market_enable="0"
+						name="market_enable"><@uiLabel text="sellerProductList.TheShelves"/>(${sellerGoodsList.Out})</a><!--已下架  -->
+					</li>
+					<li<#if market_enable?? && market_enable=="-1">
+						class="active" <#else> class="normal" </#if> ><a
+						href="javascript:void(0);" market_enable="-1"
+						name="market_enable"><@uiLabel text="sellerProductList.ProductDrafts"/>(${sellerGoodsList.Draft})</a><!--草稿  -->
+					</li>
+					
+				</ul>
+			</div>
+			<!-- 订单列表 -->
+			<div class="store_orderlist">
+ 					<div class="go_store_orderdetail" style="padding: 10px 0 10px 0;">
+ 					  <#if locale=="zh">
+			            <a href="/goods/select_cat.html?menu=store_goods"><@uiLabel text="sellerProductList.NewProduct"/></a><!--新增  -->
+			          <#elseif locale=="ru">
+			           <a href="/goods/select_cat.html?menu=store_goods" style="width:150px;"><@uiLabel text="sellerProductList.NewProduct"/></a><!--新增  -->
+			          </#if>
+			        <#if market_enable?has_content && market_enable == "0">
+			         <#if locale=="zh">
+			            <a href="javascript:saleable('1')" ><@uiLabel text="sellerProductList.BatchShelves"/></a><!--批量上架  -->
+			          <#elseif locale=="ru">
+			          <a href="javascript:saleable('1')" style="width:200px;"><@uiLabel text="sellerProductList.BatchShelves"/></a><!--批量上架  -->
+			          </#if>
+			        <#else>
+			           <#if locale=="zh">
+			            <a href="javascript:saleable('0')"><@uiLabel text="sellerProductList.BatchShelves2"/></a><!--批量下架 -->
+			            <a href="javascript:updatePeriod()"><@uiLabel text="sellerProductList.UpdateValidity"/></a><!--更新有效期  -->
+			         <#elseif locale=="ru">
+			          <a href="javascript:saleable('0')" style="width:150px;"><@uiLabel text="sellerProductList.BatchShelves2"/></a><!--批量下架 -->
+			          <a href="javascript:updatePeriod()" style="width:200px;"><@uiLabel text="sellerProductList.UpdateValidity"/></a><!--更新有效期  -->
+			         </#if>
+			        </#if>
+			        </div>
+				<!-- 订单列表详细 -->
+				<table class="s_orderlist" cellpadding="0" cellspacing="0">
+					<thead>
+						<tr class="s_orderlist_title">
+							<th class="s_orderlist_th2"><input type="checkbox" onclick="checkAll(this);"></th>
+							<th></th>
+							<th class="s_orderlist_th1"><@uiLabel text="sellerProductList.productName"/></th><!-- 商品名称 -->
+							<th class="s_orderlist_th6">所属馆</th>
+							<th class="s_orderlist_th6">发货地</th>
+							<th class="s_orderlist_th2"><@uiLabel text="sellerProductList.classify"/></th><!--分类  -->
+							<th class="s_orderlist_th3"><a href="javascript:void(0)" id="arrivTime" ><@uiLabel text="sellerProductList.ExpirationDate"/>&#8595;&#8593;</a></th><!-- 到期时间 -->
+							<th class="s_orderlist_th4"><@uiLabel text="sellerProductList.ProductStatus"/></th><#--售出数量 -->
+							<th class="s_orderlist_th5"><@uiLabel text="sellerProductList.ExcessInventory"/></th><!--剩余库存  -->
+							<#if audit_state?? && audit_state=="2">
+								<th class="s_orderlist_th6"><@uiLabel text="sellerProductList.Reason"/></th><!--原因  -->
+							<#else>
+								<th class="s_orderlist_th6"><@uiLabel text="sellerProductList.ShangJia"/></th><!--上架  -->
+							</#if>
+							<th class="s_orderlist_th7"><@uiLabel text="sellerProductList.Caozao"/></th><!--操作 -->
+						</tr>
+					</thead>
+					<#if sellerGoodsList.totalCount != 0 >
+					<tbody>
+						<#list sellerGoodsList.storeGoodsList.result as goods>
+						<#assign storeGoodsCatTag=newTag("storeGoodsCatTag")/>
+						<#assign storeCat=storeGoodsCatTag("{'catid':${goods.cat_id!''} }")/>
+						<tr style="line-height: 12px; height: 12px; padding: 0px;">
+							<td colspan="20" style="border: 0px none;">&nbsp;</td>
+						</tr>
+						<td><input type="checkbox" value="${goods.goods_id!''}" name="orderIndexs"></td>
+						<#if locale=="zh">
+				  		<td style="width:100px;"><@image src="${goods.thumbnail!''}" alt="${goods.name!''}" height="50" width="50" /> </td>
+				  		<#elseif locale=="ru">
+				  		<td style="width:100px;"><@image src="${goods.thumbnail!''}" alt="${goods.name_ru!''}" height="50" width="50" /> </td>
+				  		</#if>
+				  		<td style="text-align:left;line-height:25px">
+			  			    &nbsp;&nbsp;&nbsp;<a id="${goods.goods_id!''}" target="_blank" href="${ctx}/goods-${goods.goods_id}.html" style="color:#005ea6">
+						    	<#if locale=="zh">
+						    	${goods.name!''}
+						    	<#elseif locale=="ru">
+						    	${goods.name_ru!''}
+						    	</#if>
+							</a>
+				  		</td>
+
+				  		<td style="width: 150px">
+							<#if goods.is_belong==0>
+								俄罗斯馆
+							<#elseif goods.is_belong==1>
+								龙江物产
+							<#elseif goods.is_belong==2>
+								澳大利亚馆
+							<#elseif goods.is_belong==3>
+								新西兰馆
+							<#elseif goods.is_belong==4>
+								韩国馆
+							<#elseif goods.is_belong==5>
+								德国馆
+							<#elseif goods.is_belong==6>
+								平台
+							</#if>
+						</td>
+						<td style="width: 150px">
+							<#if goods.deliveryregion==0>
+								国内
+							<#elseif goods.deliveryregion==1>
+								保税仓
+							<#elseif goods.deliveryregion==2>
+								俄罗斯
+							<#elseif goods.deliveryregion==3>
+								澳大利亚
+							<#elseif goods.deliveryregion==4>
+								新西兰
+							<#elseif goods.deliveryregion==5>
+								韩国
+							<#elseif goods.deliveryregion==6>
+								德国
+							<#elseif goods.deliveryregion==7>
+								暂不存在
+							</#if>
+						</td>
+						<td style="width: 100px">
+						<#if locale=="zh">
+				    	${storeCat.cat.name!''}
+				    	<#elseif locale=="ru">
+				    	${storeCat.cat.name_ru!''}
+				    	</#if>
+						</td>
+						<td style="width: 100px"><@dateformat time="${goods.expire_time!''}" pattern="yyyy-MM-dd"/></td><#-- HH:mm -->
+						<td style="width: 100px">
+							<#-- ${goods.buy_count!''} -->
+							<#if (goods.audit_status)??>
+								<#if goods.audit_status==1>
+									<@uiLabel text="sellerProductList.canDo"/><!--审核通过  -->
+								</#if>
+								<#if goods.audit_status==0 && goods.market_enable!=-1>
+									<@uiLabel text="sellerProductList.PendingPeview"/><!--待审核  -->
+								</#if>
+								<#if goods.audit_status==0 && goods.market_enable==-1>
+									<@uiLabel text="sellerProductList.ProductDrafts"/><!--草稿  -->
+								</#if>
+								<#if goods.audit_status==2>
+									<@uiLabel text="sellerProductList.cantDo"/><!--未通过  -->
+								</#if>
+								<#if goods.audit_status==3>
+									<@uiLabel text="sellerProductList.ggtg"/><!--未通过  -->
+								</#if>
+							<#else>
+								<@uiLabel text="sellerProductList.canDo"/><!--审核通过  -->
+							</#if>
+						</td>
+						<td style="width: 100px">${goods.enable_store!''}</td>
+						<td style="width: 100px">
+						<#if goods.market_enable?? && goods.market_enable ==0>
+							<@uiLabel text="sellerProductList.no"/><!--否-->
+						</#if>
+						<#if goods.market_enable?? && goods.market_enable ==1>
+							<@uiLabel text="sellerProductList.yes"/><!--是-->
+						</#if>
+						<#if audit_state?? && audit_state=="2">
+							${goods.audit_discribe!''}
+						</#if>	
+						</td>
+						<td>
+						   <p>
+						   <#if ( 
+						   		(goods.audit_status==0 && goods.market_enable==-1)<!--  草稿显示删除按钮  -->
+						   		||(goods.audit_status==2 && goods.market_enable==-1)<!-- 审核未通过显示删除按钮 -->
+						  		||(goods.audit_status==1 && goods.market_enable==0)<!-- 已下架显示删除按钮 -->
+						  		)>
+								<a href="#" name="deleteStore" onclick="deleteStore('${goods.goods_id!''}','${goods.audit_status!''}','${goods.market_enable!''}')">删除</a>
+						   </#if>
+						   </p>
+						   <!-- <p>
+								<a href="#" name="deleteStore" onclick="deleteStore('${goods.goods_id!''}')"><@uiLabel text="sellerLabel.delete"/></a>删除 
+								避免全部显示删除按钮
+							</p> -->
+							<p>
+							<#if goods.market_enable!=2>
+			                   <a href="/goods/edit_goods.html?goods_id=${goods.goods_id!''}"><@uiLabel text="sellerProductList.BianJI"/></a><!--编辑  -->
+			                </#if>
+			                </p>
+			                <p>
+			                   <a href="#" name="updateStore" goods_id="${goods.goods_id!''}"<#-- onclick="inventory('${goods.goods_id!''}')" -->><@uiLabel text="sellerProductList.TiaoZhengKuCu"/></a><!-- 调整库存 -->
+			                </p>
+						</td>
+						</tr>
+						</#list>
+					</tbody>
+				</table>
+				<@pager pageno="${sellerGoodsList.page!'1'}"
+				pagesize="${sellerGoodsList.pageSize}"
+				totalcount="${sellerGoodsList.totalCount}" /> <#else>
+				</table>
+				<#if locale=="zh">
+				<p class="no_blank"><@uiLabel text="sellerRefunds.RefundsNoRecord"/></p><!--暂无符合条件的数据记录  -->
+				<#elseif locale=="ru">
+					<p class="no_blank" style="width:500px;"><@uiLabel text="sellerRefunds.RefundsNoRecord"/></p><!--暂无符合条件的数据记录  -->
+				</#if>
+			</#if>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$("#btnSearch").click(function() {
+		search();
+	});
+	$("a[name='audit_state']").click(function() {
+		$("#audit_state").val($(this).attr("audit_state"));
+		if($(this).attr("audit_state")=="0"){
+			//alert($(this).attr("audit_state"));
+			$("#market_enable").val(2);
+		}
+		search();
+	});
+	$("a[name='market_enable']").click(function() {
+		$("#market_enable").val($(this).attr("market_enable"));
+		search();
+	});
+	function search() {
+		var goods_name = $("input[name='goods_name']").val();
+		var goods_cat = $("input[name='goods_cat']").val();
+		var goods_store=$("input[name='goods_store']").val();
+		var audit_state=$("#audit_state").val();
+		var market_enable=$("#market_enable").val();
+		var deliveryregion=$("#deliveryregion").val();
+		var c = $("#good_id").val();
+		location.href = "goods_list.html?goods_name=" + goods_name
+				+ "&goods_cat=" + goods_cat + "&audit_state=" + audit_state+"&goods_store="+goods_store+"&deliveryregion="+deliveryregion
+				+ "&market_enable=" + market_enable+"&c="+c+ "&menu=store_goods"+"&sort=";
+	}
+</script>
+<script>
+	$(function() {
+		var leftselect = $(".left_selected").val();
+		if (leftselect == "wait_ship") {
+			selectMenu(1);
+		} else {
+			selectMenu(0);
+		}
+		//设置商品名的颜色为紫色
+		var colorFlag=GetQueryString("colorFlag");
+		var color_goods_id = GetQueryString("goods_id");
+		if(colorFlag !=null)
+		{
+			$("#"+color_goods_id).attr({ style : "color:#9B30FF"});
+		}
+
+		//修改商品库存信息
+		$("a[name='updateStore']").click(function(){
+			dialog = $.dialog({
+				title : "<@uiLabel text="sellerProductList.XiuGaiKuCunInfo"/>",
+				lock : true,
+				min : false,
+				max : false
+			});
+			$.ajax({
+				url : "goodsStore.html?goods_id="+$(this).attr("goods_id"),
+				success : function(html) {
+					dialog.content(html);
+					dialog.button([ {
+						name : '<@uiLabel text="sellerProductList.ProductEdit"/>',
+						callback : function() {
+							editStore();
+							return false;
+						}
+					}]);
+				},
+				error : function() {
+					$.alert("<@uiLabel text='goodsList.chongshi'/>");//出现错误，请重试
+				},
+				cache : false
+			});	
+		});
+		function editStore(){
+			var reg=/^[0-9]*$/;
+			if($(".one_storenum").val()!=undefined){
+				if(!reg.test($(".one_storenum").val())){
+					alert("<@uiLabel text="sellerProductList.InputRightNumbe"/>");
+					return false;
+				}
+			}
+			if($(".more_storenum").val()!=undefined){
+				if(!reg.test($(".more_storenum").val())){
+					alert("<@uiLabel text="sellerProductList.InputRightNumbe"/>");
+					return false;
+				}
+			}
+			
+			var options = {
+					url : "${ctx}/api/b2b2c/goods!saveGoodsStore.do",
+					type : "POST",
+					dataType : 'json',
+					success : function(data) {	
+						alert(data.message);
+						if(data.result==1){
+							location.reload();
+						}
+					},
+					error : function(e) {
+						alert("<@uiLabel text='goodsList.chongshi'/>");//出现错误 ，请重试
+					}
+				};
+			$("#goodsStoreForm").ajaxSubmit(options);
+		}
+	})
+</script>
+<script type="text/javascript">
+	/* 执行删除语句 */
+  function deleteStore(goods_id,audit_status,market_enable){//获取goods_id，audit_status，market_enable的值
+	 if(confirm("确定删除吗？")){
+		$.ajax({
+		    url:"${ctx}/api/b2b2c/goods!deleteGood.do?goods_id1="+goods_id+"&audit_status1="+audit_status+"&market_enable1="+market_enable,//传参
+			dataType : 'json',
+			success:function(data) {
+				alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error:function(e) {
+				alert("出现错误 ，请重试");
+			}
+	   });
+	}
+ }
+  $("#arrivTime").click(function(){
+		var sort1 = "order by g.expire_time asc";
+		var sort2 = "order by g.expire_time desc"
+		if("${sort}" && "${sort}"==sort1){
+			location.href = "goods_list.html?sort=" + sort2;
+		}
+		if("${sort}" && "${sort}"==sort2){
+			location.href = "goods_list.html?sort=" + sort1;
+		}
+		if(!"${sort}"){
+			location.href = "goods_list.html?sort=" + sort1;
+		}
+	})
+/*  //批量操作
+    function show_store(goods_id, operate) {
+
+        //页面中选中的checkbox
+        //var checkboxs = $("input:checked[type=checkbox][name=orderIndexs]");
+        var checkboxs = goods_id;
+        //所有搜索结果
+        if (checkboxs.length == 0) {
+            alert("请选择要操作的商品");
+            return;
+        }
+
+        var propertys = "";
+        for (var i = 0, ci; ci = checkboxs[i]; i++) {
+            if (i > 0) {
+                propertys += ",";
+            }
+            propertys += ci.value;
+        }
+        //上下架操作
+        if (operate.indexOf("saleable") != -1) {
+            jQuery.ajax({
+                url: "updateProductSaleable",
+                type: 'POST',
+                data: {goods_ids: propertys, saleable: operate.split("_")[1]},
+                error: function (msg) {
+                    showErrorAlert("aaa : " + msg);
+                },
+                success: function (msg) {
+                    navTab.reload();
+                }
+            });
+        } else if (operate.indexOf("inventory") != -1) {
+            //批量调整库存-toProductInventory 弹出库存调整dialog
+            window.location.href = "toProductInventory?goods_ids=" + propertys + "&productStoreId=" + $("#productStoreId").val();
+            //$.pdialog.open("toProductInventory?productIds="+propertys+"&productStoreId="+$("#productStoreId").val(), "toProductInventory", "库存调整", {mask:true,width:720,height:460});
+        }
+    }
+    function inventory(goods_id) {
+        window.location.href = "sellerGoodsStore.html?goods_id=" + goods_id;
+    } */
+    //更新有效期
+    function updatePeriod() {
+        //页面中选中的checkbox
+        var checkboxs = $("input:checked[type=checkbox][name=orderIndexs]");
+        if (checkboxs.length == 0) {
+            alert("<@uiLabel text='goodsList.qingxuanze'/>");//请选择要操作的商品
+            return;
+        }
+        var propertys = "";
+        for (var i = 0, ci; ci = checkboxs[i]; i++) {
+            if (i > 0) {
+                propertys += ",";
+            }
+            propertys += ci.value;
+        }
+        jQuery.ajax({
+            url: "/api/b2b2c/sellerGoodsList!updatePeriod.do?ajax=yes",
+            type: 'POST',
+            data: {goods_ids: propertys},
+            dataType : 'json',
+            error: function (e) {
+                alert("<@uiLabel text='goodsList.chuxiancuowu'/>！");//出现错误
+            },
+            success: function (result) {
+				if(result.result==1){
+					alert(result.message);
+					//$.Loading.success(result.message);
+				}else{
+					alert(result.message);
+					//$.Loading.error(result.message);
+				}
+                window.location.reload();
+            }
+        });
+        uncheckAll();
+    }
+    //批量上下架   isYN =0 下架，isYN=1 上架
+    function saleable(isYN) {
+        //页面中选中的checkbox
+        var checkboxs = $("input:checked[type=checkbox][name=orderIndexs]");
+        if (checkboxs.length == 0) {
+            alert("<@uiLabel text='goodsList.qingxuanze'/>");//请选择要操作的商品
+            return;
+        }
+        var propertys = "";
+        for (var i = 0, ci; ci = checkboxs[i]; i++) {
+            if (i > 0) {
+                propertys += ",";
+            }
+            propertys += ci.value;
+        }
+        jQuery.ajax({
+            url: "/api/b2b2c/sellerGoodsList!updateMarketEnable.do?ajax=yes",
+            type: 'POST',
+            data: {goods_ids: propertys, market_enable: isYN},
+            dataType : 'json',
+            error: function (msg) {
+                alert(msg);
+            },
+            success: function (result) {
+				if(result.result==1){
+					alert(result.message);
+					//$.Loading.success(result.message);
+					 window.location.reload();
+				}else{
+					alert(result.message);
+					//$.Loading.error(result.message);
+				}
+               
+            }
+        });
+        uncheckAll();
+    }
+    //  全选或全不选
+    function checkAll(obj) {
+        $(".s_orderlist").find("input[name=orderIndexs][type='checkbox']").each(function (i) {
+            this.checked = obj.checked;
+        });
+    }
+    //  全不选
+    function uncheckAll() {
+        $(".s_orderlist").find("input[name=orderIndexs][type='checkbox']").each(function (i) {
+            this.checked = false;
+        });
+    }
+  //获取URL中的参数
+    function GetQueryString(name)
+    {
+         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+         var r = window.location.search.substr(1).match(reg);
+         if(r!=null)return  unescape(r[2]); return null;
+    }
+    </script>
+<#include '/common/footer.html'/>

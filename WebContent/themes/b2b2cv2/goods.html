@@ -1,0 +1,1298 @@
+<#include 'common/header.html' />
+<#include 'common/reception_header.html'/>
+<#assign dateformat= "com.enation.framework.directive.DateformateDirective"?new()>	
+<#-- 创建商品基本信息标签 -->
+<#assign goodsBaseDataTag= newTag("goodsBaseDataTag") >
+<#-- 调用标签获取商品基本信息 -->
+<#assign goods= goodsBaseDataTag("'goodsid':${goodsid!0}") >
+<#assign brandDetailTag=newTag("brandDetailTag")>
+<#assign brand=brandDetailTag("'brand_id':${goods.brand_id} ")>
+<#--获取商品店铺信息 -->
+<#assign storeInfoTag=newTag("myStoreDetailTag")>
+<#assign storeInfo=storeInfoTag("{'store_id':${goods.store_id},'type':1 }")>
+<#--获取商品规格信息 -->
+<#assign goodsSpecTag=newTag("goodsSpecTag")>
+<#assign goodsSpec=goodsSpecTag("{'goods_id':${goods.goods_id}}")!''>
+<#-- 商品所产生的运费规则 -->
+<#assign goodsLogisModelTag= newTag("goodsLogisModelTag") >
+<#assign goodsLogisModel= goodsLogisModelTag("{'freightType':${goods.freightType!'1'},'goods_weight':${goods.weight!0},'goods_id':${goods.goods_id}}") >
+<#--店铺分类 -->
+<#assign storeGoodsCatTag=newTag("storeGoodsCatTag")>
+<#assign goodsCat=storeGoodsCatTag("{'catid':${goods.cat_id} }")>
+<#-- 创建商品相册标签 -->
+<#assign goodsGalleryTag= newTag("goodsGalleryTag")>
+<#-- 该商品是否在秒伤活动内 -->
+<#assign showGoodSkillTag= newTag("showGoodSkillTag")>
+<#-- 调用标签获取商品相册信息 -->
+<#assign galleryList= goodsGalleryTag("{'goods_id':${goods.goods_id}}")!'' >
+<#-- 团购标签 -->
+<#if goods.is_groupbuy==1>
+	<#assign groupBuyTag=newTag("groupBuyTag")>
+	<#assign groupBuy=groupBuyTag("{'goodsid':${goods.goods_id} }")>
+</#if>
+
+<#-- 获取商品好评率标签 -->
+<#assign storeGoodsPraiseInfoTag = newTag("storeGoodsPraiseInfoTag")>
+<#-- 调用商品好评率值-->
+<#assign Praise = storeGoodsPraiseInfoTag("{'goods_id':${goods.goods_id}}")>
+<#assign goodsListTag = newTag("goodsListTag")>
+<#assign validateAccessTag=newTag("validateAccessTag")>
+<#assign validateAccess=validateAccessTag()>
+<#assign totalRegonShowTag=newTag("totalRegonShowTag")>
+<#assign totalRegonShow=totalRegonShowTag()>
+<#-- <script type="text/javascript"> -->
+<#-- <#if (locale == 'ru' && storeInfo.store_market != 'RUS') || (locale == 'zh' && storeInfo.store_market != 'CHN') > -->
+<#-- 	location.href = '/'; -->
+<#-- </#if> -->
+<#-- </script> -->
+
+<#assign scroll="false" />
+<#if locale=="zh">
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/goods.css" />
+<#elseif locale=="ru">
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/goods_ru.css" />
+</#if>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/index_search.css"/>
+<!-- 弹出登录层样式 -->
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/home_login.css" />
+<script  src="${ctx}/themes/b2b2cv2/js/magiczoom.js"  ></script>
+<script  src="${ctx}/themes/b2b2cv2/js/Comment.js"  ></script>
+<script  src="${ctx}/themes/b2b2cv2/js/favorite.js"  ></script>
+<#if locale=="zh">
+<script  src="${ctx}/themes/b2b2cv2/js/spec.js" ></script>
+<#elseif locale=="ru">
+<script  src="${ctx}/themes/b2b2cv2/js/spec_ru.js" ></script>
+</#if>
+<!-- 商品详情、商品评论、销售记录、产品咨询浮动 -->
+<script  src="${ctx}/themes/b2b2cv2/js/airlines.js"  ></script>
+<!-- 商品相册-->
+<script src="${ctx}/themes/b2b2cv2/js/jcarousellite_1.0.1.min.js" type="text/javascript"></script>
+<#include 'common/toup.html' />
+<div class="background clearfix">
+	<article id="content">
+    	<div class="goodslist_nav">
+    	
+  			<div class="breadcrumb wrapper">
+    		    <span><a href="${ctx}/index.html"><@uiLabel text="index.PortalHome" /></a></span>
+    		    <span class="arrow">&gt;</span>
+			    <span><a href="${ctx}/goods_list.html?cat=${goods.cat_id!''}">
+			   
+			    <#if locale=="zh">
+				   ${goodsCat.cat.name!''}
+				<#elseif locale=="ru">
+				   ${goodsCat.cat.name_ru!''}
+				</#if>
+				</a></span>
+			    <span class="arrow">&gt;</span>
+			    <span>
+			    	 <#if locale=="zh">
+                      ${goods.name!''}
+                     <#elseif locale=="ru">
+                        ${goods.name_ru!""}
+                     </#if>
+                    <!--  #ID${goods.goods_id!''} -->
+			    </span>
+			     <span style="float:right;">
+			          <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${goods.goods_id}}")>
+			         <#if showGoodSkill??>
+			           <#list showGoodSkill as a>
+			           <#if a.start_time?? && a.end_time??>
+			           <a href="../newSkill20160701/seckill_activity.html">
+			               <div class="active-time" style="width:392px; position:initial;">
+								<dl>
+								<span class="test"></span>
+									<dt >
+										<span><img src="${ctx}/themes/b2b2cv2/seckill20160701/time-icoa.png" alt="" width="20px"></span>
+									   <div><@dateformat time='${(a.start_time)}' pattern='yyyy年MM月dd日  E '/></div>
+									</dt>
+									<dd >
+									   <@dateformat time='${(a.start_time)}' pattern='HH时mm分 '/>开售
+									</dd>
+								</dl>
+				          </div>
+				          </a>
+			           </#if>
+			           </#list>
+			         </#if>  
+			         </span>
+			</div>
+		</div>
+		<div class="goods_detail">
+            <div  id="detail_wrapper"> 
+            	<#list galleryList as gallery>
+					<#if gallery.isdefault==1>
+						<#assign big="${gallery.big!''}" />
+						<#assign small="${gallery.small!''}" />
+					</#if>
+				</#list>
+         			<!-- 商品相册 -->
+					<div class="gallery">	
+						<div class="preview">
+							 <a href="${big!''}"  id="zoom" rel="zoom-width:400px;zoom-height:400px;"  class="MagicZoom" style="display: table-cell; height:320px; vertical-align:middle; text-align:center;"> 
+							 	<img   src="${small!''}" style="width:350px; height:350px;" />
+							 </a>
+						</div>
+						<div class="control_bar">
+							<div class="control left_control"></div>
+							<div class="thumblist">
+								<ul>
+								<#list galleryList as gallery>
+									<li <#if !gallery_has_next>class="last"</#if> <#if gallery.isdefault==1>class="selected"</#if>> 
+										<p style="display:table-cell;overflow:hidden;cursor: pointer;width:63px;height:63px;vertical-align: middle;"><@image src="${gallery.thumbnail!''}"  big="${gallery.big}" small="${gallery.small}" /></p>
+									</li>
+								</#list>	
+								</ul>
+							</div>
+							<div class="control right_control " ></div>
+						</div>
+					</div>
+					
+			        <div class="outline">
+			        <div class="killall">
+					    <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${goods.goods_id}}")>
+			           <#if showGoodSkill??>
+			            <#list showGoodSkill as a>
+			             <#if a.start_time?? && a.end_time??>
+											      <!-- 倒计时 距离本期结束 -->
+											      <p id="activityTime${a_index}" style="float:right;height: 20px;margin:0 -15px 10px 0;font-size: 17px;">
+											      	<span id="d${a_index}" class="seckil-time"></span><strong>天</strong>
+											      	<span id="h${a_index}" class="seckil-time"></span><strong>时</strong>
+											      	<span id="m${a_index}" class="seckil-time"></span><strong>分</strong>
+											      	<span id="s${a_index}" class="seckil-time"></span><strong>秒</strong>
+											      </p>
+											       <a href="../seckill20160701/seckill0701.html"><h5 id="activityText${a_index}" style="float:right;line-height:22px;height: 20px;font-size: 17px;color:red;">即将开始：&nbsp;</h5></a>
+											      <script type="text/javascript">
+												 	 <#assign groupBuyActSurplusTag=newTag("groupBuyActSurplusTag")>
+												  	 <#assign time=groupBuyActSurplusTag("{'end_time':${a.start_time!''} }")>
+												  	 <#assign end_time=groupBuyActSurplusTag("{'end_time':${a.end_time!''} }")>
+											      //倒计时
+											      	  var start${a_index}=${time.cha};
+											      	  var end${a_index} = ${end_time.cha};
+											      	  var startToEnd_time${a_index} = end${a_index}-start${a_index};
+											      	  var startOrEnd${a_index};
+												      var tms${a_index} = [];
+												      var day${a_index} = [];
+												      var hour${a_index} = [];
+												      var minute${a_index} = [];
+												      var second${a_index} = [];
+												      function takeCount${a_index}() {
+												          for (var i = 0, j = tms${a_index}.length; i < j; i++) {
+												              tms${a_index}[i] -= 1;
+												              //计算天、时、分、秒、
+												              var days${a_index} = Math.floor(tms${a_index}[i] / (1 * 60 * 60 * 24));
+												              var hours${a_index} = Math.floor(tms${a_index}[i] / (1 * 60 * 60)) % 24;
+												              var minutes${a_index} = Math.floor(tms${a_index}[i] / (1 * 60)) % 60;
+												              var seconds${a_index} = Math.floor(tms${a_index}[i] / 1) % 60;
+												              if (days${a_index} < 0) days${a_index} = 0;
+												              if (hours${a_index} < 0) hours${a_index} = 0;
+												              if (minutes${a_index} < 0) minutes${a_index} = 0;
+												              if (seconds${a_index} < 0) seconds${a_index} = 0;
+												              //将天、时、分、秒插入到html中
+												              if(startOrEnd${a_index}==1){
+												            	  $("#activityText${a_index}").html("距结束:&nbsp;");
+												              }
+												              if(days${a_index}==0&&hours${a_index}==0&minutes${a_index}==0&seconds${a_index}==0){
+												            	  if(startOrEnd${a_index}==0){
+												            		  tms${a_index}[i]=startToEnd_time${a_index};
+												            		  startOrEnd${a_index}=1;
+												            	  }else if(startOrEnd${a_index}==1){
+												            	  	  $("#activityTime${a_index}").html("");
+												            	      $("#activityText${a_index}").html("活动已结束&nbsp;");
+												            	  }
+												              }
+												                $("#d${a_index}").html(days${a_index});
+												                $("#h${a_index}").html(hours${a_index});
+												                $("#m${a_index}").html(minutes${a_index});
+												                $("#s${a_index}").html(seconds${a_index});
+												          }
+												          setTimeout("takeCount${a_index}()", 1000);
+												      }
+												  	  var tm${a_index} = ${time.cha};
+												  	  if(tm${a_index}<=0){
+												  		  tms${a_index}[tms${a_index}.length] = "${end_time.cha!}";
+												  		  startOrEnd${a_index}=1;
+												  	  }else{
+											              tms${a_index}[tms${a_index}.length] = "${time.cha!}";
+											              startOrEnd${a_index}=0;
+												  	  }
+										             day[${a_index}] = "d${a_index}";
+										             hour[${a_index}] = "h${a_index}";
+										             minute[${a_index}] = "m${a_index}";
+										             second[${a_index}] = "s${a_index}";
+										         </script> 
+										         <script>
+									             takeCount${a_index}();
+										         </script>
+			             </#if>
+			            </#list>
+			           </#if>
+					</div>
+			        <div  goodsid="${goods.goods_id}"  onclick="collect_goods(${goods.goods_id});" style="cursor: pointer; width:120px;float:right;">
+			        <#if locale=="zh">
+			        <strong>
+			        <img src="${ctx}/themes/b2b2cv2/images/xin.png" style="margin-top:15px; float:left;"></strong>
+			         <strong style="color:#d93600; cursor: pointer;float: right;margin-right: 35px;margin-top: 22px;"><@uiLabel text="goods.Favorite" /></strong>
+			         <#elseif locale=="ru">
+			         
+			         <strong>
+			         <img src="${ctx}/themes/b2b2cv2/images/xin.png" style="margin-left: 440px;margin-top: 15px;margin-bottom:5px;"></strong>
+			         <strong style="color:#d93600; cursor: pointer;float: right;margin-right: 15px;margin-top: 20px;marg0n-left:-50px;"><@uiLabel text="goods.Favorite" /></strong>
+			         </#if>
+			         
+			         </div>
+			         <div style="clear:both;">
+						<div class="name">
+        					<h1 style="margin-top:-20px;">
+        					<#if locale=="zh">
+                        		${goods.name!''}
+                     		<#elseif locale=="ru">
+                        		${goods.name_ru!""}
+                     		</#if>
+        					</h1>
+        				</div>
+          				<div class="goods_price" style="padding:0;">
+          					<#--<div class="mark_price"><span><@uiLabel text="goods.MarketPrice" />：</span><strong>${goods.mktprice!''}</strong></div>-->
+          					<div class="be_worth" id="be_jgworth">
+				            	<#--<#if goods.is_groupbuy==1>
+				            		<span><@uiLabel text="goods.GroupBuyPrice" />：</span>
+					              	<strong nctype="goods_price">&yen; ${groupBuy.price}</strong>
+				            		<#else>
+					              	<span><@uiLabel text="goods.BuyPrice" />：</span>
+					              	<p id="goods_price"><strong  nctype="goods_price">&yen; ${goods.price}</strong></p>
+				              	</#if>-->
+				              	<#if goods.is_discount==1>
+					              	<#if locale=="zh">
+								        <span style="width: 125px; font-family: Meiryo;font-size: 11px;"><@uiLabel text="goods.BuyPrice" />：</span>
+                                    <p id="good_cost_price"><strong id="good_cost_price" nctype="goods_price" style="text-decoration:line-through;">&yen; ${goods.cost_price}</strong></p>
+								    <#elseif locale=="ru">
+								        <span style="width: 125px; font-family: Meiryo;font-size: 11px;"><@uiLabel text="goods.BuyPrice" />：</span>
+                                    <p id="good_cost_price_ru"><strong id="good_cost_price_ru" nctype="goods_price" style="text-decoration:line-through;"> ${goods.cost_price_ru}p.</strong></p>
+								    </#if>
+                                    
+				              		<span style="width: 125px; font-family: Meiryo;font-size: 11px;"><@uiLabel text="goods.zhekoujia" />：</span>
+                                    <p id="goods_price"><strong id="good_price1" nctype="goods_price" style="text-decoration: blink">&yen; ${goods.price}</strong></p>
+								<#else>
+									<#if goods.is_groupbuy==1>
+										<#if locale=="zh">
+									        <span style="width: 125px; font-family: Meiryo;font-size: 11px;"><@uiLabel text="goods.BuyPrice" />：</span>
+	                                  		 <p id="good_cost_price"><strong id="good_original_price" nctype="goods_price" style="text-decoration:line-through;">&yen; ${goods.original_price}</strong></p>
+									    <#elseif locale=="ru">
+									        <span style="width: 125px; font-family: Meiryo;font-size: 11px;"><@uiLabel text="goods.BuyPrice" />：</span>
+	                                    	<p id="good_cost_price_ru"><strong id="good_original_price_ru" nctype="goods_price" style="text-decoration:line-through;"> ${goods.original_price_ru}p.</strong></p>
+									    </#if>
+										<span style="width: 125px; font-family: Meiryo;font-size: 11px;"><@uiLabel text="goods.tuangou" />：</span>
+                                    	<p id="goods_price"><strong id="good_price1" nctype="goods_price">&yen; ${goods.price}</strong></p>
+									<#else>
+									     <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${goods.goods_id}}")>
+			                                 <#if showGoodSkill?size  gt   0>
+			                                   <#list showGoodSkill as a>
+			                                     <#if a.start_time?? && a.end_time??>
+									              <#if a.start_time  gt a.nowtime>
+		               			                    <span style="width: 122px; font-family: Meiryo;font-size: 11px;">秒杀价：</span>
+	                                    	        <p id="good_activity_price"><strong id="good_activity_price" nctype="goods_price" style="text-decoration:line-through;">&yen;${a.activity_price}</strong>
+	                                    	            <font  style="font-weight: 600;margin-left: 10px;">
+	                                    		               <a href="../newSkill20160701/seckill_activity.html" style="font-size: 14px;color:red;"><i style="text-decoration:underline;">查看更多活动</i></a>
+
+	                                    	              </font>
+	                                    	        </p>
+	                                    	        <span style="width: 125px; font-family: Meiryo;font-size: 11px;"><@uiLabel text="goods.BuyPrice" />：</span>
+                                   		            <p id="goods_price"><strong id="good_price1" nctype="goods_price">&yen; ${goods.price}</strong></p>
+		               			                  <#elseif a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+		               			                     <span style="width: 122px; font-family: Meiryo;font-size: 11px;">秒杀价：</span>
+                                   		             <p id="goods_price"><strong id="good_price1" nctype="goods_price">&yen; ${goods.price}</strong>
+                                   		                 <font  style="font-weight: 600;margin-left: 10px;">
+	                                    		               <a href="../newSkill20160701/seckill_activity.html" style="font-size: 14px;color:red;"><i style="text-decoration:underline;">查看更多活动</i></a>
+	                                    	              </font>
+                                   		             </p>
+                                   		             <span style="width: 122px; padding-right:3px; font-family: Meiryo;font-size: 11px; " ><@uiLabel text="goods.BuyPrice" />：</span>
+                                   		            <p id="good_original_price"><strong id="good_original_price" style="text-decoration:line-through;" nctype="good_original_price">&yen; ${a.original_price}</strong></p>
+		               			                  <#elseif  a.end_time lt a.nowtime>
+		               			                   <span style="width: 122px; padding-right:3px; font-family: Meiryo;font-size: 11px;"><@uiLabel text="goods.BuyPrice" />：</span>
+                                   		           <p id="goods_price"><strong id="good_price1" nctype="goods_price">&yen; ${goods.price}</strong></p>
+		               			                  </#if>  
+		               			                 <#else>
+		               			                <span style="width: 125px; font-family: Meiryo;font-size: 11px;"><@uiLabel text="goods.BuyPrice" />：</span>
+                                   		      <p id="goods_price"><strong id="good_price1" nctype="goods_price">&yen; ${goods.price}</strong></p>
+		               			                 </#if> 
+									          </#list>
+									        <#else>
+									          <span style="width: 125px; font-family: Meiryo;font-size: 11px;"><@uiLabel text="goods.BuyPrice" />：</span>
+                                   		      <p id="goods_price"><strong id="good_price1" nctype="goods_price">&yen; ${goods.price}</strong></p>
+									        </#if>
+									 </#if>
+								</#if>
+				              </div>
+				              
+				              <!-- 添加批发价格 -->
+				              <div id="be_worth_pf" class="be_worth">
+                                    <span style="width: 120px;"><@uiLabel text="goods.Whprice" />：</span>
+                                    <p id="goods_whprice" ><strong id="goods_whprice1" nctype="goods_whprice">&yen; ${goods.whprice} </strong></p>
+                                    <#if locale="zh">
+	                                    <span id="pfjId" style="width: 159px;color:red;padding-left:90px;">
+	                                    	<font  style="font-weight: 600; padding-left:5px;">
+	                                    		（批发起批数：<i id="pfqpsId">${goods.wholesale_volume!0}</i>）
+	                                    	</font>
+	                                    </span>
+                                    <#elseif locale=="ru">
+                                    	<span id="pfjId"  style="width: 350px;color:red;padding-left:20px;">
+	                                    	<font style="font-weight: 600;">
+	                                    		（минимум количества оптовой торговли：<i id="pfqpsId">${goods.wholesale_volume!0}</i>）
+	                                    	</font>
+	                                    </span>
+                                    </#if>
+				              </div>
+
+				             <#-- <div class="goodssn">
+				              		<span><@uiLabel text="goods.ArticleNumber" /></span>
+				              		<strong>${goods.sn!''}</strong>
+				              </div>	-->
+                           <!--  <div class="add-favorite" goodsid="${goods.goods_id}"  onclick="collect_goods(${goods.goods_id});">
+								<strong>11<@uiLabel text="goods.Favorite" /></strong>
+							</div> -->
+          				</div>
+          				
+          				<input type="hidden" id="goods_name" value="${goods.name!''}" />
+          				<input type="hidden" id="goods_name_ru" value="${goods.name_ru!''}" />
+          				<input type="hidden" id="goods_price_2" value="${goods.price!''}" />
+          				<input type="hidden" id="goods_price_ru" value="${goods.price_ru!''}" />
+          				<input type="hidden" id="goods_sn" value="${goods.sn}" />
+          				<input type="hidden" id="cat_name" value="${goodsCat.cat.name}" />
+          				<input type="hidden" value="${small!''}" id="pc_url"/>
+          				<#if goods.brand_id==0>
+          				<input type="hidden" value="无品牌" id="brand">
+          				 <#else>
+          				 <input type="hidden" value="${brand.name}" id="brand">
+          				  </#if>
+          				<form  id="goodsform">
+          					<input type="hidden"  id="goods_id" name="goodsid" value="${goods.goods_id}" />
+          					<input type="hidden" id="storeid" value="${storeInfo.store_id}" />
+          					<input type="hidden" name="min_number" value="${goods.min_number}" />
+          					<input type="hidden" name="action" value="addGoods" />
+          					
+	                    	<div class="goods-key"> 
+	                     
+								<#include 'detail/spec.html' />
+						 	
+					                			 		<dl>
+					              	<dt style="font-family: Meiryo;font-size: 11px; padding-right:20px;">物 流：</dt>
+					              		<#if goods.deliveryregion??>
+					              		     <#if goods.deliveryregion==0>
+					              		                         国内
+					              		     <#elseif goods.deliveryregion==1>
+					              		                         保税仓
+					              		     <#elseif goods.deliveryregion==2>
+					              		                          俄罗斯
+					              		     <#elseif goods.deliveryregion==3>
+					              		                          澳大利亚
+					              		     <#elseif goods.deliveryregion==4>
+					              		                           新西兰
+					              		     <#elseif goods.deliveryregion==5>
+					              		                           韩国
+					              		     <#elseif goods.deliveryregion==6>
+					              		                           德国
+					              		     </#if>
+					              		<#else>
+					              		国外
+					              		</#if>
+					              		<#list goodsLogisModel as logis>
+					              		    <#if logis.validatedays??>
+					              		      <#if logis_index == 0>
+					              		<a id="choseExpress" href="javascript:void(0);" onclick="add_wuliu()"  
+					              		style="background-image:url(${ctx}/themes/b2b2cv2/images/downArrow.png);background-repeat: no-repeat;background-position:right; padding-right: 16px;display:inline-block;" >
+					              		       </#if>
+					              		    <#else>
+					              		    
+					              		    </#if>
+					              		 </#list>
+						              		<span style="padding-left:5px;">
+							              		<#if locale=="zh">
+							              		<#if goods.is_belong==1>
+			                                       
+			                                    <#else>
+			                                       <#if goods.deliveryregion==0>
+			                                          
+			                                       <#else>
+			                                           &nbsp;至&nbsp;中国海关
+			                                       </#if>
+			                                    </#if>   
+			                                    <#elseif locale=="ru">
+			                                          Russian 
+			                                     </#if>		
+						              		</span>
+					              		</a>
+					              		<span id="freightTips"  style="position:relative;font-weight：100；padding-left:10px;padding-top:3px;">
+					              		<#if totalRegonShow??>
+					              		     <#if totalRegonShow.city??>
+					              		                   至${totalRegonShow.city!''}
+					              		     </#if>              
+					              		<#else>
+					              		</#if>
+					              		运费:
+					              		                  <#if locale=="zh">
+								                    	     <span id="dd" style="display: none; position:absolute;left:1px;top:0px;color: black;font-weight: bold;font-size: 15px;">&yen;</span>  
+								                    	   <#elseif locale=="ru">
+								                    	    <span id="dd" style="display: none; position:absolute;left:1px;top:0px;color: black;font-weight: bold;font-size: 15px;">&yen;</span>  
+								                    	   </#if>
+						                      
+						              		  <#list goodsLogisModel as logis>
+						              		      <#if logis.validatedays??>
+	                                      		  <span id="freightprice" style="color: black;font-weight: bold;color:#d93600; font-size:14px;">
+	                                             
+								                    <#if logis_index == 0>
+								                    	<#if logis.freightprice==0>
+								                    		Free shipping
+								                    	<#else>
+								                    		 <#if locale=="zh">
+								                    	     &yen;${logis.freightprice!0.0}
+								                    	   <#elseif locale=="ru">
+								                    	    	${logis.freightprice!0.0}p.
+								                    	   </#if>
+								                    	</#if>
+													</#if>
+	                                      		  </span> 
+	                                      		 <input type="hidden" id="myModelId" value="${logis.freight_id}">
+	                                      		<#else>
+	                                      		     <input type="hidden" id="myModelId" value="${logis.freight_id}">
+	                                      		     
+	                                      		   <span id="freightprice" style="color: black;font-weight: bold;color:#d93600; font-size:14px;">
+	                                             <#if logis.freight_id==-1>
+								                          <#if locale=="zh">
+								                    	     &yen;${logis.freightprice!0.0}
+								                    	   <#elseif locale=="ru">
+								                    	    ${logis.freightprice!0.0}p.
+								                    	   </#if>
+	                                      	   <#else>
+	                                      	       <#if logis_index == 0>
+								                    	<#if logis.freightprice==0>
+								                    		Free shipping
+								                    	<#else>
+								                    	   <#if locale=="zh">
+								                    	     &yen;${logis.freightprice!0.0}
+								                    	   <#elseif locale=="ru">
+								                    	    ${logis.freightprice!0.0}p.
+								                    	   </#if>
+								                    		
+								                    	</#if>
+													</#if>
+	                                      		</#if>
+	                                      	   </#if>
+	                                      	</span>
+	                                      </#list>
+	                                      		 
+					              		</span>
+					              		
+					                	<br>
+					                	<em style="" class="fl" ><!-- <@uiLabel text="goods.freightlogissendgoodtime" />： 
+					                		<@uiLabel text="goods.freightlogisfrom" />&nbsp;
+							              			<@uiLabel text="goods.freightlogischina" />
+					                		&nbsp;<@uiLabel text="goods.freightlogissendgoods" /> -->
+				                		<span id="freightTime" >
+				                		     16:00前付款,预计
+				                		   <#list goodsLogisModel as logis>
+				                		        <#if logis.validatedays??>
+				                		           <#if logis_index ==0>
+				                		           ${logis.validatedays!''}
+				                		            </#if>
+				                		          <#else>
+				                		          <#if validateAccess??>
+				                		               ${validateAccess.validatedays!''}
+				                		          <#else>
+				                		                 2-5
+				                		          </#if>
+				                		      </#if>
+				                		   </#list>
+				                		日内送达</span></em>
+					                </dd>
+									<div class="clear"></div>
+					            </dl>
+						 			 <dl>
+							 			 <#if locale=="zh">
+										  	<dt><@uiLabel text="goods.zuixiaogoumai" />：</dt>
+							 				<dd>${goods.min_number!''}(<@uiLabel text="goods.Item" />)</dd>
+										<#elseif locale=="ru">
+										  	<dt style="width:auto;"><@uiLabel text="goods.zuixiaogoumai" />：</dt>
+							 				<dd style="width:auto;">${goods.min_number!''}(<@uiLabel text="goods.Item" />)</dd>
+										</#if>
+						 			</dl>
+					            <dl>
+					              	<dt style="font-family: Meiryo;font-size: 11px;"><@uiLabel text="goods.BuyQuantity" />：</dt>
+					              	<dd class="goods-figure-input"  > 
+					              		<a href="javascript:void(0)" ><i class="icon-minus decrease fl text-hidden" style="padding:2px 5px">-</i></a>
+					                	<input type="text" name="num" onblur="sum()" id="quantity" value="1" size="3" maxlength="6" class="fl" style="border-radius:0;">
+					                	<a href="javascript:void(0)" ><i class="icon-plus increase fl text-hidden" style="padding:2px 5px">+</i></a> 
+					                	
+											<#if goods.is_groupbuy==1>
+												<input type="hidden" id="groupbuy" value="1">
+												<#if goods.enable_store!=0>
+							                		<em class="fl ml201" style="width:550px;margin-left:-20px;">
+							                		(<@uiLabel text="goods.shangpinshuliang" />:<strong>${groupBuy.goods_num!0}</strong><@uiLabel text="goods.Item" />,
+							                		<@uiLabel text="goods.Purchased" />:<strong>${groupBuy.visual_num+groupBuy.buy_num*2}</strong><@uiLabel text="goods.Item" />,
+							                		<@uiLabel text="goods.shengyushuliang" />:<strong nctype='goods_stock'>${groupBuy.goods_num-groupBuy.visual_num-groupBuy.buy_num*2}</strong><@uiLabel text="goods.Item" />)
+							                		</em> 
+							                	</#if>
+						                    <#else>
+						                         <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${goods.goods_id}}")>
+			                                        <#if showGoodSkill?size  gt   0>
+				                                          <#list showGoodSkill as a>
+				                                             <#if a.limitbuy==1>
+				                                             <input type="hidden" id="limitbuy" value="${a.limitbuy!'0'}">     
+				                                             <input type="hidden" id="limitnumber" value="${a.limitnumber!'0'}">     
+				                                             <input type="hidden" id="start_time" value="${a.start_time!'0'}">     
+				                                             <input type="hidden" id="end_time" value="${a.end_time!'0'}">     
+				                                             <input type="hidden" id="nowtime" value="${a.nowtime!'0'}">
+				                                             <input type="hidden" id="virtual" value="${a.virtual!'0'}">
+				                                             <input type="hidden" id="virtualcount" value="${a.virtualcount!'0'}">
+				                                             <em class="fl ml20">(<@uiLabel text="goods.CurrentInventory" /><strong nctype='goods_stock'>${goods.enable_store!'0'}</strong><@uiLabel text="goods.Item" />)</em>
+				                                                     <#if a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+				                                                        <br><font style="color: red;font-size: 16px;margin-left: -90px;" >(活动商品只限购买${a.limitnumber!'0'}件)</font>                  
+				                                                     </#if>          
+				                                             <#else>
+				                                                <#if a.virtual==1>
+				                                                  <input type="hidden" id="virtual" value="${a.virtual!'0'}">
+				                                                  <input type="hidden" id="virtualcount" value="${a.virtualcount!'0'}">
+				                                                </#if>
+				                                              <em class="fl ml20">(<@uiLabel text="goods.CurrentInventory" /><strong nctype='goods_stock'>${goods.enable_store!'0'}</strong><@uiLabel text="goods.Item" />)</em> 
+				                                             </#if>                   
+				                                          </#list>
+			                                        <#else>
+			                                         <em class="fl ml20">(<@uiLabel text="goods.CurrentInventory" /><strong nctype='goods_stock'>${goods.enable_store!'0'}</strong><@uiLabel text="goods.Item" />)</em> 
+			                                        </#if>  
+						                		
+						                	</#if>
+					                </dd>
+					             <!--   <dt>物流方式：俄速通航空小包，运费：包邮</dt> -->
+									<div class="clear"></div>
+					            </dl>
+					
+<!-- 					    <dt style="width: 622px; padding-left: 30px;"><@uiLabel text="goods.LogisticsMode" />：<@uiLabel text="goods.AirParcel" />  &nbsp &nbsp&nbsp <@uiLabel text="goods.Carriage" />：<@uiLabel text="goods.CarriageFree" /></dt>   
+ -->					    	<!-- 此产品已下架时不显示购买按钮 -->
+					    	<#if goods.market_enable?? && goods.market_enable == 1>    	
+		            				<div class="goods-btn clearfix">
+		            					<span class="store-not-enough" style="display:none"><@uiLabel text="goods.SorryInventoryShortage" /></span>
+		            					<div class="btn">
+		            					<#if  goods.price==0 && locale="zh">
+		            						<#if  goods.enable_store==0>
+			            						<br>
+			                         	    	<dt style="width: 622px; padding-left: 30px;clear:both;"><font size ="4px" color="red">此商品暂时缺货！</font></dt>
+		            						<#else>
+			            						<br>
+			                         	    	<dt style="width: 622px; padding-left: 30px;clear:both;"><font size ="5px" color="red">此商品未上架！</font></dt>
+		                         	    	</#if>
+		                         	 	<#elseif goods.price_ru==0 && locale=="ru">
+		                         	 		<br>
+		                         	    	<dt style="width: 622px; padding-left: 30px;clear:both;"><font size ="5px" color="red">Это товар не поступать в продажу!</font></dt>
+		                         	 	<#else>
+			            					<#if  goods.is_groupbuy==0>
+			            						<#if  goods.enable_store==0>
+			            						<br>
+			                         	    	<dt style="width: 340px; padding-left: 30px;clear:both;text-align: left;"><font size ="3px"  color="red">此商品暂时缺货！</font></dt>
+			            						<#else>
+				                            	<a href="javascript:void(0);" class="buynow fl " id="buyNow"><@uiLabel text="goods.BuyNow" /></a><!-- 立即购买--> 
+				              					<a href="javascript:void(0);" class="addcart fl ml10 " id="addCart"><@uiLabel text="goods.AddToCart" /><!-- 加入购物车--></a> 
+				              					<a href="javascript:void(0);"  onclick="add_large_order();" class="buynow fl" style=" background: none;color:#333;"><@uiLabel text='goods.dazongjiaoyi' /></a><!-- 大宗交易-->
+				              					</#if>
+			              					<#else>
+			              					<!--  <a href="javascript:void(0);" class="addGroupbuyGoods  fl ml10 " title="<@uiLabel text='goods.AddToCart' />" id="addGroupBuy"><@uiLabel text="goods.AddToCart" /></a> --><!-- 加入购物车-->
+			              						<#if  goods.enable_store==0>
+			            						<br>
+			                         	    	<dt style="width: 340px;padding-left: 30px; clear:both;text-align: left;"><font size ="3px" color="red">此商品暂时缺货！</font></dt>
+			            						<#else>
+				              					<a href="javascript:void(0);" class="buynow fl " id="buyNow"><@uiLabel text="goods.BuyNow" /></a><!-- 立即购买--> 
+				              					<a href="javascript:void(0);" class="addcart fl ml10 " id="addCart"><@uiLabel text="goods.AddToCart" /><!-- 加入购物车--></a> 
+			              						</#if>
+			              					</#if>
+		              					</#if>
+		              					</div>
+		                          	</div>
+		                     <#else>
+		                     		<#if  goods.is_groupbuy==0>
+		                     			    <#if  goods.enable_store==0>
+			            						<br>
+		                         				 <dt style="width: 622px; padding-left: 30px;clear:both;"><font size ="4px" color="red"><#if locale=="zh">此商品暂时缺货！<#elseif locale=="ru">Это товар не поступать в продажу!</#if></font></dt>
+		            						<#else>
+			            						<br>
+			            						 <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${goods.goods_id}}")>
+											         <#if showGoodSkill?size gt 0>
+											           <#list showGoodSkill as a>
+											           		<#if a.start_time?? && a.end_time??>
+											           		     <#if a.start_time  gt a.nowtime>
+											           		     <dt style="width: 622px; padding-left: 30px;clear:both;"><font size ="5px" color="red"><#if locale=="zh">  活动未开始，敬请期待！<#elseif locale=="ru">Это товар не поступать в продажу!</#if></font></dt>
+											           		     </#if>
+											           		<#else>
+											           		<dt style="width: 622px; padding-left: 30px;clear:both;"><font size ="5px" color="red"><#if locale=="zh">此商品未上架！<#elseif locale=="ru">Это товар не поступать в продажу!</#if></font></dt>
+											           		</#if>
+											           	</#list>	
+											         <#else>
+										                  <dt style="width: 622px; padding-left: 30px;clear:both;"><font size ="5px" color="red"><#if locale=="zh">此商品未上架！<#elseif locale=="ru">Это товар не поступать в продажу!</#if></font></dt>
+											         </#if>
+		                         	    	</#if>
+		                         	 
+		                         	 <#else>
+		                         	 		<#if locale=="zh">
+		                         			<br>
+		                         	 		<dt style="width: 622px; padding-left: 30px;clear:both;"><font size ="5px" color="red">  全部买光了</font></dt>
+		                         	 		<#elseif locale=="ru">
+		                         	 		<br>
+		                         	 		<dt style="width: 622px; padding-left: 30px;clear:both;"><font size ="5px" color="red">  Все проданы</font></dt>
+						                	</#if>
+		                         	 </#if>
+		                     </#if>
+                                    <div class="clear"></div>
+                                    <div id="buy-banner">
+                                        <div class="bp-horizontal-banner ">
+                                            <div class="buy-protection-info">
+                                           <!--  <#if locale=="zh">
+                                                <h3><div style=" width: 100px;float: left;"><@uiLabel text="goods.BuyerProtection" /> </div>  <div style="  width: 200px; float: left;"><a href="${ctx}/helpc-33-52.html" style="  color: rgb(231, 37, 37); font-size: 14px;" ><@uiLabel text="index.lijie" /></a></div></h3>
+                                          <#elseif locale=="ru">
+                                                 <h3><div style=" width: 230px;float: left;"><@uiLabel text="goods.BuyerProtection" /> </div>  <div style="  width: 200px; float: left;margin-left: 20px;"><a href="${ctx}/helpc-33-52.html" style=" color: rgb(231, 37, 37); font-size: 14px;" ><@uiLabel text="index.lijie" /></a></div></h3>
+                                                </#if> -->
+                                                <ul class="buy-protection-info-list util-clearfix">
+                                              
+                                                 <!--  <li class="bp-info-item" style=" width: 600px;"   ><em><@uiLabel text="goods.LogisticsMode" />
+                                                        ：</em><@uiLabel text="goods.AirParcel" />  
+                                                    </li>-->
+  <#--                                                  <li class="bp-info-item" style="width: 600px; " id="bc">
+                                                     	<em style="float: left;font-family: Meiryo;font-size: 11px;">运费:&nbsp;</em>
+                                                     	<div style="float: left;font-family: Meiryo;font-size: 11px;">
+                                                     		<#if goods.freightType?? >
+	                                                     		<#if goods.freightType == '1' >
+		                                                     		包邮&nbsp;
+	                                                     		<#elseif goods.freightType == '2' >
+	                                                     			${goods.freight}元
+	                                                     		<#elseif goods.freightType == '3' >
+	                                                     			<label id="expressText" >平台计算运费</label>
+	                                                     		</#if>
+	                                                     	<#else>
+	                                                     		暂无
+                                                     		</#if>
+                                                     	</div> 
+                                                    </li>   
+                                                    
+                                                    <li class="bp-info-item" style="width: 600px; " id="bc">
+                                                     <em style="float: left;font-family: Meiryo;font-size: 11px;"><@uiLabel text="goods.yunshu" />:&nbsp;</em>
+                                                     <#if locale == 'ru' >
+                                                     	<div style="float: left;font-family: Meiryo;font-size: 11px;">从俄罗斯发货<@uiLabel text="goods.yunshuzhi" />&nbsp;</div>
+                                                     <#elseif locale == 'zh' >
+                                                     	<div style="float: left;font-family: Meiryo;font-size: 11px;">从国内发货<@uiLabel text="goods.yunshuzhi" />&nbsp;</div>
+                                                     </#if>
+                                                     <font style="text-decoration: underline; cursor: pointer;" class="changeRed"><@uiLabel text="index.PortalLearnMore" /></font>
+                                                    </li> -->
+                                                    
+                                                   <!--  <li class="bp-info-item">
+                                                     <div class="accepted-tips>
+                                                     <li class="moneybookers"></li>
+                                                   </div>
+                                                    </li> -->
+                                                     <!-- <li class="bp-info-item"> --> 
+                                                    <div class="accepted-tips" style="width: 600px;" >    
+                                                    	<div style=" color: rgb(51, 51, 51);font-weight: normal;float: left; margin-top: 10px; font-family: Meiryo;"><@uiLabel text="goods.PaymentMethods" />：  
+                                                    	</div>
+                                                        <div>
+                                                        	<#if locale == 'ru' >
+	                                                     		<li class="moneybookers" style=" padding: initial;cursor:default;"></li>
+<#-- 	                                      						<li class="mastercard" style=" padding: initial;cursor:default;"></li> -->
+                                                        	<#elseif locale == 'zh' >
+<#-- 	                                                     		<li class="visa" style=" padding: initial;cursor:default;"></li> -->
+	                                                     		<li class="payease" style=" padding: initial;cursor:default;margin-top:10px; background:none;border:none;">网上支付</li>
+	                                      					</#if>
+                                      					</div>
+                                      				</div>
+                                                     
+                                                   
+                                                   
+                                                <!--   </li> -->
+                                                     <li class="bp-info-item" style="width: 600px; font-family: Meiryo;font-size: 11px;" id="ab">
+                                                     <em style="float: left;"><@uiLabel text="index.Refund" />:&nbsp;</em>
+                                                     <div style="float: left;font-family: Meiryo;font-size: 11px;"><@uiLabel
+													text="goods.xintuikuan" />&nbsp;</div>
+													<div style="text-decoration: underline; cursor: pointer;font-family: Meiryo;font-size: 11px;">
+																		
+													<font style="font-family: Meiryo;font-size: 11px;text-decoration: underline;" class="changeRed" >
+													<@uiLabel text="index.PortalLearnMore" /></font>
+													
+													</div>
+                                                    </li>
+                                                  <!--   <li class="bp-info-item"><em><@uiLabel text="goods.PartialRefund" />
+                                                        ：</em><@uiLabel text="goods.DescriptionSeriousDiscrepancies" /></li> -->
+                                                </ul>
+                                                <li class="bp-info-item"><em style="font-family: Meiryo;font-size: 10px;"><@uiLabel text="goods.BuyerProtection" />:&nbsp;</em>
+                                                
+                                                <#if locale=="zh">
+                                                <a href="${ctx}/helpc-33-52.html" style="cursor: pointer;font-family: Meiryo;font-size: 11px;" >
+                                                <@uiLabel text="goods.gengduobaohu" /></a>
+                                                <#elseif locale=="ru">
+                                                <@uiLabel text="goods.gengduobaohu" />
+                                                <a href="${ctx}/helpc-33-83.html" style="cursor: pointer;font-family: Meiryo;font-size: 11px;" >
+                                                <span style="font-family: Meiryo;font-size: 11px;text-decoration: underline;" >здесь.</span></#if></a></li>
+                                                </ul>
+                                                <!-- <div class="buy-protection-more"> <a rel="nofollow" target="_blank" href="#">了解更多 </a> </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+								<div class="clear"></div>
+	          				</div>
+          				</form>
+        			</div>
+     				<div class="goods_store">
+     						<div class="store_outdside">
+	  							<#if locale=="zh">
+	                     		 <h1>卖家欢迎你！<br><font color="#d93600" >${storeInfo.store_name}</font></h1>
+	                  			<#elseif locale=="ru">
+	                     		<h1 style="font-family: Meiryo;font-size: 12px; font-weight:bold;">Продавец
+	                     		<a href="${ctx}/home.html?show_c=1&store_id=${storeInfo.store_id}" target="_blank" class="goto_store">
+	                     		<font color="#E63F00" class="color">&nbsp;${storeInfo.store_name}</font>
+	                     		</a>
+	                     		<br>приветствует вас!</h1>
+	                     		</#if>
+						     </div>
+     						<div class="store_outdside" style="font-family: Meiryo;font-size: 12px; font-weight:bold;">
+     							<label style="padding-left:10px;"><@uiLabel text="goods.PraiseInfo" />:</label><span style="color:#d93600;">${Praise}</span>
+     						</div>
+     						
+						      <div class="store_outdside">
+							      <div class="store_rate">
+							      	<!-- <ul>
+							      		<li>
+							      			<h2><@uiLabel text="goods.Description" /></h2>
+							      			<span>${storeInfo.store_desccredit!'5'}<@uiLabel text="goods.Point" /></span>
+							      		</li>
+							      		<li>
+							      			<h2><@uiLabel text="goods.Service" /></h2>
+							      			<span>${storeInfo.store_servicecredit!'5'}<@uiLabel text="goods.Point" /></span>
+							      		</li>
+							      		<li>
+							      			<h2><@uiLabel text="goods.Delivery" /></h2>
+							      			<span>${storeInfo.store_deliverycredit!'5'}<@uiLabel text="goods.Point" /></span>
+							      		</li>
+							      	</ul> -->
+							      </div>
+							       <#if locale=="zh">
+		                     		 <div class="go_store">
+							      		<a href="${ctx}/home.html?show_c=1&store_id=${storeInfo.store_id}" target="_blank" class="goto_store"><@uiLabel text="goods.EnterBusinesses" /></a>
+							      		<a  href="javascript:void(0);" rel="${storeInfo.store_id!0}" class="store_favoritebtn"><@uiLabel text="goods.FavoriteStores" /><#-- <span>(${storeInfo.store_collect!0})</span> --></a>
+							     	 </div>
+		                  			<#elseif locale=="ru">
+			                     		<div class="go_store">
+								      		<a style="width:170px; margin-left:8px" href="${ctx}/home.html?show_c=1&store_id=${storeInfo.store_id}" target="_blank" class="goto_store"><@uiLabel text="goods.EnterBusinesses" /></a>
+								      		<a style="margin-top: 10px;white-space: nowrap; width:170px"  href="javascript:void(0);" rel="${storeInfo.store_id!0}" class="store_favoritebtn"><@uiLabel text="goods.FavoriteStores" /><#-- <span>(${storeInfo.store_collect!0})</span> --></a>
+								      	</div>
+		                     		</#if>
+							      
+						      </div>
+     			 <div class="accepted-tips clearfix">
+						      		<h1 style="font-family: Meiryo;font-size: 12px; text-decoration:underline;"><@uiLabel text="goods.Note1" />:</h1>
+						      		<!-- <h1><@uiLabel text="goods.PaymentMethods" /></h1> -->
+                                  <p style="display: none;"  class="accepted-text"><@uiLabel text="goods.PaymentSecurity" /></p>
+                                  <p class="accepted-text">
+                                  	<span id="paymentIdbefore" style="font-size: 12px; font-weight:100;">	
+                                  	</span>
+                                  	 <a style="text-decoration: underline;font-size: 12px; font-weight:100; font-weight:normal;" href="${ctx}/helpc-33-83.html">
+                                  	<span id="paymentIdafter">	
+                                  	</span>
+                                  	</a>
+                                  </p>
+                             
+						      </div>
+								<div class="noticebox">
+									<!-- <strong class="orange" style="color:#d93600;"><@uiLabel text="goods.Note" />：<> -->
+									<@uiLabel text="goods.PaymentInformation" />
+								</div>
+								<!-- 聊天入口 -->
+								<div>
+									<div style="width:225px;height:50px;">
+										<a href="${ctx}/ask/chat.html?storeId=${storeInfo.member_id}&goodsid=${goods.goods_id}" target="_blank">
+											<div style="background-color:#BA7538;width:225px;height:50px;color:papayawhip;line-height:50px;text-align: center;">咨询卖家</div>
+											</div>
+										</a>
+									</div>
+								</div>
+    				</div>
+     			</div>
+     			
+     			
+      			<div class="clear"></div>
+    		</divn>
+    		<section class="goods_all" >
+    			<aside class="goodsdetail_left">
+      			<#assign store_id=storeInfo.store_id />
+				<#include 'home/store_basic.html' />
+      		</aside>
+      			<article class="goodsdetail_right">
+					<div  id="commodity">
+        				<nav class="tabbar pngFix" id="airlines_nav">
+          					<div class="pr" style="z-index: 70;">
+	            				<ul id="detailmenu">
+	              					<li class="current" tab="goodsdetail1"><a href="javascript:void(0);" ><span><@uiLabel text="goods.ProductDetails" /></span></a></li>
+	              					<#--<li tab="goodsdetail5" id="tail5"><a  href="javascript:void(0);"><span><@uiLabel text="goods.yunshu" /></span></a></li>--><!-- 暂时禁掉物流信息jfw -->
+	              					<li tab="goodsdetail2"><a  href="javascript:void(0);"><span><@uiLabel text="goods.ProductReviews" /></span></a></li>
+	              					<#--<li tab="goodsdetail3"><a  href="javascript:void(0);"><span><@uiLabel text="goods.SalesRecords" /></span></a></li>-->
+	              					<li tab="goodsdetail4"><a  href="javascript:void(0);"><span><@uiLabel text="goods.ProductAdvisory" /></span></a></li>
+	            					<li tab="goodsdetail6" id="tail6"><a  href="javascript:void(0);"><span><@uiLabel text="index.Refund" /></span></a></li>
+	            				
+	            				</ul>
+          					</div>
+        				</nav>
+       				<section class="goodsdetail_same goodsdetail1">
+			          <div id="ncGoodsIntro" class="content bd" style="">
+	                        <div class="default"><#if locale=="zh">
+								   ${goods.intro!''}
+								<#elseif locale=="ru">
+								   ${goods.ru_content!''}
+								</#if>
+							</div>
+			          </div>
+			        </section>
+			        <section class="goodsdetail_same goodsdetail5" style="display:none">
+			         <div class="content">
+	        				<!--商品成交记录-->
+							<#include 'detail/trans_info.html'/>
+						</div>
+			        </section>
+        			<section class="goodsdetail_same goodsdetail2" style="display:none">
+        				<div id="discuss_wrapper" class="content">
+        					<!-- 评论列表 -->
+							<#include 'detail/discuss_list.html'/>
+							<!--发表评论-->				
+							<#include 'detail/discuss_form.html'/>
+						</div>
+        			</section>
+        			
+        			<section class="goodsdetail_same goodsdetail3" style="display:none">
+        				<div class="content">
+	        				<!--商品成交记录-->
+							<#include 'detail/transaction.html'/>
+						</div>
+        			</section>
+        			<section class="goodsdetail_same goodsdetail4" style="display:none">
+        				<div class="content bd">
+        					<!-- 咨询提示 -->
+<#--       						<div class="point_out">
+								<p><@uiLabel text="" />goods.CustomerReply</p>
+								<a href="#anchor"><@uiLabel text="goods.Question" /></a>
+							</div>-->
+							<!--商品咨询列表-->
+							<#include 'detail/ask_list.html'/>
+							<!--商品咨询表单-->				
+							<#include 'detail/ask_form.html'/>
+						</div>
+        			</section>
+        			
+        			<section class="goodsdetail_same goodsdetail6" style="display:none">
+        				<div class="content">
+	        				<!--商品成交记录-->
+							<#include 'detail/tuikuan.html'/>
+						</div>
+        			</section>
+                	<section class="goodsdetail_rec">
+          				<div class="title">
+            				<h4><@uiLabel text="goods.OtherPeopleViewed" /></h4>
+          				</div>
+          				<div class="content">
+            				 <#assign findOtherLikeGoodsTag=newTag("findOtherLikeGoodsTag")>
+                            <#assign findOtherLikeGoods=findOtherLikeGoodsTag("{'catid':${goods.cat_id} }")>
+                            <#if findOtherLikeGoods? size gt 0>
+                                		<ul>
+            				<!-- <#assign goodsList=goodsListTag("'tagid':'10','goodsnum':'5'")> -->
+							<#list findOtherLikeGoods as goods>
+                             	<li>
+									<dl>
+										<dt class="goods_name" >
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"
+								title="<#if locale=="zh">${goods.name}<#elseif locale=="ru">${goods.name_ru!""}</#if>">
+								<#if locale=="zh">
+                                	${goods.name!''}
+                                <#elseif locale=="ru">
+                                	${goods.name_ru!""}
+                                </#if>
+								</a>
+						</dt>
+						<!--商品图片-->
+						<dd class="goods_img">
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"> 
+								<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" /> </a>
+						</dd>
+						<!--商品价格-->
+						<dd class="goods_price"><@uiLabel text="goods.ShopPrice" />：
+						<#if locale=="zh">
+                            ${goods.price?string.currency}
+                        <#elseif locale=="ru">
+                            ${goods.price_ru!''}р.
+                        </#if>
+                        </d>
+						</dd>
+									</dl>
+			   					</li>
+			   					</#list>
+                           	</ul>
+                          <#else>
+                                  <ul>
+            				<#assign goodsList=goodsListTag("'tagid':'10','goodsnum':'5'")>
+							<#list goodsList as goods>
+                             	<li>
+									<dl>
+										<dt class="goods_name" >
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"
+								title="<#if locale=="zh">${goods.name}<#elseif locale=="ru">${goods.name_ru!""}</#if>">
+								<#if locale=="zh">
+                                	${goods.name!''}
+                                <#elseif locale=="ru">
+                                	${goods.name_ru!""}
+                                </#if>
+								</a>
+						</dt>
+						<!--商品图片-->
+						<dd class="goods_img">
+							<a target="_blank" href="${ctx}/goods-${goods.goods_id}.html"> 
+								<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goods.name}" /> </a>
+						</dd>
+						<!--商品价格-->
+						<dd class="goods_price"><@uiLabel text="goods.ShopPrice" />：
+						<#if locale=="zh">
+                            ${goods.price?string.currency}
+                        <#elseif locale=="ru">
+                            ${goods.price_ru!''}р.
+                        </#if>
+                        </d>
+						</dd>
+									</dl>
+			   					</li>
+			   					</#list>
+                           	</ul>
+                         </#if>
+							<div class="clear"></div>
+          				</div>
+        			</section>
+        		</div>
+      		</article>
+	  		<div class="clear"></div>
+    	</section>
+  	</article>
+  	
+</div>
+<div class="clear"></div>
+<div class="add_success_msg" style="display:none">
+	<dl class="add_message">
+		<dt><@uiLabel text="goods.Congratulation" /></dt>
+		<dd>
+			<input type="button" class="returnbuy_btn" value="<@uiLabel text='goods.ContinueShopping' />">
+			<input type="button" class="checkout_btn" value="<@uiLabel text='goods.Clearing' />">
+		</dd>
+	</dl>
+</div>
+<div id="dd"></div>
+<div id="wuliu"></div>
+<script type="text/javascript">
+$(function(){
+	Spec.init();
+	CommentList.init();
+	CommentForm.init();	
+	Favorite.init();
+	jiage();
+	pfj();
+	var qps = $("#pfqpsId").html();
+	if(qps==0){
+		$("#pfjId").hide();
+	}else{
+		$("#pfjId").show();
+	}
+	$("#ab").click(function(){
+		$("#detailmenu li").removeClass("current");
+		$(".goodsdetail_same").hide();
+		$("#tail6").addClass("current");
+		$("."+"goodsdetail6").show();
+	});
+	$("#bc").click(function(){
+		$("#detailmenu li").removeClass("current");
+		$(".goodsdetail_same").hide();
+		$("#tail5").addClass("current");
+		$("."+"goodsdetail5").show();
+	});
+	
+	$(".goods_detail1").show();
+	$("#detailmenu li").click(function(){
+		$("#detailmenu li").removeClass("current");
+		$(".goodsdetail_same").hide();
+		$(this).addClass("current");
+		$("."+$(this).attr("tab")).show();
+	});
+//	Goods.init(${scroll});     商品相册暂时先取消，稍后制作
+	$('#airlines_nav').waypoint(function(event, direction) {
+        $(this).parent().parent().parent().toggleClass('sticky', direction === "down");
+        event.stopPropagation();
+    });
+	<#if galleryList?? && (galleryList?size>4)>
+     $("#detail_wrapper .gallery .thumblist").jCarouselLite({
+        btnNext: ".left_control",
+        btnPrev: ".right_control",
+        visible:4
+    }); 
+	</#if>
+    //相册放大切换
+    $("#detail_wrapper .gallery .thumblist li p").click(function(){
+        var self = this;
+        var $this = $(this);
+        var img  = $this.children("img");
+        var zoom = document.getElementById('zoom'); //get the reference to our zoom object
+//        MagicZoom.update(zoom, img.attr("big"), img.attr("small"), 'show-title: false');
+		$(".MagicZoom img").attr("src" , img.attr("big"));
+        $this.addClass("selected").siblings().removeClass("selected");
+    });
+    
+    var peyment = $(".accepted-text").html();
+    var locale="${locale}";
+    if (locale=="zh"){
+	   	 $("#paymentIdbefore").html(peyment.substring(0,19));
+	   	 $("#paymentIdafter").html(peyment.substring(19));
+    }else{
+    	 $("#paymentIdbefore").html(peyment.substring(0,71));
+		 $("#paymentIdafter").html(peyment.substring(71));
+    }
+   
+   
+})
+$(function(){
+	$(".color").hover(
+			  function () {
+				    $(this).css("color","red");
+				  },
+				  function () {
+				    $(this).css("color","#E63F00");
+				  }
+				);
+})
+$(function(){
+	$(".changeRed").hover(
+			  function () {
+				    $(this).css("color","red");
+				  },
+				  function () {
+				    $(this).css("color","rgb(102, 102, 102)");
+				  }
+				);
+})
+
+	function jiage(){
+	var jgfull=$("#good_price1").html();
+	var locale="${locale}";
+	if(locale=="zh"){
+		var subpfj=jgfull.lastIndexOf("￥");
+		var pfjbefore=jgfull.substring(1,subpfj-1);
+		var pfjafter=jgfull.substring(subpfj+1,jgfull.length);
+		if((pfjbefore==0 && pfjafter==0)||pfjafter==0){
+			$("#be_jgworth").hide();
+		}
+		if((pfjbefore>0 && pfjafter>0 && pfjbefore==pfjafter )){
+			$("#good_price1").html("￥"+pfjbefore);
+		}
+	}else{
+		var subpfj=jgfull.lastIndexOf("-");
+		var pfjbefore=jgfull.substring(0,subpfj-2);
+		var pfjafter=jgfull.substring(subpfj+1,jgfull.length-2);
+		if((pfjbefore==0 && pfjafter==0)||pfjafter==0){
+			$("#be_jgworth").hide();
+		}
+		if((pfjbefore>0 && pfjafter>0 && pfjbefore==pfjafter )){
+			$("#good_price1").html(pfjbefore+"р.");
+		}
+	}
+	}
+	
+	function pfj(){
+		var pfjfull=$("#goods_whprice1").html();
+		var locale="${locale}";
+		if(locale=="zh"){
+			var subpfj=pfjfull.lastIndexOf("￥");
+			var pfjbefore=pfjfull.substring(1,subpfj-1);
+			var pfjafter=pfjfull.substring(subpfj+1,pfjfull.length);
+			if((pfjbefore==0 && pfjafter==0)||pfjafter==0){
+				$("#be_worth_pf").hide();
+			}
+			if((pfjbefore>0 && pfjafter>0 && pfjbefore==pfjafter )){
+				$("#goods_whprice1").html("￥"+pfjbefore);
+			}
+		}else{
+			var subpfj=pfjfull.lastIndexOf("-");
+			var pfjbefore=pfjfull.substring(0,subpfj-2);
+			var pfjafter=pfjfull.substring(subpfj+1,pfjfull.length-2);
+			if((pfjbefore==0 && pfjafter==0)||pfjafter==0){
+				$("#be_worth_pf").hide();
+			}
+			if((pfjbefore>0 && pfjafter>0 && pfjbefore==pfjafter )){
+				$("#goods_whprice1").html(pfjbefore+"р.");
+			}
+		}
+	}
+/* 	$("#choseExpress").click(function(){
+		dialog = $.dialog({
+			title : "<@uiLabel text='goods.ChoiceExpress'/>",
+			lock : true,
+			min : false,
+			max : false,
+		});
+		$.ajax({
+			url : "express_chose.html",
+			cache : false,
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([{
+					name : "<@uiLabel text='goods.SaveExpressInfo'/>",
+					callback : function() {
+						var country = $("#send2country").find("option:selected").text();
+						var check = $("input:radio[name='expressRadio']:checked").parent();
+						var name = $(check).next().text();
+						var time = $(check).next().next().text();
+						var cost = $(check).next().next().next().text();
+						$("#choseExpress").html(country);
+						$("#freightTips").html(name +"&nbsp;&nbsp;"+ cost);
+						$("#freightTime").html(time + '<@uiLabel text="goods.Day" />' );
+						$(dialog).dialog('close');
+						return true;
+					}
+				}, {
+					name : "<@uiLabel text='goods.CancelOper'/>"
+				} ]);
+			},
+			error : function() {
+				$.alert("<@uiLabel text='goods.chuxiancuowuqingchongshi'/>!");
+			}
+		});
+	}); */
+	function add_wuliu(){
+		//var address = $("#address").val();
+		//$("#test").load("a.jsp",{"name" : "Adam"});
+		/* alert("333"); */
+		$("#wuliu").empty();
+		$("#wuliu").append("<div id='wuliu_div' value='1'></div>");
+		var html = $("#wuliu_div").load("checkout/express_chose.html",{"myfreightid" : "${goods.freightType!0}","myweight":"${goods.weight!0}","goods_id":"${goods.goods_id}","store_id":"${goods.store_id}"});
+		var dialog = $.dialog({ 
+			title:"<@uiLabel text='goods.freightlogischooselogis'/>",
+			width:450,
+			top:150,
+			content:html,
+			lock:true,
+			init:function(){
+		}});
+		//dialog.content("url:checkout/new_address.html");
+	}
+	function add_large_order(){
+		//var address = $("#address").val();
+		$("#dd").empty();
+		$("#dd").append("<div id='address_div' value='1'></div>");
+		var html = $("#address_div").load("checkout/new_large_order.html");
+		var dialog = $.dialog({ 
+			title:'<@uiLabel text='goods.dazongjiaoyi' />',
+			width:675,
+			top:100,
+			content:html,
+			lock:true,
+			init:function(){
+		}});
+		//dialog.content("url:checkout/new_address.html");
+	}
+	function sum(){
+		var freight_id=$("#myModelId").val();
+		 var bb=$.trim($("#freightprice").text());
+	     var free = "Free shipping";
+	       var num = parseInt($('#quantity').val());
+	       var max = parseInt($('[nctype="goods_stock"]').text());
+	       var limitbuy=parseInt($('#limitbuy').val());
+	 	   var limitnumber=parseInt($('#limitnumber').val());
+	 	   var start_time=$('#start_time').val();
+	 	   var end_time=$('#end_time').val();
+	 	   var nowtime=$('#nowtime').val();
+	 	   var result=0;
+	 	  if(limitbuy==1){
+ 			  if(start_time < nowtime  && nowtime <end_time){
+ 				   if(num>=limitnumber){
+ 					  if (num > max) {
+ 		 		 			alert("库存不足，请重新输入");
+ 		 		 			$('#quantity').val(1);
+ 		 		 			return;
+ 		 		 		}else{
+ 		 		 			$('#quantity').val(limitnumber);
+ 		 		 		}
+ 					  result=0;
+ 				   }
+ 			  }else{
+ 				  result=0;
+ 			  }
+	 	  }else{
+	 		  result=0;
+	 	  }	
+	 	  if(result==0){
+	 			if(bb==free){
+	 				$("#freightprice").text(free);
+	 				var num = parseInt($('#quantity').val());
+	 		 		var max = parseInt($('[nctype="goods_stock"]').text());
+	 		 		if (num > max) {
+	 		 			alert("库存不足，请重新输入");
+	 		 			$('#quantity').val(1);
+	 		 			return;
+	 		 		}
+	 			}else{
+	 				var num = parseInt($('#quantity').val());
+	 		 		var max = parseInt($('[nctype="goods_stock"]').text());
+	 		 		var goods_id = $("input[name='goodsid']").val();
+	 		 		var storeid = $("#storeid").val();
+	 		 		var freight_id=$("#myModelId").val();
+	 		 		if (num > max) {
+	 		 			alert("库存不足，请重新输入");
+	 		 			$('#quantity').val(1);
+	 		 			return;
+	 		 		}
+	 		 		$.ajax({
+	 		 			url: "api/shop/logis!caculateLogisPrice.do?ajax=yes&goods_id="+goods_id+"&num="+num+"&freight_id="+freight_id,
+	 		 			type : "POST",
+	 		 			async : false,
+	 		 			dataType : "json",
+	 		 			success : function(result) {
+	 		 				if(result!=null){
+	 		 					if(result.result==1){
+	 		 						/*alert(result.message);*/
+	 		 						/*$("#freightprice").text(price);
+	 		                         $('.ui_close').trigger("click");*/
+	 		 						$("#freightprice").text(result.message);
+	 		 					}else{
+	 		 						alert("失败");
+	 		 					}
+	 		 				}
+	 		 			}
+	 		 		});
+	 		  }	
+	 	  }
+	}
+</script>
+<script type="text/javascript">
+var goodsid=$("#goods_id").val();
+var sn=$("#goods_sn").val();
+var goodsname=$("#goods_name").val();
+var price=$("#goods_price_2").val();
+var catname=$("#cat_name").val();
+var refer=window.location.href
+var pc_url=$("#pc_url").val();
+var pic_count=pc_url.lastIndexOf("//");
+pc_url=pc_url.substring(0,pic_count)+pc_url.substring(pic_count+1);
+var brand=$("#brand").val();
+var enable=$("#enable").val();
+var num=0;
+if(enable>0){
+	num=1;
+}else{
+	num=0;
+}
+py('event','viewItem',{
+		'product_no': goodsid,
+		'spu_id':goodsid,
+		'name':goodsname,
+		'category':catname,
+		'price':price,
+		'currency_code':'CNY',
+		'product_url':refer,
+		'pc_pic_url':pc_url,
+		'sold_out':num,
+		'brand':brand,
+	});
+</script>
+
+<!-----footer------>
+<#include 'common/footer.html'/>

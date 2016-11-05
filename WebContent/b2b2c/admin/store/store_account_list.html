@@ -1,0 +1,88 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="buttonArea">
+		<div style="float:left;">
+		</div>
+		<span style="float: right;height:28px;"> 
+			<a href="javascript:void(0)" class="button b_fr" id="search" data-options="plain:true" onclick="searchStore()">搜索</a>&nbsp;&nbsp;
+			<input id="searchKeyword" class="input_text b_fr mr5" type="text" value="" size="30" placeholder="请输入店铺名称" name="searchKeyWord" />
+			交易类型：<select id="tradeType" class="inputSelect valid" style="width: 145px; margin-right: 10px;" >
+				<option value="-2" selected="selected">---所有---</option> 
+				<option value="1">缴保证金</option>
+				<option value="2">放款</option>
+				<option value="3">提现</option>
+				<option value="4">佣金</option>
+				<option value="5">手续费</option>
+			</select>
+		</span>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="storeform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/b2b2c/admin/store!store_account_listJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="storedata">
+				<thead>
+					<tr>
+						<th data-options="field:'rec_id',checkbox:true,width:100"></th>
+						<th  data-options="field:'unique_id',width:100">交易流水号</th>
+				   	 	<th  data-options="field:'store_name',width:100">店铺名称</th>
+				   	 	<th  data-options="field:'member_name',width:50">会员名称</th>
+				   	 	<th  data-options="field:'type',width:50" formatter="formatType">交易类型</th>
+				   	 	<th  data-options="field:'amount_type',width:50" formatter="formatAccountType">账户类型</th>
+				   	 	<th  data-options="field:'income_amount',width:30">收入金额</th>
+				   	 	<th  data-options="field:'outlay_amount',width:30">支出金额</th>
+				   	 	<th  data-options="field:'balance',width:50">账户余额</th>
+				   	 	<th  data-options="field:'credit_balance',width:50">保证金余额</th>
+				   	 	<th  data-options="field:'note',width:100">备注</th>
+					</tr>
+				</thead>
+			</table>
+			
+		</form>
+	</div>
+</div>
+
+<div id="divdia"></div>
+
+<script type="text/javascript">
+/* function formatAction (value,row,index){
+	var val="";
+	val+="<a href='javascript:void(0);' class='edit' onclick='append("+row.store_id+",\"uname\")' title='修改'></a>";
+	return val;
+} */
+function formatType(value,row,index){
+	val="";
+	if(value==1){
+		val="缴保证金";
+	}else if(value==2){
+		val="放款";
+	}else if(value==3){
+		val="提现";
+	}else if(value==4){
+		val="佣金";
+	}else if(value==5){
+		val="手续费";
+	}
+	return val;
+}
+function formatAccountType(value,row,index){
+	val="";
+	if(value==1){
+		val="普通账户";
+	}else if(value==2){
+		val="保证金账户";
+	}
+	return val;
+}
+
+function searchStore(){
+	var storeName = $("#searchKeyword").val();
+	var type=$("#tradeType").val();
+	$("#storedata").datagrid('load', {
+		tradeType:type,
+		storeName:storeName,
+		page:1
+   });
+}
+</script>
+<#include '/admin/footer.html' >

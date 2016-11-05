@@ -1,0 +1,261 @@
+<#if locale=="zh">
+    <#assign  title="收货地址" />
+ <#elseif locale=="ru">
+     <#assign title="адрес доставки" />
+ </#if>
+<#include 'member_header.html' />
+<!--创建"会员地址列表"标签-->
+<#assign consigneeListTag= newTag("consigneeListTag") >    
+<!--调用"会员地址列表"标签-->          
+<#assign  consigneeList= consigneeListTag()>	
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<div class="member_center">
+	<div class="address">
+		<ul>
+			<li class="selected"><a href="address.html"><span><@uiLabel text="index.PortalUserSendAddress" /></span></a></li>
+		</ul>
+		<a href="javascript:;" class="add_address"><span><@uiLabel text="index.NewDeliveryAddress" /></span></a>
+	</div>
+	<div class="alert_address">
+		<h1><@uiLabel text="index.AddressTips" /></h1>
+		<p>1，<@uiLabel text="index.AddressTipsContents" /></p>
+		<p>2，<@uiLabel text="index.AddressTipsContents2" /></p>
+	</div>
+	<div class="address_list">
+		<table cellpadding="0" cellspacing="0" style="TABLE-LAYOUT: fixed" border="1" cellspacing="0" cellpadding="0" width="200">
+			<thead>
+				<tr>
+					<th class="a1"><@uiLabel text="index.Consignee" /></th>
+					<th class="a2"><@uiLabel text="index.Location" /></th>
+					<th class="a3"><@uiLabel text="index.StreetAddress" /></th>
+					<th class="a4"><@uiLabel text="index.PhoneOrMobile" /></th>
+					<th class="a5"><@uiLabel text="index.Sellercode" /></th>
+					<th class="a6"><@uiLabel text="index.Default" /></th>
+					<th class="a7"><@uiLabel text="index.CommOper" /></th>
+				</tr>
+			</thead>
+			<tbody>
+				<#if consigneeList?size gt 0 >
+				<#list consigneeList as address>
+				<tr>
+					<td>${address.name!''}</td>
+					<td style="WORD-WRAP: break-word" width="20">${address.province!''}-${address.city!''}-${address.region!''} </td><#--${address.country!''}-->
+					<td style="WORD-WRAP: break-word" width="20">${address.addr!''}</td>
+					<td>
+						<p class="a_tel">${address.tel!''}</p>
+						<p class="a_phone">${address.mobile!''}</p>
+					</td>
+					<td>${address.zip!''}</td>
+					<td><#if address.def_addr == 0 ><@uiLabel text="index.CommonFalse" /></#if><#if address.def_addr == 1 ><@uiLabel text="index.CommonYes" /></#if></td>
+					<td style="width:110px;">
+						<a href="javascript:;" rel="${address.addr_id}" class="edit" style=" margin-left: 40px;" <#if locale=="zh"> title="编辑"<#elseif locale=="ru">title="Изменить"</#if>></a>
+						<!-- <span class="aline"></span>
+						<a href="javascript:;" class="address_del" rel="${address.addr_id}" ></a> -->
+					</td>					
+				</tr>
+				</#list>
+				<#else>
+				<tr>
+					<td colspan="9">
+						<@uiLabel text="index.NoShippingAddress" />，<a href="javascript:;" class="addressadd"><@uiLabel text="index.AddingOneAddress" /></a>
+					</td>
+				</tr>
+				</#if>
+			</tbody>	
+		</table>
+	</div>
+	<!--添加会员地址。使用js load方法调用member/address_add.html页面  -->
+	<div class="address_add" style="height: 700px;">
+	</div>
+	<!-- 修改会员地址 。使用js load方法调用member/address_edit.html页面 -->
+	<div class="address_edit" style="height: 700px;">
+	</div>
+</div>
+
+<script>
+	function dataCheck(){
+		if($("input[name='name']").val()==''){
+			alert("<@uiLabel text='index.xmbnwk' />");
+			return false;
+		}
+		if($("input[name='country']").val()==''){
+			alert("<@uiLabel text='index.gjbnwk' />");
+			return false;
+		}
+		/* if($("input[name='province']").val()==''){
+			alert("<@uiLabel text='index.addressbnwk' />");
+			return false;
+		} */
+		if($("input[name='city']").val()==''){
+			alert("<@uiLabel text='index.AddressCity' /><@uiLabel text='member.isnotnull' />");
+			return false;
+		}
+		if($("input[name='addr']").val()==''){
+			alert("<@uiLabel text='index.xxdzbnwk' />");
+			return false;
+		}
+		if($("#zipcode").val()==''){
+			alert("<@uiLabel text='index.AddressZipCode' /><@uiLabel text='member.isnotnull' />");
+			return false;
+		}
+		<#if locale=="zh">
+			var tel= $.trim( $("#tel").val() ) ;
+			var mobile = $.trim( $("#mobile").val() ) ;
+			
+			if( tel!="" && !$.isTel(tel) ){
+				alert("电话号格式不正确");
+				return false;
+			}
+			if( mobile != "" && !$.isMobile(mobile) ){
+				alert("手机格式不正确");
+				return false;
+			}
+			if(mobile=="" && tel==""){
+				alert("手机或电话必须填写一项");
+				return false;
+			}
+			
+			
+		<#elseif locale=="ru">
+			var m=0;
+			var t=0;
+			var m1=$("#mobile1").val();
+			var m2=$("#mobile2").val();
+			var m3=$("#mobile3").val();
+			var m4=$("#mobile4").val();
+			alert(mobile1);
+			if(m1!="" && m2!="" && m3!="" && m4!=""){
+				m=1;
+				if(!isNaN(m1) && !isNaN(m2) && !isNaN(m3) && !isNaN(m4)){
+					m=2
+				}else{
+					m=3
+				}	
+			}
+			if(m!=2){
+				alert("<@uiLabel text='index.shoujishu' />");
+				return false;
+			}
+			var t1=$("#tel1").val();
+			var t2=$("#tel2").val();
+			
+			if(t1!="" || t2!=""){
+				t=1
+				if(!isNaN(t1) && !isNaN(t2)){
+					t=2;
+				}else{
+					t=3
+				}
+			}
+			if(t!=0 && t!=2){
+				alert("<@uiLabel text='index.AddressAlert' />");
+				return false;
+			}
+		</#if>
+
+		return true;
+	}
+	$(function(){
+		/*添加会员地址专用*/
+		$(".add_address,.addressadd").click(function(){
+			$(".address_add").load("address_add.html",function(){
+				$(".address_list").hide();
+				$(".address_edit").hide();
+				$(".grey_top").hide();
+				$(".address_add").show();
+				/*添加用户地址js*/
+				$("#btnSubmit").click(function(){
+					if(dataCheck()==false){
+						return false;
+					}//校验数据
+					var value2 = $("#region_id").val();
+					if (value2 == "" || value2 == "0"){
+						alert("<@uiLabel text='goods.IncompleteInformationRegion' />");
+						return false;
+					}
+					$("#member_addr").ajaxSubmit({
+						url : "${ctx}/api/shop/memberAddress!add.do",
+						dataType : 'json',
+						success : function(data) {	
+							alert(data.message)
+							if(data.result==1)
+								location.href = "address.html"
+						},
+						error : function(e) {
+							alert("<@uiLabel text="index.BuyersCenterAlertB" />");
+						}
+					})
+				});
+				
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				 RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				}; 
+			});
+		});
+	})
+		/*修改地址专用*/
+		$(".edit").click(function(){
+			var editid = $(this).attr("rel");
+			$(".address_edit").load("address_edit.html?addressid="+editid,function(){
+				$(".address_list").hide();
+				$(".address_edit").show();
+				$(".grey_top").hide();
+				$(".address_add").hide();
+				/*修改用户地址*/
+				$("#address_edit").click(function(){
+					if(dataCheck()==false){
+						return false;
+					}//校验数据
+					var value2 = $("#region_id").val();
+					if (value2 == "" || value2 == "0"){
+						alert("<@uiLabel text='goods.IncompleteInformationRegion' />");
+						return false;
+					}
+					$("#edit_member_address").ajaxSubmit({
+						url : "${ctx}/api/shop/memberAddress!edit.do?addressid="+editid,
+						dataType : 'json',
+						success : function(data) {	
+							alert(data.message)
+							if(data.result==1)
+								location.href = "address.html"
+						},
+						error : function(e) {
+							alert("<@uiLabel text='index.BuyersCenterAlertB' />");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			})
+		})
+		/*删除地址*/
+		/* $(".address_del").click(function(){
+			if(confirm("<@uiLabel text="index.BuyersCenterAlertC" />")){
+				var deleteid = $(this).attr("rel");
+				$.ajax({
+					url : "${ctx}/api/shop/memberAddress!delete.do?addr_id="+deleteid,
+					dataType : 'json',
+					success : function(data) {	
+						alert(data.message)
+						if(data.result==1)
+							location.href = "address.html"
+					},
+					error : function(e) {
+						alert("<@uiLabel text="index.BuyersCenterAlertB" />");
+					}
+				})  
+			}
+			else{
+				location.href="address.html";
+			}
+		}) */
+		
+</script>
+	<!--会员中心首页右侧结束-->
+
+
+</div>
+<#include '../common/footer.html'/>

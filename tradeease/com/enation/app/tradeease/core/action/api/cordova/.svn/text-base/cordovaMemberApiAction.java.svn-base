@@ -1,0 +1,1031 @@
+package com.enation.app.tradeease.core.action.api.cordova;
+
+import java.io.File;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.struts2.convention.annotation.Action;
+import org.apache.struts2.convention.annotation.Namespace;
+import org.apache.struts2.convention.annotation.ParentPackage;
+import org.springframework.context.annotation.Scope;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
+
+import com.enation.app.b2b2c.core.model.member.StoreMember;
+import com.enation.app.base.core.model.Member;
+import com.enation.app.base.core.service.IMemberManager;
+import com.enation.app.base.core.service.IRegionsManager;
+import com.enation.app.base.core.service.ISmsManager;
+import com.enation.app.base.core.service.ISmtpManager;
+import com.enation.app.base.core.service.IsmsMobileManager;
+import com.enation.app.base.core.service.auth.IAdminUserManager;
+import com.enation.app.shop.core.service.IMemberPointManger;
+import com.enation.eop.sdk.context.UserConext;
+import com.enation.eop.sdk.utils.UploadUtil;
+import com.enation.eop.sdk.utils.ValidCodeServlet;
+import com.enation.framework.action.WWAction;
+import com.enation.framework.context.webcontext.ThreadContextHolder;
+import com.enation.framework.jms.EmailProducer;
+import com.enation.framework.util.HashCrypt;
+import com.enation.framework.util.StringUtil;
+//SmsMoblieManager
+@Component
+@Scope("prototype")
+@ParentPackage("eop_default")
+@Namespace("/api/cordova")
+@Action("member")
+@SuppressWarnings({ "rawtypes", "unchecked", "serial","static-access" })
+
+public class cordovaMemberApiAction extends WWAction {
+	private IMemberManager memberManager;
+	private IAdminUserManager adminUserManager;
+	
+	private IRegionsManager regionsManager;
+	private String username;
+	private String password;
+	private String validcode;//验证码
+	private String remember;//两周内免登录
+	private Map memberMap;
+	private String license;//同意注册协议
+	private String email;
+	private String friendid;
+	private String mobileCode;//短信收到的验证码
+//	private String validate;//传回来的验证码
+	private IsmsMobileManager SmsMoblieManager;
+	
+
+	/**
+	 * 上传头像变量
+	 */
+	private File faceFile ;
+	private File face ;         //633行有单独的上传头像，没动，酌情处理，需要这里，
+	private String faceFileName;
+	
+	private String faceFileFileName;
+
+	private String photoServer;
+	private String photoId;
+	private String type;
+	private String turename;
+
+	/**
+	 * 更改密码
+	 */
+	private String oldpassword;
+	private String newpassword;
+	private String re_passwd;
+	
+	
+	private Integer province_id;
+	private Integer city_id;
+	private Integer region_id;
+	private String province;
+	private String city;
+	private String region;
+	private String address;
+	private String zip;
+	private String mobile;
+	private String tel;
+	private String nickname;
+	private String sex;
+	private String mybirthday;
+	/**
+	 * 搜索
+	 */
+	private Integer lvid; //会员级别id
+	private String keyword; //关键词
+	/**
+	 * 重新发送激活邮件
+	 */
+	private JavaMailSender mailSender;
+	private EmailProducer mailMessageProducer;
+	private IMemberPointManger memberPointManger;
+
+	
+	private File file ;
+	private String fileFileName;
+	/**
+	 * loginType：0用户名 ；1邮箱；2手机号
+	 */
+	private Integer loginType;
+	private ISmsManager smsManager;
+	// 发送邮件
+//	private EmailProducer mailMessageProducer;
+	private ISmtpManager smtpManager;
+	private String opid;//qq接口传递的id（lsy）
+	
+public String login() {
+      String name = "";
+	  String  AccountNo = "账号不存在";
+	  String  PasswordError = "密码错误";
+	  String  IsCheck="您的账号处于禁用状态，请联系网站客服";
+	  HttpServletRequest request = ThreadContextHolder.getHttpRequest();
+	  //loginType1 邮箱登录 根据邮箱查找 uname 不存在返回“”
+	  if(loginType==1){
+		  name = this.memberManager.getUnameByEmail(username);
+	  }
+	  //loginType2 手机登录 根据手机号查找 uname 不存在返回“”
+	  else if(loginType==2){
+		  name = this.memberManager.getUnameByMobile(username);
+	  }
+	  //未识别登录方式 当用户名处理，判断用户名是否存在
+	  else{
+		  int checkuname = this.memberManager.checkname(username);
+		  if(checkuname==1){
+			  name = username;
+		  }else{
+			  this.showErrorJson(AccountNo);
+			  return WWAction.JSON_MESSAGE;
+		  }
+	  }
+	  //邮箱或者手机查出的用户名为空时，直接当用户名查询  存在直接用户名登录
+	  if(name == null||"".equals(name)){
+		  int checkuname = this.memberManager.checkname(username);
+		  if(checkuname==1){
+			  name = username;
+		  }else{
+			  this.showErrorJson(AccountNo);
+			  return WWAction.JSON_MESSAGE;
+		  }
+	  }
+	  int result = this.memberManager.login(name, password);
+	  if (result == 1) {
+		  Member member = UserConext.getCurrentMember();
+		  this.showSuccessJson(member.getMember_id().toString());
+	  }else if(result==-1){
+		  this.showErrorJson(IsCheck);
+	  }else{
+		  this.showErrorJson(PasswordError);
+		
+	}
+	return WWAction.JSON_MESSAGE;
+}
+//忘记密码验证手机号
+public String judgeCode2(){
+	//System.out.println("验证手机号码");
+	if (memberManager.checkmobile(username) <= 0) {
+		this.showErrorJson("此账号不存在");
+	}else if(StringUtil.isEmpty(username)){
+		this.showErrorJson("请填写手机号");
+	}else{
+		this.showSuccessJson("");
+	}
+	//this.showSuccessJson("");
+	return this.JSON_MESSAGE;
+}
+//忘记密码
+public String forgotPassword(){
+	HttpSession session = ThreadContextHolder.getHttpRequest().getSession();
+	String validate = session.getAttribute("validateCode").toString();
+	String  VerificationError = "";
+	VerificationError = "验证码错误";
+	Member member = memberManager.getMemberByMobile(username);
+			//判断手机验证码
+			if (!validate.equals(mobileCode)) {
+				this.showErrorJson(VerificationError);
+			}else{
+				//账号存在手机验证码正确，创建新密码
+				try {
+					this.memberManager.updatePassword(member.getMember_id(), newpassword);
+					this.showSuccessJson("重设密码成功");
+				} catch (Exception e) {
+					this.showErrorJson("修改密码失败");
+				}
+			}
+	return WWAction.JSON_MESSAGE;
+}
+//邮箱注册
+public String register() {
+	HttpSession session = ThreadContextHolder.getHttpRequest().getSession();
+	Locale locale = (Locale) session.getAttribute("locale");
+	String code = "";
+	String agree = "";
+	String emailVerification = "";
+	String emailVerification2 = "";
+	String emailVerification3 = "";
+	String registSuccess ="";
+		 registSuccess = "注册成功";
+		 code = "验证码输入错误!";
+		 agree = "同意注册协议才可以注册!";
+		 emailVerification = "此邮箱已经注册过，请您选择另外的邮箱！";
+		 emailVerification2 = "注册邮箱不能为空！";
+		 emailVerification3 = "注册邮箱格式不正确！";
+		 if (this.validcode(validcode, "memberreg") == 0) {
+				this.showErrorJson(code);
+				return this.JSON_MESSAGE;
+			}
+			if (!"agree".equals(license)) {
+				this.showErrorJson(agree);
+				return this.JSON_MESSAGE;
+			}
+	StoreMember member = new StoreMember();
+	
+	HttpServletRequest request = ThreadContextHolder.getHttpRequest();
+	String registerip = request.getRemoteAddr();
+
+	if (StringUtil.isEmpty(username)) {
+		this.showErrorJson("用户名不能为空！");
+		return this.JSON_MESSAGE;
+	}
+	if (username.length() < 4 || username.length() > 20) {
+		this.showErrorJson("用户名的长度为4-20个字符！");
+		return this.JSON_MESSAGE;
+	}
+	if (!username.contains("@")) {
+		this.showErrorJson("请使用邮箱进行注册！");
+		return this.JSON_MESSAGE;
+	}
+	if (StringUtil.isEmpty(password)) {
+		this.showErrorJson("密码不能为空！");
+		return this.JSON_MESSAGE;
+	}
+	if (memberManager.checkname(username) > 0) {
+		this.showErrorJson("此用户名已经存在，请您选择另外的用户名!");
+		return this.JSON_MESSAGE;
+	}
+	member.setIs_cheked(1);
+	member.setIs_store(0);
+	member.setMobile("");
+	member.setUname(username);
+	member.setPassword(password);
+	member.setEmail(username);
+	member.setRegisterip(registerip);
+	member.setMember_prove_type(1);
+
+	int result = memberManager.register(member);
+	if (result == 1) { // 添加成功
+		this.showSuccessJson(registSuccess);
+		
+	}else{
+		
+	
+		this.showErrorJson("用户名[" + member.getUname() + "]已存在!");
+	}
+	return this.JSON_MESSAGE;
+}
+/**
+ * qq注册（lsy）
+ * @return
+ */
+public String registerByQQ(){
+	int result = this.memberManager.checkname(opid);
+	String password=opid.substring(0,6);
+	if(result==0){
+		//先注册后登陆
+		String agree = "";
+		String registSuccess ="";
+			 registSuccess = "注册成功";
+		StoreMember member = new StoreMember();
+		HttpServletRequest request = ThreadContextHolder.getHttpRequest();
+		String registerip = request.getRemoteAddr();
+		//识别qq注册用户为1
+		member.setRegistype(2);
+		member.setIs_cheked(1);
+		member.setIs_store(0);
+		member.setMobile(opid);
+		member.setUname(opid);
+		member.setPassword(password);
+		member.setEmail("");
+		member.setRegisterip(registerip);
+		member.setMember_prove_type(1);
+		int result2 = memberManager.register(member);
+		if (result2 == 1) { // 添加成功
+			//登陆
+			String  LoginSuccess = "";
+			String  AccountNo = "";
+			String  PasswordError = "";
+			String  IsCheck="";
+			LoginSuccess = "登录成功";
+			AccountNo = "账号不存在";
+			PasswordError = "密码错误";
+			IsCheck="您的账号处于禁用状态，请联系网站客服";
+			int result3 = this.memberManager.login(opid, password);
+				if (result3 == 1) {
+					Member member2 = UserConext.getCurrentMember();
+					this.showSuccessJson(member2.getMember_id().toString());
+				}else if(result3==-1){
+					this.showErrorJson(IsCheck);
+				}else{
+					Member member2 = memberManager.getMemberByUname(opid);
+					if(member2 == null){
+						this.showErrorJson(AccountNo); 
+					}else{
+						this.showErrorJson(PasswordError);
+					}
+			}
+		}else{
+			this.showErrorJson("用户名[" + member.getUname() + "]已存在!");
+		}
+	}else{
+		//直接登陆
+		String  LoginSuccess = "";
+		String  AccountNo = "";
+		String  PasswordError = "";
+		String  IsCheck="";
+		LoginSuccess = "登录成功";
+		AccountNo = "账号不存在";
+		PasswordError = "密码错误";
+		IsCheck="您的账号处于禁用状态，请联系网站客服";
+		int result3 = this.memberManager.login(opid, password);
+			if (result3 == 1) {
+				Member member2 = UserConext.getCurrentMember();
+				this.showSuccessJson(member2.getMember_id().toString());
+			}else if(result3==-1){
+				this.showErrorJson(IsCheck);
+			}else{
+				Member member2 = memberManager.getMemberByUname(opid);
+				if(member2 == null){
+					this.showErrorJson(AccountNo); 
+				}else{
+					this.showErrorJson(PasswordError);
+				}
+		}
+		
+	}
+	return this.JSON_MESSAGE;
+}
+/**
+ * 手机注册（lsy）
+ * @return
+ */
+public String registerBymobile(){
+	
+	HttpSession session = ThreadContextHolder.getHttpRequest().getSession();
+	String validate = session.getAttribute("validateCode").toString();
+	Locale locale = (Locale) session.getAttribute("locale");
+	//String code = "";
+	String agree = "";
+	String registSuccess ="";
+		 registSuccess = "注册成功";
+		 //code = "验证码输入错误!";
+		 agree = "同意注册协议才可以注册!";
+		 
+			if (!"agree".equals(license)) {
+				this.showErrorJson(agree);
+				return this.JSON_MESSAGE;
+			}
+	StoreMember member = new StoreMember();
+	
+	HttpServletRequest request = ThreadContextHolder.getHttpRequest();
+	String registerip = request.getRemoteAddr();
+
+/*	if (StringUtil.isEmpty(mobile)) {
+		this.showErrorJson("手机不能为空！");
+		return this.JSON_MESSAGE;
+	}*/
+	
+	
+	//手机验证
+	String regExp = "^[1]([3,4,5,7,8][0-9]{1}|59|58|88|89)[0-9]{8}$";  
+	Pattern p = Pattern.compile(regExp);  
+	Matcher m = p.matcher(username);
+	if(m.find()){
+	}else{
+		this.showErrorJson("手机格式不正确");
+		return this.JSON_MESSAGE;
+	}
+	//密码验证
+	if (StringUtil.isEmpty(password)) {
+		this.showErrorJson("密码不能为空！");
+		return this.JSON_MESSAGE;
+	}
+	//验证码时间验证
+	long Currenttime=System.currentTimeMillis();
+	long Sendtime1=(Long) session.getAttribute("Sendtime");
+	if(Currenttime-Sendtime1>180000){
+		this.showErrorJson("验证码已经失效");
+		return this.JSON_MESSAGE;
+	}
+	//验证码验证
+	if (!validate.equals(mobileCode)) {
+		this.showErrorJson("验证码不正确!");
+		return this.JSON_MESSAGE;
+	}
+	
+	//识别手机注册用户为1
+	member.setRegistype(1);
+	member.setIs_cheked(1);
+	member.setIs_store(0);
+	member.setMobile(username);
+	member.setUname(username);
+	member.setPassword(password);
+	member.setEmail("");
+	member.setRegisterip(registerip);
+	member.setMember_prove_type(1);
+	System.out.println("添加用户");
+	int result = memberManager.register(member);
+	if (result == 1) { // 添加成功
+		this.showSuccessJson(registSuccess);
+		
+	}else{
+		this.showErrorJson("用户名[" + member.getUname() + "]已存在!");
+	}
+	return this.JSON_MESSAGE;
+}	
+
+/**
+ * 检测username是否存在，并生成json返回给客户端
+ */
+public String checkname() {
+	
+	int result = this.memberManager.checkname(username);
+	if(result==0){
+		this.showSuccessJson("会员名称可以使用！");
+	}else{
+		this.showErrorJson("该会员名称已经存在！");
+	}
+	return this.JSON_MESSAGE;
+}
+
+private int validcode(String validcode,String name) {
+	//管理员登录账号。不需要验证码
+	
+	String code = (String) ThreadContextHolder.getSessionContext().getAttribute(ValidCodeServlet.SESSION_VALID_CODE + name);
+	if (code == null) {
+		return 0;
+	} else {
+		if (!code.equalsIgnoreCase(validcode)) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
+public String logout() {
+	HttpSession session = ThreadContextHolder.getHttpRequest().getSession();
+	Locale locale = (Locale) session.getAttribute("locale");
+	
+
+		this.showSuccessJson("注销成功");
+	
+	
+	this.memberManager.logout();
+	return WWAction.JSON_MESSAGE;
+}
+/**
+ * 判断session是否失效（lsy）
+ * @return
+ */
+public String isLogin(){
+	Member member = UserConext.getCurrentMember();
+	if(member==null){
+		this.showErrorJson("session失效");
+	}else{
+		this.showSuccessJson("session存在");
+	}
+	return this.JSON_MESSAGE;
+}
+/**
+ * 修改会员密码
+ * @param oldpassword:原密码,String类型
+ * @param newpassword:新密码,String类型
+ * @return json字串
+ * result  为1表示修改成功，0表示失败 ，int型
+ * message 为提示信息 ，String型
+ */
+public String changePassword() {
+	
+	HttpSession session = ThreadContextHolder.getHttpRequest().getSession();
+	
+	
+	
+	Member member = UserConext.getCurrentMember();
+	if(member==null){
+		this.showErrorJson("尚未登陆，无权使用此api");
+		return this.JSON_MESSAGE;
+	}
+	String oldPassword = this.getOldpassword();
+//	oldPassword = oldPassword == null ? "" : StringUtil.md5(oldPassword);
+	
+	
+	if (checkPassword(member.getPassword() , oldPassword)) {
+		String password = this.getNewpassword();
+		String passwd_re = this.getRe_passwd();
+		if(oldPassword.equals(password)){
+			
+			
+
+			
+				this.showErrorJson("新旧密码相同,请重新输入或放弃修改");
+				return this.JSON_MESSAGE;
+			
+			
+			
+		}
+		
+
+		if (passwd_re.equals(password)) {
+			try {
+				memberManager.updatePassword(password);
+				this.showSuccessJson("修改密码成功");
+			} catch (Exception e) {
+				if (this.logger.isDebugEnabled()) {
+					logger.error(e.getStackTrace());
+				}
+				this.showErrorJson("修改密码失败");
+			}
+		} else {
+			
+				this.showErrorJson("修改失败！两次输入的密码不一致");
+			
+			
+		}
+	} else {
+		
+		this.showErrorJson("修改失败！原始密码不符");
+		
+	}
+	return WWAction.JSON_MESSAGE;
+}
+/**
+ * 修改头像
+ */
+public String changeFace(){
+	//先上传图片
+	String faceField = "faceFile";
+	
+	if(file!=null){
+	
+		//判断文件类型
+		String allowTYpe = "gif,jpg,bmp,png,jpeg";
+		if (!fileFileName.trim().equals("") && fileFileName.length() > 0) {
+			String ex = fileFileName.substring(fileFileName.lastIndexOf(".") + 1, fileFileName.length());
+			if(allowTYpe.toString().indexOf(ex.toLowerCase()) < 0){
+				this.showErrorJson("对不起,只能上传gif,jpg,bmp,png,jpeg格式的图片！");
+				return this.JSON_MESSAGE;
+			}
+		}
+		String imgPath=	UploadUtil.upload(file, fileFileName, faceField);
+		imgPath = UploadUtil.replacePath(imgPath);
+		Member member = UserConext.getCurrentMember();
+		member.setFace(imgPath);
+		this.memberManager.updateFace(member.getMember_id(),imgPath);
+		//更新当前session中的用户信息
+		ThreadContextHolder.getSessionContext().setAttribute(UserConext.CURRENT_MEMBER_KEY, member);
+		this.showSuccessJson(imgPath);
+	}
+	return this.JSON_MESSAGE;
+
+}
+/**
+ * 获取当前用户头像
+ * */
+	public String getCurretMemberImg(){
+		Member member = UserConext.getCurrentMember();
+		if(member.getFace()==null){
+			this.showErrorJson("获取头像失败");
+		}else{
+			this.showSuccessJson(member.getFace());
+		}
+		return this.JSON_MESSAGE;
+	}
+
+/**
+ * 验证原密码输入是否正确
+ * @param oldpassword:密码，String型
+ * @return json字串
+ * result  为1表示原密码正确，0表示失败 ，int型
+ * message 为提示信息 ，String型
+ */
+public String password(){
+	Member member = UserConext.getCurrentMember();
+	String old = oldpassword;
+	String oldPassword = StringUtil.md5(old);
+	if (oldPassword.equals(member.getPassword())){
+		this.showSuccessJson("正确");
+	}else{
+		this.showErrorJson("输入原始密码错误");
+	}
+	return WWAction.JSON_MESSAGE;
+}
+//注册判断手机号码
+public String judgeCode(){
+	if (StringUtil.isEmpty(username)) {
+		this.showErrorJson("请填写手机号码");
+	}else if(memberManager.checkmobile(username) > 0){//StringUtil.isEmpty(username)
+		this.showErrorJson("此手机号码已经被注册！请更换手机号码");
+	}else{
+		this.showSuccessJson("");
+	}
+	return this.JSON_MESSAGE;
+}
+//发送手机验证码
+public String smsMobile(){
+	System.out.println("获取验证码");
+	Random rd = new Random();
+	String validateTemp = "";
+	System.out.println(username);
+	
+	for(int i =0;i<6;i++){
+		int data = rd.nextInt(10);
+		validateTemp += data;
+	}
+	System.out.println(validateTemp);
+	try {
+		this.SmsMoblieManager.sendMobile(this.username, "亲爱的用户，您的验证码为"+validateTemp+", 3分钟后失效,请尽快验证！");
+		HttpSession session = ThreadContextHolder.getHttpRequest().getSession();
+		session.setAttribute("validateCode", validateTemp);
+		long Sendtime=System.currentTimeMillis();
+		session.setAttribute("Sendtime", Sendtime);
+		this.showSuccessJson("验证码发送成功");
+	} catch (Exception e) {
+		this.showErrorJson("验证码发送失败");
+	}
+	return this.JSON_MESSAGE;
+}
+
+//修改密码
+private static boolean checkPassword(String oldPassword, String currentPassword) {
+	boolean passwordMatches = false;
+	if (oldPassword != null) {
+		passwordMatches = HashCrypt.comparePassword(oldPassword, "SHA", currentPassword);
+	}
+	if (!passwordMatches) {
+		passwordMatches = currentPassword.equals(oldPassword);
+	}
+	return passwordMatches;
+}
+
+public IMemberManager getMemberManager() {
+	return memberManager;
+}
+
+public void setMemberManager(IMemberManager memberManager) {
+	this.memberManager = memberManager;
+}
+
+public IAdminUserManager getAdminUserManager() {
+	return adminUserManager;
+}
+
+public void setAdminUserManager(IAdminUserManager adminUserManager) {
+	this.adminUserManager = adminUserManager;
+}
+
+public IRegionsManager getRegionsManager() {
+	return regionsManager;
+}
+
+public void setRegionsManager(IRegionsManager regionsManager) {
+	this.regionsManager = regionsManager;
+}
+
+public String getUsername() {
+	return username;
+}
+
+public void setUsername(String username) {
+	this.username = username;
+}
+
+public String getPassword() {
+	return password;
+}
+
+public void setPassword(String password) {
+	this.password = password;
+}
+
+public String getValidcode() {
+	return validcode;
+}
+
+public void setValidcode(String validcode) {
+	this.validcode = validcode;
+}
+
+public String getRemember() {
+	return remember;
+}
+
+public void setRemember(String remember) {
+	this.remember = remember;
+}
+
+public Map getMemberMap() {
+	return memberMap;
+}
+
+public void setMemberMap(Map memberMap) {
+	this.memberMap = memberMap;
+}
+
+public String getLicense() {
+	return license;
+}
+
+public void setLicense(String license) {
+	this.license = license;
+}
+
+public String getEmail() {
+	return email;
+}
+
+public void setEmail(String email) {
+	this.email = email;
+}
+
+public String getFriendid() {
+	return friendid;
+}
+
+public void setFriendid(String friendid) {
+	this.friendid = friendid;
+}
+
+public File getFaceFile() {
+	return faceFile;
+}
+
+public void setFaceFile(File faceFile) {
+	this.faceFile = faceFile;
+}
+
+public File getFace() {
+	return face;
+}
+
+public void setFace(File face) {
+	this.face = face;
+}
+
+public String getFaceFileName() {
+	return faceFileName;
+}
+
+public void setFaceFileName(String faceFileName) {
+	this.faceFileName = faceFileName;
+}
+
+public String getFaceFileFileName() {
+	return faceFileFileName;
+}
+
+public void setFaceFileFileName(String faceFileFileName) {
+	this.faceFileFileName = faceFileFileName;
+}
+
+public String getPhotoServer() {
+	return photoServer;
+}
+
+public void setPhotoServer(String photoServer) {
+	this.photoServer = photoServer;
+}
+
+public String getPhotoId() {
+	return photoId;
+}
+
+public void setPhotoId(String photoId) {
+	this.photoId = photoId;
+}
+
+public String getType() {
+	return type;
+}
+
+public void setType(String type) {
+	this.type = type;
+}
+
+public String getTurename() {
+	return turename;
+}
+
+public void setTurename(String turename) {
+	this.turename = turename;
+}
+
+public String getOldpassword() {
+	return oldpassword;
+}
+
+public void setOldpassword(String oldpassword) {
+	this.oldpassword = oldpassword;
+}
+
+public String getNewpassword() {
+	return newpassword;
+}
+
+public void setNewpassword(String newpassword) {
+	this.newpassword = newpassword;
+}
+
+public String getRe_passwd() {
+	return re_passwd;
+}
+
+public void setRe_passwd(String re_passwd) {
+	this.re_passwd = re_passwd;
+}
+
+public Integer getProvince_id() {
+	return province_id;
+}
+
+public void setProvince_id(Integer province_id) {
+	this.province_id = province_id;
+}
+
+public Integer getCity_id() {
+	return city_id;
+}
+
+public void setCity_id(Integer city_id) {
+	this.city_id = city_id;
+}
+
+public Integer getRegion_id() {
+	return region_id;
+}
+
+public void setRegion_id(Integer region_id) {
+	this.region_id = region_id;
+}
+
+public String getProvince() {
+	return province;
+}
+
+public void setProvince(String province) {
+	this.province = province;
+}
+
+public String getCity() {
+	return city;
+}
+
+public void setCity(String city) {
+	this.city = city;
+}
+
+public String getRegion() {
+	return region;
+}
+
+public void setRegion(String region) {
+	this.region = region;
+}
+
+public String getAddress() {
+	return address;
+}
+
+public void setAddress(String address) {
+	this.address = address;
+}
+
+public String getZip() {
+	return zip;
+}
+
+public void setZip(String zip) {
+	this.zip = zip;
+}
+
+public String getMobile() {
+	return mobile;
+}
+
+public void setMobile(String mobile) {
+	this.mobile = mobile;
+}
+
+public String getTel() {
+	return tel;
+}
+
+public void setTel(String tel) {
+	this.tel = tel;
+}
+
+public String getNickname() {
+	return nickname;
+}
+
+public void setNickname(String nickname) {
+	this.nickname = nickname;
+}
+
+public String getSex() {
+	return sex;
+}
+
+public void setSex(String sex) {
+	this.sex = sex;
+}
+
+public String getMybirthday() {
+	return mybirthday;
+}
+
+public void setMybirthday(String mybirthday) {
+	this.mybirthday = mybirthday;
+}
+
+public Integer getLvid() {
+	return lvid;
+}
+
+public void setLvid(Integer lvid) {
+	this.lvid = lvid;
+}
+
+public String getKeyword() {
+	return keyword;
+}
+
+public void setKeyword(String keyword) {
+	this.keyword = keyword;
+}
+
+public JavaMailSender getMailSender() {
+	return mailSender;
+}
+
+public void setMailSender(JavaMailSender mailSender) {
+	this.mailSender = mailSender;
+}
+
+public EmailProducer getMailMessageProducer() {
+	return mailMessageProducer;
+}
+
+public void setMailMessageProducer(EmailProducer mailMessageProducer) {
+	this.mailMessageProducer = mailMessageProducer;
+}
+
+public IMemberPointManger getMemberPointManger() {
+	return memberPointManger;
+}
+
+public void setMemberPointManger(IMemberPointManger memberPointManger) {
+	this.memberPointManger = memberPointManger;
+}
+
+public File getFile() {
+	return file;
+}
+
+public void setFile(File file) {
+	this.file = file;
+}
+
+public String getFileFileName() {
+	return fileFileName;
+}
+
+public void setFileFileName(String fileFileName) {
+	this.fileFileName = fileFileName;
+}
+
+public ISmsManager getSmsManager() {
+	return smsManager;
+}
+
+public void setSmsManager(ISmsManager smsManager) {
+	this.smsManager = smsManager;
+}
+
+public ISmtpManager getSmtpManager() {
+	return smtpManager;
+}
+
+public void setSmtpManager(ISmtpManager smtpManager) {
+	this.smtpManager = smtpManager;
+}
+public String getMobileCode() {
+	return mobileCode;
+}
+public void setMobileCode(String mobileCode) {
+	this.mobileCode = mobileCode;
+}
+public IsmsMobileManager getSmsMoblieManager() {
+	return SmsMoblieManager;
+}
+public void setSmsMoblieManager(IsmsMobileManager smsMoblieManager) {
+	SmsMoblieManager = smsMoblieManager;
+}
+public Integer getLoginType() {
+	return loginType;
+}
+public void setLoginType(Integer loginType) {
+	this.loginType = loginType;
+}
+public String getOpid() {
+	return opid;
+}
+public void setOpid(String opid) {
+	this.opid = opid;
+}
+
+}

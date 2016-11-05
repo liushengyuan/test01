@@ -1,0 +1,40 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>KindEditor JSP</title>
+    <link rel="stylesheet" href="../../editor/kindeditor-4.1.10/themes/default/default.css" />
+    <link rel="stylesheet" href="../../editor/kindeditor-4.1.10/plugins/code/prettify.css" />
+    <script charset="utf-8" src="../../editor/kindeditor-4.1.10/kindeditor.js"></script>
+    <script charset="utf-8" src="../../editor/kindeditor-4.1.10/lang/zh_CN.js"></script>
+    <script charset="utf-8" src="../../editor/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+    <script>
+        KindEditor.ready(function(K) {
+            var editor1 = K.create('textarea[name="content1"]', {
+                cssPath : '../../editor/kindeditor-4.1.10/plugins/code/prettify.css',
+                uploadJson : '${ctx}/eop/kindeditorUploader.do',
+                fileManagerJson : '../../editor/kindeditor-4.1.10/jsp/file_manager_json.jsp',
+                allowFileManager : true,
+                afterCreate : function() {
+                    var self = this;
+                    K.ctrl(document, 13, function() {
+                        self.sync();
+                        document.forms['example'].submit();
+                    });
+                    K.ctrl(self.edit.doc, 13, function() {
+                        self.sync();
+                        document.forms['example'].submit();
+                    });
+                }
+            });
+            prettyPrint();
+        });
+    </script>
+</head>
+<body>
+<form name="example" method="post" action="demo.jsp">
+    <textarea name="content1" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;">${htmlData!""}</textarea>
+    <br />
+    <input type="submit" name="button" value="提交内容" /> (提交快捷键: Ctrl + Enter)
+</form>
+</body>
+</html>

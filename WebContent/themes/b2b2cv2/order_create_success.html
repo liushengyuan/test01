@@ -1,0 +1,162 @@
+<#if locale=="zh">
+	<#assign  title="成功提交订单" />
+<#elseif locale=="ru">
+	<#assign  title="Ваш заказ был успешно принят" />
+</#if>
+<#include 'common/header.html' />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/checkout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/cart.css" />
+<!--正文-->
+<#--创建订单详细标签-->
+<#assign orderDetailTag = newTag("orderDetailTag") />
+<#--获取订单详细，传递参数orderid-->
+<#assign order = orderDetailTag("'orderid':${orderid}") />
+<#--创建订单状态标签-->
+<#assign orderStautsTag= newTag("orderStautsTag") />
+<#--获取订单状态 -->
+<#assign orderStauts= orderStautsTag() />
+<#--创建订单货物列表标签-->
+<#assign orderItemListTag = newTag("orderItemListTag") />
+<#--获取货物列表详细，传递参数orderid-->
+<#assign itemsOrder = orderItemListTag("'orderid':${orderid}") />
+<!-- 购物流程 -->
+<div class="flow_path">
+	<div class="cart_logo">
+		<a href="${ctx}/index.html"><@image src="${staticserver}/images/logo-1x.png" class="pngFix" style="width:150px;height:40px;" /></a>
+	</div>
+	<div class="flow_pathlist">
+		<ul>
+			<li class="">
+				<i class="process1"></i>
+				<span style="background:#27E346;"></span>
+				<p style="color:green;"><@uiLabel text="goods.MyShoppingCart" /></p>
+				<strong></strong>
+			</li>
+			<li class="">
+				<i class="process4"></i><!-- 以前为2，现在更改颜色改为4 -->
+				<span style="background:#27E346;"></span>
+				<p style="color:green;"><@uiLabel text="goods.FillCheck" /></p>
+				<strong></strong>
+			</li>
+			<li class="selected">
+				<i class="process3"></i>
+				<span></span>
+				<p><@uiLabel text="goods.OrdersSubmittedSuccessfully" /></p>
+				<strong></strong>
+			</li>
+		</ul>
+	</div>
+</div>
+<!-- 订单确认，并引导支付 -->
+<div class="confirmation" style=" width:1000px;">
+
+	<div class="con_img">
+<!-- 		<img src="themes/b2b2cv2/images/duihao.jpg" alt="结算提交凭证正确对号图片" /> -->
+<!-- 		<h1><@uiLabel text="goods.OrderSubmitted" /></h1> -->
+
+         
+	</div>
+	<table style="border:1px solid #bbb; width:870px;margin-bottom:40px;margin-top:-170px;margin-left:7%;;">
+	<tr><td><h2 style="border-bottom:none; text-align:center;color:#888888;font-weight: 900"><@uiLabel text="index.PortalPlacePay" /></h2></td></tr>
+	
+		<tr>
+			<td><h2 style="border-bottom:none; font-weight:bold;"><@uiLabel text="index.PortalUserOrderNumber" />: <span style="font-weight:normal" id="sn">${order.sn}</span></h2>
+			</td>
+		</tr>
+		<tr>
+			<td><h2 style="border-bottom:none; font-weight:bold;"><@uiLabel text="goods.AmountsPayable" />: <span style="border-bottom:none;font-weight:normal" id="price">
+					<#if order.currency=="CNY">
+						${order.need_pay_money?string("currency")}
+					<#elseif order.currency=="RUB">
+						${order.need_pay_money!''}р.
+					</#if>
+				<span></h2>
+		
+				
+			</td>
+		</tr>
+		<tr>
+			<td><h2 style="border-bottom:none; font-weight:bold;word-break: break-all; word-wrap:break-word;"><@uiLabel text="goods.ReceivingInformation" />:
+			<span style="font-weight:normal;"">${order.ship_name}(${order.ship_addr})</span>
+			</h2></td>
+			
+		</tr>
+		<tr>
+			<td><h2 style="border-bottom:none; font-weight:bold;"><@uiLabel text="goods.Phone" />:
+			<span style="border-bottom:none;font-weight:normal">
+					<#if order.ship_mobile??>${order.ship_mobile!''}<#else>${order.ship_tel!''}</#if>
+				</span>
+			</h2></td>
+			
+		</tr>
+	</table>
+	<div class="go_tools" style="padding-left:420px;">
+	<div style="margin-left: -20px;margin-top: 10px;font-size: 16px;font-weight: bold;color: red"><#list itemsOrder as items >
+	     <#if items.is_skill==1>
+	       (秒杀商品，请您在20分钟内付款完成！)
+	     </#if>
+	   </#list>	
+	   
+	</div>
+		<#if order.status==orderStauts.ORDER_NOT_PAY||order.status==orderStauts.ORDER_NOT_CONFIRM && !order.isCod >
+			<#if order.isOnlinePay >
+			
+			<#if locale=="zh">
+    			<a class="go_pay" href='api/b2b2c/storePaymentApi.do?orderid=${order.order_id}' target="_blank">
+				<@uiLabel text="index.PortalUserPayNow" /></a>
+			<#elseif locale=="ru">
+  	 			<a class="go_pay" href='api/b2b2c/storePaymentApi.do?orderid=${order.order_id}' target="_blank" style="width:150px">
+				<@uiLabel text="index.PortalUserPayNow" /></a>
+			</#if>
+				
+			</#if>
+		</#if>
+		
+<#-- 		<a href=" ${ctx}/" class="go_continue"><@uiLabel text="goods.ContinueShopping" /></a>
+		<#if order.member_id?exists  >
+			<a href="member/order_detail.html?ordersn=${order.sn}" class="go_state"><@uiLabel text="goods.CheckOrderStatus" />>></a>
+		<#else>
+			<a href="orderdetail.html?ordersn=${order.sn}" class="go_state"><@uiLabel text="goods.CheckOrderStatus" />>></a>	
+		</#if> -->
+		
+		<#if locale=="zh">
+    		<a href="${ctx}/cart.html"><span class="text"><@uiLabel text="index.PortalBackShoppingCart" />>></span></a>
+		<#elseif locale=="ru">
+  	 		<a href="${ctx}/cart.html" style="width:220px"><span class="text"><@uiLabel text="index.PortalBackShoppingCart" />>></span></a>
+		</#if>
+		<#list itemsOrder as items >
+		<input  type="hidden" class="item_count" value="${items.goods_id}" name="${items.num}" id="${items.price}"/>
+		</#list>
+		 
+		
+	</div>
+
+</div>
+
+	<!--正文结束-->
+<#include 'common/footer.html' />
+<script type="text/javascript">
+var sn=$("#sn").html();
+
+var price=$("#price").text().split("￥")[1];
+var pp=$.trim(price);
+
+var itemValueNum = [];
+var itemValueId = [];
+var itemValuePrice = [];
+var shu=document.getElementsByClassName('item_count');
+$.each(shu,function(i,ss){
+	itemValueNum.push(shu[i].name);
+	itemValueId.push(shu[i].value);
+	itemValuePrice.push(shu[i].id);
+})
+var itemValue = [];
+$.each(shu,function(i,ss){
+	itemValue.push({id:itemValueId[i],count:itemValueNum[i],price:itemValuePrice[i]});
+})
+py('event','order' ,{
+    'id':sn,
+    'money':pp,
+    'items':itemValue
+}).track('Qas.QEs.awSHBJNiDl9HO-VgwT5c8_');
+</script>

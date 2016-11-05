@@ -1,0 +1,132 @@
+<script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"  ></script>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/echarts.min.js"></script>
+<#assign visitUserTag=newTag("visitUserTag")>
+<#assign visitPage = visitUserTag()>
+<#assign vistList=visitPage.result>
+<div style="width:960px; margin:0 auto; clear:both;">
+	<div id="yibiao" style="float:left;width: 450px;height:450px; border:1px solid #eee;"></div>
+	<div id="yibiao2" style="float:right;width: 450px;height:450px; border:1px solid #eee;""></div>
+	<div id="now_number" style="clear:both; width:960px;height:30px; position:relative; top:-40px;">
+			<div align="center" style="width:452px; float:left; background:#eee; height:40px; line-height:36px;"><b>实时在线人数：<font style="font-size:25px; color:#f00;">${vistList[0].visit_onlinenum!''}</font></b></div>
+			<div align="center" style="width:452px; float:right; background:#eee; height:40px; line-height:36px;"><b>当天网站页面访问量：<font id="num" style="font-size:25px; margin-top:2px; color:#2970a0;"></font></b></div>
+	</div> 
+</div>
+<div id="main2" style="width: 1200px;height:300px; margin:0 auto; border:1px solid #eee; margin-top:20px;"></div>
+<!-- 实时在线人数仪表盘 -->
+<script type="text/javascript">
+// 基于准备好的dom，初始化echarts实例
+var myChart = echarts.init(document.getElementById('yibiao'));
+// 指定图表的配置项和数据
+var option = {
+	title: {
+	     text: '实时在线人数',
+	     x:'center',
+	     textStyle: {fontSize: '22'}
+	},
+    tooltip : {
+        formatter: "{a} <br/>{b} : {c}%"
+    },
+    toolbox: {
+        feature: {
+            restore: {},
+            saveAsImage: {}
+        }
+    },
+    series: [
+        {
+            name: '访问量',
+            type: 'gauge',
+            max: 2000 ,
+            detail: {formatter:'{value}'},
+            data: [{value: ${vistList[0].visit_onlinenum!''}, name: '在线人数'}]
+        }
+    ]
+};
+// 使用指定的配置项和数据显示图表。
+myChart.setOption(option);
+</script>
+
+<!-- 当天累计访问量仪表盘 -->
+<script type="text/javascript">
+var num;//计算当天访问量（截止当日的累积访问量-前一天累积访问量）
+if((${vistList[0].visit_num!''}-${vistList[1].visit_num!''})>=0){
+	num=${vistList[0].visit_num!''}-${vistList[1].visit_num!''};
+}else{
+	num=${vistList[0].visit_num!''};//小于零说明服务器数据被清空，重新开始累计访问量
+}
+$("#num").html(num);
+var myChart = echarts.init(document.getElementById('yibiao2'));
+// 指定图表的配置项和数据
+var option = {
+	title: {
+	     text: '当天网站页面访问量',
+	     x:'center',
+	     textStyle: {fontSize: '22'}
+	},
+    tooltip : {
+        formatter: "{a} <br/>{b} : {c}%"
+    },
+    toolbox: {
+        feature: {
+            restore: {},
+            saveAsImage: {}
+        }
+    },
+    series: [
+        {
+            name: '访问量',
+            type: 'gauge',
+            max: 2000 ,
+            detail: {formatter:'{value}'},
+            data: [{value: num, name: '今日访问量已达到：'}]
+        }
+    ]
+};
+// 使用刚指定的配置项和数据显示图表。
+myChart.setOption(option);
+</script>
+
+<!--龙贸通最近10天在线人数折线图 -->
+<script type="text/javascript">
+// 基于准备好的dom，初始化echarts实例
+var myChart = echarts.init(document.getElementById('main2'));
+// 指定图表的配置项和数据
+var option = {
+    title: {
+        text: '龙贸通最近10天在线人数',
+	     x:'center',
+	     textStyle: {fontSize: '22'}
+    },
+    toolbox: {
+        show: true,
+        feature: {
+        	dataView : {show: true, readOnly: false},
+            saveAsImage: {
+                show: true
+            }
+        }
+    },
+    xAxis: {
+    	inverse: true,
+        data: [<#list vistList as visit>("${visit.visit_time!''}").split(" ",1),</#list>]
+    },
+    yAxis: {},
+    series: [{
+        name: '访问量',
+        type: 'line',
+        itemStyle : { normal: {label : {show: true}}},//显示节点数值
+        data: [<#list vistList as visit>3*${visit.visit_onlinenum!''},</#list>]//因进口每日用户访问量无法从后台数据库中获得，这里取值为3倍实时访问用户数量
+    }]
+};
+// 使用指定的配置项和数据显示图表。
+myChart.setOption(option);
+</script>
+
+<!-- 自动刷新 -->
+<!--  <script language="JavaScript">
+	function myrefresh(){
+	   window.location.reload();
+	}
+	setTimeout('myrefresh()',5000); //指定5秒刷新一次
+</script>  -->

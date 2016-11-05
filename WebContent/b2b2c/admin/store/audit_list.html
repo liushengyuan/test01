@@ -1,0 +1,170 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueBlue"
+			data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
+		<a href="javascript:void(0)" class="button b_fr" id="search" data-options="plain:true" onclick="searchStore()">搜索</a>&nbsp;&nbsp;
+		<input id="searchKeyword" class="input_text b_fr mr5" type="text" value="" size="30" placeholder="请输入店铺名称或会员名称" name="searchKeyWord" />
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="auditform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/b2b2c/admin/store!store_listJson.do?disabled=0',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="auditdata">
+				<thead>
+					<tr>
+						<th  data-options="field:'store_id',checkbox:true,width:100"></th>
+						<th  data-options="field:'storeId',width:40" formatter="formatStoreId">店铺ID</th>
+				   	 	<th  data-options="field:'store_name',width:100">店铺名称</th>
+				   	 	<th  data-options="field:'create_time',width:100" formatter="formatCreatetime">店铺注册时间</th>
+				   	 	<th  data-options="field:'parent_store',width:100" formatter="formatParentStore">店铺归属</th>
+				   	 	<th  data-options="field:'member_name',width:100">会员名称</th>
+				   	 	<!-- <th  data-options="field:'store_region',width:100">所在地</th> -->
+				   	 	<th  data-options="field:'disabled',width:100" formatter="formatDisabled">店铺状态</th>
+				   	 	<th  data-options="field:'check_time',width:100" formatter="formatChecktime">审核时间</th>
+				   	 	<th  data-options="field:'action',width:100"  formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+	</div>
+	<div id="storeInfo" style="display: none;"></div>
+</div>
+
+<script type="text/javascript">
+function formatAction (value,row,index){
+	var val="<a href='javascript:void;'class='edit' onclick='onPass("+row.store_id+")' title='审核通过'></a><a href='javascript:void;' class='edit' onclick='openStoreInfo("+row.store_id+")' title='查看详情'></a>"
+	return val;
+}
+function formatDisabled(value,row,index){
+	if(value=="0")
+		return "待审核";
+	if(value=="1")
+		return "已审核"
+	if(value=="2")
+		return "已关闭";
+}
+function formatParentStore(value,row,index){
+	if(value=="0")
+		return "独立店铺";
+	if(value=="1")
+		return "青云商城";
+	if(value=="2")
+		return "雅宝路商城";
+}
+function formatChecktime(value, row, index) {
+	if(row.disabled=="1" || row.disabled=="-1"){
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}else{
+		return "";
+	}
+	
+}
+function formatCreatetime(value, row, index) {
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+function formatStoreId(value,row,index){
+	return row.store_id;
+}
+function onPass(storeId){
+	$("#storeInfo").show();
+　　	$('#storeInfo').dialog({
+　　		title: '审核店铺',
+　　		width: 550,
+　　		closed: false,
+　　		cache: false,
+　　		href: '${ctx}/b2b2c/admin/store!pass.do?storeId='+storeId,
+　　		modal: true,
+　　		buttons: [{
+　　			 text:'保存',
+　　			 iconCls:'icon-ok',
+　　			 handler:function(){
+　　				 var btn = $(this);
+　　				 var disabled=btn.hasClass("l-btn-disabled");
+　　				 if(!disabled){
+　　					 pass(btn);
+	　　			 }	
+　　			}
+			 },{
+			 text:'还原',
+			 handler:function(){
+				$('#storeInfoForm')[0].reset() ;
+			 }
+　　		}]
+　　	});
+}
+
+function pass(btn){
+	//alert($("#storeInfoForm input[name='commission']").val());
+	/* if(isNaN($("#storeInfoForm input[name='commission']").val())){
+		alert("输入的佣金比例不是数值，请重新输入");
+		$("#storeInfoForm input[name='commission']").val(0.00);
+		return;
+	}
+	if($("#storeInfoForm input[name='commission']").val()<0){
+		alert("输入的佣金比例不能为负数，请重新输入");
+		$("#storeInfoForm input[name='commission']").val(0.00);
+		return;
+	} */
+	if($("#storeInfoForm textarea[name='check_description']").val().length<=0){
+		alert("审核理由不能为空，请重新新输入！");
+		//$("#storeInfoForm input[name='commission']").val(0.00);
+		return;
+	}
+	var formflag= $("#storeInfoForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍后...");
+		btn.linkbutton("disable");	
+		var options = {
+				url : "${ctx}/b2b2c/admin/store!audit_pass.do",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$("#storeInfo").dialog('close');
+						$('#auditdata').datagrid('reload');
+						$.Loading.success(result.message);
+					}else{
+						$.Loading.error(result.message);
+					}
+					btn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error('出现错误，请重试');
+			 		btn.linkbutton("enable");
+				}
+			};
+		$('#storeInfoForm').ajaxSubmit(options);	
+	}
+	
+}
+
+function openStoreInfo(storeId){
+	$("#storeInfo").show();
+　　	$('#storeInfo').dialog({
+　　		title: '店铺详情',
+　　		width: 900,
+　　		closed: false,
+　　		cache: false,
+　　		href: '${ctx}/b2b2c/admin/store!getStoreInfo.do?storeId='+storeId,
+　　		modal: true,
+　　		buttons: [{
+　　			 text:'关闭',
+　　			 iconCls:'icon-ok',
+　　			 handler:function(){
+　　				$("#storeInfo").dialog('close');
+　　			}
+			 }]
+　　	});
+}
+function searchStore(){
+	var storeName = $.trim($("#searchKeyword").val());
+	
+	$("#auditdata").datagrid('load', {
+		storeName:storeName,
+		page:1
+   });
+}
+</script>
+<#include '/admin/footer.html' >

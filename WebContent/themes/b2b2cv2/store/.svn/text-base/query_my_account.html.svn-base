@@ -1,0 +1,173 @@
+<#assign  title="我的账户" />
+<#include '/store/store_header.html' />
+<#assign myAccountTag = newTag("myAccountTag")>
+<#assign myAccount = myAccountTag()>
+<#assign myAccountList = myAccount.result>
+<script language="javascript" type="text/javascript" src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"></script>
+
+<link rel="stylesheet" href="${ctx}/themes/b2b2cv2/css/easydialog.css" type="text/css"/>
+<#if locale=="zh">
+   <script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/easydialog.js"></script>
+   <script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/easydialog.min.js"></script> 
+<#elseif locale=="ru">
+  	<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/easydialog_ru.js"></script>
+  	<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/easydialog_ru.min.js"></script> 
+</#if>
+<style type="text/css">
+.textarea #message_text{
+    font: 12px/20px Arial;
+    color: #777;
+    background-color: #FFF;
+    vertical-align: top;
+    display: inline-block;
+    height: 60px;
+    padding: 4px;
+    border: 1px solid #CCC;
+    outline: 0px none;
+}
+</style>
+<div class="store_center">
+<#include '/store/left_menu.html' />
+<div class="sotre_right_content">
+	<div class="path">
+            <span style="color:#999;">您的位置：</span>
+            <span>></span>
+            <span>资金账户管理</span><span>></span>我的账户
+    </div>
+             <form method="post" id="messageSearch" action="">
+                <table class="search-form">
+                    <tbody>
+                    <tr>
+                    <td style="width:20px">&nbsp;</td>
+                       <!--  <td>
+                            <label class="button-border">
+                                <input value="发消息" onclick="addAdvisory();" class="yellow_btn" type="button">
+                            </label>
+                        </td>
+                        --> 
+                        <td style="width:340px">&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <th>起始时间 </th>
+                        <td style="width:50px">&nbsp;</td>
+                        <td >
+                            <input name="start_myaccount_time" id="start_myaccount_time" class="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" type="text">
+                            –
+                            <input name="end_myaccount_time" id="end_myaccount_time" class="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" type="text">
+                        </td>
+                        <td style="width:50px">&nbsp;</td>
+                        <td >
+                            <label class="submit-border">
+                                <input id="sellersearch" class="yellow_btn" value="查询" type="button">
+                            </label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+           </form> 
+             <div class="address_list">
+					<table cellpadding="0" cellspacing="0">
+						<thead>
+							<tr>
+								<th class="a2">店铺名称</th>
+								<th class="a2">银行账号</th>
+								<th class="a2">平台账户金额</th>
+								<th class="a2">保证金账户金额</th>
+								<th class="a2">保证金账户的状态</th>
+								<th style="width:128px">账户创建时间</th>
+						<!-- 	<th style="width:73px">操作</th>       -->
+							</tr>
+						</thead>
+						<tbody id="scroll-box">
+						<#list myAccountList as ma>
+						<tr>
+						   <td>${ma.store_name!''}</td>
+						   <td>${ma.bank_account_number!''}</td>
+						   <td>${ma.account!''}</td>
+						   <td>${ma.credit_account!''}</td>
+						   <td ><#if ma.credit_account_status=0>不可用</#if>
+	 							<#if ma.credit_account_status=1>可用</#if>
+						   </td>
+						   <td><@dateformat time="${ma.create_time!''}" pattern="yyyy-MM-dd HH:mm"/></td>
+					<!--  <td><button class='yellow_btn' onclick="lookMessage();">详情 </button></td> -->
+						</tr>
+						</#list>
+						<tbody>
+					</table>
+				</div>
+
+
+  	<@pager pageno="${page!'1'}" pagesize="${myAccount.pageSize!''}" totalcount="${myAccount.totalCount!''}" />
+</div>
+</div>
+<script type="text/javascript">
+    function addAdvisory() {
+        easyDialog.open({
+            container: {
+                header: '<@uiLabel text="index.ImgBoxAlertOne" />：',
+                content: $("#imgBox").html()
+            }
+        });
+    }
+    //使用异步请求保存信息
+    function saveMessageForBox(){
+    	var actyformObj = event.srcElement.parentNode.parentNode.parentNode;
+    	var url = "${ctx}/api/b2b2c/sellerMessage!sellerMassMessages.do?ajax=yes";
+    	if(actyformObj.message_title.value==""){
+    		alert("<@uiLabel text="index.ImgBoxAlertTwo" />");
+    		return;
+    	}
+    	if(actyformObj.message_text.value==""){
+    		alert("<@uiLabel text="index.ImgBoxAlertThree" />");
+    		return;
+    	}
+    	acceptMembers=actyformObj.acceptMembers.value;
+    	var formDate="message_title="+actyformObj.message_title.value+"&message_text="+actyformObj.message_text.value;
+    	if(acceptMembers!=""){
+    		formDate=formDate+"&acceptMembers="+acceptMembers;
+    		url = "${ctx}/api/b2b2c/sellerMessage!sellerLoginMessages.do?ajax=yes";
+    	}
+    	//关闭弹出框
+    	easyDialog.close();
+    	jQuery.ajax({
+    		url: url,//要访问的后台地址
+            type: "post",//使用get方法访问后台
+            data: formDate,
+            success: function (data) {//msg为返回的数据，在这里做数据绑定
+					alert(data);
+					location.reload();
+            }
+        });
+    }
+    //切换群发和按登录名发送
+    function setForeUserLogin(obj,type){
+    	if(type=='qunfa'){
+    		$(obj).parent().next().next().css("display","block");
+    		$(obj).css("display","none");
+    	}
+    	if(type=='danfa'){
+    		$(obj).parent().prev().prev().find("a").css("display","");
+    		$(obj).prev().val("");
+    		$(obj).parent().css("display","none");
+    	}
+
+    }
+    //查看发送的消息
+    function lookMessage() {
+    	location.href="query_account_details.html";
+    }
+    //根据日期进行查询
+    function sellersearch(){
+    	var start_myaccount_time = $("#start_myaccount_time").val();
+    	var end_myaccount_time = $("#end_myaccount_time").val();
+    	location.href="query_my_account.html?start_myaccount_time=" + start_myaccount_time +"&end_myaccount_time=" + end_myaccount_time;
+    }
+    $(function(){
+		$("#sellersearch").click(function(){
+			sellersearch();
+		})
+ 	})
+
+ 	
+</script>
+</div>
+<#include '/common/seller_footer.html' />

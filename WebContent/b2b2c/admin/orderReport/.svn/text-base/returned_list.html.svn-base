@@ -1,0 +1,83 @@
+<#include '/admin/header.html' > <#assign
+dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+<div id="loading"></div>
+<div class='buttonArea'>
+		<span style="float: right;"> 
+		 	<span id="simpleSearch"> 
+			 	<input id="searchKeyword" class="input_text" type="text" value="" size="30" style="width: 300px;" placeholder="请输入订单号" name="searchKeyWord">
+				<a href="javascript:void(0)" class="easyui-linkbutton" id="search" data-options="plain:true" onclick="searchOrder()">搜索</a>
+			</span> 
+		</span>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<table id="orderReturndata" class="easyui-datagrid"	data-options="url:'${ctx}/b2b2c/admin/storeOrderReport!returnedListJson.do',pageList: [10,15,20,30],pageSize:${pageSize},fitColumns:'true'"
+			       pagination="true" width="width">
+			<thead>
+				<tr>
+					<th data-options="field:'id',width:35">退货ID</th>
+					<th data-options="field:'tradeno',width:100">退货单号</th>
+					<th data-options="field:'pay_method',width:100" >支付方式</th>
+					<th data-options="field:'tradestatus',width:100" formatter="formatType">退货状态</th>
+					<th data-options="field:'ordersn',width:100">退货订单号</th>
+					<th data-options="field:'regtime',width:100" formatter="formatTime">操作时间</th>
+					<th data-options="field:'alltotal_pay',width:100">退货金额</th>
+					<th data-options="field:'title',width:50" formatter="formatName3">买家收货</th>
+					<th data-options="field:'action',width:50,align:'center'" formatter="formatOperation">操作</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="pay_detail"></div>
+	</div>
+</div>
+<script type="text/javascript">
+	function formatName3(value,row,index){
+	    var name = "是";
+		var val=name;
+		return val;
+	}
+	function formatType(value, row, index) {
+		var val;
+		if (value == 0) {
+			val = "待审核";
+		}
+		if (value == 1) {
+			val = "已通过";
+		}
+		if (value == 2) {
+			val = "已入库";
+		}
+		if (value == 3) {
+			val = "已完成";
+		}
+		if (value == 4) {
+			val = "已拒绝";
+		}
+		return val;
+	}
+
+	function formatTime(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+	function formatOperation(value, row, index) {
+		var val;
+		if(row.tradestatus==2){//最原始的为状态为2(已入库) 1的状态为（已完成）
+			val = "<a href='javascript:void(0);' onclick=newTab('退货结算','${ctx}/shop/admin/sellBack!payment.do?id="+row.id+"'); >查看</a>";
+		}
+		return val;
+	}
+	
+	window.top["reload_Abnormal_Monitor"]=function(){
+        $("#orderReturndata").datagrid("reload");
+    };
+    function searchOrder(){
+    	var keyword = $("#searchKeyword").val();
+    	$("#orderReturndata").datagrid('load', {
+    		 keyword:keyword,
+    		 page:1
+        });
+    }
+</script>
+<div id="log"></div>
+
+<#include '/admin/footer.html' >

@@ -1,0 +1,565 @@
+/* 分类  */
+.cl-item-unfold .cate-name a.country_a{
+	width:196px;
+}
+.cl-item .sub_catea{
+	left:225px;
+}
+.sub-cate-items dd a{
+	font-weight:100; font-size:12px;
+}
+.play ul .country_li{
+	width:1200px;
+}
+.play ul .country_li img{
+	width:1200px;
+}
+.ao_leim{
+	width:220px;height:40px;padding:13px 82px 12px 82px;font-weight:bold;font-size: 120%;color:#fff;
+	background:#aa1e2b url('../images/ico_a.png') 150px center no-repeat;
+}
+.ao_leim:hover{
+	background:#991622;
+}
+.fenlei_div .cl-item{
+	background:#bb2d3a;
+}
+.fenlei_div .cl-item:hover{
+	background:#aa1e2b; border-right:none;
+}
+
+/* 品牌列表  */
+.brand_div_news{
+	width:1200px; margin:0 auto; padding-bottom:20px; clear:both;
+}
+.brand_div_news ul li {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #f2f2f2;
+    float: left;
+    font-family: Microsoft YaHei;
+    height: 280px;
+    margin: 30px 28px 0 0;
+    position: relative;
+    text-align: center;
+    width: 160px;
+    padding: 20px 55px;
+}
+.discoveryItemFollow {
+    color: #9f9da3;
+    margin: 10px 0 15px;
+}
+.ui-brand-btn {
+    background: #c00 none repeat scroll 0 0;
+    border-radius: 11px;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    height: 22px;
+    line-height: 22px;
+    outline: 0 none;
+    position: relative;
+    text-align: center;
+    text-decoration: none !important;
+    white-space: nowrap;
+    width: 75px;
+}
+.ui-brand-btn i {
+    background: rgba(0, 0, 0, 0) url("../images/T1F05SXB4cXXcGdY6f-38-12.png") no-repeat scroll 0 0;
+    display: inline-block;
+    height: 12px;
+    line-height: 12px;
+    margin: 0 0 -2px;
+    overflow: hidden;
+    transition: none 0s ease 0s ;
+    width: 12px;
+}
+.ui-brand-btn span {
+    margin-left: 4px;
+}
+.discoveryItemDisplay {
+    height: 160px;
+    margin: 5px 0 15px;
+    width: 160px;
+}
+
+/*  关注的品牌－品牌动态      */
+.brand_ftitle{
+	background:url(../images/bjj.jpg) no-repeat; width:100%; height:100px;
+}
+.main-layout{
+    margin: 0 auto;
+    width: 1200px;
+}
+.myInfo-avatar {
+    border: 3px solid #402f36;
+    border-radius: 40px;
+    display: inline-block;
+    float: left;
+    height: 70px;
+    margin: 10px auto 0;
+    overflow: hidden;
+    padding: 2px;
+    position: relative;
+    width: 70px;
+}
+.myInfo-avatar img {
+    border-radius: 50px;
+}
+.myInfo-avatar s {
+    background: rgba(255, 255, 255, 0.8) none repeat scroll 0 0;
+    bottom: -40px;
+    color: #000;
+    height: 40px;
+    left: -5px;
+    line-height: 40px;
+    position: absolute;
+    text-align: center;
+    text-decoration: underline;
+    transition: bottom 0.2s ease-out 0s;
+    width: 80px;
+}
+.myInfo-con {
+    color: #fff;
+    float: left;
+    font-family: "Microsoft YaHei";
+    line-height: 18px;
+    margin: 40px 0 0 15px;
+    width: 500px;
+}
+.myInfo-con span {
+    margin-left: 10px;
+}
+.myInfo-con a {
+    color: #fff;
+    margin: 0 5px;
+}
+.myInfo-con a em {
+    font-size: 14px;
+    margin: 0 2px -2px 0;
+}
+a.myInfo-avatar:hover s{bottom:0;transition:bottom 0.2s ease-out 0s;}
+
+.myBrandNav li {
+    float: left;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 20px;
+    width:auto;
+}
+.myBrandNav .act{
+	border-bottom:3px solid #000;
+}
+.myBrandNav li a {
+    color: #000;
+    display: inline-block;
+    height: 23px;
+    line-height: 23px;
+    padding: 4px 10px;
+}
+
+.brandList-item {
+    border-top: 1px dotted #ccc;
+    margin: 25px auto 15px;
+}
+.brandList-item-hd {
+    height: 55px;
+    padding-top: 5px;
+}
+.brandList-item-hd .logo {
+    float: left;
+    position: relative;
+    text-align: center;
+    width: 90px;
+    z-index: 99;
+}
+.brandList-item-hd .logo .name {
+    color: #000;
+    display: block;
+    height: 45px;
+}
+.brandList-item-hd .ui-brand-btn {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    color: #666;
+    display: block;
+    font-weight: 400;
+    margin-left: 4px;
+    margin-top:10px;
+}
+.brandList-item-hd .nav {
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    margin: 5px 0 0 90px;
+}
+.brandList-item-hd .nav li {
+    color: #999;
+    cursor: pointer;
+    float: left;
+    margin-right: 30px;
+}
+.brandList-item-hd .nav li:hover, .brandList-item-hd .nav .active {
+    border-bottom: 2px solid #000;
+    color: #000;
+}
+.brandList-item-hd .nav .active {
+    cursor: default;
+}
+.brandList-item-hd .more {
+    color: #000;
+    float: right;
+    margin-top: 10px;
+}
+.brandList-item-con {
+    height: 320px;
+    padding-left: 100px;
+    position: relative;
+}
+.brandList-item-slide {
+    height: 320px;
+    overflow: hidden;
+    position: relative;
+}
+.brandList-item-con li {
+    float: left;
+    height: 298px;
+    margin-right: 20px;
+    overflow: hidden;
+    width: 190px;
+}
+.brandList-item .item {
+    float: left;
+    width: 190px;
+}
+.brandList-item-con .img {
+    display: block;
+    height: 230px;
+    overflow: hidden;
+    position: relative;
+    width: 190px;
+}
+.brandList-item-con img {
+    vertical-align: top;
+}
+.brandList-item-con .img .prod-item-mask {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 190px;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    transition: opacity 0.2s ease 0s;
+    width: 190px;
+}
+.prod-item-atc {
+    background-image: url("../images/T1l47xFkVdXXbMwQzy-500-355.png");
+}
+.brandList-item-con .img .prod-item-atc {
+    background-position: -230px -247px;
+    background-repeat: no-repeat;
+    height: 30px;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 170px;
+    transition: opacity 0.2s ease 0s;
+    width: 190px;
+}
+.brandList-item-con .img:hover .prod-item-atc{
+	display:block; opacity:1;transition:opacity 0.2s ease 0s;
+}
+.brandList-item-con .item .tips {
+    background: #2ebe9d none repeat scroll 0 0;
+}
+.brandList-item-con .tips {
+    background: #000 none repeat scroll 0 0;
+    color: #fff;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+}
+.brandList-item-con .img:hover .prod-item-mask{opacity:1; transition:opacity 0.2s ease 0s;}
+.brandList-item-com .img:hover .prod-item-atc{display:block; opacity:1;transition:opacity 0.2s ease 0s;}
+
+/* 关注的品牌－发现品牌    */
+#discoverySearchBox {
+    right: 38px;
+    position: absolute;
+    margin-top:-20px;
+    /* top: 183px; */
+    width: 250px;
+}
+#discoverySearchBox label {
+    color: #999;
+    font-family: Microsoft Yahei;
+    font-size: 14px;
+    left: 19px;
+    line-height: 38px;
+    position: absolute;
+}
+#discoverySearchBox input {
+    border: 3px solid #ddd;
+    border-radius: 32px;
+    color: #000;
+    font-family: Microsoft Yahei;
+    font-size: 14px;
+    height: 32px;
+    padding: 0 16px;
+    width: 214px;
+}
+.mybrandSearchInput {
+    outline-width: 0;
+}
+#discoverySearchBox s {
+    background: rgba(0, 0, 0, 0) url("../images/T1BV22FoxcXXcXKh7q-1740-737.png") no-repeat scroll -844px -76px;
+    height: 21px;
+    position: absolute;
+    right: 19px;
+    top: 8px;
+    width: 20px;
+}
+#discoverySearchBox .mybrandSearchResults {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #ddd;
+    display: none;
+    left: 0;
+    padding: 15px 20px;
+    position: absolute;
+    top: 35px;
+    width: 212px;
+    z-index: 20;
+}
+#brandWall {
+    display: inline;
+    height: 243px;
+    margin-left: 45px;
+}
+#brandWall ul li {
+    float: left;
+    margin: 20px 1px 1px 20px;
+    position: relative;
+}
+#brandWall ul li a {
+    display: block;
+    font-size: 0;
+    position: relative;
+}
+#brandWall ul li a .brandWallItemBg {
+    height: 80px;
+    left: -1px;
+    position: absolute;
+    top: -1px;
+    width: 80px;
+}
+#brandWall ul li a .brandWallItemBg:hover,#brandWall ul li a .current, #brandWall ul li a .brandWallItemBg:active{border:1px solid #09b2f2;}
+#brandWall ul li .brandWallItemFollow {
+    background-color: #09b2f2;
+    color: #fff;
+    display: none;
+    font-family: Microsoft Yahei;
+    height: 72px;
+    left: 80px;
+    opacity: 0.95;
+    padding-left: 20px;
+    padding-top: 10px;
+    position: absolute;
+    top: -1px;
+    width: 142px;
+    z-index: 100;
+}
+.brandWallItemFollow .brandWallItemTitle {
+    height: 20px;
+    overflow: hidden;
+    width: 140px;
+}
+#brandWall ul li .brandWallItemFollow a {
+    margin-top: 5px;
+}
+#brandWall ul li a {
+    display: block;
+    font-size: 0;
+    position: relative;
+}
+.ui-brand-btn {
+    background: #c00 none repeat scroll 0 0;
+    border-radius: 11px;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    height: 22px;
+    line-height: 22px;
+    outline: 0 none;
+    position: relative;
+    text-align: center;
+    text-decoration: none !important;
+    white-space: nowrap;
+    width: 75px;
+}
+.ui-brand-btn, .ui-brand-btn * {
+    transition: all 0.2s ease-in 0s;
+}
+.ui-brand-btn i {
+    background: rgba(0, 0, 0, 0) url("../images/T1F05SXB4cXXcGdY6f-38-12.png") no-repeat scroll 0 0;
+    display: inline-block;
+    height: 12px;
+    line-height: 12px;
+    margin: 0 0 -2px;
+    overflow: hidden;
+    transition: none 0s ease 0s ;
+    width: 12px;
+}
+.ui-brand-btn span {
+    margin-left: 4px;
+}
+
+#discoveryNavSlide {
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    width: 72%;
+}
+#discoveryNav .discoveryNavContent a {
+    display: block;
+    padding: 3px 0 0 3px;
+    position: relative;
+}
+#discoveryNav .discoveryNavContent a .discoveryCategoryItemImg {
+    border: 3px solid #e0e0e0;
+    border-radius: 60px;
+    height: 60px;
+    overflow: hidden;
+    width: 60px;
+    z-index: 200;
+}
+#discoveryNav .discoveryNavContent a p {
+    color: #000;
+    font-family: Microsoft YaHei;
+    font-size: 14px;
+    line-height: 20px;
+    margin-left: 3px;
+    margin-top: 6px;
+    text-align: center;
+    width: 60px;
+}
+#discoveryNav #discoveryNavNext {
+    background: rgba(0, 0, 0, 0) url("../images/T1BV22FoxcXXcXKh7q-1740-737.png") no-repeat scroll -844px -25px;
+    height: 51px;
+    position: absolute;
+    right: 6%;
+    margin-top:-75px;
+    width: 28px;
+}
+#discoveryNav #discoveryNavPrev {
+    background: rgba(0, 0, 0, 0) url("../images/T1BV22FoxcXXcXKh7q-1740-737.png") no-repeat scroll -872px -25px;
+    height: 51px;
+    left: 6%;
+    position: absolute;
+    margin-top:-75px;
+    width: 28px;
+}
+.brandItems ul {
+    margin: 0;
+    position: relative;
+}
+#discoveryContent ul li {
+    padding: 20px 55px;
+}
+.brandItems ul li {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #f2f2f2;
+    float: left;
+    font-family: Microsoft YaHei;
+    height: 280px;
+    margin: 30px 28px 0 0;
+    position: relative;
+    text-align: center;
+    width: 160px;
+}
+#discoveryContent .discoveryItemFollow {
+    color: #9f9da3;
+    margin: 10px 0 15px;
+}
+.ui-brand-btn {
+    background: #c00 none repeat scroll 0 0;
+    border-radius: 11px;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    height: 22px;
+    line-height: 22px;
+    outline: 0 none;
+    position: relative;
+    text-align: center;
+    text-decoration: none !important;
+    white-space: nowrap;
+    width: 75px;
+}
+.ui-brand-collected {
+    background: #f2f2f2 none repeat scroll 0 0;
+    color: #999;
+}
+.ui-brand-btn i {
+    background: rgba(0, 0, 0, 0) url("../images/T1F05SXB4cXXcGdY6f-38-12.png") no-repeat scroll 0 0;
+    display: inline-block;
+    height: 12px;
+    line-height: 12px;
+    margin: 0 0 -2px;
+    overflow: hidden;
+    transition: none 0s ease 0s ;
+    width: 12px;
+}
+.ui-brand-collected i {
+    background-position: -26px 0;
+}
+.ui-brand-btn span {
+    margin-left: 4px;
+}
+
+.gpic_img_list{
+	overflow:hidden; width:1200px; margin:0 auto; margin-top:20px; height:90px;
+}
+.gpic_img_list table tr td img{
+	width:60px; height:60px; border-radius:30px; border:1px solid #ccc;
+}
+.brandList-item-hd .ui-brand-collected {
+    background: #f2f2f2 none repeat scroll 0 0;
+    color: #999;
+}
+.myInfo-con .bigfont:hover{
+	text-decoration:underline;
+	color:#f60 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

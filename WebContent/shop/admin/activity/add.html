@@ -1,0 +1,160 @@
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+<#-- 引入国际化模板函数 -->
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="addTeamForm" method="post" class="validate">
+			<table width="100%">
+				<tr>
+					<th><span style="color:red;">*</span>中文名称</th>
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="name" name="name" maxlength="20" data-options="required:true"></input>
+					</td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>索引值</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="index" validType="number"
+						name="index" maxlength="5" data-options="required:true"></input></td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>活动开始日期</th>
+					<td><input class="easyui-datebox" validType="date" id="start_date" name="start_date" data-options="required:true" /></td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>活动开始时间</th>
+					<td><input class="easyui-timebox" type="time" id="start_time" name="start_time" data-options="required:true" /></td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>活动结束日期</th>
+					<td><input class="easyui-datebox" validType="date" id="end_date" name="end_date" data-options="required:true" /></td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>活动结束时间</th>
+					<td><input class="easyui-timebox" type="time" id="end_time" name="end_time" data-options="required:true" /></td>
+				</tr>
+				<tr>
+					<th>分割线颜色</th>
+					<td>
+						<select class="easyui-validatebox" name="line_color">
+            				<option value="0098ff" >蓝色</option>
+            				<option value="00c3c4">浅蓝色</option>
+            				<option value="000080">海军蓝</option>
+            				<option value="f384a2">粉红色</option>
+            				<option value="bb9752">褐色</option>
+            				<option value="fc5e00">橘红色</option>
+            				<option value="ffc100">黄色</option>
+            				<option value="666" >黑灰色</option>
+            				<option value="7fa400">浅绿色</option>
+            				<option value="9728b7">紫色</option>
+            				<option value="00a635">青色</option>
+            				<option value="40E0D0">绿宝石</option>
+            				<option value="FF00FF">洋红</option>
+            				<option value="6A5ACD">蓝灰色</option>
+            				<option value="00FF00">酸橙色</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>类型</th>
+					<td><select class="easyui-validatebox" id="ssss" style="width: 65px;" name="type">
+							<option value="0"  >打折</option>
+							<option value="1" selected="selected" >秒杀</option>
+						</select>
+					</td>
+				</tr>
+				<!-- <tr id="discount">
+					<th><span style="color:red;">*</span>输入折扣率</th>
+					<td><input class="easyui-validatebox input_text" type="text" 
+						 name="discountnumber" maxlength="20" data-options="required:true" validType="number" value="1"></input>(单位：%)
+					</td>
+				</tr> -->
+				<tr >
+					<th>是否开启</th>
+					<td><input class="easyui-validatebox input_text" type="radio"
+						style="width: 10px;" name="is_show" value="1" checked />
+						开启&nbsp;&nbsp; <input type="radio" name="is_show" value="0" />
+						停用</td>
+				</tr>
+				<tr id="m1">
+					<th>是否限购</th>
+					<td><input  class="radioItem" type="radio"
+						style="width: 10px;" name="limitbuy" value="1" id="notSuperChk" checked="true"/>
+						是&nbsp;&nbsp; <input type="radio" class="radioItem" name="limitbuy" value="0" id="superChk" />
+						否</td>
+				</tr>
+				<tr id="roletr">
+					<th><span style="color:red;">*</span>限购数量</th>
+					<td><input class="easyui-validatebox input_text" type="text" 
+						 name="limitnumber" maxlength="20" data-options="required:true" validType="number" value="1"></input>
+					</td>
+				</tr>
+				<tr id="m2">
+					<th>是否虚拟库存数量</th>
+					<td><input  class="radioItem" type="radio"
+						style="width: 10px;" name="virtual" value="1" id="notvirtual" checked="true"/>
+						是&nbsp;&nbsp; <input type="radio" class="radioItem" name="virtual" value="0" id="virthual" />
+						否</td>
+				</tr>
+				<tr id="virtualnum">
+					<th><span style="color:red;">*</span>虚拟倍数</th>
+					<td><input class="easyui-validatebox input_text" type="text" 
+						 name="virtualcount" maxlength="20" data-options="required:true" validType="number" value="1"></input>
+					</td>
+				</tr>
+				<tr id="m3">
+					<th>是否使用优惠券</th>
+					<td><input  class="bonus" type="radio"
+						style="width: 10px;" name="bonus_select" value="1"  checked="true"/>
+						是&nbsp;&nbsp; <input type="radio" class="bonus" name="bonus_select" value="0"  />
+						否</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script language="javascript">
+$(function(){
+    $("#notSuperChk").click(function(){
+        if(this.checked)
+        $("#roletr").show();
+    });
+    $("#superChk").click(function(){
+        if(this.checked)
+        $("#roletr").hide();
+    });    
+    $("#notvirtual").click(function(){
+        if(this.checked)
+        $("#virtualnum").show();
+    });
+    $("#virthual").click(function(){
+        if(this.checked)
+        $("#virtualnum").hide();
+    });    
+});   
+
+$(function(){
+	 $("#ssss").change(function(){
+		 if($('#ssss option:selected').val()==0){
+			 $("#m1").css('display','none');
+			 $("#m2").css('display','none');
+			 $("#m3").css('display','none');
+			 $("#roletr").css('display','none');
+			 $("#virtualnum").css('display','none');
+			 $(".window-shadow").css('height','390')
+		 }else{
+			 $("#m1").show();
+			 $("#m2").show();
+			 $("#m3").show();
+			 $("#roletr").show();
+			 $("#virtualnum").show();
+		 }
+    })
+});
+</script>
+	
+

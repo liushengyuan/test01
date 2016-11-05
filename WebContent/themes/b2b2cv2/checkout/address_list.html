@@ -1,0 +1,70 @@
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/shohuodizhi.css" />
+<#--创建"会员地址列表"标签-->
+<#assign memberAddressTag= newTag("memberAddressTag") >    
+<#--调用"会员地址列表"标签-->          
+<#assign memberAddress= memberAddressTag()>
+<#list memberAddress as address>
+	<label>
+		<input type="radio" autocomplete="off" class="def_addr"  <#if address.def_addr?exists&& address.def_addr==1> checked=true </#if> 
+		value="${address.addr_id!''}"   name="addressId" shipAddr="${address.addr!''}" shipName="${address.name!''}"  shipMobile="${address.mobile!''}"  shipTel="${address.tel!''}" shipZip="${address.zip!''}" />
+			<#if address.def_addr?exists&& address.def_addr==1> 
+		<strong style="color: red;"><@uiLabel text="goods.DefaultShippingAddress" />：</strong>
+			</#if>
+			<span> ${address.province!''}-${address.city!''}-${address.region!''}，<@uiLabel text="index.Consignee" />：${address.name!''}，<@uiLabel text="index.AddressPhone" />：${address.mobile!''}，<@uiLabel text="index.AddressTelePhone" />：${address.tel!''}，<@uiLabel text="index.AddressZipCode" />：${address.zip!''}
+			</span>	
+			<a style="color: red;font-size: 14px;font: bold;font-weight: bold; " href="javascript:void(0);"  onclick="edit_address(this);"  rel="${address.addr_id!''}" >&nbsp&nbsp<@uiLabel text="goods.Modify" /></a>
+	</label>
+	<div id="dd"></div>
+</#list>
+<script>
+function edit_address(obj){
+	/* var addressid= $(obj).attr("rel");
+	$("#dd").append("<div id='address_div'></div>");
+	var html = $("#address_div").load("checkout/address_edit.html?addressid="+addressid); */
+	var addressid= $(obj).attr("rel");
+	var address = "<@uiLabel text='goods.EditConsigneeAddress' />";
+	$("#dd").empty();
+	$("#dd").append("<div id='address_div'></div>");
+	//var html = $("#address_div").load("checkout/new_address.html");
+	var html = $("#address_div").load("checkout/address_edit.html?addressid="+addressid);
+	var dialog = $.dialog({ 
+		title:address,
+		width:800,
+		top:100,
+		content:html,
+		lock:true,
+		init:function(){
+	}});
+	
+	
+}
+
+$(function(){
+	
+	/* var item = $("input[name='addressId']:checked");//将input选中赋值给变量item，
+	var len=item.length;                            //判断选中的个数
+	if(len==0){                                     //如果选中的个数等于0，那么代表没有默认地址。
+		 $('input[name=addressId]:first').attr('checked', 'checked');
+		$("input[name='addressId']:checked").attr("id","def_addr")  //给checked=true的input添加一个ID名称
+		}  */
+	
+	$(".def_addr").click(function(){
+		$.ajax({
+			url:"api/b2b2c/memberAddress!setDefAddress.do?ajax=yes&addrid="+$(this).val(),
+			dataType:"json",
+			success:function(res){
+				if(res.result==1){
+					parent.location.href="checkout.html";
+				}else{
+					alert(res.message);
+				}
+			},
+			error:function(){
+				alert("<@uiLabel text='index.BuyersCenterAlertB' />");
+			}
+		});
+	})
+	
+	
+})
+</script>

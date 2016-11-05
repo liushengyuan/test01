@@ -1,0 +1,216 @@
+<#if locale=="zh">
+    <#assign  title="退货申请" />
+ <#elseif locale=="ru">
+     <#assign title="возврат" />
+ </#if>
+<#include 'member_header.html' />
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("orderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+<#--创建“订单货物列表”标签-->
+<#assign orderItemListTag = newTag("orderItemListTag")>
+<#--调用“订单货物列表”标签，并传递参数-->
+<#assign orderItemList = orderItemListTag("{'orderid':${orderDetail.order_id} }")>
+<#--创建"支付列表"标签-->
+<#assign shopPaymentListTag= newTag("shopPaymentListTag") >    
+<#--调用"支付列表"标签-->          
+<#assign paymentList = shopPaymentListTag("locale:'${locale}'")>
+<style>
+.order_detail .order_intro{
+	border-right: 0px solid #d8d8d8;
+}
+.order_detail .intro_staus{
+	border-left: 1px solid #d8d8d8;
+}
+</style>
+<div class="user_order">
+	<form id="returnForm">
+	<input type="hidden" name="orderId" value="${orderDetail.order_id}"/>
+	<div class="order_detail">
+		<div class="order_intro" style="width:978px;">
+			<h1><@uiLabel text="index.PortalUserOrderInformation" /></h1>
+			<div class="detail_list">
+				<dl>
+					<dt><@uiLabel text="index.PortalUserPayShipAddress" />：</dt>
+					<dd>${orderDetail.ship_addr!''}-${orderDetail.ship_name!''}</dd>
+<!-- 					<dd>${orderDetail.shipping_area!''}-${orderDetail.ship_addr!''}-${orderDetail.ship_name!''}</dd> -->
+				</dl>
+				<dl class="online">
+					<dt><@uiLabel text="index.PortalUserOrderNumber" />：</dt>
+					<dd>${orderDetail.sn}</dd>
+				</dl>
+				<dl>
+					<dt><@uiLabel text="index.PortalUserPaymentMethod" />：</dt>
+					<dd>${orderDetail.payment_name!''}</dd>
+				</dl>
+				<dl>
+					<dt><@uiLabel text="index.PortalUserOrderTime" />：</dt>
+					<dd><@dateformat time="${orderDetail.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></dd>
+				</dl>
+			</div>
+		</div>
+		<div class="intro_staus" style="width:650px;border:0px;padding:0px;width:960px;">
+			<h1 style="background:#f3f3f3;border-bottom:1px solid #d8d8d8;height:20px;padding:9px;width:960px;font-weight: 600;"><@uiLabel text="return.Title" /></h1>
+			<div class="orderdetail" style="background:#fbfbfb;border-bottom:1px dotted #e7e7e7;padding:9px 9px 9px;margin-bottom:0px;width:960px;">
+            <select name="refund_reason" style="margin-top:10px;"> 
+              <option value="0">-- <@uiLabel text="return.Reason" /> --</option>
+                  <option value="<@uiLabel text='return.Confiscation' />"> <@uiLabel text="return.Confiscation" /> </option> 
+                  <option value="<@uiLabel text='return.SentOnTime' />"> <@uiLabel text="return.SentOnTime" /> </option> 
+                  <option value="<@uiLabel text='return.ProductDescription' />"> <@uiLabel text="return.ProductDescription" /> </option> 
+                  <option value="<@uiLabel text='return.NotBeUsed' />"> <@uiLabel text="return.NotBeUsed" /> </option> 
+                  <option value="<@uiLabel text='return.Fake' />"> <@uiLabel text="return.Fake" /> </option> 
+                  <option value="<@uiLabel text='return.Wrong' />"> <@uiLabel text="return.Wrong" /> </option>         
+            </select>
+      </div> 
+			<div class="orderdetail" style="width:960px;background:#fbfbfb;padding:9px;margin-top:0px;">
+				<@uiLabel text="index.PortalUserRefunds" />:
+						<select name="refund_way"> 
+							<option value="0">-- <@uiLabel text="index.PortalUserChooseRefund" /> --</option>
+							<#list paymentList as payment  >
+								<#if payment.type!="cod">
+									<option value="${payment.name}"> ${payment.name} </option>
+								</#if>
+							</#list>
+						</select>
+			</div>	
+				<ul style="margin-left:9px;font-size:16px; font:16px/32px ;color:#333;">
+					<li>
+						<@uiLabel text="index.PortalUserRefundAccount" />：<input type="text" name="return_account" />
+					</li>
+					<li>
+						<@uiLabel text="index.PortalUserReturnDescription" />：<textarea name="remark"   style="resize:none;width:90%;height:80px" placeholder="<@uiLabel text='goods.TotalReason' />"></textarea>
+					</li>
+					<li>
+						<input type="button" name="btnSubmit" value="<@uiLabel text="return.Send" />" id="btnSubmit" class="yellow_btn" />
+					</li>
+				</ul>
+			</div>
+		</div>
+	<div class="detail_goodslist">
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th></th>
+					<th><@uiLabel text="index.PortalUserReturnProductImage" /></th>
+					<th><@uiLabel text="index.PortalUserProductName" /></th>
+					<th><@uiLabel text="index.PortalUserProductsPrice" /></th>
+					<th><@uiLabel text="index.PortalUserProductsNumber" /></th>
+					<th><@uiLabel text="index.PortalUserReturnReturnsNumber" /></th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list orderItemList as item>		       
+					<tr>
+						<td>
+							<#if item.state==0 >
+								<input type="checkbox" name="gid" value="${item.goods_id}" onclick="click1('${item.goods_id}');" goods_id="${item.goods_id}" payNum="${item.num}"/>
+							<#else>
+					 		&nbsp;&nbsp;
+							</#if>
+						</td>
+						<td style="width:50px">
+							<a target="_blank" href="../goods-${item.goods_id}.html">
+								<span style="display: block; height: 50px;" class="cart-product-img">
+									<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+								</span>
+							</a>				
+						</td>
+						<td style="width:300px;"><a target="_blank" href="../goods-${item.goods_id}.html">${item.name}</a></td>
+						<td>${item.price?string.currency}</td>
+						<td>
+							${item.num}
+							<input type="hidden" name="payNum" value="${item.num}"/> 
+							<input type="hidden" name="productId" value="${item.product_id}" />
+							<input type="hidden" name="goodsId" value="${item.goods_id}" />
+					
+							<input type="hidden" name="price" value="${item.price}" />
+						</td>
+						<td><input name="goodsNum"  type="text" value="${item.num}" disabled="disabled" id="${item.goods_id}" class="input_text"  style="width:30px" /></td>
+					</tr>
+				</#list>
+			</tbody>
+		</table>
+	</div>
+	</form>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#btnSubmit").click(function(){
+		
+		if($("input[name='gid']").length==0){
+			alert("<@uiLabel text="index.BuyersCenterAlertN" />");
+			return false;
+		}
+		
+		if($("input[name='gid']").filter(":checked").length==0){
+			alert("<@uiLabel text="index.BuyersCenterAlertO" />");
+			return false;
+		}
+		var choose=false;
+		$("input[name='gid']:checked").filter(function(index){
+			if($("#"+$(this).attr("goods_id")).val()<=0){
+				alert("<@uiLabel text="index.BuyersCenterAlertP" />");
+				choose=true;
+			}else if(isNaN($("#"+$(this).attr("goods_id")).val())){
+				alert("<@uiLabel text="index.BuyersCenterAlertQ" />");
+				choose=true;
+			}else if($("#"+$(this).attr("goods_id")).val()>$(this).attr("payNum")){
+				alert("<@uiLabel text="index.BuyersCenterAlertR" />");
+				choose=true;
+			}
+		});
+		if(choose) return false;
+		if($("select[name='refund_way']").val()=="0"){
+			alert("<@uiLabel text="index.BuyersCenterAlertS" />");
+			return false;
+			
+		}
+		if($("select[name='refund_reason']").val()=="0"){
+			alert("<@uiLabel text="goods.TotalReason" />");
+			return false;
+			
+		}
+		var myReg = /^\d{10,20}$/;
+		var return_account = $("input[name='return_account']").val();
+		if(!myReg.test(return_account)){
+			alert("<@uiLabel text='goods.tuikuanzhanghao' />");
+			return false;
+		}
+		var options = {
+				url : "${ctx}/api/store/storeSellBack!save.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					alert(result.message);
+					if(result.result==1){
+						location.href="return_list.html"
+					}
+				},
+				error : function(e) {
+					alert("<@uiLabel text="index.ErroToTry" />");
+				}
+			};
+			$('#returnForm').ajaxSubmit(options);
+	});
+	/* $("input[name='gid']").click(function(){
+		var goods_id=$("input[name='gid']").attr("goods_id");
+		if($("#"+goods_id ).attr("disabled")=="disabled"){
+			$("#"+goods_id ).attr("disabled",false);
+		}else{
+			$("#"+goods_id ).attr("disabled",true);
+		}
+	}); */
+})
+
+	function click1(id){
+		var goods_id=id;
+		if($("#"+goods_id ).attr("disabled")=="disabled"){
+			$("#"+goods_id ).attr("disabled",false);
+		}else{
+			$("#"+goods_id ).attr("disabled",true);
+		}
+	}
+</script>
+
+<#include '../common/footer.html'/>

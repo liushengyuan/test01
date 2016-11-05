@@ -1,0 +1,220 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<table>
+			<tr>
+				<td>真实名称：</td>
+				<td>
+					<input class="input_text" type="text" value="${member.name!''}" readonly="readonly" >
+				</td>
+				<td>证件号码：</td>
+				<td>
+					<input class="input_text" type="text" value="${member.id_number!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td>注册邮箱：</td>
+				<td>
+					<input class="input_text" type="text" value="${member.email!''}" readonly="readonly" >
+				</td>
+				<td>手机号：</td>
+				<td>
+					<input class="input_text" type="text" value="${member.mobile!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td>卖家地址：</td>
+				<td  colspan="3">
+					<label>${member.address!''}</label>
+				</td>
+			</tr>
+			<tr>
+				<td>店铺地址：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.store_location!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td>店铺名称：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.store_name!''}" readonly="readonly" >
+				</td>
+				<td>商业类型：</td>
+				<td>
+					<#assign storeType="">
+					<#if store.store_type==1 ><#assign storeType="个人"></#if>
+					<#if store.store_type==2 ><#assign storeType="公司"></#if>
+					<#if store.store_type==3 ><#assign storeType="企业"></#if>
+					<input class="input_text" type="text" value="${storeType}" readonly="readonly" >
+					<#assign storeType="">
+				</td>
+			</tr>
+			<tr>
+				<td>推广语：</td>
+				<td  colspan="3">
+					<label>${store.store_banner!''}</label>
+				</td>
+			</tr>
+			<tr>
+				<td>店铺简介：</td>
+				<td  colspan="3">
+					<label>${store.description!''}</label>
+				</td>
+			</tr>
+	 		<#if store.store_type==1 >
+	 		<tr>
+				<td>持卡人姓名：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_name!''}" readonly="readonly" >
+				</td>
+			</tr>	 		
+	 		<tr>
+				<td>持卡人证件类型：</td>
+				<td>
+					<input class="input_text" type="text" value="<#if store.prove_type==1>
+					身份证
+				<#elseif store.prove_type==2>
+   					护照
+   				<#elseif store.prove_type==3>
+   					港澳台身份证
+				</#if>" readonly="readonly" >
+				</td>
+				<td>持卡人证件号：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.id_number!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td>个人银行账号：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.bank_account_number!''}" readonly="readonly" >
+				</td>
+				<td>开户行地址：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.bank_region!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+					<td>身份证正面：</td>
+					<td>
+						<img src="${store.id_img!''}" style="width:300px;height:200px">
+					</td>
+					<td>身份证反面：</td>
+					<td>
+						<img src="${store.reverse_id_img!''}" style="width:300px;height:200px">
+					</td>
+				</tr>
+			<tr>
+				<td>银行卡正面：</td>
+					<td>
+						<img src="${store.bcard_img!''}" style="width:300px;height:200px">
+					</td>
+			</tr>
+			</#if>
+		<#if store.store_type==2 >
+			<tr>
+				<td>公司名称：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.company_name!''}" readonly="readonly" >
+				</td>
+				<td>营业执照证件号：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.registration_number!''}" readonly="readonly" >
+				</td>
+				<!--  <td>公司法人：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.enterprise_legal!''}" readonly="readonly" >
+				</td>-->
+			</tr>
+			<tr>
+				<td>公司银行账号：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.bank_account_number!''}" readonly="readonly" >
+				</td>
+				<td>开户行地址：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.bank_region!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td>支行联行号：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.bank_code!''}" readonly="readonly" >
+				</td>
+				<td>公司固定电话：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.tel!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td>财务联系人：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_name!''}" readonly="readonly" >
+				</td>
+				<td>财务联系人证件类型：</td>
+				<td>
+					<input class="input_text" type="text" value="<#if store.prove_type==1>
+					身份证
+				<#elseif store.prove_type==2>
+   					护照
+   				<#elseif store.prove_type==3>
+   					港澳台身份证
+				</#if>" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td>财务联系人证件号：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.id_number!''}" readonly="readonly" >
+				</td>
+				<td>财务联系人手机：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_mobile!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td>业务联系人：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_name2!''}" readonly="readonly" >
+				</td>
+				<td>业务联系人手机：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_mobile2!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td>紧急联系人：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_name3!''}" readonly="readonly" >
+				</td>
+				<td>紧急联系人手机：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_mobile3!''}" readonly="readonly" >
+				</td>
+			</tr>
+		<!--<tr>
+				<td>注册地址：</td>
+				<td  colspan="3">
+					<label>${store.attr!''}</label>
+				</td>
+			</tr>  -->
+			<tr>
+					<td>营业执照：</td>
+					<td>
+						<img src="${store.license_img!''}" style="width:300px;height:200px">
+					</td>
+					<td>开户证明：</td>
+					<td>
+						<img src="${store.prove_img!''}" style="width:300px;height:200px">
+					</td>
+				</tr>
+				<!--  <tr>
+					<td>银行卡正面：</td>
+					<td>
+						<img src="${store.bcard_img!''}" style="width:100px;height:100px">
+					</td>
+				</tr>-->
+			</#if>
+
+		</table>
+	</div>
+</div>

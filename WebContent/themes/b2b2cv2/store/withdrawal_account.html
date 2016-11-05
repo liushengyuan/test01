@@ -1,0 +1,130 @@
+<#include '/store/store_header.html' />
+<!-- 获取店铺订单标签 -->
+<#assign myWithdrawAccountList=newTag("myWithdrawAccountListTag")/> 
+<#assign withdrawAccountList=myWithdrawAccountList()/>
+<#assign withdrawAccount = withdrawAccountList.result>
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color: #999;"><@uiLabel text="sellerAccount.Location"/>：</span> <span>></span> <a href="withdrawal_account.html"><@uiLabel text="seller.AccountManager"/></a><span>></span><@uiLabel text="seller.BankManager"/><!--您的位置  --><!-- 资金账户管理 --><!--银行卡管理  -->
+		<div class="go_store_orderdetail" style="padding: 10px 0 10px 0;">
+		<a href="/store/add_account.html" style="width:150px;"><@uiLabel text="sellerProductList.NewProduct"/></a><!--新增  -->
+		</div>
+		</div>
+		
+		<div class="store_goodslist">
+			<br/>
+			<!-- 订单列表 -->
+			<div class="store_orderlist">
+				<!-- 订单列表详细 -->
+				<table class="s_orderlist" cellpadding="0" cellspacing="0">
+					<thead>
+							<tr>
+								<th class="a1"><@uiLabel text="sellerCardManger.registerEmail"/></th><!--注册邮箱  -->
+								<th class="a2"><@uiLabel text="sellerCardManger.storeName"/></th><!-- 店铺名称 -->
+								<th class="a3" style="text-align:center"><@uiLabel text="sellerCardManger.cardNumber"/></th><!-- 银行卡号 -->
+								<th class="a3" style="text-align:center"><@uiLabel text="sellerCardManger.cardName"/></th><!--银行名称  -->
+								<th class="a5"><@uiLabel text="sellerCardManger.CardholderName"/></th><!-- 持卡人姓名 -->
+								<th class="a3"><@uiLabel text="sellerCardManger.CardStatic"/></th><!-- 银行卡状态 -->
+								<th class="a3"><@uiLabel text="sellerCardManger.ApprovalStatus"/></th><!-- 审核状态 -->
+								<th style="width:78px"><@uiLabel text="sellerCardManger.OperationTime"/></th><!-- 操作时间 -->
+								<th style="width:78px"><@uiLabel text="sellerCardManger.CardOperation"/></th><!-- 操作 -->
+							</tr>
+					</thead>
+					<tbody id="scroll-box">
+						<#list withdrawAccount as withdraw>
+						<tr>
+						   <td>${withdraw.login_name!}</td>
+						   <td>${withdraw.store_name!}</td>
+						   <td>${(withdraw.card_num)!}</td>
+						   <td>${(withdraw.bank_name)!}</td>
+						   <td>${(withdraw.card_holder)!}</td>
+						   <td name=${(withdraw.is_enable)!}>
+							    <#if withdraw.is_enable?? && withdraw.is_enable == 1>
+						          	<@uiLabel text="sellerCardManger.CardEnable"/><!-- 启用  -->
+						        <#else>
+						          <@uiLabel text="sellerCardManger.CardDisabled"/><!--  禁用 -->
+						        </#if>
+							</td>
+						   <td id=${(withdraw.status)!}>
+							    <#if withdraw.status?? && withdraw.status == 0>
+						          	<@uiLabel text="sellerCardManger.PendingReview"/><!-- 待审核  -->
+						        </#if>
+							    <#if withdraw.status?? && withdraw.status == 1>
+						          	<@uiLabel text="sellerCardManger.AuditPassed"/><!--  审核通过 -->
+						        </#if>
+							    <#if withdraw.status?? && withdraw.status == 2>
+						          	<@uiLabel text="sellerCardManger.AuditNotPassed"/><!--审核不通过  -->
+						        </#if>
+							</td>
+						   <td><@dateformat time="${(withdraw.check_time)!}" pattern="yyyy-MM-dd HH:mm"/></td>
+						   <td>
+						    <#if withdraw.is_enable?? && withdraw.is_enable == 0>
+					            <a href="javascript:cardEnable(${(withdraw.id)!},'1')" ><@uiLabel text="sellerCardManger.CardEnable"/></a><!--启用  -->
+					        <#else>
+					            <a href="javascript:cardEnable(${(withdraw.id)!},'0')"> <@uiLabel text="sellerCardManger.CardDisabled"/></a><!--禁用  -->
+					        </#if>
+					        	<a href="${ctx}/store/edit_account.html?card_num=${withdraw.card_num!''}" ><@uiLabel text="sellerCardManger.CardEidt"/></a><!--编辑  -->
+						   </td>
+						</tr>
+						</#list>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<@pager pageno="${page!'1'}" pagesize="${withdrawAccountList.pageSize}" totalcount="${withdrawAccountList.totalCount}" />
+	</div>
+</div>
+
+
+<script type="text/javascript">
+
+
+    function cardEnable(id,isYN) {
+        //页面中选中的checkbox
+//         var usedCard = $("input:checked[type=checkbox][name=orderIndexs]");
+       if(isYN==1){
+    	   var usedCard = $("td[name='1']");
+           if (usedCard.length >= 1) {
+               alert("<@uiLabel text="sellerCardManger.DisableBankcard"/>！");//请先停用启用的银行卡！
+               return;
+           }
+       }
+       var status = $("td[id='0']");
+       if (status.length >= 1) {
+           alert("<@uiLabel text="sellerCardManger.CardUnderReview"/>！");//已有银行卡在审核中
+           return;
+       }
+//         var propertys = "";
+//         for (var i = 0, ci; ci = checkboxs[i]; i++) {
+//             if (i > 0) {
+//                 propertys += ",";
+//             }
+//             propertys += ci.value;
+//         }
+// alert(id);
+// {id: id, isEnable: isYN, status:0}
+        jQuery.ajax({
+            url: "${ctx}/api/b2b2c/withdrawAccount!editAccount.do?ajax=yes",
+            type: 'POST',
+            data: "id="+id,
+            dataType : 'json',
+            error: function (result) {
+                alert(result.message);
+            },
+            success: function (result) {
+				if(result.result==1){
+					alert(result.message);
+					//$.Loading.success(result.message);
+					 window.location.reload();
+				}else{
+					alert(result.message);
+					//$.Loading.error(result.message);
+				}
+               
+            }
+        });
+    }
+    </script>
+<#include '/common/footer.html'/>

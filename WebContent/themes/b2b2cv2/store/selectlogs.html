@@ -1,0 +1,305 @@
+<#assign  title="平台模板" />
+<#include '/store/store_header.html' />
+<!--创建"编辑平台模板列表"标签-->
+<#assign logisEditTag=newTag("logisEditTag")>     
+<#assign logissedit=logisEditTag('{"model_name":"${model_name}","store_id":"${store_id!0}"}')>	
+<div class="store_center">
+<#include '/store/left_menu.html' />
+<div id="sotre_right_content" class="sotre_right_content">
+<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			<a href="#">物流管理</a><span>></span>运费模板管理
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;">运费模板管理 </a>
+					</li>
+					<div class="address">
+		
+		<a href="logispricemodel.html" class="add_address"><span>返回</span></a>
+	</div>
+				</ul>
+			</div>
+	<input type="hidden" value="${model_name}" id="modelName">
+	<div class="address_list">
+	    <form class="validate" id="goodsStoreForm">
+		 <table cellpadding="0" cellspacing="0" align="center" class="dd">
+		   <!-- <input type="hidden" name="store_id" value="${myStoreDetail.store_id!''}" -->
+		   <input type="hidden" id="storeid" value="${myStoreDetail.store_id!''}" />
+			<thead>
+			    <tr><th colspan=4 style="text-align:left; padding-left:20%;" ><span style="margin-right:20px;">输入运费模版名称:</span><span><input type="text" name="model_name" value="${model_name}"  id="reg_modelname" title="模版名称不能有特殊字符" fun="checkmodelname"/></span></th></tr>
+				<tr>
+				    <th class="a1" style="width:300px;"><input type="checkbox" onclick="checkAll(this);"></th>
+					<th class="a1"  style="text-align:left">选择物流</th>
+					<th class="a2"  style="text-align:left">运费设置 </th>
+					<th class="a3"  style="text-align:left">货物到达时间</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#if logissedit?size gt 0 >
+				<#list logissedit as lo>
+				<!-- onchange="checkchanged(${lo.freight_id!''})" -->
+				<tr>
+				    <td style="width:300px;"><input type="checkbox" checked="checked" name="orderIndexs" id="tr_${lo.logis_model_id!''}" value="${lo.logis_model_id!''}"/></td>
+					 <td style="text-align:left">
+					 
+					    <#if lo.product_name?? && lo.product_name=="1">标准快递</#if>
+					 </td>
+					<td  style="text-align:left">
+					   <div><input type="radio"    id="radio_${lo.logis_model_id!''}"   value="0" name="logis_price_type_${lo.logis_model_id!''}" <#if lo.logis_price_type==0>checked=checked</#if>>标准运费</div> 
+					   <div><input type="radio"    id="radio_${lo.logis_model_id!''}"   value="1"  name="logis_price_type_${lo.logis_model_id!''}"  <#if lo.logis_price_type==1>checked=checked</#if>>卖家承担运费</div>
+					</td>
+					<td style="text-align:left;">${lo.validatedays!''}天</td>	
+				</tr>
+				</#list>
+			   </#if>
+			</tbody>
+			<tr>
+			       	
+				  <td colspan=4 style="border:none;">
+					<div style="padding-left:35%;"><input type="button"  class="yellow_btn" onclick="finish()" value="保存并返回"></div>
+				  </td>
+				   </tr>	
+		</table>
+		</form>
+	<!-- </div>
+	添加会员地址。使用js load方法调用member/address_add.html页面 
+	<div class="address_add" style="overflow:hidden;">
+	</div>
+	修改会员地址 。使用js load方法调用member/address_edit.html页面
+	<div class="address_edit" style="overflow:hidden;"> -->
+	</div>
+	
+</div>
+
+</div>
+
+
+<script>
+	/* function checkchanged(id){
+		alert($("#tr_"+id).val());
+		alert($("input:checked[type=radio][name=logis_price_type_"+id+"]").val());
+	}
+ */
+	function finish() {
+	 if(!$("#goodsStoreForm").checkall())
+			return false;
+		if("false"!=$(this).attr("validate")){
+			$.Loading.show("正在提交您的信息，请稍候...");
+			$('#goodsStoreForm').ajaxSubmit();	
+		}
+		
+        var checkAll=document.getElementsByName("orderIndexs");
+		var checkboxs = $("input:checked[type=checkbox][name=orderIndexs]");
+		if (checkboxs.length == 0) {
+		    alert("请选择要操作模板");
+		    return;
+		}
+	   
+		 var propertys = "";
+		 var propertys1="";
+		 var count=0;
+		 for ( var x= 0; x < checkAll.length; x++) {
+			 if(checkAll[x].checked == false){
+				 propertys1+=checkAll[x].value+","
+				 count++;
+			 }
+			 
+		}
+		 if(count==0){
+			 propertys1+=0;
+		 }
+		/*    alert(propertys1);  */
+		 
+		for (var i = 0; ci = checkboxs[i]; i++) {
+		    if (i >= 0) {
+		        propertys += ci.value+","+$("input:checked[type=radio][name=logis_price_type_"+ci.value+"]").val()+";";
+		    }   
+		} 
+		var store_id=$("#storeid").val();
+		var name1=$("#modelName").val();
+		var name=$("#reg_modelname").val();
+		$("#goodsStoreForm").ajaxSubmit({
+			url : "${ctx}/api/shop/logis!editAddLogisMode.do?ajax=yes&modelname="+name+"&modelname1="+name1+"&store_id="+store_id,
+			data: { freight_id1 :propertys,check_id:propertys1},
+			type:"post",
+			dataType : 'json',
+			success : function(data) {	
+				alert(data.message)
+				if(data.result==1)
+					location.href = "logispricemodel.html"
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+		});
+		
+		/* jQuery.ajax({
+		    url: '${ctx}/shop/admin/logi!addLogisMode.do?ajax=yes',
+		    type: 'POST',
+		    data: {freight_id1: propertys},
+		    dataType : 'json',
+		    success: function (result) {
+				if(result.result==1){
+					alert(result.message);
+					//$.Loading.success(result.message);
+				}else{
+					alert(result.message);
+					//$.Loading.error(result.message);
+				}
+		        window.location.reload();
+		    }
+		}); */
+		//$("#goodsStoreForm").ajaxSubmit(options);
+
+} 
+ function checkmodelname(value,callback){
+	   var store_id=$("#storeid").val();
+	   var model=$("#reg_modelname").val();
+		if($.trim(model)==''){
+			return "模版名称不能为空！";
+		}
+		if(model.length>=10){
+			return "模版名称长度小于10";
+		}
+		var reg=/^[^@\/\'\\\"#$%&\^\*]+$/;
+		if(!reg.test(model)){
+			return "模版名称不能输入特殊字符";
+		}
+		/* alert(model) */
+		var model1=$("#modelName").val();
+		if(model1==model){
+
+		}else{
+			$.ajax({
+				url:"${ctx}/api/shop/logis!checkModelName.do?ajax=yes&store_id="+store_id,
+				type:"POST",
+				data:{ modelname:model },
+				dataType:"json",
+				success:function(json){
+					if(json.result==0){
+						callback(false,"添加模板重复！");
+					}else{
+						callback(true,"");
+					}
+				}		
+			});	
+			
+		}
+		return true;
+		
+ }
+	$(function(){
+		/*添加会员地址专用*/
+		$(".add_address,.addressadd").click(function(){
+			$(".address_add").load("address_add.html",function(){
+				$(".address_list").hide();
+				$(".address_edit").hide();
+				$(".grey_top").hide();
+				$(".address_add").show();
+				/*添加用户地址js*/
+			
+				$("#btnSubmit").click(function(){
+					var membername = $(".member_name_title").val();
+					if(membername.indexOf(" ")!=-1){
+						alert("姓名中不允许有空格！");
+						return false;
+					}
+					$("#member_addr").ajaxSubmit({
+						url : "${ctx}/api/shop/memberAddress!add2.do",
+						dataType : 'json',
+						success : function(data) {	
+							alert(data.message)
+							if(data.result==1)
+								location.href = "address.html"
+						},
+						error : function(e) {
+							alert("出现错误 ，请重试");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			});
+		});
+		/*修改地址专用*/
+		$(".edit").click(function(){
+			var editid = $(this).attr("rel");
+			
+			$(".address_edit").load("address_edit.html?addressid="+editid,function(){
+				$(".address_list").hide();
+				$(".address_edit").show();
+				$(".grey_top").hide();
+				$(".address_add").hide();
+				
+				/*修改用户地址*/
+				$("#address_edit").click(function(){
+					var membername = $(".member_name_title").val();
+					if(membername.indexOf(" ")!=-1){
+						alert("姓名中不允许有空格！");
+						return false;
+					}
+					$(".validate").ajaxSubmit({
+						url : "${ctx}/api/shop/memberAddress!edit2.do?addressid="+editid,
+						dataType : 'json',
+						success : function(data) {	
+							alert(data.message)
+							if(data.result==1)
+								location.href = "address.html"
+						},
+						error : function(e) {
+							alert("出现错误 ，请重试");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			})
+		})
+		/*删除地址*/
+		$(".address_del").click(function(){
+			if(confirm("确定要删除吗")){
+				var deleteid = $(this).attr("rel");
+				$.ajax({
+					url : "${ctx}/api/shop/memberAddress!delete.do?addr_id="+deleteid,
+					dataType : 'json',
+					success : function(data) {	
+						alert(data.message)
+						if(data.result==1)
+							location.href = "address.html"
+					},
+					error : function(e) {
+						alert("出现错误 ，请重试");
+					}
+				})  
+			}
+			else{
+				location.href="address.html";
+			}
+		})
+	});	
+	
+	   //  全选或全不选
+    function checkAll(obj) {
+        $(".dd").find("input[name=orderIndexs][type='checkbox']").each(function (i) {
+            this.checked = obj.checked;
+        });
+    }
+    //  全不选
+    function uncheckAll() {
+        $(".dd").find("input[name=orderIndexs][type='checkbox']").each(function (i) {
+            this.checked = false;
+        });
+    }
+</script>
+
+
+</div>
+<#include '/common/seller_footer.html' />

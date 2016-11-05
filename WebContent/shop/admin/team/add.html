@@ -1,0 +1,97 @@
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+
+<div class="main" style="background-color: white;">
+
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="addTeamForm" method="post" class="validate">
+			<table width="100%">
+				<tr>
+					<th>中文名称：</th>
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="name_zh" name="team.name_zh" data-options="required:true"></input>
+					</td>
+					<th>俄文名称：</th>
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="name_ru" name="team.name_ru" data-options="required:true"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>分割线颜色：</th>
+					<td>
+						<select class="easyui-validatebox" name="team.line_color">
+            				<option value="0098ff" >蓝色</option>
+            				<option value="00c3c4">浅蓝色</option>
+            				<option value="000080">海军蓝</option>
+            				<option value="f384a2">粉红色</option>
+            				<option value="bb9752">褐色</option>
+            				<option value="fc5e00">橘红色</option>
+            				<option value="ffc100">黄色</option>
+            				<option value="666" >黑灰色</option>
+            				<option value="7fa400">浅绿色</option>
+            				<option value="9728b7">紫色</option>
+            				<option value="00a635">青色</option>
+            				<option value="40E0D0">绿宝石</option>
+            				<option value="FF00FF">洋红</option>
+            				<option value="6A5ACD">蓝灰色</option>
+            				<option value="00FF00">酸橙色</option>
+						</select>
+					</td>
+					<th>索引值：</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="team_index"
+						name="team.team_index" data-options="required:true"></input></td>
+				</tr>
+				<tr>
+					<th>是否显示：</th>
+					<td><input class="easyui-validatebox input_text" type="radio"
+						style="width: 10px;" name="team.is_show" value="1" checked />
+						显示&nbsp;&nbsp; <input type="radio" name="team.is_show" value="0" />
+						隐藏</td>
+					<th>关联网址：</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="pic_url"
+						name="team.pic_url" data-options="required:true"></input></td>
+				</tr>
+				<tr>
+					<th>上传图片文件：</th>
+					<td><input type="button" class="button blueButton" onclick="setTeamImage()" value="上传图片"></input></td>
+					<th>市场：</th>
+					<td>
+						<select class="easyui-validatebox" name="team.market">
+            				<option value="1" >平台</option>
+            				<!-- <option value="2">俄罗斯市场</option> -->
+            				<option value="3" >新西兰馆</option>
+            				<option value="4">韩国馆</option>
+            				<option value="5" >德国馆</option>
+            				<option value="6">龙江物产</option>
+            				<option value="7" >俄罗斯馆</option>
+            				<option value="8" >澳大利亚馆</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td><img alt="" src="${imgPath!''}" id="show_team_picture" height="120px" width="150px;">
+					</td>
+				</tr>
+
+			</table>
+			<input type="hidden" name="team.team_image" id="update_team_image" class="easyui-validatebox" data-options="required:true">
+		</form>
+	</div>
+ 
+</div>
+
+<script language="javascript">
+getImage=function getTeamImage(obj){
+	$("#show_team_picture").attr("src",obj);
+	$("#update_team_image").val(obj);
+}
+function setTeamImage(){
+	openImgDlg(getImage);
+}
+</script>
+	
+

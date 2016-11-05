@@ -1,0 +1,609 @@
+<#include 'common/header.html' />
+<#include 'common/reception_header.html'/>
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/home.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/index_search.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/home_news.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/home_brand.css"/>
+<script src="${ctx}/themes/b2b2cv2/js/home_index.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.scrollLoading.js"></script>
+
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/layout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/goods_list.css" />
+
+<script src="${ctx}/themes/b2b2cv2/js/jquery.raty.min.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/waypoints.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/search_category_menu.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/search_goods.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/class_area_array.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.datalazyload.js" ></script>
+<!-- 项目维护 时期弹出框-->
+
+<div class="clear"></div>
+<#assign advListTag= newTag("advListTag")>
+<!-- 调用广告信息,传递参数acid:1 -->
+<#if locale=="zh">
+	<#assign adv = advListTag("'acid':'1'")!'' >
+<#elseif locale=="ru">
+	<#assign adv = advListTag("'acid':'4'")!'' >
+</#if>
+<#-- 获取选择器 -->
+<#assign searchSelectorTag= newTag("searchSelectorTag") >
+<#assign goodsSelector = searchSelectorTag() >
+<!--会员品牌动态  -->
+<#assign memberDetailTag = newTag("memberDetailTag")>
+<#assign memberDetail = memberDetailTag()>
+<!-- 获取品牌 -->
+<#assign brandListByIdTag = newTag("brandListByIdTag")>
+<#-- 获取品牌 -->
+<#assign brandListTag= newTag("brandListTag") >
+<#assign brandList = brandListTag() >
+<#-- 获取是否登录  -->
+<#assign memberIsLoginTag= newTag("memberIsLoginTag")>
+<#assign isLogin = memberIsLoginTag() >
+<#-- 获取不同品牌商品 -->
+<#assign brandFindGoodsTag= newTag("brandFindGoodsTag") >
+<#assign brandgoodsList = brandFindGoodsTag('{"pageSize":12}') >
+<#-- 各种未选中的选择器 -->
+<#assign propMap= goodsSelector.prop >
+<#assign catList= goodsSelector.cat >
+<#assign brantrist= goodsSelector.brand >
+<#assign sortList= goodsSelector.sort![] >
+<#assign priceList= goodsSelector.price![] >
+<!-- 获取广告列表 -->
+<#assign advList = adv.advList />
+<#include 'common/toup.html' />
+
+
+<div id="body">
+   <div style="height:40px; background:#fff; border-bottom:2px solid #aa1e2b;">
+ 
+	<div class="grid" style="height:40px;line-height:40px">
+	<#if locale=="zh">
+		<span class="ao_leim" id="show"><@uiLabel text="index.AllItem" />
+			<div class="categories-main" id="categories-main" style="display: block;position: absolute;z-index:9999; border:none; width:225px;display: none;">
+                    <#list goodsCat.cat_tree as cat>
+                        <div class="categories-list-box fenlei_div">
+                            <dl data-role="first-menu" class="cl-item cl-item-electronics">
+                                
+                                <#if cat_index==0>
+                                <dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_a.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>素颜霜&nbsp;/&nbsp;</i>
+											<i>阿玛尼唇釉&nbsp;/&nbsp;</i>
+											<i>VANT</i>
+										</p>
+                                	</a>
+                                </dt>
+                                <#elseif cat_index==1>
+                                	<dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_b.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>进口零食&nbsp;/&nbsp;</i>
+											<i>代餐奶昔</i>
+										</p>
+                                	</a>
+                                	</dt>
+                                	<#elseif cat_index==2>
+                                	<dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_c.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>奶粉&nbsp;/&nbsp;</i>
+											<i>纸尿裤&nbsp;/&nbsp;</i>
+											<i>铁锌钙</i>
+										</p>
+                                	</a>
+                                	</dt>
+                                	<#elseif cat_index==3>
+                                	<dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_d.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>运动鞋&nbsp;/&nbsp;</i>
+											<i>箱包&nbsp;/&nbsp;</i>
+											<i>女装</i>
+										</p>
+                                	</a>
+                                	</dt>
+                                	<#elseif cat_index==4>
+                                	<dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_e.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>净水饮水/ </i>
+											<i>烹饪锅具</i>
+										</p>
+                                	</a>
+                                	</dt>
+                                </#if>
+                                <dd data-role="first-menu-main" class="sub-cate sub_catea">
+
+                                    <div class="sub-cate-main">
+                                        <#if cat.hasChildren>
+                                            <#assign children2=cat.children />
+                                            <#list children2 as cat2>
+                                                <dl data-role="two-menu" class="sub-cate-items">
+                                                    <dt>
+                                                        <a href="${ctx}/goods_list.html?cat=${cat.cat_id}_${cat2.cat_id}">
+                                                       <!--  ${cat.name } -->
+                                                        <#if locale=="zh">
+                                                        
+                                                        	<font style="color:#${cat2.font_color!''}"> 
+                                 	  						${cat2.name}
+                                 	  						</font> 
+                                 						<#elseif locale=="ru">
+                                 	  						${cat2.name_ru!''}
+                                 						</#if>
+                                                        </a>
+                                                    </dt>
+                                                    <br/>
+                                                    <#if cat2.hasChildren >
+                                                        <#assign children3=cat2.children />
+                                                      <dd style="position: relative;">
+	                                                        <#list children3 as cat3>
+	                                                                <a href="${ctx}/goods_list.html?cat=${cat.cat_id}_${cat2.cat_id}_${cat3.cat_id}">
+	                                                                <!-- ${cat3.name} -->
+	                                                               	<#if locale=="zh">
+	                                                               	<font style="color:#${cat3.font_color!''}"> 
+	                                 	  								${cat3.name}
+	                                 	  								</font>
+	                                 							  	<#elseif locale=="ru">
+	                                 	  						 		${cat3.name_ru!''}
+	                                 								</#if>
+	                                                                </a>
+	                                                        </#list>
+                                                        </dd>
+                                                    </#if>
+                                                </dl>
+                                            </#list>
+                                        </#if>
+                                    </div>
+                                </dd>
+                            </dl>
+
+                        </div>
+                    </#list>
+                  </div>
+		</span>
+		<span style=" font-size:14px;padding-left:8px">
+			
+			<a href="${ctx}/index.html" style="color:#aa1e2b; font-weight:bold;text-decoration:none;" >&nbsp;&nbsp;&nbsp;&nbsp;首页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/longjiang_list.html?is_belong=1" style="text-decoration:none;"   >龙江物产&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/russa_list.html?is_belong=0" style="text-decoration:none;"  >俄罗斯馆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/australia_list.html?is_belong=2" style="text-decoration:none;"  >澳大利亚馆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/newzealand_list.html?is_belong=3" style="text-decoration:none;" >新西兰馆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/korea_list.html?is_belong=4" style="text-decoration:none;" >韩国馆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/germany_list.html?is_belong=5"style="text-decoration:none;"  >德国馆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/country_index.html" style="text-decoration:none;" >国家地区馆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			
+			<a href="http://www.trade-ease.ru/" target="_blank" title="前往俄罗斯网站" style="float: right;" ><img style="width: 38px;height: 25px;margin-top: 7px;border:1px solid  #EEEEE0;" src="${ctx}/themes/b2b2cv2/images/els.jpg"></a>
+			<a href="http://www.tradeease.net/" target="_blank" title="前往中国网站"  style="float: right;margin-right:20px;"><img style="width: 38px;height: 25px;margin-top: 7px;border:1px solid  #EEEEE0;" src="${ctx}/themes/b2b2cv2/images/china.jpg"></a>
+		</span>
+		<#elseif locale=="ru">
+			<span style="width:220px;height:40px;padding:13px 65px 12px 65px;background:#ad2633;font-weight:bold;font-size: 150%;color:#fff"><@uiLabel text="index.AllItem" /></span>
+			
+			<span style=" font-size:14px;font-family:Lucida Sans Unicode;padding-left:15px">
+			<a href="${ctx}/qingyun/qingyun_store.html" ><@uiLabel text="index.Albatron" /></a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="${ctx}/yabaolu/yabaolu_store.html" ><@uiLabel text="apply.YaBaoLuShop" /></a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="${ctx}/helpc-33-50.html" ><@uiLabel text="index.DeliverGoods" />&nbsp&nbsp&nbsp</a>
+			<a href="${ctx}/helpc-33-49.html" >&nbsp&nbsp&nbsp<@uiLabel text="index.Pay" />&nbsp</a>
+			<a href="${ctx}/helpc-33-52.html" >&nbsp&nbsp&nbsp&nbsp&nbsp<@uiLabel text="index.Refund" />&nbsp</a>
+			</span>
+		</#if>
+		</div>
+	</div>
+	</div>
+    <div class="grid grid-c2-e6" style="width:100%;">
+        <div class="col-main" style="width:100%;">
+            <div class="main-wrap fllist_div" style="width:100%;">
+                <!-- 品牌动态 -->
+                <div class="brand_ftitle">
+                	<div class="main-layout myInfo-layout">
+				        <#if memberDetail.member.face!=''>
+				        <a class="myInfo-avatar" href="">
+				        	<img  id="face" src="${memberDetail.member.face!''}" style="width: 72px;height: 74px;"/>
+				            <s onclick='$("#file").trigger("click")'>编辑</s>
+				        </a>
+				       <#else>
+				       <a class="myInfo-avatar" href="">
+				        	<img  id="face" src="${ctx}/themes/b2b2cv2/images/brandimage/no_picture.jpg" style="width: 72px;height: 74px;"/>
+				            <s onclick='$("#file").trigger("click")'>编辑</s>
+				        </a>
+				        </#if>
+				         <form id="faceForm">
+							<input type="file" name="file" id="file" style="display:none;"/>
+						</form>
+				        <div class="myInfo-con">
+				        <#if memberDetail??>
+				           <#if memberDetail.member??>
+				            Hi,${memberDetail.member.uname}
+				            </#if>
+				        </#if>    
+				            <span>
+				                	您总共关注了
+				                <a href="/my_attention_brand.html" style="text-decoration: none">
+				                  <em>
+				                  <#if memberDetail??>
+				                    <#if memberDetail.count??>
+				                       ${memberDetail.count}
+				                   </#if>
+				                  </#if>  
+				                  </em>个品牌</a>
+				                <a href="/my_attention_brand.html" class="bigfont" >我关注的品牌</a>
+				            </span>
+				        </div>
+				    </div>
+                </div>
+                <div class="myBrandNav">
+				    <ul class="main-layout clearfix">
+				        <li><a href="${ctx}/brand_follow.html">品牌动态</a></li>
+				        <li class="act"><a href="${ctx}/brand_index.html">发现品牌</a></li>
+				    </ul>
+				   
+				</div>
+				<!-- 发现品牌 -->
+				<div class="main-layout">
+					<div id="brandWall">
+					    <ul>
+					    <#if brandList??>
+					    	<#list brandList as brand>
+					    	<li>
+			                    <a style="font-size:0;" title="${brand.name!''}" target="_blank" class="brandWallItemLink" href="${ctx}/goods_list.html?search=goods&brand=${brand.brand_id!''}">
+			                    <@image width="90" height="60"  src="${brand.logo!''}"/>
+			                    </a>      
+							</li>
+					    	</#list>
+					    </#if>
+					    </ul>
+					  </div>
+				</div>
+				<div style="clear:both; height:0;"></div>
+				<div id="gpic" class="gpic_img_list">
+					<table border="0" align="center" cellpadding="0" cellspacing="0">
+					  <tr>
+					    <td id="gpic1" valign="top" align="center">
+					    <table width="1200" border="0" align='center' cellpadding="0" cellspacing="0">
+					        <tr>
+					          <td valign='top' bgcolor="#FFFFFF">
+						          <a title="全部" href="${ctx}/brand_find.html?catId=">
+						          	<img src="${ctx}/themes/b2b2cv2/images/brandimage/all.jpg" alt="" border="0" />
+						          </a>
+					          </td>
+					          <td valign="top" bgcolor="#FFFFFF">
+					          	<a title="亲子" href="${ctx}/brand_find.html?catId=13001419">
+					          		<img src="${ctx}/themes/b2b2cv2/images/brandimage/qinzi.jpg" alt="" border="0" />
+					          	</a>
+					          </td>
+					         <td valign="top" bgcolor="#FFFFFF">
+					          	<a title="悦己" href="${ctx}/brand_find.html?catId=13001440">
+					          		<img src="${ctx}/themes/b2b2cv2/images/brandimage/yueji.jpg" alt="" border="0" />
+					          	</a>
+					          </td>
+					          <td valign="top" bgcolor="#FFFFFF">
+					          	<a title="行走" href="${ctx}/brand_find.html?catId=13001438">
+					          		<img src="${ctx}/themes/b2b2cv2/images/brandimage/walk.jpg" alt="" border="0" />
+					          	</a>
+					          </td>
+					          <td valign="top" bgcolor="#FFFFFF">
+					          	<a title="数码" href="${ctx}/brand_find.html?catId=13001446">
+					          		<img src="${ctx}/themes/b2b2cv2/images/brandimage/shuma.jpg" alt="" border="0" />
+					          	</a>
+					          </td>
+					          <td valign="top" bgcolor="#FFFFFF">
+					          	<a title="国际奢品" href="${ctx}/brand_find.html?catId=13001420">
+					          		<img src="${ctx}/themes/b2b2cv2/images/brandimage/guojishepin.jpg" alt="" border="0" />
+					          	</a>
+					          </td>
+					          <td valign="top" bgcolor="#FFFFFF">
+					          	<a title="业界大牌" href="${ctx}/brand_find.html?catId=13001441">
+					          		<img src="${ctx}/themes/b2b2cv2/images/brandimage/yejiedapai.jpg" alt="" border="0" />
+					          	</a>
+					          </td>
+					          <td valign="top" bgcolor="#FFFFFF">
+					          	<a title="时尚名牌" href="${ctx}/brand_find.html?catId=13001441">
+					          		<img src="${ctx}/themes/b2b2cv2/images/brandimage/shishangmingpai.jpg" alt="" border="0" />
+					          	</a>
+					          </td>
+					          <td valign="top" bgcolor="#FFFFFF">
+					          	<a title="新锐潮牌" href="${ctx}/brand_find.html?catId=13001441">
+					          		<img src="${ctx}/themes/b2b2cv2/images/brandimage/xinruichaopai.jpg" alt="" border="0" />
+					          	</a>
+					          </td>
+					          <td valign="top" bgcolor="#FFFFFF">
+					          	<a title="饮食" href="${ctx}/brand_find.html?catId=13001418">
+					          		<img src="${ctx}/themes/b2b2cv2/images/brandimage/yinshi.jpg" alt="" border="0" />
+					          	</a>
+					          </td>
+					        </tr>
+					      </table>
+					     	 </td>
+					   		 <td id="gpic2" valign="top"></td>
+					 		 </tr>
+						</table>
+					</div>
+					<script>
+					var speed=30
+					gpic2.innerHTML=gpic1.innerHTML
+					function Marquee(){
+						if(gpic2.offsetWidth-gpic.scrollLeft<=0){
+							gpic.scrollLeft-=gpic1.offsetWidth;
+						}else{
+							//console.info(gpic.scrollLeft);
+							gpic.scrollLeft++
+						}
+						//console.info(gpic.scrollLeft+"a");
+						if(gpic.scrollLeft==1100){
+							//console.info("aasdfghgfdsasdfdsdfs");
+							gpic.scrollLeft = 0;
+						}
+					}
+					var MyMar=setInterval(Marquee,speed)
+					gpic.onmouseover=function() {clearInterval(MyMar)}
+					gpic.onmouseout=function() {MyMar=setInterval(Marquee,speed)}
+					</script>
+
+				
+					<div data-spm="7" class="brandItems main-layout" id="discoveryContent">
+					<ul style="opacity: 1;">
+					    <#if brandgoodsList.result?size gt 0>
+					    <#list brandgoodsList.result as brandgoods >
+					    	<li>
+					        <a target="_blank" href="" title="${brandgoods.brandname!''}" class="discoveryItemTitle">
+					        <@image width="90" height="45" src="${brandgoods.logo!''}"/>
+					        </a>
+							<#assign brandmap = brandListByIdTag("'goods_id':'${brandgoods.goods_id!''}'")>
+					        <div class="discoveryItemFollow">
+					            <#if brandmap.brand??>
+					              <span data-brandid="3261618" brandid="${brandmap.brand.brand_id!''}" id="numberview_${brandmap.brand.brand_id!''}" class="brand-num j_CollectBrandNum">${brandmap.brand.attention!''}</span>关注
+					             </#if>
+					             <#if brandmap.attention??>
+				              		<#if  brandmap.attention.is_true==1>
+						            <a hidefocus="true" id="attion_${brandmap.brand.brand_id!''}" href="javascrip:void(0);" onmouseover="mousemove('${brandmap.brand.brand_id!''}')" onclick="qxattention('${brandmap.brand.brand_id!''}')" data-brandid="3261618" onmouseleave="mouselave('${brandmap.brand.brand_id!''}')"   class="ui-brand-btn j_CollectBrand ui-brand-collected">
+						                <i></i><span>已关注</span><b></b>
+						            </a>
+						            <#else>
+						            	<a hidefocus="true" id="attion_${brandmap.brand.brand_id!''}" href="javascrip:void(0);" onclick="attention('${brandmap.brand.brand_id!''}')" data-brandid="3261618" class="ui-brand-btn j_CollectBrand">
+						                <i></i><span>关注</span><b></b>
+						           		</a>
+						            </#if>
+						            <#else>
+						            	<a hidefocus="true" id="attion_${brandmap.brand.brand_id!''}" href="javascrip:void(0);" onclick="attention('${brandmap.brand.brand_id!''}')" data-brandid="3261618" class="ui-brand-btn j_CollectBrand">
+						                <i></i><span>关注</span><b></b>
+						           		</a>
+						         </#if>
+					        </div>
+					        <div class="discoveryItemDisplay">
+					          <a target="_blank" href="" title="${brandgoods.goodsname}">
+					          <@image width="160" height="160" src="${brandgoods.thumbnail!''}"/>
+					          </a>
+					        </div>
+					      </li>
+					     </#list>
+					    </#if>
+					</ul>
+					
+					</div>
+			<!-- 分类end -->
+            </div>
+        </div>
+        
+    </div>
+ <@pager pageno="${brandgoodsList.currentPageNo!'1'}" pagesize="${brandgoodsList.pageSize}" totalcount="${brandgoodsList.totalCount}" />
+<div class="public-Information js-old-information">
+    <dl class="dl1">
+        <dt></dt>
+        <dd style="line-height:11px;">
+            <strong><@uiLabel text="index.PortalAboutUS" /></strong>
+            <p style="padding-top:10px; line-height: 1.5;">黑龙江特色商品、各类进口商品大集，链接中国和世界的桥梁。</p>
+            <br>
+            <a href="${ctx}/helpc-34-72.html"><@uiLabel text="home.somec" /> &gt;&gt;</a>
+        </dd>
+    </dl>
+    <dl class="dl2">
+        <dt class="dt_1"></dt>
+        <dd style="line-height:11px;">
+            <strong><@uiLabel text="home.somea" /></strong>
+            <p style="padding-top:10px; line-height: 1.5;"><@uiLabel text="home.somee" /></p>
+            <br>
+            <a href="${ctx}/helpc-33-48.html"><@uiLabel text="home.somec" /> &gt;&gt;</a>
+        </dd>
+    </dl>
+    <dl class="dl3">
+        <dt class="dt_2"></dt>
+        <dd style="line-height:11px;">
+            <strong><@uiLabel text="home.someb" /></strong>
+            <p style="padding-top:10px; line-height: 1.5;"><@uiLabel text="home.somef" /></p>
+            <br>
+            <a href="${ctx}/helpc-33-83.html"><@uiLabel text="home.somec" /> &gt;&gt;</a>
+        </dd>
+    </dl>
+</div>
+<script language="javascript">
+	function mousemove(brand_id){
+		$("#attion_"+brand_id).removeClass();
+		$("#attion_"+brand_id).addClass("ui-brand-btn j_CollectBrand");
+		$("#attion_"+brand_id).find("span").html("取消关注");
+	}
+	function mouselave(brand_id){
+		$("#attion_"+brand_id).removeClass();
+		$("#attion_"+brand_id).addClass("ui-brand-btn j_CollectBrand ui-brand-collected");
+		$("#attion_"+brand_id).find("span").html("已关注");
+	}
+	function attention(brand_id){
+		  var isLogin = ${isLogin?string};
+		  if(isLogin){
+			  var is_true=1;
+			  var brand_id=brand_id;
+			   $.ajax({
+					url: "api/shop/logis!myattion.do?ajax=yes&brand_id="+brand_id+"&is_true="+is_true,
+					type : "POST",
+					async : true,
+					dataType : "json",
+					success : function(result) {
+						if(result!=null){
+							if(result.result==1){
+								alert("关注成功！");
+								/* $("#numberview_"+brand_id).html(result.data.count); */
+								location.href="/brand_find.html";
+							}else{
+								alert("失败");
+							}
+						}
+					}
+				});
+			}else{
+				$.Loading.show("您未登录,请先登录");
+				location.href=ctx+"/login.html?forward=brand_find.html";				
+			}
+	}
+	function qxattention(brand_id){
+		  var isLogin = ${isLogin?string};
+		  if(isLogin){
+			  var is_true=0;
+			  var brand_id=brand_id;
+			   $.ajax({
+					url: "api/shop/logis!myattion.do?ajax=yes&brand_id="+brand_id+"&is_true="+is_true,
+					type : "POST",
+					async : true,
+					dataType : "json",
+					success : function(result) {
+						if(result!=null){
+							if(result.result==1){
+								alert("取消关注成功！");
+								/* $("#numberview_"+brand_id).html(result.data.count); */
+								location.href="/brand_find.html";
+							}else{
+								alert("失败");
+							}
+						}
+					}
+				});
+			}else{
+				$.Loading.show("您未登录,请先登录");
+				location.href=ctx+"/login.html?forward=brand_find.html";				
+			}
+	}
+	$(function() {
+	 	$(".lazy").each(function(index,element){
+			 if($(this).attr("src")!='/themes/b2b2cv2/images/loading.gif'){
+			 	$(this).attr("src","/themes/b2b2cv2/images/loading.gif"); 
+		 	}	
+		}); 
+		$(".lazy").scrollLoading();	
+	});
+    (function (category) {
+        category.fn.hoverDelay = function () {
+            return this.each(function () {
+                $(this).mouseenter(function () {
+                    $(this).addClass("cl-item-unfold").siblings().removeClass("cl-item-unfold");
+                }).mouseleave(function () {
+                    $(this).removeClass("cl-item-unfold");
+                })
+            })
+        }
+    })(jQuery);
+    (function (industry) {
+        industry.fn.tabHoverDelay = function () {
+            return this.each(function (i) {
+                var tabs = $(".tabbed-pane-panel").find(".industry-main");
+                $(this).click(function () {
+                    $(this).addClass("on-click").siblings().removeClass("on-click");
+                    $(tabs[i]).css({"z-index": "6", "opacity": "1"}).siblings().css({
+                        "z-index": "1",
+                        "opacity": "0"
+                    });
+                })
+            })
+        }
+    })(jQuery);
+    (function (switchable) {
+        switchable.fn.switchHoverDelay = function () {
+            return this.each(function (i) {
+                var switchables = $(".tabbed-pane-panel").find(".industry-main");
+                $(this).mouseenter(function () {
+                    $(".ui-switchable-prev-btn").css({"display": "inline"});
+                    $(".ui-switchable-next-btn").css({"display": "inline"});
+                    $(this).addClass("on-click").siblings().removeClass("on-click");
+                    $(switchables[i]).css({"z-index": "6", "opacity": "1"}).siblings().css({
+                        "z-index": "1",
+                        "opacity": "0"
+                    });
+                }).mouseleave(function () {
+                    $(".ui-switchable-prev-btn").css({"display": "none"});
+                    $(".ui-switchable-next-btn").css({"display": "none"});
+                })
+            })
+        }
+    })(jQuery);
+
+    $("#file").change(function(){
+    	var options = {
+    			url : "/api/cordova/member!changeFace.do?ajax=yes",
+    			type : "POST",
+    			dataType : 'json',
+    			success : function(result) {
+    				if (result.result == 1) {
+    					$("#face").attr("src",result.message);
+    				}else{
+    					alert("图片出错！")
+    				}
+    			},
+    			error : function(e) {
+    				alert("上传异常！");
+    			}
+    		};
+    		$("#faceForm").ajaxSubmit(options);
+    	});
+</script>
+
+<script>
+    $(function () {
+        $(".categories-list-box dl").hoverDelay();
+        $("#tabbedIndustryMenus li").tabHoverDelay();
+        $("#key-visual li").switchHoverDelay();
+    });
+    $("#show").hover(function(){
+		$("#categories-main").css("display", "block");
+	},
+	function(){
+		$("#categories-main").css("display", "none");
+	})
+	$("#categories-main").mouseover(function(){
+		$("#categories-main").show();
+	})
+	$("#categories-main").mouseleave(function(){
+		$("#categories-main").hide();
+	})
+</script>
+
+<!-----footer------>
+<#include 'common/footer.html'/>

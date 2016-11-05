@@ -1,0 +1,64 @@
+10
+
+dir
+1344
+svn://223.202.119.226:9999/tradeEaseIpt/test/com/enation/test
+svn://223.202.119.226:9999
+
+
+
+2016-06-17T11:22:00.277290Z
+237
+zmm
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d43ea004-e395-4cb9-b7bd-d3e1b29e44b9
+
+comments
+dir
+
+db
+dir
+
+eop
+dir
+
+framework
+dir
+
+freemarker
+dir
+
+order
+dir
+
+page
+dir
+
+plugin
+dir
+
+product
+dir
+
+resource
+dir
+
+shop
+dir
+
+tmall
+dir
+

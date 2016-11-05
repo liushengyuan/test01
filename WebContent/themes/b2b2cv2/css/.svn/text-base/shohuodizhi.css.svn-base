@@ -1,0 +1,25 @@
+@charset "utf-8";
+/* CSS Document */
+*{ margin:0 auto; padding:0px;}
+.dizhi-table{ width:600px;}
+.dizhi-table tr{ width:600px; border-bottom:1px solid #e7e7e7;display:inline-block; padding:5px 0px;}
+.dizhi-table tr th{width:200px;text-align:right;  color: #666;font: 12px/20px "Hiragino Sans GB","Microsoft Yahei",arial,宋体,"Helvetica Neue",Helvetica,STHeiTi,sans-serif;}
+
+.dizhi-table tr td{width:390px; text-align:left;    color: #999;font: 12px/20px "Hiragino Sans GB","Microsoft Yahei",arial,宋体,"Helvetica Neue",Helvetica,STHeiTi,sans-serif;padding-left:10px; display:inline-block；}
+.dizhi-table tr td .dizhi-input{ height:25px;    background-color: #F9F9F9;    border: solid 1px;
+    border-color: #CCC #DDD #DDD #CCC;    box-shadow: 2px 2px 1px 0 #E7E7E7 inset;
+    -moz-box-shadow: 2px 2px 1px 0 #E7E7E7 inset/* if FF*/;
+    -webkit--box-shadow: 2px 2px 1px 0 #E7E7E7 inset/* if Webkie*/; }
+	.youxiang{ color: #999;}
+.youxiang:hover{ color:#F00;}
+.shouhuodizhi-an{}
+.shouhuodizhi-an td input{background-color: #5bb75b;
+    border: 0 none;
+    color: #fff;
+    cursor: pointer;
+    display:inline-block;
+    font-size: 12px;
+    font-weight: normal;
+    height: 30px;
+   padding:3px 10px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1);}

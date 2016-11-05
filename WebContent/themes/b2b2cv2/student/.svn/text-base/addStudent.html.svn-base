@@ -1,0 +1,129 @@
+<!-- 获取学生信息标签 -->
+<#include '/store/store_header.html' />
+<script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"  ></script>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/loginAndRegiste.css" />
+<script  src="${ctx}/themes/b2b2cv2/js/jquery.validation.min.js" ></script>
+
+<#if id??>
+<#assign studentList=newTag("studentTag")>
+<#assign stud=studentList("{'id':'${id}'}")>
+</#if>
+<!--登录界面-->
+<#if locale=="zh">
+ <script  src="${ctx}/themes/b2b2cv2/js/jquery.validate.js"  ></script>
+ <#elseif locale=="ru">
+ <script  src="${ctx}/themes/b2b2cv2/js/jquery.validatet.js"  ></script>
+ </#if>
+<div class="main">
+	<!--左侧登录界面-->
+
+    <div id="content" class="clearfix" style="min-height: 480px;">
+        <div class="maincontent">
+            <div class="outerbox" style="margin-top: 100px;margin-left: -300px;" >
+                <form method="post" class="validate" id="studentForm">
+                   <#if stud??>
+                  <#list stud as stud>
+                    <div class="lefttitle">学生姓名:</div>
+                    <div class="rtcon">
+                        <input type="text" value="${stud.name}" tabindex="1" maxlength="128" name="name" id="username" class="txtinput" isrequired="true">
+                    </div>
+                    <div class="lefttitle">学生年龄:</div>
+                    <div class="rtcon">
+                        <input type="text" value="${stud.age}" tabindex="2" maxlength="30" name="age" id="studentAgeId" class="txtinput" isrequired="true">
+                    </div>
+                    <div class="lefttitle">学生成绩:</div>
+                    <div class="rtcon">
+                        <input type="text" value="${stud.score}" tabindex="2" maxlength="30" name="score" id="studentScoreId" class="txtinput" isrequired="true">
+                    </div>
+                    </#list>
+                     <div class="ncu-form-style tc pb30">
+                        <input type="button" id="updateId"  class="submit go_save_selectcat" value="修改学生信息" style="margin-top:20px;margin-left: -150px;"/>
+                    </div>
+                    <#else>
+                    <div class="lefttitle">学生姓名:</div>
+                    <div class="rtcon">
+                        <input type="text" value="" tabindex="1" telphoneValid="true" name="name" id="username" class="txtinput" isrequired="true">
+                    </div>
+                    <div class="lefttitle">学生年龄:</div>
+                    <div class="rtcon">
+                        <input type="text" value="" tabindex="2" maxlength="30" name="age" id="studentAgeId" class="txtinput" isrequired="true">
+                    </div>
+                    <div class="lefttitle">学生成绩:</div>
+                    <div class="rtcon">
+                        <input type="text" value="" tabindex="3" maxlength="30" name="score" id="studentScoreId" class="txtinput" isrequired="true">
+                    </div>
+                    <div class="ncu-form-style tc pb30">
+                        <input type="button"  id="addId"  class="submit go_save_selectcat" value="增加学生信息" style="margin-top:20px;margin-left: -150px;"/>
+                    </div>
+                    </#if> 
+                </form>
+                <script>
+                	$(function(){
+                		$("#addId").click(function(){
+                			
+                			 $("#studentForm").ajaxSubmit({
+        						url : "${ctx}/api/b2b2c/student!addstudent.do?ajax=yes",
+        						type : "POST",
+        						dataType : "json",
+        						success : function(result){
+        							if(result){
+        								if(result.result==1){
+        									alert(result.message);
+        									location.href="student.html";
+        								}else{
+        									alert(result.message);
+        								}
+        							}else{
+        								alert("返回值为null");
+        							}
+        							
+        						},
+        						error : function(e){
+        							alert("程序出错！");
+        						}
+        					})   
+                		});
+                		<#if id??>
+                		$("#updateId").click(function(){
+            				var studId=${id};
+            				 $("#studentForm").ajaxSubmit({
+            				url : "${ctx}/api/b2b2c/student!updatestudent.do?ajax=yes",
+     						data: {"id":studId},
+     						type : "POST",
+    						dataType : "json",
+    						success : function(result){
+    							if(result){
+    								if(result.result==1){
+    									alert(result.message);
+    									location.href="student.html";
+    								}else{
+    									alert(result.message);
+    								}
+    							}else{
+    								alert("返回值为null");
+    							}
+    							
+    						},
+    						error : function(e){
+    							alert("程序出错！");
+    						}
+    					})  
+            			})
+            			</#if>
+                	})
+                	
+                	
+                	
+                </script>
+            </div>
+        </div>
+      
+    </div>
+</div>
+<script>
+/* $(function(){
+	jQuery.validator.addMethod("telphoneValid",function(value,element){
+		alert("a"); 
+	});
+}) */
+</script>

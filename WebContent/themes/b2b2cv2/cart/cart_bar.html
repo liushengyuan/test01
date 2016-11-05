@@ -1,0 +1,47 @@
+<#assign cartTag= newTag("cartTag")> 
+<#assign itemList = cartTag() >
+<style>
+	.my_cartlist_all{overflow:hidden;position:relative;height:200px;}
+</style>
+<#if (itemList?size>0) >
+		<div class="my_cartlist_all" style="overflow-y:auto">
+		<#list itemList as item>
+			<dl itemid="${item.id}" class="item">
+				<dd class="goods_thumb">
+					<span class="thumb size40" >
+						<a target="_blank" href="${ctx}/goods-${item.goods_id}.html" title="${item.name}" >
+							<@image height="40" width="40" src="${item.image_default!''}" style="cursor: pointer;" />
+						</a>	
+					</span>
+				</dd>
+				<dt class="goods_name">
+					<a href="${ctx}/goods-${item.goods_id}.html"><#if locale=="zh">${item.name!}<#elseif locale=="ru">${item.name_ru!}</#if>#ID${item.goods_id!}
+					<#if item.others.specList?exists>
+								<span>
+									<#list item.others.specList as spec>
+										<#if spec_index!=0></#if><span><#if locale=="zh">${spec.name!}<#elseif locale=="ru">${spec.name_ru!}</#if>:&nbsp;<em><#if locale=="zh">${spec.value!}<#elseif locale=="ru">${spec.value_ru!}</#if></em></span>&nbsp;&nbsp;
+									</#list>
+								</span>
+							</#if>
+					</a>
+				</dt>
+				<dd class="goods_price"><p><#if item.currency=="CNY">￥${item.price}<#elseif item.currency=="RUB">${item.price}р.</#if>×${item.num}</p></dd>
+				<dd class="handle">
+					<a href="javascript:void(0)" itemid="${item.id}" class="delete"><@uiLabel text="index.PortalUserDelete" /></a>
+				</dd>
+			</dl>
+			<#if item_has_next>
+			</#if>
+		</#list>
+		</div>
+		<div class="checkout">
+			<a  class="btn-cart" href="${ctx}/cart.html"><@uiLabel text="goods.ViewMyCart" /></a>
+		</div>
+<#else>
+	<p style="border:0px!important;" class="no_cartlist"><@uiLabel text="goods.YourCartNoMerchandise" /></p>
+</#if>
+<script>
+	$(function(){
+		$('.my_cartlist_all').perfectScrollbar();
+	})
+</script>

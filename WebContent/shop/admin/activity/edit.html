@@ -1,0 +1,40 @@
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+<#-- 引入国际化模板函数 -->
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<div class="main" style="background-color: white;">
+
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="editTeamProductForm" method="post" class="validate">
+			<table width="100%">
+				<tr>
+					<th><span style="color:red;">*</span>索引值</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="index" validType="number"
+						name="allActivityProduct.index" maxlength="5" value="${allActivityProduct.index!''}" data-options="required:true"></input></td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>原始价格</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="original_price"
+						name="allActivityProduct.original_price" maxlength="20" value="${allActivityProduct.original_price!''}" readonly="readonly" data-options="required:true"></input></td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>活动价格</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="activity_price" validType="price"
+						name="allActivityProduct.activity_price" maxlength="20" value="${allActivityProduct.activity_price!''}" data-options="required:true"></input></td>
+				</tr>
+				<#--<tr>
+					<th><span style="color:red;">*</span><@uiLabel text='activity.count' />：(<@uiLabel text='activity.numberOf' />：${product.enable_store})</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="count"
+						name="allActivityProduct.count" maxlength="20" value="${allActivityProduct.count!''}" data-options="required:true"></input></td>
+				</tr>-->
+				<input type="hidden" value="${allActivityProduct.id}" name="allActivityProduct.id"/>
+				<input type="hidden" value="${allActivityProduct.goods_id}" name="allActivityProduct.goods_id"/>
+				<input type="hidden" value="${allActivityProduct.allactivity_id}" name="allActivityProduct.allactivity_id"/>
+			</table>
+		</form>
+	</div>
+ 
+</div>

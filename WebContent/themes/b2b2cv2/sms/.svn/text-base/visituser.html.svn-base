@@ -1,0 +1,55 @@
+
+<script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"  ></script>
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2cv2/css/base.css" />
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2cv2/css/default.css" />
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2cv2/css/store.css" />
+<script src="${ctx}/themes/b2b2cv2/js/jquery.js"></script>
+<#assign visitUserTag=newTag("visitUserTag")>
+<#assign visitPage = visitUserTag()>
+<#assign vistList=visitPage.result>
+
+<form id="visituserForm" action="" method="post">
+	<div style="text-align: left;" >
+		<span>请输入你查询的日期:</span>
+		<input type="text" name="visit_time" id="timeId" value=""/>
+		<input type="button"   id="queryvisituserId" value="查询"/>
+	</div>
+	<div>
+	<table class="s_orderlist" id="tableId"  cellpadding="0" cellspacing="0">
+  		<thead>
+  			<tr class="">
+  				<th class="s_orderlist_th1" width="25%">最后访问时间</th>
+  				<th class="s_orderlist_th1" width="25%">最后访问者信息</th>
+  				<th class="s_orderlist_th1" width="25%">单天访问量</th>
+  				<th class="s_orderlist_th1" width="25%">在线人数</th>
+  			</tr>
+  		</thead>
+  		<tbody  id="dataBody">
+  		<#if vistList??>
+  		<#list vistList as visit>
+  			<tr id="" >
+  				<td>${visit.visit_time!''}</td>
+  				<td>${visit.visit_message!''}</td>
+  				<td>${visit.visit_num!''}</td>
+  				<td>${visit.visit_onlinenum!''}</td>
+  			</tr>
+  		</#list>
+  		</#if>
+  		</tbody>
+  	</table>
+  	<@pager pageno="${page!'1'}" pagesize="${visitPage.pageSize}" totalcount="${visitPage.totalCount}" />
+  	</div>
+</form>
+<script>
+	//查询
+	$(function(){
+		$("#queryvisituserId").click(function(){
+			var visit_time=$("#timeId").val();
+			location.href="/sms/visituser.html?visit_time="+visit_time;
+		});
+	})
+	
+</script>

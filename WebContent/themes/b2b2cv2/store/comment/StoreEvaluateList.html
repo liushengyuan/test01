@@ -1,0 +1,284 @@
+<#include '/store/store_header.html' />
+<#assign storeConsultListTag=newTag('storeConsultListTag')/>
+<#assign storeConsult=storeConsultListTag("'type':'1'")/>
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;"><@uiLabel text="storeEvaluateList.yourlocation" />：</span><!--您的位置  -->
+			<span>></span>
+			<a href="#"><@uiLabel text="storeEvaluateList.jiaoyiguanli" /> </a><span>></span><@uiLabel text='storeEvaluateList.shangpinpingjia' /><!--交易管理  --><!-- 商品评价 -->
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active commont_list">
+						<a hre="#"><@uiLabel text="storeEvaluateList.pinglunleibiao" /></a><!--评论列表  -->
+					</li>
+					<li class="normal score_num">
+						<a hre="#"><@uiLabel text="storeEvaluateList.dianpupingfen" /></a><!--店铺评分  -->
+					</li>
+				</ul>
+				<div class="store_commont_search">
+					<a class="ncu_btn3 " name="stype" stype="0"  href="javascript:void(0);"><@uiLabel text="storeEvaluateList.mohusousuo" /> </a><!--模糊搜索  -->
+	  				<a class="ncu_btn3 detailFind" name="stype" stype="1" href="javascript:void(0);"><@uiLabel text="storeEvaluateList.xiangxisousuo" /></a><!--详细搜索  -->
+	  				<input type="hidden" id="stype" value="${storeConsult.stype}"/>
+				</div>
+			</div>
+		</div>
+		<!-- 评论搜索 -->
+		<div class="search_store_commont">
+			<table class="search_form"  id="keywordFind" <#if storeConsult.stype=="1"> style="display: none;" </#if>>
+		  		<tbody>
+		  			<tr>
+		  				<td></td>
+	  					<th style="width:120px;"><@uiLabel text="storeEvaluateList.mohusousuo" />：</th><!--模糊搜索  -->
+		  				<td style="width:520px;">
+		  					<input type="text" class="input_text" name="keyword" value="${storeConsult.keyword!''}"/> <span>(<@uiLabel text="storeEvaluateList.antiaojiansousuo" />)</span><!--可按商品名称、会员名称、评论内容搜索  -->
+						</td>
+						<td style="width:90px;"><input type="button" class="submit"  name="searchComment" value="<@uiLabel text='storeEvaluateList.search' />" /></td>
+	  				</tr>
+	  			</tbody>
+	  		</table>
+	  		<table class="search_form"  id="detailFind" <#if storeConsult.stype=="0"> style="display: none;" </#if>>
+		  		<tbody>
+					<tr>
+		  					<th><@uiLabel text="storeEvaluateList.memebername" />：</th><!--会员名称  -->
+       						<td style="width:60px;"><input type="text" style="width:70px;" class="input_text" name="mname" value="${storeConsult.mname!''}"/></td>
+       						<th><@uiLabel text="storeEvaluateList.productname" />：</th><!--商品名称  -->
+       						<td style="width:60px;"> <input type="text" class="input_text" name="gname" value="${storeConsult.gname!''}"/> </td>
+       						<th><@uiLabel text="storeEvaluateList.neirong" />：</th><!--内容  -->
+       						<td style="width:60px;"> <input type="text" class="input_text" name="content" value="${storeConsult.content!''}"/></td>
+       					
+       						<th><@uiLabel text="storeEvaluateList.pingjia" />：</th><!--评价  -->
+		  					<td style="width:60px;">
+		  						<select id="grade">
+									<option value="-1">--<@uiLabel text="storeEvaluateList.all" />--</option><!--全部  -->
+									<option value="3"><@uiLabel text="storeEvaluateList.good" /></option><!--好评 -->
+									<option value="2"><@uiLabel text="storeEvaluateList.zhongping" /></option><!--中评  -->
+									<option value="1"><@uiLabel text="storeEvaluateList.bad" /></option><!--差评  -->
+								</select>
+		  					</td>
+		  					<th><@uiLabel text="storeEvaluate.huifuzhuangtai" />：</th><!-- 回复状态 -->
+		  					<td style="width:60px;">
+		  						<select id="replyStatus">
+									<option value="0">--<@uiLabel text="storeEvaluateList.all" /> --</option><!--全部  -->
+									<option value="1"><@uiLabel text="storeEvaluateList.yihuifu" /></option><!--已回复 -->
+									<option value="2"><@uiLabel text="storeEvaluateList.weihuifu" /></option><!--未回复 -->
+								</select>
+		  					</td>
+							<td style="width:70px;text-align:right;"><input type="button" class="submit"  name="searchComment" value="<@uiLabel text='storeEvaluateList.search' />" /></td><!-- 搜索 -->
+       					</tr>
+			  		</tbody>
+			  	</table>
+			</div>
+			<!-- 咨询、评论列表 -->
+			<div class="s_commont_list">
+				<table cellpadding="0" cellspacing="0">
+					<thead>
+						<tr>
+							<th style="width:80%"><@uiLabel text="storeEvaluate.pinglun" /></th><!--评论  -->
+							<th style="width:20%"><@uiLabel text="storeEvaluate.caozuo" /></th><!--操作  -->
+						</tr>
+					</thead>
+					<tbody>
+						<#list storeConsult.cmmentList.result as comment>
+							<tr>
+								<th  colspan="20">
+									<span><input type="hidden" name="commentId" value="${comment.comment_id}"/><a href="../../goods-${comment.goods_id}.html"> ${comment.goods_name}</a></span>
+									<span><@uiLabel text="storeEvaluateList.zixunyonghu" />：${comment.uname}</span><!-- 咨询用户 -->
+									<span><@uiLabel text="storeEvaluateList.zixunshijian" />：<@dateformat time="${comment.dateline?c}" pattern="yyyy-MM-dd HH:mm"/></span><!--咨询时间  -->
+								</th>
+							</tr>
+							<tr>
+								<td style="width:80%;text-align:left;padding-left:20px">
+									<div style="width:810px;height:10px;word-break:break-all; word-wrap:break-word;"><i><@uiLabel text="storeEvaluateList.pinglunwenti" />：</i><p>${comment.content!''}</p></div><!--评论问题  -->
+									<#if comment.reply??>
+									<div style="color:#d93600;"><i><@uiLabel text="storeEvaluateList.huifupinglun" />：</i><p>${comment.reply!''}</p></div><!--回复评论  -->
+									</#if>
+								</td>
+								<td>
+									<a class="reply tool4" commentId="${comment.comment_id}" href="javascript:void(0)"><i></i><@uiLabel text="storeEvaluateList.huifu" /></a><!--回复 -->
+								</td>
+							</tr>
+						</#list>
+					</tbody>
+				</table>
+			</div>
+			
+			<!-- 店铺动态评分 -->
+			<div class="s_score_num" style="display:none;">
+				<table class="seller_rate_info" id="sixmonth">
+		      		<tbody>
+		        		<tr>
+		          			<th><p><@uiLabel text="storeEvaluateList.nodifferent" /></p><!--宝贝与描述相符 -->
+		            			<p class="rate_star mt5"><em><i style=" width:${myStoreDetail.store_desccredit*20}%;"></i></em></p>
+		            		</th>
+		          			<td>
+		          				<dl class="ncs_rate_column">
+		              				<dt><em style="left:${myStoreDetail.store_desccredit*20}%;">${myStoreDetail.store_desccredit}</em></dt>
+						            <dd><@uiLabel text="storeEvaluateList.veryunhappy" /></dd><!--非常不满 -->
+						            <dd><@uiLabel text="storeEvaluateList.yawp" /></dd><!--不满意 -->
+						            <dd><@uiLabel text="storeEvaluateList.general" /></dd><!--一般 -->
+						            <dd><@uiLabel text="storeEvaluateList.manyi" /></dd><!--满意 -->
+						            <dd><@uiLabel text="storeEvaluateList.greatsatisfaction" /></dd><!--非常满意-->
+		            			</dl>
+		            		</td>
+		        		</tr>
+				        <tr>
+				        	<th><p><@uiLabel text="storeEvaluateList.sellerattitude" /></p><!--卖家的服务态度-->
+				            	<p class="rate_star mt5"><em><i style="width:${myStoreDetail.store_servicecredit*20}%;"></i></em></p>
+				            </th>
+				          	<td>
+				          		<dl class="ncs_rate_column">
+				              		<dt><em style="left:${myStoreDetail.store_servicecredit*20}%;">${myStoreDetail.store_servicecredit}</em></dt>
+				              		<dd><@uiLabel text="storeEvaluateList.veryunhappy" /></dd><!--非常不满-->
+				              		<dd><@uiLabel text="storeEvaluateList.yawp" /></dd><!--不满意-->
+				              		<dd><@uiLabel text="storeEvaluateList.general" /></dd><!--一般-->
+				              		<dd><@uiLabel text="storeEvaluateList.manyi" /></dd><!--满意-->
+				              		<dd><@uiLabel text="storeEvaluateList.greatsatisfaction" /></dd><!--非常满意-->
+				            	</dl>
+				            </td>
+						</tr>
+		        		<tr>
+		          			<th><p><@uiLabel text="storeEvaluateList.sellerspeed" /></p><!--卖家的发货速度-->
+		            			<p class="rate_star mt5"><em><i style="width:${myStoreDetail.store_deliverycredit*20}%;"></i></em></p></th>
+		          			<td>
+		          				<dl class="ncs_rate_column">
+			              			<dt><em style="left:${myStoreDetail.store_deliverycredit*20}%;">${myStoreDetail.store_deliverycredit}</em></dt>
+			              			<dd><@uiLabel text="storeEvaluateList.veryunhappy" /></dd><!--非常不满-->
+			              			<dd><@uiLabel text="storeEvaluateList.yawp" /></dd><!--不满意-->
+			              			<dd><@uiLabel text="storeEvaluateList.general" /></dd><!--一般-->
+			              			<dd><@uiLabel text="storeEvaluateList.manyi" /></dd><!--满意-->
+			              			<dd><@uiLabel text="storeEvaluateList.greatsatisfaction" /></dd><!--非常满意-->
+		            			</dl>
+		            		</td>
+		        		</tr>
+		      		</tbody>
+		    	</table>
+			</div>
+		</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	$("#replyStatus").find("option[value='${storeConsult.replyStatus}']").attr("selected",true);
+	$("#grade").find("option[value='${storeConsult.grade}']").attr("selected",true);
+	$("a.reply").click(function(){
+		dialog = $.dialog({
+			title : "<@uiLabel text='storeEvaluateList.replycomment' />",//回复评论
+			width : 475,
+			lock : true,
+			min : false,
+			max : false
+		});
+		$.ajax({
+			url : "reply_comment.html?comment_id="+$(this).attr("commentId")+"&type=1",
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '<@uiLabel text="sellerAddGood.queding23" />',//确定
+					callback : function() {
+						reply();
+						return false;
+					}
+				}]);
+			},
+			error : function() {
+				$.alert("<@uiLabel text='storeEvaluateList.chuxiancuowuqingchongshi' />");//出现错误，请重试
+			},
+			async:false
+		});	
+	});
+	$("a[name='stype']").click(function(){
+		var stype=$(this).attr("stype");
+		$("#stype").val(stype);
+		if(stype==0){
+			$("#keywordFind").show();
+			$("#detailFind").hide();
+		}else{
+			$("#detailFind").show();
+			$("#keywordFind").hide();
+		}
+	});
+	$("#deleteComment").click(function(){
+		if(!confirm("<@uiLabel text="storeEvaluateList.doyoudelete" />？"))//确定删除吗
+			return false;
+		if($("input[name='commentId']:checked").size()==0){
+			alert("<@uiLabel text="storeEvaluateList.selectone" />");//请至少需要选择一条数据
+			return false;
+		}
+		var options = {
+				url : "${ctx}/api/b2b2c/storeCommentApi!delComment.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					if(data.result==1){
+						location.reload();
+					}
+				},
+				error : function(e) {
+					alert("<@uiLabel text="storeEvaluateList.chuxiancuowuqingchongshi" />");//出现错误 ，请重试
+				}
+			};
+		$("#commentForm").ajaxSubmit(options);
+	});
+	$("input[name='searchComment']").click(function(){
+		var replyStatus=$("#replyStatus").val();
+		var grade=$("#grade").val();
+		var stype=$("#stype").val();
+		if(stype=="0"){
+			var keyword=$("input[name='keyword']").val();
+			
+			location.href="StoreEvaluateList.html?type=1&keyword="+keyword+"&replyStatus="+replyStatus+"&stype="+stype+"&grade="+grade;
+		}else{
+			var mname=$("input[name='mname']").val();
+			var gname=$("input[name='gname']").val();
+			var content=$("input[name='content']").val();
+			location.href="StoreEvaluateList.html?type=1&stype="+stype+"&mname="+mname+"&gname="+gname+"&content="+content+"&grade="+grade+"&replyStatus="+replyStatus;
+		}
+	});
+});
+function reply(){
+	var options = {
+		url : "${ctx}/api/b2b2c/storeCommentApi!edit.do",
+		type : "POST",
+		dataType : 'json',
+		async:false,
+		success : function(data) {	
+			alert(data.message);
+			if(data.result==1){
+				location.reload();
+			}
+		},
+		error : function(e) {
+			alert("<@uiLabel text="storeEvaluateList.chuxiancuowuqingchongshi" />");//出现错误 ，请重试
+		}
+	};
+	$("#replyForm").ajaxSubmit(options);
+}
+
+$(".commont_list").click(function(){
+	$(".pngFix li").removeClass("active");
+	$(".pngFix li").addClass("normal");
+	$(this).removeClass("normal");
+	$(this).addClass("active");
+	$(".s_commont_list").show();
+	$(".s_score_num").hide();
+})
+$(".score_num").click(function(){
+	$(".pngFix li").removeClass("active");
+	$(".pngFix li").addClass("normal");
+	$(this).removeClass("normal");
+	$(this).addClass("active");
+	$(".s_commont_list").hide();
+	$(".s_score_num").show();
+})
+</script>
+	<script>
+		$(function(){
+				selectMenu(3);
+		})
+	</script>
+<#include '/common/footer.html' />

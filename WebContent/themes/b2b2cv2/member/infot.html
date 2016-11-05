@@ -1,0 +1,298 @@
+<#if locale=="zh">
+   <#assign  title="基本资料" />
+ <#elseif locale=="ru">
+     <#assign title="Базовая информация" />
+ </#if>
+<#include 'member_header.html' />
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class="selected"><a href="javascript:;"><span><@uiLabel text="member.info" /></span></a></li>
+		</ul>
+	</div>
+	<div class="userinfo">
+		<form id="form_saveMember"   method="post" class="validate"  action="#">
+			<div class="info_left">
+				<input type="hidden" name="member_id" value="${member.member_id!''}" id="member_id" >
+				
+			</div>
+			<div class="info_right">
+				<table width="100%" cellspacing="0" cellpadding="0"	class="perfection">
+					<tr>
+						<th><@uiLabel text="login.Email" />：</th>
+						<td  class="email"><input fun="email" id="email" type="text" isrequired="true" name="email" value="${member.email!''}" /></td>
+						
+					</tr>
+					<tr>
+						<th class="member_turename"><@uiLabel text="apply.CardOnName" /></th>
+						<td colspan="3"><input type="text" isrequired="true" name="name" value="${member.name!''}" class="input_text member_t" />
+							<!-- <p class="prompt member_p">请务必填写您的真实姓名，以便出现问题时客服核对您的真实信息！</p> -->
+						</td>
+					</tr>
+					<tr id="gender">
+						<th><@uiLabel text="member.xingbie" />：</th>
+						<td class="middle" colspan="3"><label class="gender">
+							<input type="radio" name="sex" <#if member.sex!=0>checked</#if> value="1"  />
+							<span><@uiLabel text="member.nan" /></span></label>
+							<label class="gender" id="lgender">
+							<input type="radio" value="0"  name="sex" <#if member.sex==0>checked</#if> />
+							<span><@uiLabel text="member.nv" /></span>
+							</label>
+						</td>
+					</tr>
+					
+				 	<tr>
+						<th><@uiLabel text="index.AddressContry" />：</th>
+						<td colspan="3" class="birthday middle">
+							
+							<select name="member_country"  >
+								<option value='CHN'>中国</option>
+								<#-- <option value='RUS' <#if member.member_country=='RUS'>selected</#if>><@uiLabel text="infot.Russia" /></option>
+								<option value='COS' <#if member.member_country=='COS' >selected</#if>><@uiLabel text="infot.chose" /></option> -->
+							</select> 
+						</td>
+					</tr> 
+					<tr>
+						<th class="label middle"><@uiLabel text="apply.CardType" /></th>
+						<td colspan="3">
+				<select name="member_prove_type" id="member_prove_type" >
+					<option value="0" <#if member.member_prove_type==0>selected</#if>><@uiLabel text="infot.huzhao" /></option>
+					<option value="1" <#if member.member_prove_type==1>selected</#if>><@uiLabel text="infot.shenfenzheng" /></option>
+					<option value="2" <#if member.member_prove_type==2>selected</#if>><@uiLabel text="infot.hongkong" /></option>
+				</select></td>
+					</tr>
+					<tr>
+						<th><@uiLabel text="apply.CardNumber" /></th>
+						<td colspan="3">
+							<input  id="id_number" name="id_number"   type="text" class="input_text" value="${member.id_number!''}" dataType="int" />
+							
+						</td>
+					</tr>
+					<tr>
+						<th class="label middle"><@uiLabel text="apply.ApplyPhone" /></th>
+						<td colspan="3">
+							<input fun="mobile" id="cellphone" name="mobile" type="text" value="${member.mobile!''}" class="input_text"  style="float:left;"/><span style="color:red;" id="mobileAlert"></span>
+						</td>
+					</tr>
+					<#if member.is_mobile!=1>
+					 <tr style="color: red;font-size: 15px;">
+					     <th class="label middle">注意：</th>
+					    <td colspan="3" style="color: red">成功绑定手机号将赠送您50个积分 </td>
+					</tr>
+					</#if>
+					<tr>
+						<th class="label middle">手机验证码：</th>
+						<td >
+							<input isrequired="true" placeholder="输入验证码" type="text" name="valiCode" id="validate" style="width:150px;height: 20px;" class="text w140"/><input class="text w260" id="button" style="width:160px;height:30px;margin-left: 20px;" type="button"  value="获取验证码" onclick="getValidate()" />
+						</td>
+					</tr>
+				</table>
+				<div class="info_ok">
+					<div class="btn">
+						<input type="button" name="btnSubmit" value="<@uiLabel text="index.ImgBoxSave" />" id="btnSubmit" class="yellow_btn" />
+					</div>
+					
+				</div>
+			</div>
+			<input type="hidden" id="valiDateCode" name="valiDateCode" />
+		</form>
+	</div>
+</div>
+
+<script language="javascript"> 
+function check(){
+	var a = /^(\d{4})-(\d{2})-(\d{2})$/
+	if (!a.test(document.getElementById("birthdaysss").value)) { 
+	alert("日期格式不正确!") 
+	return false 
+	} 
+	else 
+	return true 
+	} 
+</script> 
+
+<script type="text/javascript">
+function email(value,callback){
+	var member_id=$("#member_id").val();
+	var email=$("#email").val();
+	var reg=/.+@.+\.[a-zA-Z]{2,4}$/;
+	if(!reg.test(email)){
+		return "邮箱格式不对！";
+	}
+	$.ajax({
+		url : "${ctx}/api/shop/member!checkemail.do?ajax=yes&email="+email+"&member_id="+member_id,
+		type : "POST",
+		data : {
+			emailname : email
+		},
+		dataType : "json",
+		success : function(json) {
+			if (json.result == 0) {
+				callback(false,"添加邮箱重复!");
+			} else {
+				callback(true,"");
+			}
+		}
+	});
+	return true;
+}
+function mobile(value,callback){
+	var member=$("#member_id").val();
+	var mobile = $("#cellphone").val();
+	/* var reg=/^(13[0-9]|14[0-9]|15[0-9]|18[0-9])\d{8}$/;
+	if(!reg.test(mobile)){
+		return "手机格式不对！";
+	} */
+	$.ajax({
+		url : "${ctx}/api/shop/member!checkmobile.do?ajax=yes&mobile="+mobile+"&member_id="+member_id,
+		type : "POST",
+		data : {
+			mobilename : mobile
+		},
+		dataType : "json",
+		success : function(json) {
+			if (json.result1 == 0) {
+				callback(false,"添加手机号重复!");
+			} else {
+				callback(true,"");
+			}
+		}
+	});
+	return true;
+}
+
+$(function(){
+	/* <#if member.province_id?exists && member.city_id?exists && member.region_id?exists>
+	RegionsSelect.load(${member.province_id},${member.city_id},${member.region_id});
+	</#if>
+	//地区联动选择-选择最后一级（区）时自动设置邮编
+	RegionsSelect.regionChange=function(regionid,name,zipcode){
+		$("#zipcode").val(zipcode);
+	};
+	 */
+	//保存会员信息	
+	$("#btnSubmit").click(function(result){
+		
+		
+//			alert($("#member_prove_type").val());
+		
+			if(!$("#form_saveMember").checkall())
+			return false; 
+			var validate=$("#validate").val();
+			var valiDateCode=$("#valiDateCode").val();
+			if($.trim(validate)!=$.trim(valiDateCode)){
+				alert("验证码输入有误,请重新输入");
+				return false;
+			}
+		//判断日期格式
+		
+		//判断手机格式
+	/* var tel = $("#cellphone").val();
+		 var reg = /^0?1[3|4|5|8][0-9]\d{8}$/;
+		 if(reg.test(tel)==false){
+			 alert("手机格式错误");
+			 return false;
+		 }
+		//判断真是姓名
+		 	if($(".member_t").val()==""){
+			alert("真是姓名不能为空");
+			return false;
+		} 
+		if(isNaN($("#zipcode").val())!==false){
+			alert("邮编必须为纯数字");
+			return false;
+		}*/
+		
+		　　//校验身份证
+			var idNumber = $("#id_number").val();
+			/* if($("#member_prove_type").val()==1){
+				var type = 1;
+				var reg = /(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+				if (!reg.test(idNumber)) {
+					alert("证件号码为必填项"); 
+					return false;
+				}
+			} else if($("#member_prove_type").val()==2) {
+				var num= /^[\w]{8,10}$/;
+				if(!num.test(idNumber)){
+					alert("<@uiLabel text='apply.GatIdCardFormat' />");
+					return false;
+				}
+			} else if($("#member_prove_type").val()==0) {
+				var exp =/^[\w]{7,12}$/ ;
+				if(!exp.test(idNumber)){
+					alert("<@uiLabel text='apply.PassportFormat' />"); 
+					return false;
+				}
+			} */
+			var propertys = "";
+			var mobile=$("#cellphone").val();
+			var email=$("#email").val();
+		 $("#form_saveMember").ajaxSubmit({
+				url:"${ctx}/api/shop/member!updateInfo.do?ajax=yes&mobile="+mobile+"&email="+email,
+				dataType:"json",
+				success:function(data){
+					if(data.result==1){
+						alert(data.message);
+						location.href="member.html";
+					}
+					else{
+						alert(data.message);
+					}
+				}
+			})
+			
+	});
+	
+});
+//获取手机号的验证码。发送验证码到手机
+var curCount=120;
+	var code=0;
+function getValidate(){
+	    var mobile = $('#cellphone').val();
+	    if($.trim(mobile)==''){
+		  $("#mobileAlert").html("手机号不能为空");
+		  return ;
+		 }else{
+			$("#mobileAlert").html("")
+		 }
+		 var reg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+		 if(!reg.test(mobile)){
+		    $("#mobileAlert").html("手机格式不正确");
+		    return;
+	      }else{
+	    	 $("#mobileAlert").html("")
+	      }
+		$("#button").attr("disabled", "true");  
+		$("#button").val("请在" + curCount + "秒内输入验证码");  
+			 InterValObj = window.setInterval(SetRemainTime, 1000); // 启动计时器，1秒执行一次
+		 $.ajax({
+				url:"${ctx}/api/shop/member!sendCode1.do?ajax=yes&mobile="+mobile,
+				type:"POST",
+				dataType:"json",
+				success:function(json){
+				if(json.result==0){
+  					alert(json.message);
+				}else{
+			$("#valiDateCode").val(json.message);
+					}
+				}
+			});
+  }
+function SetRemainTime() {  
+if (curCount == 0) {                  
+  window.clearInterval(InterValObj);// 停止计时器  
+  $("#button").removeAttr("disabled");// 启用按钮  
+  $("#button").val("重新发送验证码");
+  curCount = 60;
+  code = ""; // 清除验证码。如果不清除，过时间后，输入收到的验证码依然有效  
+}else {  
+  curCount--;  
+  $("#button").val("请在" + curCount + "秒内输入验证码");  
+}  
+} 
+</script>
+	</div>
+	<#include '../common/footer.html'/>

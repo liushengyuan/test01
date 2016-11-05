@@ -1,0 +1,69 @@
+<tr>
+    <th> 接口地址 ：</th>
+    <td>
+        <input type="text" name="v_action_url" value="${v_action_url!''}" class="input_text easyui-validatebox"
+               id="v_action_url"/>
+    </td>
+</tr>
+<tr>
+    <th> 商户编号：</th>
+    <td>
+        <input type="text" name="v_mid" value="${v_mid!''}" class="input_text easyui-validatebox" id="v_mid"/>
+    </td>
+</tr>
+<tr>
+    <th> 支付币种：</th>
+    <td>
+        <input type="text" name="v_moneytype" value="${v_moneytype!''}" class="input_text easyui-validatebox"
+               id="v_moneytype"/>
+    </td>
+</tr>
+<tr>
+    <th> 支付方式：</th>
+    <td>
+        <input type="text" name="v_pmode" value="${v_pmode!''}" class="input_text easyui-validatebox" id="v_pmode"/>
+    </td>
+</tr>
+<tr>
+    <th> 数字签名：</th>
+    <td>
+        <input type="text" name="v_signature" value="${v_signature!''}" class="input_text easyui-validatebox"
+               id="v_signature"/>
+    </td>
+</tr>
+<tr>
+    <th> 商户备货状态：</th>
+    <td>
+        <input type="text" name="v_orderstatus" value="${v_orderstatus!''}" class="input_text easyui-validatebox"
+               id="v_orderstatus"/>
+    </td>
+</tr>
+<tr>
+    <th> 支付卡类型：</th>
+    <td>
+        <input type="text" name="v_card" value="${v_card!''}" class="input_text easyui-validatebox"
+               id="v_card"/>
+    </td>
+</tr>
+<script type="text/javascript">
+    $(function () {
+        $('#v_action_url').validatebox({
+            required: true
+        });
+        $('#v_mid').validatebox({
+            required: true
+        });
+        $('#v_moneytype').validatebox({
+            required: true
+        });
+        $('#v_pmode').validatebox({
+            required: true
+        });
+        $('#v_signature').validatebox({
+            required: true
+        });
+        $('#v_orderstatus').validatebox({
+            required: true
+        });
+    })
+</script>

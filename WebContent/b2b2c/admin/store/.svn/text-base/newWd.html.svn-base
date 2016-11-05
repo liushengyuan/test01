@@ -1,0 +1,237 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+
+</style>
+
+<div class="main">
+	<div class="buttonArea">
+		<div style="float:left;">
+		</div>
+		<span style="float: right;height:28px;"> 
+			<#--<a href="javascript:void(0)" class="button b_fr" id="daochu" data-options="plain:true" onclick="daochu4()">导出</a>-->
+			 <a href="/b2b2c/admin/store!daochu.do" class="button b_fr" id="daochu">导出</a>&nbsp;&nbsp;
+		</span>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+	<form id="wdauform" >
+		
+			<table class="easyui-datagrid"  url:'${ctx}/b2b2c/admin/store!auth_listJson.do'
+				data-options="url:'${ctx}/b2b2c/admin/store!wd_listJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="wddata">
+				<thead>
+					<tr>
+					<th  data-options="field:'id',checkbox:true"></th>
+						<th data-options="field:'serial_number',width:100" >流水号</th>
+						<th data-options="field:'create_date',width:100" formatter="formatName4">创建时间</th>
+						<th data-options="field:'type'" formatter="formatName6">类型</th>
+						<th data-options="field:'card',width:100">帐号</th>
+						<th data-options="field:'number'">金额</th>
+						<th data-options="field:'capital_channel',width:100" >资金渠道</th>
+						<th data-options="field:'state'" formatter="formatName3">状态</th>
+					 	<th data-options="field:'note',width:100" >备注</th>
+						<th data-options="field:'details',width:100">详情</th>
+					 	<!-- <th data-options="field:'account'" >帐号金额</th> -->
+					 	<th data-options="field:'action'" formatter="formatName">操作</th>
+						<#-- <th data-options="field:'action2'" formatter="formatName2">不同意</th>
+						<th data-options="field:'action3'" formatter="formatName7">同意</th> -->
+						<!-- <th data-options="field:'action4',width:100" formatter="formatName8">导出</th> -->
+			</tr>
+				</thead>
+			</table>
+			</form>
+		</div>
+</div>
+
+<script type="text/javascript">
+
+  function formatName(value,row,index){
+	var val;
+	if(row.state==0){
+		val="<a href='javascript:void' onclick='append3("+row.id+")'>同意</a>||<a href='javascript:void' onclick='append2("+row.id+")'>不同意</a>";
+	}else if(row.state==4){
+		val="<a href='javascript:void' onclick='append("+row.store_id+","+row.id+","+row.member_id+","+row.number+")'>放款</a>";
+	}
+ 	return val; 
+ }
+/* function formatName2(value,row,index){
+	if(row.state==4){
+		return null
+	}
+	
+ 	var val="<a href='javascript:void' onclick='append2("+row.id+")'>不同意</a>";
+ 	return val;
+}
+function formatName7(value,row,index){
+	if(row.state==4){
+		return null
+	}
+ 	var val="<a href='javascript:void' onclick='append3("+row.id+")'>同意</a>";
+ 	return val;
+} */
+function formatName8(value,row,index){
+	//alert("12");
+ 	var val="<a href='javascript:void' onclick='appendt()'>导出</a>";
+ 	return val;
+}
+function append(storeid,id,memberid,number){
+		 $("#wdauform").ajaxSubmit({
+		url:"${ctx}/api/b2b2c/storeApi!wdAudit.do?ajax=yes&id="+id+"&store_id="+storeid+"&member_id="+memberid+"&number="+number,
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				alert(data.message);
+				//location.href="${ctx}/store/allWd.html";
+				location.reload();
+			}
+			else{
+				alert(data.message);
+			}
+		}
+	});
+	 
+}
+/* function appendt(){
+	//alert("asda");
+	 $("#wdauform").ajaxSubmit({
+	url:"${ctx}/api/b2b2c/storeApi!daochu.do?ajax=yes",
+	dataType:"json",
+	success:function(data){
+		if(data.result==1){
+		//	alert("keyi");
+			alert(data.message);
+			//location.href="tixian.xls";
+			
+			//location.reload();
+		}
+		else{
+			alert(data.message);
+		}
+	}
+});
+ 
+}
+function daochu4(){
+	//alert("asda");
+	 $("#wdauform").ajaxSubmit({
+	url:"${ctx}/api/b2b2c/storeApi!daochu.do?ajax=yes",
+	dataType:"json",
+	success:function(){
+		alert("成功");
+			location.reload();
+	}
+	
+});
+ 
+}
+function daochu2(){
+	//alert("asda");
+	 $("#wdauform").ajaxSubmit({
+	url:"${ctx}/api/b2b2c/storeApi!daochu.do?ajax=yes",
+	dataType:"json",
+	success:function(data){
+		if(data.result==1){
+			//alert("keyi");
+			alert(data.message);
+			//location.href="${ctx}/store/allWd.html";
+			location.reload();
+		}
+		else{
+			alert(data.message);
+		}
+	}
+});
+ 
+} */
+function exportToExcel2(){
+	var curTbl = document.getElementById("wddata");
+	var oXL;
+	try{
+		oXL = new ActiveXObject("Excel.Application");
+	}catch(e){
+		alert("无法启动Excel");
+		return false;
+	}
+	var  oWB = oXL.Workbooks.Add();
+	var oSheet = oWB.ActiveSheet;
+	var lenr = curTbl.rows.length;
+	for(i=0;i<lenr;i++){
+		var lenc = curTbl.rows(i).cells.length-1;
+		for(j=0;j<lenc;j++){
+			oSheet.Cells(i+1,j+1).value = curTbl.rows(i).cells(j).innerText;
+		}
+	}
+}
+function append2(id){
+	
+	 $("#wdauform").ajaxSubmit({
+		url:"${ctx}/api/b2b2c/storeApi!wdNoAgree.do?id="+id,
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				
+				alert(data.message);
+				//location.href="${ctx}/store/allWd.html";
+				location.reload();
+			}
+			else{
+				alert(data.message);
+			}
+		}
+	});
+	 
+	
+}
+function append3(id){
+	//alert("aa");
+	 $("#wdauform").ajaxSubmit({
+		url:"${ctx}/api/b2b2c/storeApi!wdokAgree.do?id="+id,
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				alert(data.message);
+				//location.href="${ctx}/store/allWd.html";
+				location.reload();
+			}
+			else{
+				alert(data.message);
+			}
+		}
+	});
+	 
+	
+}
+
+function formatName3(value,row,index){
+	if(value=="0")
+		return "待审核";
+	if(value=="1")
+		return "已放款"
+	if(value=="2")
+		return "不审批";
+	if(value=="3")
+		return "已取消";
+	if(value=="4")
+		return "已同意";
+}
+function formatName6(value,row,index){
+	if(value=="0")
+		return "未知";
+	if(value=="1")
+		return "提现"
+	
+}
+function formatName4(value,row,index){
+	if(value==null){
+		return "";
+	}
+	else{
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}
+}
+
+ 	
+</script>
+
+<#include '/admin/footer.html' >
+
+
+

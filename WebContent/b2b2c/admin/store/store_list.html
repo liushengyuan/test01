@@ -1,0 +1,509 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+</style>
+<div class="main">
+	<div class="buttonArea">
+		<div style="float:left;">
+		</div>
+		<span style="float: right;height:28px;"> 
+			<a href="javascript:void(0)" class="button b_fr" id="aAdvanced"  >高级搜索</a><!-- onclick="Exproter()" 导出当前页面的excel-->
+			<a href="${ctx}/b2b2c/admin/store!exportStore.do" class="button b_fr" id="daochu" data-options="plain:true" >导出</a>&nbsp;&nbsp;
+			<a href="javascript:void(0)" class="button b_fr" id="search" data-options="plain:true" onclick="searchStore()">搜索</a>&nbsp;&nbsp;
+			<input id="searchKeyword" class="input_text b_fr mr5" type="text" value="" size="30" placeholder="请输入店铺名称或会员名称" name="searchKeyWord" />
+			获取初始单：<select id="store_initiallist"   class="inputSelect valid" style="width: 145px; margin-right: 10px;" >
+				<option value="0" selected="selected">---全部---</option>
+				<option value="1" >未获取</option>
+				<option value="2">已获取</option>
+			</select>
+			
+			店铺状态：<select id="storeStatus" class="inputSelect valid" style="width: 145px; margin-right: 10px;" >
+				<option value="-2" selected="selected">---所有---</option> 
+				<option value="1" >开启中</option>
+				<option value="2">关闭中</option>
+				<option value="0">审核中</option>
+				<option value="-1">审核未通过</option>
+			</select>
+		</span>
+	</div>
+	
+	<div style="display: block;" class="searchAdvanced" >
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+		<table width="98%" border="0" cellspacing="0" cellpadding="8">
+			<tr>
+				<td width="70" align="right">店铺名称</td>
+				<td>
+					<input type="text" value="${name!''}" id="storeName"  class="input_text" style="width: 95%;" >
+				</td>
+				<td width="70" align="right">会员名称</td>
+				<td>
+					<input type="text" value="${name!''}" id="memberName"class="input_text" style="width: 95%;">
+				</td>
+				<td width="80" align="right">店铺注册时间</td>
+				<td>
+					<input class="easyui-datebox" style="width: 90px;height: 28px;"
+					id="start_time" data-options="buttons:buttons" /> <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+					<input class="easyui-datebox" style="width: 90px;height: 28px;" id="end_time"
+					data-options="buttons:e_buttons" />
+				</td>
+			</tr>
+			<tr>
+				<td width="70" align="right">店铺归属</td>
+				<td>
+					<select id="parentStore" class="inputSelect"  style="width: 145px; margin-right: 10px;" >
+					<option value="3" selected="selected">---所有---</option>
+						<option value="0" >独立店铺</option>
+						<option value="1" >青云商城</option>
+						<option value="2" >雅宝路商城</option>
+					</select>
+				</td>
+				<!--  <td width="70" align="right">店铺状态</td>
+				<td>
+					<select id="storeStatus2" class="inputSelect valid" style="width: 145px; margin-right: 10px;" >
+						<option value="-2" selected="selected">---所有---</option> 
+						<option value="1" >开启中</option>
+						<option value="2">关闭中</option>
+						<option value="0">审核中</option>
+						<option value="-1">审核未通过</option>
+					</select>
+				</td>-->
+				<td width="70" align="right">店铺国家</td>
+				<td>
+					<select id="storeCountry" class="inputSelect"  style="width: 145px; margin-right: 10px;" >
+						<option value="1"  selected="selected">---所有---</option>
+						<option value="CHN" >中国</option>
+						<option value="RUS" >俄罗斯</option>
+					</select>
+				</td>
+				<td>
+					<a id="searchAdvance" class="button blueButton" onclick="searchStore()" href="javascript:;" style="margin-right: 0px;" >开始搜索</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="storeform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/b2b2c/admin/store!store_listJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="storedata">
+				<thead>
+					<tr>
+					<th data-options="field:'store_id',checkbox:true,width:100"></th>
+						<th  data-options="field:'storeId',width:40" formatter="formatStoreId">店铺ID</th>
+				   	 	<th  data-options="field:'store_name',width:100">店铺名称</th>
+				   	 	<th  data-options="field:'member_name',width:100">会员名称</th>
+				   	 	<th  data-options="field:'create_time',width:100" formatter="formatCreatetime">店铺注册时间</th>
+				   	 	<th  data-options="field:'parent_store',width:100" formatter="formatParentStore">店铺归属</th>
+				   	 	<!-- <th  data-options="field:'store_region',width:100">所在地</th> -->
+				   	 	<th  data-options="field:'disabled',width:60" formatter="formatDisabled">店铺状态</th>
+				   	 	<th  data-options="field:'store_country',width:60" formatter="formatMarket" >店铺国家</th>
+				   	 	<th  data-options="field:'store_market',width:60" formatter="formatMarket" >投向市场</th>
+				   	 	<th  data-options="field:'store_initiallist',width:60" formatter="formatchushidan" >初始单</th>
+				   	 	<th  data-options="field:'check_time',width:100" formatter="formatChecktime">审核时间</th>
+				   	 	<th  data-options="field:'check_description',width:100" formatter="formatCheck" >审核理由</th>
+				   	 <th  data-options="field:'action',width:100"  formatter="formatAction">操作</th> 
+					</tr>
+				</thead>
+			</table>
+			
+		</form>
+	</div>
+</div>
+
+<div id="divdia"></div>
+
+<script type="text/javascript">
+
+$(function(){
+
+		$("#searchbtn").hide();
+	$(".searchAdvanced").hide();
+	//高级查询按钮
+    $("#aAdvanced").click(function () {
+        if ($("#Advanced").val() == "0") {
+            $("#Advanced").val(1);
+            $("#simpleSearch").hide();
+            $("#aAdvanced").addClass("searchAdvancedS");
+        } else {
+            $("#Advanced").val(0);
+            $("#simpleSearch").show();
+            $("#aAdvanced").removeClass("searchAdvancedS");
+        }
+        $(".searchAdvanced").slideToggle("slow");
+    });
+})	
+ function formatAction (value,row,index){
+	var val="";
+	if(row.disabled==1){
+		val="<a href='javascript:void;' class='delete' onclick='if(confirm(\"是否禁用店铺？\")){dis("+row.store_id+")}' title='禁用店铺'></a>";		
+	}else if(row.disabled==2){
+		val="<a href='javascript:void;' class='edit' onclick='if(confirm(\"是否还原店铺？\")){revert("+row.store_id+")}' title='还原店铺'></a>";
+	}
+	val+="<a href='javascript:void(0);' class='edit' onclick='append("+row.store_id+",\"uname\")' title='修改'></a>";
+	return val;
+} 
+function formatDisabled(value,row,index){
+	if(value=="-1")
+		return "未通过审核";
+	if(value=="0")
+		return "待审核";
+	if(value=="1")
+		return "已审核"
+	if(value=="2")
+		return "已关闭";
+}
+function formatMarket(value,row,index){
+	if(value=="CHN")
+		return "中国";
+	if(value=="RUS")
+		return "俄罗斯";
+}
+
+function formatchushidan(value,row,index){
+	if(value=="1")
+		return "未获取";
+	if(value=="2")
+		return "已获取";
+}
+function formatStoreId(value,row,index){
+	return row.store_id;
+}
+function formatParentStore(value,row,index){
+	if(value=="0")
+		return "独立店铺";
+	if(value=="1")
+		return "青云商城";
+	if(value=="2")
+		return "雅宝路商城";
+}
+function formatChecktime(value, row, index) {
+	if(row.disabled=="1" || row.disabled=="-1"){
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}else{
+		return "";
+	}
+	
+}
+function formatCreatetime(value, row, index) {
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+
+
+function formatCheck(value,row,index){
+	
+	if(row.disabled==-1 || row.disabled==1){
+		 return "<span title='" + value + "'>" + value + "</span>";
+	}
+}
+ function checkAll(value){
+	
+	alert(value);
+}
+
+
+function dis(storeId){
+	$("#storeform").ajaxSubmit({
+		url:"${ctx}/b2b2c/admin/store!disStore.do?storeId="+storeId,
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				alert(data.message);
+				location.reload();
+			}
+			else{
+				alert(data.message);
+			}
+		}
+	});
+}
+function revert(storeId){
+	$("#storeform").ajaxSubmit({
+		url:"${ctx}/b2b2c/admin/store!useStore.do?storeId="+storeId,
+		dataType:"json",
+		success:function(data){
+			if(data.result==1){
+				alert(data.message);
+				location.reload();
+			}
+			else{
+				alert(data.message);
+			}
+		}
+	});
+}
+function opt() {
+	$("#divdia").dialog({
+		title : "选择用户",
+		width : 500,
+		height : 260,
+		closed : false,
+		cache : false,
+		href : "store!opt.do",
+		modal : true,
+		buttons : [ {
+			text : '保存',
+			iconCls : 'icon-ok',
+			handler : function() {
+				var savebtn = $(this);
+　　				var disabled=savebtn.hasClass("l-btn-disabled");
+　　				if(!disabled){
+					optMember(savebtn);
+				}
+			}
+		}, {
+			text : '清空',
+			handler : function() {
+				clearForm(map);
+			}
+		} ]
+	});
+}
+
+function optMember(savebtn){
+	var formflag = $("#optForm").form().form('validate');
+	if (formflag) {
+		savebtn.linkbutton("disable");
+		var options = {
+			url :  "store!optMember.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					append(result.id,result.message);
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+				savebtn.linkbutton("enable");
+			}
+		};
+		$("#optForm").ajaxSubmit(options);
+	}
+}
+
+
+function append(id,name) {
+	var map = {}; // Map map = new HashMap();
+	
+	if (!id) {
+		map["href"] = "store!add.do?uname="+name;
+		map["formId"] = "#addForm";
+		map["url"] = "store!save.do?ajax=yes";
+		map["title"] = "新增店铺";
+	} else {
+		map["href"] = "store!edit.do?storeId="+id,
+		map["formId"] = "#editForm";
+		map["url"] = "store!saveEdit.do?ajax=yes";
+		map["title"] = "店铺修改";
+	}
+	
+	
+	map["divDialog"] = "#divdia";
+	map["gridreload"] = "#storedata";
+
+	addDialog(map);
+}
+
+function addDialog(map) {
+	$(map["divDialog"]).show();
+	$(map["divDialog"]).dialog({
+		title : map["title"],
+		width : 940,
+		height : 600,
+		top:10,
+		closed : false,
+		cache : false,
+		href : map["href"],
+		modal : true,
+		buttons : [ {
+			text : '保存',
+			iconCls : 'icon-ok',
+			handler : function() {
+				var savebtn = $(this);
+　　				var disabled=savebtn.hasClass("l-btn-disabled");
+　　				if(!disabled){
+					submitForm(map,savebtn);
+				}
+			}
+		}, {
+			text : '清空',
+			handler : function() {
+				clearForm(map);
+			}
+		} ]
+	});
+}
+function submitForm(map,savebtn) {
+	var formflag = $(map["formId"]).form().form('validate');
+	if (formflag) {
+		$.Loading.show("正在保存请稍后...");
+		savebtn.linkbutton("disable");
+		var options = {
+			url : map["url"],
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$.Loading.success(result.message);
+					$(map["divDialog"]).dialog('close');
+					$(map["gridreload"]).datagrid('reload');
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+				savebtn.linkbutton("enable");
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+				savebtn.linkbutton("enable");
+			}
+		};
+		$(map["formId"]).ajaxSubmit(options);
+	}
+}
+
+//清空
+function clearForm(map) {
+	//$(map["formId"]).form('clear');
+}
+function searchStore(){
+	var storeName = $.trim($("#searchKeyword").val());
+	var storeStatus=$("#storeStatus").val();
+	var store_initiallist=$("#store_initiallist").val();
+	var adv_storeName = $.trim($("#storeName").val());
+	var adv_memberName = $.trim($("#memberName").val());
+	var start_time = $('#start_time').datebox('getValue');
+	var end_time = $('#end_time').datebox('getValue');  
+	var parentStore = $.trim($("#parentStore").val());
+	//var storeStatus = $.trim($("#storeStatus2").val());
+	var storeCountry = $.trim($("#storeCountry").val());
+	var disabled = $.trim($("#storeStatus").val());
+	$("#storedata").datagrid('load', {
+		disabled:disabled,
+		storeName:storeName,
+		store_initiallist:store_initiallist,
+		adv_storeName:adv_storeName,
+		adv_memberName:adv_memberName,
+		start_time:start_time,
+		end_time:end_time,
+		parentStore:parentStore,
+		storeStatus:storeStatus,
+		storeCountry:storeCountry,
+		page:1
+   });
+}
+
+$("#daochu").click(function(){
+	var storeName = $.trim($("#searchKeyword").val());
+	var storeStatus=$("#storeStatus").val();
+	var adv_storeName = $.trim($("#storeName").val());
+	var adv_memberName = $.trim($("#memberName").val());
+	var start_time = $('#start_time').datebox('getValue');
+	var end_time = $('#end_time').datebox('getValue');  
+	var parentStore = $.trim($("#parentStore").val());
+	//var storeStatus = $.trim($("#storeStatus2").val());
+	var storeCountry = $.trim($("#storeCountry").val());
+	var disabled = $.trim($("#storeStatus").val());
+	//alert("${ctx}/b2b2c/admin/storeOrder!exportOrder.do?keyword="+keyword+"&start_time="+start_time+"&end_time="+end_time+"&status="+status+"&store_name="+store_name);
+	var exportHref = "${ctx}/b2b2c/admin/store!exportStore.do?storeName="+storeName+"&storeStatus="+storeStatus
+	+"&adv_storeName="+adv_storeName+"&adv_memberName="+adv_memberName+"&start_time="+start_time
+	+"&end_time="+end_time+"&parentStore="+parentStore+"&storeCountry="+storeCountry+"&disabled="+disabled;
+	$("#daochu").attr("href",exportHref);
+ });
+
+
+function Exproter() {  
+    //获取Datagride的列  
+  
+    var rows = $('#storedata').datagrid('getRows');  
+
+  var oXL;
+  try { 
+	  oXL = GetObject("", "Excel.Application"); 
+	  } catch (E) { 
+	  try { 
+	  oXL = new ActiveXObject("Excel.Application"); 
+	  } 
+	  catch (E2) { 
+	  //alert("Please confirm:\n1.Microsoft Excel has been installed.\n2.Internet Options=>Security=>Setting \"Enable unsafe ActiveX\""); 
+	  alert("请确认:\n0.使用ie内核浏览器.\n1.机器上Excel已经安装.\n2.Internet 选项=>安全=>Internet \"对没有标记为安全的ActiveX控件进行初始化和脚本运行，设定为启用\"");
+	  return; 
+	  } 
+	  }
+   
+    var oWB = oXL.Workbooks.Add(); //获取workbook对象   
+    var oSheet = oWB.ActiveSheet; //激活当前sheet  
+    var columns = $("#storedata").datagrid("options").columns[0];  
+    //设置工作薄名称  
+    oSheet.name = "导出店铺Excel报表";  
+    //设置表头  
+    for (var i = 0; i < columns.length-1; i++) {  
+    	
+        oSheet.Cells(1, i+1).value = columns[i].title ;
+    	
+    }  
+    //设置内容部分  
+    for (var i = 0; i < rows.length; i++) {  
+        //动态获取每一行每一列的数据值  
+         oSheet.Cells(i + 2, 2).value = rows[i][columns[0].field];
+     
+        
+        	  
+            oSheet.Cells(i + 2, 3).value = rows[i][columns[2].field];  
+            oSheet.Cells(i + 2, 4).value = rows[i][columns[3].field]; 
+           
+           var time=getFormatDateByLong(rows[i][columns[4].field], "yyyy-MM-dd hh:mm:ss")
+            oSheet.Cells(i + 2, 5).value = time ;   
+            if(rows[i][columns[5].field]=="0")
+             	oSheet.Cells(i + 2, 6).value = "独立店铺"; 
+        	if(rows[i][columns[5].field]=="1")
+            	oSheet.Cells(i + 2, 6).value = "青云商城"; 
+        	if(rows[i][columns[5].field]=="2")
+                oSheet.Cells(i + 2, 6).value = "雅宝路商城"; 
+            if(rows[i][columns[6].field]=="-1")
+            	 oSheet.Cells(i + 2, 7).value = "未通过审核";
+    		if(rows[i][columns[6].field]=="0")
+    			 oSheet.Cells(i + 2, 7).value = "待审核";
+    		if(rows[i][columns[6].field]=="1")
+    			 oSheet.Cells(i + 2, 7).value = "已审核"
+    		if(rows[i][columns[6].field]=="2")
+    			 oSheet.Cells(i + 2, 7).value = "已关闭";
+    		 if(rows[i][columns[7].field]=="CHN")
+                 oSheet.Cells(i + 2, 8).value = "中国"; 
+    		 if(rows[i][columns[7].field]=="RUS")
+                 oSheet.Cells(i + 2, 8).value = "俄罗斯";
+    		 if(rows[i][columns[8].field]=="CHN")
+                 oSheet.Cells(i + 2, 9).value = "中国";
+    		 if(rows[i][columns[8].field]=="RUS")
+                 oSheet.Cells(i + 2, 9).value = "俄罗斯";
+    		 var time2=getFormatDateByLong(rows[i][columns[9].field], "yyyy-MM-dd hh:mm:ss")
+            oSheet.Cells(i + 2,10).value =time2;  
+            oSheet.Cells(i + 2, 11).value = rows[i][columns[10].field];  
+           
+    }      
+    oXL.Visible = true; //设置excel可见属性  
+}
+var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+buttons.splice(1, 0, {
+text: '清空',
+handler: function(target){
+	 $('#start_time').datebox('setValue',"");
+}
+});
+
+var e_buttons = $.extend([], $.fn.datebox.defaults.buttons);
+e_buttons.splice(1, 0, {
+text: '清空',
+handler: function(target){
+	 $('#end_time').datebox('setValue',"");
+}
+});
+</script>
+<#include '/admin/footer.html' >

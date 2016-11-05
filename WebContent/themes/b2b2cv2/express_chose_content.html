@@ -1,0 +1,9 @@
+<#list expressList as item >
+<tr>
+	<th><input type="radio" name="expressRadio" <#if item_index == 0 >checked="checked"</#if> >
+	 </th>
+	<th>${item.name!''}</th>
+	<th>${item.time!''}</th>
+	<th>${item.cost!0}</th>
+</tr>
+</#list>

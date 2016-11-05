@@ -1,0 +1,211 @@
+<#include '/store/store_header.html' />
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("storeOrderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${orderNo}"}')>
+<!--创建“订单货物列表”标签-->
+<#assign orderItemListTag = newTag("orderItemListTag")>
+<!--调用“订单货物列表”标签，并传递参数-->
+<#assign orderItemList =
+orderItemListTag("{'orderid':${orderDetail.order_id}}")>
+<!--获取发货地址-->
+<#assign selectSellerAddressTag= newTag("selectSellerAddressSFTag") >    
+<#assign  addressList= selectSellerAddressTag() >
+<link type="text/css" rel="stylesheet"
+	href="${ctx}/themes/b2b2cv2/css/logistics.css" />
+<script src="${ctx}/themes/b2b2cv2/js/express.js"></script>
+<body>
+	<div class="logi_main">
+		<!--标题-->
+		<div class="logi_title">
+			<h2><@uiLabel text="storeNextNumberTwo.goodsinfowrite" /></h2><!--货物信息填写  -->
+			<ul class="ul_bj2">
+				<li><@uiLabel text="storeNextNumberTwo.selectlogisticssolution" /></li><!--选择物流方案  -->
+				<li class="li_colo"><@uiLabel text="storeNextNumberTwo.goodsinfowrite" /></li><!--货物信息填写  -->
+				<li><@uiLabel text="storeNextNumberTwo.applicationsuccessful" /></li><!--申请成功  -->
+			</ul>
+		</div>
+		<div class="fl"></div>
+		<!--内容-->
+		<div class="logi_content">
+			<div class="logi2_text">
+				<h2><@uiLabel text="storeNextNumberTwo.produceinfo" /></h2><!--商品信息  -->
+				<!--<@uiLabel text="storeNextNumberTwo.shenbaoused" /> --><!--包限重2KG（不包括），以下信息将作为海关申报使用。  -->
+			</div>
+			<div class="logi_table">
+				<form id="formlist" name="form1" action="">
+					<#list orderItemList as item>
+					<table width="96%" border="0" id="tracks" align="center"
+						cellpadding="0" cellspacing="0" class="table1">
+						<tr class="tr_cle">
+							<!-- <td width="10%" align="center" valign="middle">是否交运</td> -->
+							<td width="200px" align="center" valign="middle"><@uiLabel text="storeNextNumberTwo.producepicture" /></td><!--商品图片  -->
+							<td width="20%" align="center" valign="middle">商品数量<!--<@uiLabel text="storeNextNumberTwo.goodsapplicationname" />--></td><!--货物申报名称  -->
+						<!-- 	<td align="center" valign="middle">数量</td> -->
+							 <td align="center" valign="middle"><!--<@uiLabel text="storeNextNumberTwo.applicationvalue" />--></td><!--申报价值  -->
+							<td align="center" valign="middle">发货地</td><!--原产地<@uiLabel text="storeNextNumberTwo.original" />  -->
+						</tr>
+						<tr class="tr_cle2">
+						<input name="yewu"  type="hidden" 
+										value="${yewu}" />
+							<td width="100px" align="center" valign="middle"><p
+									class="img_logi" style="margin-left:70px;">
+									<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+								</p>
+							</td>
+							<td valign="middle" width="30%" align="center">
+								<p class="input_p">
+									<!--<@uiLabel text="storeNextNumberTwo.englishappname" />： --><input name="ename" id="ename"  maxlength="30" type="hidden" value="gift"
+										/><!--英文申报名：  -->
+								</p>
+								<p class="input_p">
+								<span style="text-align:right">&nbsp;&nbsp;<@uiLabel text="storeNextNumberTwo.productnumber" />：</span>&nbsp;<input name="name" id="name" type="text" maxlength="30"
+										class="input_logi2" /><!--商品数量：  -->
+							</td>
+							<!-- <td align="center" valign="middle"><input name="count"
+								type="text" class="input_logi3" value="${item.num}" id="count"
+								readonly="readonly" />
+							</td> -->
+							<td align="center" valign="middle"><input name="unitPrice"
+								id="unitPrice" type="hidden" class="input_logi3" maxlength="10"
+								value="25" /><!-- /<@uiLabel text="storeNextNumberTwo.piece" /></td>--><!--/件  -->
+							<td align="center" valign="middle"><@uiLabel text="storeNextNumberTwo.china" /></td><!--中国  -->
+						</tr>
+					</table>
+					</#list>
+				</form>
+				<div style="margin-top:20px;">
+				<span style="margin-right:10px">寄件所在省:</span><input type="text" id="province" value="${addressList.province!''}">
+				<span style="margin-left:20px;margin-right:10px">寄件所在市:</span><input type="text" id="city" value="${addressList.city!''}">
+				<span style="margin-left:20px;margin-right:10px">寄件所在区:</span><input type="text" id="region" value="${addressList.region!''}">
+				<span style="margin-left:20px;margin-right:10px">寄件所在详细地址:</span><input type="text" id="area" value="${addressList.addr!''}">
+				</div>
+				<br>
+				<span style="margin-right:10px">寄件人姓名:</span><input type="text" id="j_name" value="${addressList.name!''}">
+				<span style="margin-left:20px;margin-right:10px">寄件人手机:</span><input type="text" id="j_mobile" value="${addressList.mobile!''}">
+				<span style="margin-left:20px;margin-right:10px">快递类型：</span><select id="express_type" name="" style="height:24px">
+							<option value="1">标准快递</option><!--标准快递  -->
+							<!--<option value="2">顺丰特惠</option><!--顺丰特惠 -->
+							<!-- <option value="3">电商特惠</option>  --><!--电商特惠-->
+							<!--<option value="7">电商速配</option> <!--电商速配  -->
+							<!--<option value="28">电商专配</option> <!--电商专配  -->
+					   </select>
+				<div class="an">
+					<input name="" type="button" class="button_long but1"
+						onclick="submit()" value="<@uiLabel text='storeNextNumberTwo.confirmandsubmit' />" /><!--确认并提交  -->
+				</div>
+			</div>
+		</div>
+		<div class="fl"></div>
+	</div>
+</body>
+<script>
+	var size = 1;
+	function submit() {
+		var reg = /^[a-zA-z]+[\s]*[a-zA-z]+$/;
+		var matchReg = /^([1-9]|([1-9][0-9]{1,7}))((\.[0-9]{1,2})?)$/;
+		try {
+			var form = document.getElementById("formlist");
+			var i = form.ename.length;
+			if(i != undefined){
+				size = i;
+			}
+			var name;
+			var mctcode;
+			var count;
+			var unitPrice;
+			if (size <= 1) {
+				ename = form.ename.value;
+				name = form.name.value;
+				//count = form.count.value;
+				unitPrice = form.unitPrice.value;
+				if (!reg.test($.trim(ename))) {
+					alert("<@uiLabel text='storeNextNumberTwo.englishapplicationname' />");//英文申报名输入有误
+					return;
+				}
+				
+				if (!matchReg.test(unitPrice)) {
+					alert("<@uiLabel text='storeNextNumberTwo.inputrightvalue' />");//请正确输入申报价值
+					return;
+				}
+			} else {
+				var listEname = form.ename;
+				for ( var i = 0; i < listEname.length; i++) {
+					ename = listEname[i].value;
+					name = form.name[i].value;
+				//	count = form.count[i].value;
+					unitPrice = form.unitPrice[i].value;
+					if (!reg.test(ename)) {
+						alert("<@uiLabel text='storeNextNumberTwo.inputenglishword' />");//请输入英文字母
+						return;
+					}
+					
+					if (!matchReg.test(unitPrice)) {
+						alert("<@uiLabel text='storeNextNumberTwo.inputrightvalue' />");//请正确输入申报价值
+						return;
+					}
+				}
+			}
+			regMobile = /^1\d{10}$/;
+			var province = $.trim($("#province").val());
+			var city = $.trim($("#city").val());
+			var region=$.trim($("#region").val());
+			var area=$.trim($("#area").val());
+			var j_name=$.trim($("#j_name").val());
+			var j_mobile=$.trim($("#j_mobile").val());
+			var express_type = $("#express_type").val();
+			if(province.length==0){
+				alert("请输入所在寄件所在省");
+				return false;
+			}
+			if(city.length==0){
+				alert("请输入所在寄件所在市");
+				return false;
+			}
+			if(region.length==0){
+				alert("请输入所在寄件所在区");
+				return false;
+			}
+			if(area.length==0){
+				alert("请输入所在寄件所在详细地址");
+				return false;
+			}
+			if(j_name.length==0){
+				alert("请输入寄件人姓名");
+				return false;
+			}
+			if (!regMobile.test(j_mobile)) {
+		        alert("请输入正确的手机");
+		        return false;
+		    }
+			var number = $("#name").val();//商品数量
+			if(!matchReg.test(number)){
+				alert("请输入正确的商品数量");
+		        return false;
+			}
+			var options = {
+				url : "${ctx}/api/shop/route!fuwu.do?sn=" +${orderDetail.sn} + "&totalw=" + ${weight}+ "&goodsname=" +ename+ "&num="  +name+ "&fuwu="  +'${fuwu}'
+						+"&province="+province+"&city="+city+"&region="+region+"&area="+area+"&j_name="+j_name+"&j_mobile="+j_mobile+"&express_type="+express_type,
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+						window.location.href = "successful2.html?ship_no="+ result.mailno
+						+ "&orderid="+ result.sn+"&yewu="+ result.yewu+"&goodsname="+ename+"&num="+ name+"&unitPrice="+ unitPrice+ "&fuwu="  +'${fuwu}'
+						+"&province="+province+"&city="+city+"&region="+region+"&area="+area+"&j_name="+j_name+"&j_mobile="+j_mobile+"&express_type="+express_type;
+				                  
+				},
+				error : function(e) {
+					alert(e.statusText);
+					alert("<@uiLabel text='storeNextNumberTwo.appearmistack' />");//出现错误请重试
+				}
+			};
+
+			$('#formlist').ajaxSubmit(options);
+		} catch (e) {
+			window.location.reload(true);
+			alert(e);
+		}
+
+	}
+</script>
+<#include '/common/footer.html'/>

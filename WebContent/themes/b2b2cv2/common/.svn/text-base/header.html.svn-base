@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- 聊天提醒   -->
+<#assign chatMemberIdTag = newTag("chatMemberIdTag") /> 
+<#assign memberId =chatMemberIdTag() />
+<#assign messageNewTag = newTag("messageNewTag") /> 
+<#assign headernewmsg =messageNewTag() />
+<#assign memberIsLoginTag= newTag("memberIsLoginTag")>
+<#-- 获取是否登录  -->
+<#assign isLogin = memberIsLoginTag() >
+<!-- 用户流量统计 -->
+ <#--
+<#assign flowCountTag = newTag("flowCountTag")>
+<#assign flowCount= flowCountTag()> 
+-->
+<#assign headerTag = newTag("headerTag") /> 
+<#assign header =headerTag() /> 
+	<#if title??>
+		<title>${title}-${header.title}</title> 
+	<#else>
+		<title>${header.title}</title> 
+	</#if> 
+	<#if keywords??>
+		<meta name="keywords" content="${keywords!''}">
+	<#else>
+		<meta name="keywords" content="${header.keywords!''}">
+	</#if> 
+	<#if description??>
+		<meta name="description" content="${description!''}">
+	<#else>
+		<meta name="description" content="${header.description!''}">
+	</#if>
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" content="ie=edge"/> 
+	
+</meta>
+
+<!-- 判断IE，并使IE9以下支持html5标签 -->
+<!–[if lt IE 9]> <script  src="${ctx}/themes/b2b2cv2/js/html5.js"  ></script> <![endif]–>
+
+
+<script>
+var member = "${member!''}";
+var loginDialog;
+var ctx="${ctx}";
+var app_path="${ctx}";
+var language="${locale!''}";
+</script>
+
+<#if site.icofile?exists>
+	<link href="${site.icofile}" rel="shortcut icon">
+</#if>
+
+<#-- 引入国际化模板函数 -->
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+
+<!-- 公共样式 -->
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/base.css" />
+<!-- 内含dialog.css样式，原来的dialog.css中无代码 -->
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/default.css" />
+<!-- 商品详细、 -->
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/shop.css" />
+
+<script  src="${ctx}/themes/b2b2cv2/js/jquery.js"  ></script>
+
+<script  src="${ctx}/themes/b2b2cv2/js/common.js"  ></script>
+<script  src="${ctx}/themes/b2b2cv2/js/shop.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.ui.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/index.js"></script>
+<!-- 国际化 -->
+<#if locale=="zh">
+   <script  src="${ctx}/themes/b2b2cv2/js/jquery.validate.js"  ></script>
+   <script  src="${ctx}/themes/b2b2cv2/js/lhgdialog.js" ></script> 
+<#elseif locale=="ru">
+  	<script  src="${ctx}/themes/b2b2cv2/js/jquery.validate_ru.js"  ></script>
+  	<script  src="${ctx}/themes/b2b2cv2/js/lhgdialog_ru.js" ></script> 
+</#if>
+<script  src="${ctx}/themes/b2b2cv2/js/jquery.form-3.51.js"  ></script> 
+<script  src="${ctx}/themes/b2b2cv2/js/CartBar.js"></script>
+<script  src="${ctx}/themes/b2b2cv2/js/jquery.blockUI.js"   ></script>
+<script  src="${ctx}/themes/b2b2cv2/js/LoginDialog.js"  ></script>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.cookie.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/perfect-scrollbar.min.js"  ></script>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.mousewheel.js" ></script>
+<!-- jquery 布局 -->
+<script src="${ctx}/themes/b2b2cv2/js/jquery.masonry.js" ></script> 
+<!-- 异步加载图片 -->
+<script src="${ctx}/themes/b2b2cv2/js/jquery.scrollLoading-min.js" ></script>
+<!-- 轮播图js -->
+<script src="${ctx}/themes/b2b2cv2/js/jquery.SuperSlide.2.1.1.js" ></script>
+
+<!-- 购物车移入滚动条 -->
+<script src="${ctx}/themes/b2b2cv2/js/jquery.nicescroll.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.bigautocomplete.js"></script>
+<!-- 自定义滚动条 -->
+<script src="${ctx}/themes/b2b2cv2/js/jquery.jscroll.js"></script>
+<!-- 聊天支持 -->
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/new/js/easy-ui/themes/gray/easyui.css"/>    
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/new/js/easy-ui/themes/icon.css"/> 
+<!-- <script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/swfobject.js"></script>  --> 
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/web_socket.js"></script>  
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.WebSocket.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/easy-ui/jquery.easyui.min.js"></script>
+
+
+<script type="text/javascript">
+
+var ctx="${ctx}";
+
+
+//聊天提示业务流程JS
+
+var WEB_SOCKET_SWF_LOCATION = "${ctx}/themes/b2b2cv2/media/WebSocketMain.swf";
+var toName=1;
+var self = ${memberId}  //登录用户ID
+var ws = null;
+$(function(){  
+		window.onbeforeunload = onbeforeunload_handler;   
+		window.onunload = onunload_handler;   
+		function onbeforeunload_handler(){   
+		    return;
+		}  
+		function onunload_handler()  
+		{  
+		    ws = null;  
+		}  
+	});  
+		var url = "serverSocket?message_to="+toName+"&message_me="+self;  
+		var ws = new $.websocket({
+		    protocol : "serverSocket?message_to="+toName+"&message_me="+self,  
+		    domain : "117.78.51.112",
+		    port : "80",
+		    onOpen:function(event){
+		    	$.ajaxSetup ({ cache: false });
+		    },    
+		    onError:function(event){  
+		    },    
+		    onMessage:function(result){
+		        receiveMessage(result);  
+		    },  
+		    onClose:function(event){
+		        ws = null;  
+		    }  
+		});  
+
+function receiveMessage(result){  
+	showMessage(result);  
+}  
+
+function showMessage(innerHTML){  
+	var dis =innerHTML.split("*@%&$");
+	sender = dis[0];
+	var temp = $('#headerNewMessage').html();
+	updateState(sender,self);
+	$.messager.show({
+		title: '聊天新消息提醒',
+        msg: "<a href='${ctx}/ask/chat.html?storeId="+sender+"' target='_blank' onclick='readNewMsg("+sender+")'>您有新消息，请点击查看</a>",
+        timeout: 60000,     //60秒超时
+        showType: 'slide',
+        width: 300,
+        height: 200
+	});
+	if(temp==""||temp==null||temp.length==0){
+		temp+="<a href='${ctx}/ask/chat.html?storeId="+sender+"' target='_blank' onclick='readNewMsg("+sender+")'>新消息</a>";
+		$('#headerNewMessage').html(temp);
+	}
+}
+		
+function updateState(sender,sendee){
+	$.ajax({
+		url:"${ctx}/api/b2b2c/chat!updateStateNotRead.do?ajax=yes&member_id="+sender+"&store_id="+sendee,
+		dataType : 'json'
+	})
+}
+
+function readNewMsg(store_id){
+	$(".messager-body").window('close');
+	$.ajax({
+		url:"${ctx}/api/b2b2c/chat!updateChatState.do?ajax=yes&store_id="+store_id,
+		dataType : 'json'
+	})
+}
+//聊天end
+
+$(function(){
+	//在ie中load()方法去是拿缓存的数据而不是向服务器拿  
+	//在script开头加上这句js，让ie不读取缓存就好，如果只是一个方法用到load() 那就在load()之前加上
+	$.ajaxSetup ({ cache: false });
+    $(".nav-user-account").load('${ctx}/common/my_store.html',function(){
+		$("#logout").click(function(){
+			$.ajax({
+				url:"${ctx}/api/shop/member!logout.do?ajax=yes",
+				dataType:"json",
+				cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。
+				success:function(result){
+					if(result.result==1){
+						$.alert(result.message);
+						location.href="${ctx}/login.html";
+					}else{
+						$.alert(result.message);
+					}
+					$.Loading.hide();
+				},
+				error:function(){
+					$.Loading.hide();
+					$.alert("出错了:(");
+				}
+			});
+			return false;
+		});
+	});
+		
+	$(".quick-menu dl").hover(function() {
+		$(this).addClass("hover");
+	},function() {
+		$(this).removeClass("hover");
+	});
+})
+
+function changeLocale(locale){
+    $.ajax({
+        url:"${ctx}/i18n/locale!setLocale.do?locale=" + locale ,
+        dataType:"json",
+        success:function(){
+            $.Loading.hide();
+            location.reload();
+        },
+        error:function(){
+            $.Loading.hide();
+        }
+    });
+}
+</script>
+</head>
+<script type='text/javascript'>
+(function(w,d,s,l,a){
+       w[l]=w[l]||function(){w._CommandName_=l;w[l].q=w[l].q||[];var r = arguments;r.length&&w[l].q.push(r)&&w[l]._r&&w[l].$.e(r);
+       w[l].track = function(a){if(a){var m = w[l].q[w[l].q.length-1];(m['t']=a)&&w[l]._r&&w[l].$.t(m)}};return w[l]},w[l](),w 
+[l].a=a,w[l].l=1*new Date();
+       var f = 'https:' == d.location.protocol;var c = d.createElement(s);c.type='text/javascript';c.async=1;
+       c.src=(f ? 'https' : 'http') + '://'+(f?'fm.ipinyou.com':'fm.p0y.cn')+'/j/a.js';
+       var h = d.getElementsByTagName('script')[0];h.parentNode.insertBefore(c, h);
+})(window,document,'script','py',' Qas..yuiINW9cRDE0s8KV4_AWXP'); 
+</script>
+<script type="text/javascript">
+py('event','viewPage');
+</script>
+
+<body>
+	<div class="website_top w">
+		<div class="topbar wrapper">
+			<div class="common_member">
+			</div>
+			<div class="quick-menu">
+				<dl>
+                    <dt id="headerNewMessage"><#if headernewmsg?size!=0><a href="${ctx}/ask/chat.html?storeId=${headernewmsg[0].sender}" onclick="readNewMsg(${headernewmsg[0].sender})">新消息</a></#if></dt>
+                </dl>
+				<dl>
+                    <dt>
+                        <a href="http://www.tradeease.cn/"><@uiLabel text="index.PortalHome" /></a>
+                    </dt>
+                </dl>
+                <#if locale="zh">
+                <dl>
+                    <dt>
+                       <a href="#" id="myattention" style="color: #B22222 !important;font-weight:800;" data-brandid="3261618" >我关注的品牌</a>
+                    </dt>
+                </dl>
+                <dl>
+                    <dt>
+                        <a href="http://www.tradeease.cn/helpt-34-72.html" style="color: #B22222 !important;font-weight:800;"><@uiLabel text="index.zhaosh" /></a>
+                    </dt>
+                </dl>
+				
+                <dl>
+                    <dt>
+                        <a href="http://seller.tradeease.cn/store/business_center.html?menu=store_index" style="color: #B22222 !important;font-weight:800;"><@uiLabel text="index.PortalSeller" /></a>
+                    </dt>
+                </dl>
+				</#if>
+                <dl>
+                    <dt>
+                        <a href="http://www.tradeease.cn/member/member.html"><@uiLabel text="index.PortalMyTradeEase" /></a>
+                    </dt>
+                </dl>
+                <dl>
+                    <dt>
+                        <#-- <a href="http://www.tradeease.cn/help-34-72.html"><@uiLabel text="index.PortalContactUs" /></a> -->
+                        <a href="http://www.tradeease.cn/helpc-33-54.html"><@uiLabel text="index.PortalContactUs" /></a>
+                    </dt>
+                </dl>
+                <!--  <dl>
+                    <dt>
+                        <a href="${ctx}/help4.html"><@uiLabel text="index.zhaosh" /></a>
+                    </dt>
+                </dl> -->
+                <dl>
+                    <dt>
+                    <#if locale=="zh">
+                        <a href="http://www.tradeease.cn/helpc-34-72.html"><@uiLabel text="index.PortalHelp" /></a>
+                    <#elseif locale=="ru">
+                    	<a href="http://www.tradeease.cn/helpc-37-82.html"><@uiLabel text="index.PortalHelp" /></a>
+                    </#if>
+                    </dt>
+                </dl>
+                <!-- <dl>
+                    <dt>
+					<#if locale=="zh">
+                        <a href="javascript:changeLocale('ru');">русский</a>
+					<#elseif locale=="ru">
+                        <a href="javascript:changeLocale('zh');">中文</a>
+					</#if>
+                    </dt>
+                </dl> -->
+                </div>
+			</div>
+		</div>
+<script type="text/javascript">
+  $("#myattention").click(function(){
+	  var isLogin = ${isLogin?string};
+	  if(isLogin){
+	      location.href="http://www.tradeease.cn/brand_follow.html";
+	  }else{
+		  $.Loading.show("您未登录,请先登录");
+			setTimeout( function(){
+				}, 19 * 1000 );
+			location.href="http://www.tradeease.cn/login.html?forward=brand_follow.html";				
+	  }
+  });
+	$(function(){
+		colorful1();
+	})
+	var i = 0;
+	function getColor(){
+		i++;
+		switch(i){
+			case 1:return "#ff0000";
+			case 2:return "#FFDE00";
+			case 3:return "#000000";
+			default:return "#000000";
+		}
+	}
+	function colorful1(){
+	
+		$("#headerNewMessage").find("a").attr("style","color:"+getColor()+"!important");
+		if(i==3)i=0;
+		setTimeout('colorful1()',500);
+	}
+
+	var newUrl=window.location.href;
+	if(newUrl=='http://tradeease.net/' || newUrl=='http://www.tradeease.net/index.html'){
+		newUrl = "http://www.tradeease.net/";
+		location.href=newUrl;
+	}
+	if(newUrl=='http://tradeease.cn/' || newUrl=='http://www.tradeease.cn/index.html'){
+		newUrl = "http://www.tradeease.cn/";
+		location.href=newUrl;
+	}
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?add73762106a843c568946a7a16dd0f9";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>

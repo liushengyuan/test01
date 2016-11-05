@@ -1,0 +1,46 @@
+10
+
+dir
+1344
+svn://223.202.119.226:9999/tradeEaseIpt/cms/com/enation/app/cms/core
+svn://223.202.119.226:9999
+
+
+
+2016-09-23T09:37:25.609437Z
+1258
+dengzhandong
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d43ea004-e395-4cb9-b7bd-d3e1b29e44b9
+
+action
+dir
+
+model
+dir
+
+plugin
+dir
+
+service
+dir
+
+tag
+dir
+
+taglib
+dir
+

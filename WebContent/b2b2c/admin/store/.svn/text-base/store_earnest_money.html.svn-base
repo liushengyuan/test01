@@ -1,0 +1,49 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="storeInfoForm" method="post" class="validate" >
+		<input type="hidden" name="storeId" value="${store.store_id!''}"/>
+		<input type="hidden" name="member_id" value="${store.member_id!''}">
+		<table>
+			<tr>
+				<td>店铺名称：</td>
+				<td>${store.store_name!''}</td>
+			</tr>
+			<tr>
+				<td>平台账户余额：</td>
+				<td>${store.account?string("currency")}</td>
+			</tr>
+			<tr>
+				<td>保证金余额：</td>
+				<td>${store.credit_account?string("currency")}</td>
+			</tr>
+			<tr>
+				<td>保证金账户是否开启：</td>
+				<td>
+					<input type="radio" value="1" <#if store.credit_account_status==1> checked="checked"</#if> name="creditAccountStatus"/>是
+					<input type="radio" value="0" <#if store.credit_account_status==0> checked="checked"</#if> name="creditAccountStatus"/>否
+				</td>
+			</tr>
+			<tr>
+				<td>输入保证金金额：</td>
+				<td>
+					<input class="easyui-numberbox input_text" style="width: 150px;" type="text" name="creditAccount" value="0" data-options="required:true" isrequired="true" />
+					输入的金额会与保证余额累加
+				</td>
+			</tr>
+			<tr>
+				<td>输入平台金额：</td>
+				<td>
+					<input class="easyui-numberbox input_text" style="width: 150px;" type="text" name="account" value="0" data-options="required:true" isrequired="true" />
+					输入的金额会与保证余额累加
+				</td>
+			</tr>
+			<tr>
+				<td>备注：</td>
+				<td>
+					<input class="easyui-validatebox input_text" type="text" name="account_description" data-options="required:true" isrequired="true" />
+				</td>
+			</tr>
+		</table>
+		</form>
+	</div>
+</div>

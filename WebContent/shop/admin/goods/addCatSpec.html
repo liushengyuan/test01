@@ -1,0 +1,39 @@
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+
+<div class="main" style="background-color: white;">
+
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="addTeamForm" method="post" class="validate">
+			<table width="100%">
+				<tr>
+					<th>产品规格：</th>
+					<td>
+						<select class="easyui-validatebox input_text" name="spec_id">
+						<#if list??>
+							<#list list as spec>
+								<option value="${spec.spec_id}" >${spec.spec_name}</option>
+							</#list>
+						</#if>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" name="cat_id" id="cat_id" value="${cat_id!''}" class="easyui-validatebox" data-options="required:true">
+		</form>
+	</div>
+ 
+</div>
+
+<#-- <script language="javascript">
+getImage=function getTeamImage(obj){
+	$("#show_team_picture").attr("src",obj);
+	$("#update_team_image").val(obj);
+}
+function setTeamImage(){
+	openImgDlg(getImage);
+}
+</script> -->

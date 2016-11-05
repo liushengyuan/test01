@@ -1,0 +1,36 @@
+
+.select_cat_img ul li{
+	display:block;
+	
+	background: url("../images/member/step_chart_url.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    float:left;
+    height: 50px;
+    width: 325px;
+    line-height:50px;
+}
+.select_cat_img ul li.a1 {
+    
+    
+    background-image: url("../images/member/step_chart_url.png");
+    background-position: 0 0;
+}
+.select_cat_img ul li.a2 {
+	background-image: url("../images/member/step_chart_url.png");
+    background-position: 0 -50px;
+}
+.select_cat_img ul li.b1 {
+	background-image: url("../images/member/step_chart_url.png");
+    background-position: 0 -100px;
+}
+.select_cat_img ul li.b2 {
+	background-image: url("../images/member/step_chart_url.png");
+    background-position: 0 -150px;
+}
+.select_cat_img ul li.c1 {
+	background-image: url("../images/member/step_chart_url.png");
+    background-position: 0 -200px;
+}
+.select_cat_img ul li.c2 {
+	background-image: url("../images/member/step_chart_url.png");
+    background-position: 0 -250px;
+}

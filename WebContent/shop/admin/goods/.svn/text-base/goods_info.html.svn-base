@@ -1,0 +1,47 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<table>
+			<tr>
+				<td>中文名称：</td>
+				<td>
+					<input class="input_text" type="text" value="${goodsMap.name!''}" disabled="disabled" >
+				</td>
+				<td>俄文名称：</td>
+				<td>
+					<input class="input_text" type="text" value="${goodsMap.name_ru!''}" disabled="disabled" >
+				</td>
+			</tr>
+			<tr>
+				<td>人民币：</td>
+				<td>
+					<input class="input_text" type="text" value="${goodsMap.price!''}" disabled="disabled" >
+				</td>
+				<td>卢布：</td>
+				<td>
+					<input class="input_text" type="text" value="${goodsMap.price_ru!''}" disabled="disabled" >
+				</td>
+			</tr>
+			<tr>
+				<td>关键字：</td>
+				<td colspan="3">
+					<input class="input_text" type="text" value="${goodsMap.china_keyword!''}" disabled="disabled" >
+					<input class="input_text" type="text" value="${goodsMap.ru_keyword!''}" disabled="disabled" >
+					<!-- <input class="input_text" type="text" value="${goodsMap.meta_keywords!''}" disabled="disabled" > -->
+				</td>
+			</tr>
+			<tr>
+				<td>商品库存：</td>
+				<td>
+					<input class="input_text" type="text" value="${goodsMap.store!''}" disabled="disabled" >
+				</td>
+			</tr>
+			<tr>
+				<td>商品主图：</td>
+				<td>
+					<img src="${goodsMap.store!''}" style="width:100px;height:100px"/>
+				</td>
+			</tr>
+
+		</table>
+	</div>
+</div>

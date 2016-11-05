@@ -1,0 +1,64 @@
+<#if locale=="zh">
+	<#assign title="退货申请列表" />
+ <#elseif locale=="ru">
+ 	<#assign title="Список заявок о возврате " />
+ </#if>
+<#include 'member_header.html' />
+
+<!-- 获得会员申请退货、换货列表标签 -->
+<#assign sellBackListTag = newTag("sellBackListTag")>
+<!-- 调用会员申请退货、换货列表标签 -->
+<#assign result = sellBackListTag()>
+
+<div class="user_order">
+	<div class="order_title_nav">
+		<ul>
+			<li class="selected" ><a href="#"><span><@uiLabel text="index.PortalUserReturnRequestList" /></span></a></li>
+		</ul>
+	</div>
+	<div class="order_list">
+	<#if order?size gt 0 >
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th class="date"><@uiLabel text="index.PortalUserApplicationPeriod" /></th>
+					<th class="orderId"><@uiLabel text="index.PortalUserOrderNumber" /></th>
+					<th class="status"><@uiLabel text="index.PortalUserPayStatus" /></th>
+					<th class="oper"><@uiLabel text="index.CommOper" /></th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list result.resultList as sellback>
+					<tr class="hovertr">
+					    <td class="date">
+					    	<@dateformat time="${ sellback.regtime?c}" pattern="yyyy-MM-dd HH:mm"/>
+					    </td>
+					    <td class="orderId">
+					    	${sellback.ordersn!'' }
+					    </td>
+					    <td class="status">
+						    <#if sellback.tradestatus  == 0>
+						    	<span><@uiLabel text="index.PortalUserApplicationReturns" /></span>
+							<#elseif sellback.tradestatus  == 1||sellback.tradestatus==2>
+								<span><@uiLabel text="index.PortalUserApprovalAdvisory" /></span>
+							<#elseif sellback.tradestatus  == 3>
+								<span><@uiLabel text="index.PortalOrderCompleted" /></span>
+							<#elseif sellback.tradestatus  == 4>
+								<span><@uiLabel text="index.PortalUserRejected" /></span>
+							<#elseif sellback.tradestatus  == 5>
+								<span><@uiLabel text="index.PortalUserPartStorage" /></span>
+							</#if>
+					    </td>
+					    <td class="oper">
+					    	<a href="return_detail.html?id=${sellback.id}&sn=${sellback.ordersn}"><@uiLabel text="index.PortalUserCheckOut" /></a>
+					    </td>
+				    </tr>
+				</#list>
+			</tbody>
+		</table>
+		<#else>
+			<div class="empty" ><@uiLabel text="index.PortalUserNotYetReturned" /></div>
+		</#if>
+	</div>
+</div>
+<#include '../common/footer.html'/>

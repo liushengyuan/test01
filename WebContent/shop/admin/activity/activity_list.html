@@ -1,0 +1,267 @@
+<#include '/admin/header.html' >
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}	
+
+</style>
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	 <div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton"  onclick="append()">添加</a>
+		<a href="javascript:void(0)" class="button"  onclick="del()">删除</a>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="tagform">
+			<table class="easyui-datagrid"
+			data-options="url:'${ctx}/shop/admin/allActivity!listJson.do',pageList: [5,10,15,20],pageSize:10,fitColumns:'true'" pagination="true" width="width" id="tagdata">
+				<thead>
+				    <tr>
+				   		<th  data-options="field:'id',checkbox:true,width:40">推荐项id</th>
+				   	 	<th  data-options="field:'name',width:80">中文名称</th>
+				   	 	<th  data-options="field:'is_show',width:20" formatter="formatIsShow">显示 </th>
+				   	 	<th  data-options="field:'start_time',width:60" formatter="formatTime">开始时间 </th>
+				   	 	<th  data-options="field:'end_time',width:60" formatter="formatTime">结束时间 </th>
+				   	 	<th  data-options="field:'line_color',width:40" formatter="formateLineColor">分割线颜色</th>
+				   	 	<th  data-options="field:'index',width:20">排序</th>
+				   	 	<th  data-options="field:'open',width:40" formatter="formatOpen">状态</th>
+				   	 	<th  data-options="field:'type',width:40" formatter="formatType">类型</th>
+				   	 	<th  data-options="field:'action',width:40,align:'center'" formatter="formatAction">操作</th>
+				   	 </tr>
+				</thead>
+			</table>
+		</form>
+		<div id="Taginfo" style="display: none;"></div>
+	</div>
+</div>
+
+
+ <script type="text/javascript">
+function formatOpen(value,row,index){
+	var val;
+	if(value==0){
+		val = "未开启";
+	}else if(value==1){
+		val = "开启";
+	}else if(value==2){
+		val = "已结束";
+	}
+	return val;
+}
+function formatType(value,row,index){
+	var val;
+	if(value==0){
+		val = "打折";
+	}else if(value==1){
+		val = "秒杀";
+	}
+	return val;
+}
+function formatAction(value,row,index){
+	var val="<a title='修改' href='javascript:void(0);' onclick='edit("+row.id+")'>修改</a> | <a href='#' title='关联商品' onclick=\"newTab('关联商品','${ctx}/shop/admin/allActivityProduct!list.do?allActivity_id="+row.id+"')\">关联商品</a>";
+	return val;
+}
+function formatId(value,row,index){
+	var val=row.team_id;
+	return val;
+}
+function formatTime(value,row,index){
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+function formatIsShow(value,row,index){
+	var val=row.is_show;
+	if(val==1){
+		return "Y";
+	}else{
+		return "N";
+	}
+}
+
+function formatTeamImage(value,row,index){
+	var val="<img alt='' src='"+row.team_image+"'  height='60px' width='75px;'>";
+	return val;	
+}
+function formateLineColor(value,row,index){
+	var val="<div style='background-color: #"+row.line_color+"'>"+row.line_color+"</div>"
+	return val;
+}
+
+function del(){ 
+	 	var rows = $('#tagdata').datagrid("getSelections"); 
+	 	if(rows.length<1){
+	 		$.Loading.error("请选择要删除的活动");/*请选择要删除的推荐项*/
+	 		return;
+	 	}
+		if(!confirm("确认要删除这些活动吗？")){	
+			return ;/*确认要删除这些推荐项吗*/
+		}
+		var options = {
+				url : "${ctx}/shop/admin/allActivity!delete.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					$.Loading.success(result.message);
+					$('#tagdata').datagrid('reload');
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");/*出现错误 ，请重试*/
+				}
+		};
+		$('#tagform').ajaxSubmit(options);	
+		
+}
+ function append(){
+	 $("#Taginfo").show();
+	　　	$('#Taginfo').dialog({
+	　　		title: '添加活动',	
+	　　		width: 750,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href:'${ctx}/shop/admin/allActivity!add.do',
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				 var disabled=  $(this).hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					var savebtn = $(this);
+	　　				 	addTeamForm(savebtn);		
+	　　				 }
+	　　			}
+	　　		},{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#addTeamForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+ }
+ function edit(id){
+	 $("#Taginfo").show();
+	　　	$('#Taginfo').dialog({
+	　　		title: '修改活动',		
+	　　		width: 750,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/allActivity!edit.do?id='+id, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var disabled=  $(this).hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					var editbtn = $(this);
+		　　				editTeamForm(editbtn);		
+		　　			}
+　　				 }
+　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#editTeamForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	}); 
+ }
+function addTeamForm(savebtn){
+	var formflag= $("#addTeamForm").form().form('validate');
+	if(formflag){
+	    $.Loading.show("正在保存请稍后");
+		savebtn.linkbutton("disable");
+		var start_date=$("#start_date").datebox('getValue');
+		var start_time=$("#start_time").val();
+		var end_date=$("#end_date").datebox('getValue');
+		var end_time=$("#end_time").val();
+		if(start_time==null||start_time==""){
+			$.Loading.error("请输入开始时间");
+			savebtn.linkbutton("enable");
+			return;
+		}
+		if(end_time==null||end_time==""){
+			$.Loading.error("请输入结束时间");
+			savebtn.linkbutton("enable");
+			return;
+		}
+		var start=start_date+" "+start_time;
+		var end=end_date+" "+end_time;
+		var d1=new Date(Date.parse(start));
+		var d2=new Date(Date.parse(end));
+		if(d1>=d2){
+			$.Loading.error("开始时间必须要小于结束时间");
+			savebtn.linkbutton("enable");
+			return;
+		}
+		var myDate = new Date();
+		if(d1<myDate){
+			$.Loading.error("开始时间必须大于当前时间");
+			savebtn.linkbutton("enable");
+			return;
+		}
+		var options = {
+			url : "${ctx}/shop/admin/allActivity!saveAdd.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				$.Loading.success(result.message);
+				$("#Taginfo").dialog('close');
+				$('#tagdata').datagrid('reload');
+				savebtn.linkbutton("enable");
+		 	},
+			 error : function(e) {
+				 $.Loading.error("出现错误 ，请重试");	
+				 savebtn.linkbutton("enable");
+			}
+		
+		};
+		$('#addTeamForm').ajaxSubmit(options);
+	}
+}
+function editTeamForm(editbtn){
+	var formflag= $("#editTeamForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		editbtn.linkbutton("disable");
+		var start_date=$("#start_date").datebox('getValue');
+		var start_time=$("#start_time").val();
+		var end_date=$("#end_date").datebox('getValue');
+		var end_time=$("#end_time").val();
+		if(start_time==null||start_time==""){
+			$.Loading.error("请输入开始时间");
+			editbtn.linkbutton("enable");
+			return;
+		}
+		if(end_time==null||end_time==""){
+			$.Loading.error("请输入结束时间");
+			editbtn.linkbutton("enable");
+			return;
+		}
+		var start=start_date+" "+start_time;
+		var end=end_date+" "+end_time;
+		var d1=new Date(Date.parse(start));
+		var d2=new Date(Date.parse(end));
+		if(d1>=d2){
+			$.Loading.error("开始时间必须要小于结束时间");
+			editbtn.linkbutton("enable");
+			return;
+		}
+		var options = {
+				url : "${ctx}/shop/admin/allActivity!saveEdit.do?ajax=yes",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					$.Loading.success(result.message);
+					$("#Taginfo").dialog('close');
+					$('#tagdata').datagrid('reload');
+					editbtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error("出现错误 ，请重试");	
+			 		editbtn.linkbutton("enable");
+				}
+		};
+		$('#editTeamForm').ajaxSubmit(options);
+	}
+}
+
+</script>
+	   	 

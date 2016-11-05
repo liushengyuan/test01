@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pricefilter>
+	<cat id="0">
+		<price  min="1">龙江物产</price>
+		<price min="0" >俄罗斯馆</price>
+		<price min="2" >澳大利亚馆</price>
+		<price min="3" >新西兰馆</price>
+		<price min="4" >韩国馆</price>
+		<price min="5" >德国馆</price>
+	</cat>
+</pricefilter>

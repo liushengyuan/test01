@@ -1,0 +1,178 @@
+<#include '/admin/header.html' >
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}	
+
+</style>
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	 <!-- <div class="buttonArea"> -->
+		<!-- <a href="javascript:void(0)" class="button blueButton"  onclick="append()">添加</a>
+		<a href="javascript:void(0)" class="button"  onclick="del()">删除</a> -->
+	<!-- </div> -->
+	<div class="shadowBoxWhite tableDiv">
+		<form id="tagform">
+			<table class="easyui-datagrid"
+			data-options="url:'${ctx}/shop/admin/orderinformation!listShowInformation.do',pageList: [5,10,15,20],pageSize:10,fitColumns:'true'" pagination="true" width="width" id="tagdata">
+				<thead>
+				    <tr>
+				   		<th  data-options="field:'id',checkbox:true,width:40">推荐项id</th>
+				   	 	<th  data-options="field:'sn',width:80">子订单号</th>
+				   	 	<th  data-options="field:'paymentno',width:80">支付交易号</th>
+				   	 	<th  data-options="field:'paymentname',width:50">支付企业名称</th>
+				   	 	<th  data-options="field:'create_time',width:60" formatter="formatTime">订单创建时间 </th>
+				   	 	<th  data-options="field:'charge',width:35" formatter="forMoney">总费用 </th>
+				   	 	<th  data-options="field:'consignee',width:40" >收货人名称 </th>
+				   	 	<!-- <th  data-options="field:'customscode',width:60" >主管海关代码</th>
+				   	 	<th  data-options="field:'biztype',width:60" >主管海关代码</th> -->
+				   	 	<!-- <th  data-options="field:'ecpcode',width:60" >平台注册代码</th>
+				   	 	<th  data-options="field:'cbename',width:60" >跨境商户企业名称</th> -->
+				   	 	<th  data-options="field:'orderno',width:60" >主订单编号</th>
+				   	 	<!-- <th  data-options="field:'goodsno',width:60" >商品货号</th> -->
+				   	 	<th  data-options="field:'goodsname',width:60" >商品名称</th>
+				   	 	<th  data-options="field:'is_offine',width:60" formatter="forIs_belong" >订单所属</th>
+				   	 	<th  data-options="field:'action',width:130,align:'center'" formatter="formatAction">操作</th>
+				   	 </tr>
+				</thead>
+			</table>
+		</form>
+		<div id="Taginfo" style="display: none;"></div>
+	</div>
+</div>
+
+
+ <script type="text/javascript">
+ function forMoney(value, row, index) {
+		var val = "￥" + value;
+		return val;
+	}
+ function forIs_belong(value, row, index) {
+	 var val="";
+		if(value==1){
+		    val="线上订单"
+		}else{
+			val="线下订单"
+		}
+		return val;
+	}
+function formatAction(value,row,index){
+	var val="<a title='生成报文' href='javascript:void(0);' onclick='edit("+row.ziorder_id+")'>生成报文</a>  | <a href='#' title='线下节点' onclick=\"newTab('线下节点','${ctx}/shop/admin/orderinformation!showOffineInformation.do?order_id="+row.ziorder_id+"')\">线下节点</a> | <a href='#' title='查看报文' onclick=\"newTab('查看报文','${ctx}/shop/admin/orderinformation!lookShowXmlInformation.do?order_id="+row.ziorder_id+"')\">查看报文</a>";
+	return val;
+}
+function formatId(value,row,index){
+	var val=row.team_id;
+	return val;
+}
+function formatTime(value,row,index){
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+function formatIsShow(value,row,index){
+	var val=row.is_true;
+	if(val==1){
+		return "Y";
+	}else{
+		return "N";
+	}
+}
+
+
+function edit(ziorder_id){ 
+		var options = {
+				url : "${ctx}/shop/admin/orderinformation!createXmlDocument.do?ajax=yes&id="+ziorder_id,
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					$.Loading.success(result.message);
+					$('#tagdata').datagrid('reload');
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");/*出现错误 ，请重试*/
+				}
+		};
+		$('#tagform').ajaxSubmit(options);	
+		
+}
+ function append(){
+	 $("#Taginfo").show();
+	　　	$('#Taginfo').dialog({
+	　　		title: '添加规则名称',	
+	　　		width: 750,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href:'${ctx}/shop/admin/bonus-type!addBonusList.do',
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				 var disabled=  $(this).hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					var savebtn = $(this);
+	　　				 	addTeamForm(savebtn);		
+	　　				 }
+	　　			}
+	　　		},{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#addBonusTypeForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	});
+ }
+ function addTeamForm(savebtn){
+		var formflag= $("#addBonusTypeForm").form().form('validate');
+		if(formflag){
+			$.Loading.show("正在保存请稍后...");
+			savebtn.linkbutton("disable");	
+		 	var options = {
+				url : "${ctx}/shop/admin/bonus-type!saveBonusList.do?ajax=yes",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+						$("#Taginfo").dialog('close');
+						$('#tagdata').datagrid('reload');
+					}else{
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+				},
+				 error : function(e) {
+					 $.Loading.error("出现错误 ，请重试");	
+					 savebtn.linkbutton("enable");
+				}
+			};
+			$('#addBonusTypeForm').ajaxSubmit(options);	
+		}
+	}
+ function editTeamForm(editbtn){
+		var formflag= $("#editBonusTypeForm").form().form('validate');
+		if(formflag){
+			$.Loading.show("正在保存请稍后...");
+			editbtn.linkbutton("disable");	
+			var options = {
+				url : "${ctx}/shop/admin/bonus-type!saveRgister.do?ajax=yes",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+						$("#Taginfo").dialog('close');
+						$('#tagdata').datagrid('reload');
+						editbtn.linkbutton("enable");
+					}else{
+						$.Loading.error(result.message);
+						editbtn.linkbutton("enable");
+					}
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error("出现错误 ，请重试");	
+			 		editbtn.linkbutton("enable");
+				}
+			};
+			$('#editBonusTypeForm').ajaxSubmit(options);
+		}
+	}
+
+</script>

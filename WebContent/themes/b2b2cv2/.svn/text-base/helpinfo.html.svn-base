@@ -1,0 +1,80 @@
+<#include 'common/header.html' /> <#include
+'common/reception_header.html'/> <#assign uiLabel =
+"com.enation.framework.directive.I18nDirectiveModel"?new()>
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2cv2/css/home.css" />
+<script src="${ctx}/themes/b2b2cv2/js/home_index.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/help_new.css"/>
+<div id="body">
+	<div>
+		<!-- Begin Template component://portal/webapp/portal/help/help_info.ftl -->
+		<div class="fl"></div>
+		<!--当前位置-->
+		<div class="snav">
+			<a href="/portal/control/main">首页</a> &nbsp;&gt;&nbsp; Гид для
+			новичков &nbsp;&gt;&nbsp; Свяжитесь с нами
+		</div>
+		<!--中间内容-->
+		<div id="content">
+			<!-- left start-->
+			<div id="left">
+				<dl>
+					<dt>
+						<span class="open">Гид для новичков</span>
+					</dt>
+					<dd class="list">
+						<ul>
+							<li><a href="/portal/control/helpInfo?helpId=10035">Как
+									начать пользоваться Trade Ease?</a></li>
+							<li><a href="/portal/control/helpInfo?helpId=10036">Как
+									искать на сайте Trade Ease?</a></li>
+							<li><a href="/portal/control/helpInfo?helpId=10037">Как
+									купить товар</a></li>
+							<li><a href="/portal/control/helpInfo?helpId=10040">Как
+									оплатить</a></li>
+							<li><a href="/portal/control/helpInfo?helpId=10041">О
+									доставке</a></li>
+							<li><a href="/portal/control/helpInfo?helpId=10043">Основные
+									права и запреты для продавца</a></li>
+							<li><a href="/portal/control/helpInfo?helpId=10044">Возврат
+							</a></li>
+							<li><a href="/portal/control/helpInfo?helpId=10045">Гарантированный
+									возврат TradeEase </a></li>
+							<li><a href="/portal/control/helpInfo?helpId=10046">Свяжитесь
+									с нами</a></li>
+						</ul>
+					</dd>
+				</dl>
+			</div>
+			<!-- left end -->
+
+			<!--三级右侧-->
+			<div id="right">
+				<div class="home-content">
+
+					<div class="list-title">
+						<h1>Свяжитесь с нами</h1>
+					</div>
+					<div class="content-nr">
+						<p>
+							<span style="font-size:" 12px;="" font-family:="" arial,=""
+								helvetica,="" sans-serif;="">Свяжитесь с нами по
+								электронной почте</span><span style="font-size:" 12px;=""
+								font-family:="" arial,="" helvetica,="" sans-serif;=""
+								text-decoration:="" underline;="">
+								ailchievakamilla@payeasenet.com</span>
+						</p>
+						<p>
+							<br>
+						</p>
+					</div>
+				</div>
+				<!-- 结束 -->
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-----footer------>
+<#include 'common/footer.html'/>

@@ -1,0 +1,374 @@
+@charset "utf-8";
+/* CSS Document */
+* {
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
+	list-style: none;
+	font-size: 12px;
+	font-family: "Microsoft YaHei", "微软雅黑", "宋体";
+}
+
+.fl {
+	clear: both;
+	height: 0;
+	font-size: 0;
+	line-height: 0;
+}
+
+a {
+	color: #666;
+	text-decoration: none;
+}
+
+.logi_main {
+	padding: 20px;
+}
+
+.logi_title {
+	height: 45px;
+	border-bottom: 1px solid #ccc;
+}
+
+.logi_title h2 {
+	float: left;
+	line-height: 43px;
+	font-weight: 100;
+	font-size: 18px;
+}
+
+.logi_title ul {
+	float: right;
+	height: 43px;
+	width: 409px;
+	background: url(../images/wimg_a.png) no-repeat;
+}
+
+.logi_title .ul_bj2 {
+	background: url(../images/wimg_b.png) no-repeat;
+}
+
+.logi_title .ul_bj3 {
+	background: url(../images/wimg_c.png) no-repeat;
+}
+
+.logi_title ul li {
+	float: left;
+	line-height: 43px;
+	width: 135px;
+	text-align: center;
+	color: #5f5f5f;	
+}
+
+.logi_title ul li.li_colo {
+	color: #00f;
+	font-weight: bold;
+}
+
+.logi_ctext {
+	padding: 10px;
+}
+
+.logi_ctext p {
+	padding-top: 10px;
+}
+
+.logi_ctext p span {
+	font-weight: bold;
+}
+
+.logi_ctable {
+	background: #f8f8f8;
+	padding: 20px 10px;
+	border-top: 1px solid #f1f1f1;
+}
+
+.logi_ctable h2 {
+	font-size: 16px;
+	font-weight: 100;
+}
+
+.logi_ctable h2 span {
+	color: #F60;
+	font-size: 16px;
+}
+
+.logi_ctable ul {
+	padding-left: 15px;
+}
+
+.logi_ctable ul li {
+	float: left;
+	width: 50%;
+	padding-top: 10px;
+	color: #555;
+	height: 25px;
+	line-height: 25px;
+	vertical-align: middle;
+}
+
+.logi_ctable ul li.li_clar {
+	clear: both;
+	width: 100%;
+}
+
+.logi_ctable ul li a {
+	color: #0783c0;
+}
+
+.logi_ctable ul li.li_clar span {
+	background: url(../images/ws-join.png) no-repeat -5px -257px;
+	padding-left: 22px;
+}
+
+.input_logi {
+	border: 1px solid #bbb;
+	width: 28px;
+	height: 20px;
+	line-height: 20px;
+	text-align: center;
+	margin: 0 5px;
+}
+
+.button_long {
+	
+}
+
+.button_long {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background: -moz-linear-gradient(center top, #fff5d9, #ffe4ba) repeat
+		scroll 0 0 rgba(0, 0, 0, 0);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fff5d9),
+		to(#ffe4ba) );
+	border-color: #f2cc68 #f2cc68 #e1a82b;
+	border-image: none;
+	border-radius: 3px;
+	border-style: solid;
+	border-width: 1px;
+	box-shadow: 0 2px 1px rgba(234, 195, 110, 0.55);
+	cursor: pointer;
+	font-size: 12px;
+	height: 25px;
+	margin: 0 10px 0px 10px;
+	text-align: center;
+	width: 100px;
+}
+
+.button_long2 {
+	background: -moz-linear-gradient(center top, #fff, #f0f0f0) repeat
+		scroll 0 0 rgba(0, 0, 0, 0);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fff),
+		to(#f0f0f0) );
+	border: 1px solid #aaa;
+	border-radius: 3px;
+	box-shadow: 0 2px 1px rgba(6, 0, 1, 0.13);
+	color: #333;
+	height: 23px;
+	cursor: pointer;
+	outline: medium none;
+	overflow: visible;
+	text-align: center;
+	text-indent: inherit;
+}
+
+.an {
+	padding-top: 20px;
+	text-align: center;
+}
+
+.but1 {
+	height: 40px;
+	width: 150px;
+	color: #693a0d;
+	font-weight: bold;
+}
+
+.but2 {
+	height: 40px;
+	width: 100px;
+	color: #333333;
+	font-weight: bold;
+}
+
+.table_div {
+	padding: 15px 0px;
+}
+
+.table2 {
+	
+}
+
+.table2 tr td {
+	border-bottom: 1px solid #eaeaea;
+}
+
+.table2 .tr_1 td {
+	height: 30px;
+	background: -moz-linear-gradient(center top, #fff, #f0f0f0) repeat
+		scroll 0 0 rgba(0, 0, 0, 0);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fff),
+		to(#f0f0f0) );
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	font-weight: bold;
+}
+
+/* 物流2 */
+.logi2_text {
+	color: #555;
+}
+
+.logi2_text h2 {
+	color: #000;
+	height: 25px;
+	padding-top: 10px;
+}
+
+.table1 {
+	border: 1px solid #ccc;
+	margin-top: 15px;
+	background: #f3f3f3;
+}
+
+.img_logi {
+	border: 1px solid #ccc;
+	display: block;
+	width: 60px;
+	height: 60px;
+	background: #fff;
+	vertical-align: middle;
+	line-height: 60px;
+	text-align: center;
+}
+
+.img_logi img {
+	width: 60px;
+	vertical-align: middle;
+	display: inline;
+}
+
+.input_logi2 {
+	border: 1px solid #bbb;
+	width: 105px;
+	height: 20px;
+	line-height: 20px;
+	text-align: center;
+	margin: 0 5px;
+}
+
+.input_logi3 {
+	border: 1px solid #bbb;
+	width: 55px;
+	height: 20px;
+	line-height: 20px;
+	text-align: center;
+	margin: 0 5px;
+}
+
+.input_p {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.table1 .tr_cle td {
+	height: 30px;
+	border-bottom: 1px solid #ccc;
+	font-weight: bold;
+}
+
+.table1 .tr_cle2 td {
+	padding: 10px 0;
+	color: #444;
+}
+
+.text_logi {
+	height: 45px;
+	line-height: 45px;
+	text-align: right;
+	width: 96%;
+	font-size: 16px;
+	padding-top: 10px;
+}
+
+.text_logi span {
+	font-size: 16px;
+	color: #F60;
+	font-weight: bold;
+}
+
+/* 物流3 */
+.logi_cess {
+	border: 1px solid #97c98f;
+	background: #e2f7d6;
+	margin: 15px;
+	padding: 25px;
+}
+
+.cess_a {
+	background: url(../images/icons-v2.png) no-repeat left -280px;
+	height: 47px;
+	padding-left: 60px;
+	margin-left: 40px;
+	font-size: 14px;
+	line-height: 1.7;
+	font-weight: bold;
+}
+
+.cess_a a {
+	color: #36F;
+	font-size: 14px;
+	font-weight: 100;
+	text-decoration: underline;
+}
+
+.cess_b {
+	margin-left: 100px;
+	margin-top: 15px;
+	border-top: 1px dashed #ccc;
+	padding-top: 15px;
+	line-height: 1.8;
+}
+
+.cess_b h2 {
+	
+}
+
+.cess_b p {
+	padding-top: 10px;
+	color: #555;
+}
+
+.address_list thead tr th,td {
+	background-color: #fff;
+	border-bottom: 0px solid #e7e7e7;
+	color: #999;
+	height: 20px;
+	padding: 8px 0;
+	text-align: center;
+}
+
+.storeorderlist label {
+	float: left;
+	display: inline;
+	height: 30px;
+}
+
+.storeorderlist input {
+	border-right: 0px none;
+	float: left;
+	display: block;
+	width: 110px;
+	height: 26px;
+}
+
+.storeorder_time {
+	width: 28px;
+	height: 28px;
+	display: block;
+	border: 1px solid #ccc;
+	background: url(../images/rili.jpg) no-repeat center center #e6e6e6;
+	float: left;
+}

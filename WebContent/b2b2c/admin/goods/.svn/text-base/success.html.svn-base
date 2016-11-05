@@ -1,0 +1,15 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title></title>
+<script type="text/javascript" >
+	function closeit(){
+		setTimeout("self.close()",2000);
+	}
+	closeit();
+</script>
+</head>
+<body>
+	<h1>修改成功,2秒后自动关闭窗口</h1>
+</body>
+</html>

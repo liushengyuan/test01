@@ -1,0 +1,112 @@
+<#-- 引入国际化模板函数 --> 
+<#assign uiLabel ="com.enation.framework.directive.I18nDirectiveModel"?new()>
+<#-- 创建商品基本信息标签 -->
+<#assign goodsBaseDataTag= newTag("goodsBaseDataTag") >
+<#-- 调用标签获取商品基本信息 -->
+<#assign goods= goodsBaseDataTag("'goodsid':${goods_id}") >
+<#-- 商品所产生的运费规则 -->
+<#assign goodsCartLogisModelTag= newTag("goodsCartLogisModelTag") >
+<#assign goodsCartLogisModel= goodsCartLogisModelTag("{'goods_id':${goods_id},'goods_freightType':${freight_id}}") >
+<#-- 回显 -->
+<#assign goodsGetLogisModelTag= newTag("goodsGetLogisModelTag") >
+<#assign goodsGet = goodsGetLogisModelTag("'goods_id':${goods_id}") >
+<div id="dd">
+	<div style="text-align: left;"  id="dd">
+		<@uiLabel text="goods.freightlogisssendruston" />		
+	</div>
+   	<form>
+	<div style="width: 500px;">
+		<table  width="500px" id="expressdata">
+			<thead style="border-top: 2px solid #666; background: #eee;">
+				<tr>
+				    <th></th>
+					<th><@uiLabel text="goods.freightlogisname" /></th>
+					<th><@uiLabel text="goods.freightlogissendgoodtime" /></th>
+					<th><@uiLabel text="goods.freightlogisprice" /></th>
+				</tr>
+			</thead>
+			 <tbody>
+			 <#if goodsCartLogisModel??>
+			 	<#list goodsCartLogisModel as lo>
+			   <tr>
+			     <th><input  type="radio" name="logis_model_id" value="${lo.logis_model_id}"
+					       <#if lo.logis_model_id==goodsGet>
+			                checked="checked"
+			              <#else>
+					         <#if lo_index ==0>
+			                     checked="checked"
+			                  </#if>
+			              </#if>
+			   		  />
+			     </th>
+			     <th>
+			       <#if lo.productname??>
+			             <#assign searchLogisNameTag=newTag("searchLogisNameTag")>
+                         <#assign searchLogisName=searchLogisNameTag("{'product':'${lo.productname}'}")>
+			                    ${searchLogisName!''}
+			         </#if>
+			     
+			     </th>
+			     <th ><span id="freightTime${lo.logis_model_id}">${lo.validatedays!''}<@uiLabel text="goods.freightlogisday" /></span></th>
+			     <th><span id="f${lo.logis_model_id}">
+			        <#if lo.freightprice==0>
+			           Free shipping
+			        <#else>
+			           <#if locale=="zh">
+						   &yen;${lo.freightprice!0.0}
+					        <#elseif locale=="ru">
+						    ${lo.freightprice!0.0}p.
+					   </#if>
+			        </#if>
+			        </span>
+			    </th>
+			   </tr>
+			   </#list>
+			  </#if>
+			</tbody> 
+			<tr>
+			 <th></th>
+			<th><input type="button" class="yellow_btn" onclick="dianji(${goods_id},${num},${store_id});" style="padding: 5px 20px;"
+					value="<@uiLabel text='goods.freightlogissave' />"></th>
+			</tr>
+		</table>
+	</div>
+	</form>
+</div>
+<script type="text/javascript">
+
+             function dianji(goods_id,num,store_id){
+            	 var freightTime="";
+            	 var check_id = "";
+            	 var price="";
+            		var radio = document.getElementsByName("logis_model_id");
+            		for ( var i = 0; i < radio.length; i++) {
+            			if (radio[i].checked) {
+            				check_id = radio[i].value;
+            				freightTime=document.getElementById("freightTime"+check_id).innerHTML
+            				price=$.trim(document.getElementById("f"+check_id).innerHTML);
+            				
+            				if(price=="Free shipping"){
+            					price=0;
+            				}
+            			}
+            		}
+            	$.ajax({
+            		url: "api/shop/logis!caculateLogisPrice2.do?ajax=yes&check_id="+check_id+"&goods_id="+goods_id+"&num="+num+"&store_id="+store_id,
+						type : "POST",
+						async : false,
+						dataType : "json",
+						success : function(result) {
+							if(result!=null){
+								if(result.result==1){
+									 location.href='cart.html';
+								}else{
+									alert(result.message);
+								}
+							}
+						}
+					});
+            		
+            		
+             }
+</script>

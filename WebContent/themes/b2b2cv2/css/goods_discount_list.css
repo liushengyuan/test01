@@ -1,0 +1,13 @@
+@charset "utf-8";
+/* CSS Document */
+*{ margin:0px auto; padding:0px;}
+
+.cx .cx-ul{ list-style:none; width:980px;}
+.cx .cx-ul li{ float:left;display:block; margin-bottom:20px;}
+.cx .cx-ul li a{ position:relative; color:#fff;}
+.cx .cx-ul li a img{ width:240px; height:320px;padding: 5px 2px; display:block;}
+.cx .cx-ul li a h4{ padding:10px; background:#fb287c; width:150px; text-align:center; position:absolute; display:block; bottom:-10px; left:30px; font-size:18px;}
+.goodslist_discount_list{  display:inline-block; width:1200px;}
+.discount{ width:240px;float:left;display:block; margin-bottom:20px;padding: 20px 30px 20px 30px;height:320px;}
+.discount-tp{}
+.discount-tp a{ color:#fff; display:block; width:160px; height:160px;}

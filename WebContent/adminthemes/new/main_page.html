@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>${site.title!'' }</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=9" > </meta> 
+<link rel="shortcut icon" href=" ../favicon.ico" /> 
+<link type="image/x-icon" href="${site.icofile!''}" rel="bookmark" />
+
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-1.8.3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/new/js/easy-ui/themes/gray/easyui.css"/>    
+<link rel="stylesheet" type="text/css" href="${ctx}/adminthemes/new/js/easy-ui/themes/icon.css"/>  
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/easy-ui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/easy-ui/easyui-lang-zh_CN.js"></script>
+<#--<script type="text/javascript" src="${ctx}/adminthemes/new/js/main.js"></script>-->
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.blockUI.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.loading.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-Slider.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery.timers-1.2.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/short-msg.js"></script>
+<link href="${ctx}/adminthemes/new/css/main.css" rel="stylesheet" type="text/css" />
+<!--PNG透明-->
+<!--[if lte IE 6]>
+<script src="../adminthemes/new/js/DD_belatedPNG_0.0.8a.js" type="text/javascript"></script>
+<script type="text/javascript">
+    DD_belatedPNG.fix('*');
+</script>
+<![endif]-->
+<script>
+var referer = undefined;
+<#if referer?exists>
+	referere ='${referer}';
+</#if>
+</script>
+</head>
+<div class="navbar">
+    <ul id="navbar_menu">
+		<li id="parent_0">
+            <a href="${ctx}/admin">首页</a>
+		</li>
+	<#list menuList as menu>
+        <li id="parent${menu.id}">
+            <a href="javascript:changeMenu('${menu.id}');">${menu.title!''}</a>
+            <ul>
+				<#if menu.hasChildren >
+					<#list menu.children as child>
+                        <li id="menu${child.id}">
+                            <a href="javascript:changeMenu('${menu.id}');">${child.title!''}</a>
+                            <ul>
+								<#if child.hasChildren>
+									<#list child.children as son>
+                                        <li id="tfun${son.id}">
+                                            <a onclick="openItem(this);" src="${ctx}${son.url}"
+                                               rootMenuId="${menu.id}"
+                                               rootMenuName="${menu.title!''}"
+                                               parentMenuName="${child.title!''}"
+                                               name="${son.title!''}"
+                                               menuId="${son.id}">${son.title!''}</a></li>
+									</#list>
+								</#if>
+                            </ul>
+                        </li>
+					</#list>
+				</#if>
+            </ul>
+        </li>
+	</#list>
+        <li style="float: right;">
+            <a href='javascript:;' id='logout_btn'>退出</a>
+        </li>
+        <li class="message" style="float: right;">
+            <a href='javascript:;'>消息<span class="num"></span></a>
+            <div class="msglist" >
+                <div class="triangle"></div>
+                <ul></ul>
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="admin_center">
+    <div class="left_menu">
+        <div class="sidebar" id="sidebar">
+            <ul class="sidebar">
+			<#list menuList as menu>
+				<#if menu.hasChildren >
+				<div id="leftParent_${menu.id}"  <#if menu_index != 0>style="display: none;"</#if>>
+					<#list menu.children as child>
+                            <li class="side_menu" id="${child.id}">
+                                <h1>
+                                    ${child.title}<span class="down"></span>
+                                </h1>
+                                <ul>
+									<#if child.hasChildren>
+										<#list child.children as son>
+                                            <li id="tfun${son.id}">
+												<a onclick="openItem(this);" src="${ctx}${son.url}"
+                                                   rootMenuId="${menu.id}"
+                                                   rootMenuName="${menu.title!''}"
+                                                   parentMenuName="${child.title!''}"
+                                                   name="${son.title!''}"
+												   menuId="${son.id}">
+												${son.title}
+												</a>
+											</li>
+										</#list>
+									</#if>
+                                </ul>
+                            </li>
+					</#list>
+				</div>
+				</#if>
+			</#list>
+            </ul>
+        </div>
+    </div>
+	<div class="right_content">
+        <div class="breadcrumbs">
+            <a href="javascript:void(0);">管理中心</a> <span>&gt;</span>
+			<span id="breadcrumbs">概览</span>
+        </div>
+		<iframe src="../core/admin/index.do"
+			   id="workspace"
+			   name="workspace"
+			   style="overflow: visible;"
+			   frameborder="0"
+			   width="100%" height="100%"
+			   scrolling="yes"
+			   onload="window.parent">
+    </iframe>
+	</div>
+</div>
+
+</html>
+	<script>
+		var index = 0;
+		$(function(){
+			$(".navbar_menu .msglist").hide();
+
+			$(".navbar_menu .message").mouseover(function(){
+				if($(".navbar_menu .msglist ul>li").length>0){
+				    $(".navbar_menu .msglist").show();
+				};
+			});
+			
+			$(".navbar_menu .message").mouseout(function(){
+			    $(".navbar_menu .msglist").hide();
+			});
+			$("#logout_btn").click(function(){
+				var options = {
+					url : "../core/admin/adminUser!logout.do",
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {				
+						if(result.result==1){
+							var url = "${ctx}/admin/backendUi!login.do";
+							location.href=url;
+						}else{
+							$.Loading.error(result.message);
+						}
+					},
+					error : function(e) {
+						$.Loading.error("出现错误，请重试");
+					}
+				};
+				$.ajax(options);		
+			})
+		});   
+		
+/*		 function reloadTabGrid(title){
+	          if ($("#tabs" ).tabs('exists', title)) {
+	               $('#tabs').tabs('select' , title);
+	               window.top.reload_Abnormal_Monitor.call();
+	         }
+	     }*/
+        $(document).ready(function () {
+            var pagestyle = function () {
+                var iframe = $("#workspace");
+                var h = $(window).height() - iframe.offset().top;
+                var w = $(window).width() - iframe.offset().left;
+                if (h < 400) h = 400;
+//                if (w < 973) w = 973;
+                iframe.height(h);
+//                iframe.width(w);
+            }
+            pagestyle();
+            $(window).resize(pagestyle);
+        });
+
+        $(function() {
+            $(".side_menu h1").click(function () {
+                var changeclass = $(this).find("span").attr("class");
+                if (changeclass == "down") {
+                    $(this).next("ul").hide();
+                    $(this).find("span").removeClass("down").addClass("top");
+                } else {
+                    $(this).next("ul").show();
+                    $(this).find("span").removeClass("top").addClass("down");
+                }
+            })
+        })
+        function openItem(obj){
+            var $this = $(obj);
+            var src = $this.attr('src');
+			var rootMenuId = $this.attr("rootMenuId");
+            $("#leftParent_" + rootMenuId).show().siblings("div").hide();
+			$("#breadcrumbs").html($this.attr("rootMenuName") + " &gt; " + $this.attr("parentMenuName") + " &gt; " + $this.attr("name"));
+            $('#workspace').attr('src',src);
+        }
+		function changeMenu(menuId){
+			$("#leftParent_" + menuId).show().siblings("div").hide();
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,148 @@
+10
+
+dir
+1344
+svn://223.202.119.226:9999/tradeEaseIpt/WebContent/shop/admin
+svn://223.202.119.226:9999
+
+
+
+2016-10-13T09:34:23.417008Z
+1342
+lxy
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d43ea004-e395-4cb9-b7bd-d3e1b29e44b9
+
+activities
+dir
+
+activity
+dir
+
+article
+dir
+
+bind
+dir
+
+brand
+dir
+
+cat
+dir
+
+comments
+dir
+
+css
+dir
+
+demo
+dir
+
+depot
+dir
+
+dlyCenter
+dir
+
+field
+dir
+
+goods
+dir
+
+goodsshow
+dir
+
+goodsstore
+dir
+
+group
+dir
+
+groupbuy
+dir
+
+images
+dir
+
+import
+dir
+
+index
+dir
+
+js
+dir
+
+limitbuy
+dir
+
+member
+dir
+
+order
+dir
+
+orderReport
+dir
+
+orderinformation
+dir
+
+payment
+dir
+
+paypaltest
+dir
+
+printTmpl
+dir
+
+printtpl
+dir
+
+promotion
+dir
+
+regions
+dir
+
+selector
+dir
+
+setting
+dir
+
+spec
+dir
+
+statistics
+dir
+
+tag
+dir
+
+team
+dir
+
+type
+dir
+
+warn
+dir
+

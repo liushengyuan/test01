@@ -1,0 +1,28 @@
+<#include '/admin/header.html' >
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>流量统计导出</title>
+</head>
+<body>
+<table border='1'>
+	<tr>
+		  <td colspan="3" style="font:bold">
+		  	<center>流量统计导出</center>
+		  </td>
+    </tr>
+    <tr>
+		<th style="width:8%">访问地</th>
+		<th style="width:8%">访问数</th>
+		<th style="width:8%">完成订单数量</th>
+	</tr>
+	<#list list as st>		
+			<tr align="center">
+				<td>${st.user_addr!''}</td>
+				<td>${st.ip_count!''}</td>
+				<td>${st.order_count!''}</td>
+			</tr>		
+	</#list>
+</table>
+</body>
+</html>

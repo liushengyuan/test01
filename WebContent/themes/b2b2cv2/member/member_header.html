@@ -1,0 +1,194 @@
+<#include '../common/header.html' />
+<#include '../common/reception_header.html' />
+<#assign memberIsLoginTag=newTag("memberIsLoginTag")>
+<#assign isLogin=memberIsLoginTag()>
+<#if !isLogin>
+    <script>
+		this.href="${ctx}/login.html?forward=member/member.html"
+	</script>
+</#if>
+<#assign memberCommentListTag = newTag("memberCommentListTag")>
+<!-- 调用会员评论标签-->
+<#assign memberCommentList = memberCommentListTag()>
+<!-- 获得会员咨询列表标签 -->
+<#assign memberAskListTag = newTag("memberAskListTag")>
+<!-- 调用会员咨询列表标签 -->
+<#assign memberAskList = memberAskListTag()>
+<!-- 获取会员收藏列表标签 -->
+<#assign collectTag = newTag("collectTag")>
+<!-- 调用会员收藏列表标签 -->
+<#assign collect = collectTag()!''>
+<!-- 获取会员订单列表标签 -->
+<#assign memberOrderList = newTag("storeMemberOrderListTag")>
+<!-- 调用会员订单列表标签 -->
+<#assign ordersLists = memberOrderList()>
+<!-- 获得会员订单列表 -->
+<#assign order = ordersLists.ordersList>
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag= newTag("goodsListTag") >  
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>
+<!--调用"商品列表"标签，并传递参数-->            
+<#assign  goodsList= goodsListTag("'tagid':'2','goodsnum':'4'") >
+
+<#assign memberInfoTag=newTag("memberInfoTag")>
+<!-- 调用会员基本信息 并传递mustlogin的参数，如果没登录，直接跳转到index.html页 -->
+<#assign member=memberInfoTag("{'mustlogin':'yes'}")>
+<#if locale=="zh">
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/member.css" />
+<#elseif locale=="ru">
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/member_ru.css" />
+</#if>
+<script  src="${ctx}/themes/b2b2cv2/js/favorite.js"  ></script>
+
+<#if locale=="zh">
+<script  src="${ctx}/themes/b2b2cv2/js/Order.js"  ></script>
+<script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"  ></script>
+<#elseif locale=="ru">
+<script  src="${ctx}/themes/b2b2cv2/js/Order_ru.js"  ></script>
+<script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker_ru/WdatePicker.js"  ></script>
+</#if>
+
+
+<div class="navbar">
+	<ul id="navbar_menu">
+        <li>
+            <a href="member.html">买家中心</a>
+		</li>
+        <li>
+            <a href="order.html"><@uiLabel text="index.PortalUserTransaction" /></a>
+			<ul>
+				<li><a href="order.html"><@uiLabel text="index.PortalUserOrder" /></a></li>
+				<li><a href="return_list.html"><@uiLabel text="index.PortalUserReturnRequest" /></a></li>
+				<li><a href="ask.html"><@uiLabel text="index.PortalUserAdvisory" /></a></li>
+				<li><a href="comments.html"><@uiLabel text="index.PortalUserMyAppraisal" /></a></li>
+			</ul>
+		</li>
+		<li>
+			<a href="message_accept_list.html"><@uiLabel text="index.ProtalMesStationLetters" /></a>
+			<ul>
+				<li><a href="message_accept_list.html"><@uiLabel text="index.ProtalMesNews" /></a></li>
+				<li><a href="message_send_list.html"><@uiLabel text="index.ProtalMesSendNews" /></a></li>
+			</ul>
+		</li>
+		<li>
+			<a href="address.html"><@uiLabel text="index.PortalUserAddressManage" /></a>
+			<ul>
+				<li><a href="address.html"><@uiLabel text="index.PortalUserSendAddress" /></a></li>
+			</ul>
+		</li>
+		<li>
+			<a href="favorite.html"><@uiLabel text="index.PortalFavoriteCf" /></a>
+			<ul>
+				<li class="selected"><a href="favorite.html"><span><@uiLabel text="index.FavoriteProductCf" /></span></a></li>
+				<li><a href="collect_store.html"><span><@uiLabel text="index.ShopFavoritesCf" /></span></a></li>
+			</ul>
+		</li>
+		<li>
+			<a href="security.html"><@uiLabel text="index.AccountCenter" /></a>
+			<ul>
+				<li><a href="security.html"><@uiLabel text="index.ChangePassword" /></a></li>
+				<!-- <li><a href="mail_edit.html"><@uiLabel text="index.ModifyMailbox" /></a></li>-->
+				<li><a href="point_list.html?action=list"><@uiLabel text="member.huiyuanjifen" /></a></li>
+				<li><a href="bonus.html"><@uiLabel text="member.MyCoupons" /></a></li>
+					
+			</ul>
+		</li>
+		<li >
+						<a href="infot.html"><@uiLabel text="index.huiyuanxinxi" /></a>
+					<ul>
+						<li><a href="infot.html"><@uiLabel text="index.gerenxinxi" /></a></li>
+						</ul>
+				</li>
+		
+		
+	</ul>
+</div>
+
+<div class="member_content">
+	<div class="user_nav">
+		<div style="float: left;"><a href="../index.html"><@uiLabel text="index.PortalHome" /></a>><a href="member.html"><@uiLabel text="index.PortalMyTradeEase" /></a>></div>
+        <div id="breadcrumbs">${member.uname!''}</div>
+	</div>
+	<div class="left_member">
+		<!-- 会员中心左侧菜单 -->
+		<div class="member_left">
+			<ul class="sidebar left_same">
+				<li class="side_menu">
+					<h1 class="grey_menu"><@uiLabel text="index.PortalUserTransaction" /><span class="down"></span></h1>
+					<ul>
+						<li><a href="order.html"><@uiLabel text="index.PortalUserOrder" /></a></li>
+						<li><a href="return_list.html"><@uiLabel text="index.PortalUserReturnRequest" /></a></li>
+						<li><a href="ask.html"><@uiLabel text="index.PortalUserAdvisory" /></a></li>
+						<li><a href="comments.html"><@uiLabel text="index.PortalUserMyAppraisal" /></a></li>
+					</ul>
+				</li>
+				<li class="side_menu">
+					<h1 class="grey_menu"><@uiLabel text="index.ProtalMesStationLetters" /><span class="down"></span></h1>
+					<ul>
+						<li><a href="message_accept_list.html"><@uiLabel text="index.ProtalMesNews" /></a></li>
+						<li><a href="message_send_list.html"><@uiLabel text="index.ProtalMesSendNews" /></a></li>
+					</ul>
+				</li>
+				<li class="side_menu">
+					<h1 class="grey_menu"><@uiLabel text="index.PortalUserAddressManage" /><span class="down"></span></h1>
+					<ul>
+					<li><a href="address.html"><@uiLabel text="index.PortalUserSendAddress" /></a></li>
+					</ul>
+				</li>
+				<li class="side_menu">
+					<h1 class="grey_menu"><@uiLabel text="index.PortalFavoriteCf" /><span class="down"></span></h1>
+					<ul>
+						<li class="selected"><a href="favorite.html"><span><@uiLabel text="index.FavoriteProductCf" /></span></a></li>
+						<li><a href="collect_store.html"><span><@uiLabel text="index.ShopFavoritesCf" /></span></a></li>
+					</ul>
+				</li>
+				<li class="side_menu">
+					<h1 class="grey_menu"><@uiLabel text="index.AccountCenter" /><span class="down"></span></h1>
+					<ul>
+						<li><a href="security.html"><@uiLabel text="index.ChangePassword" /></a></li>
+						<!-- <li><a href="mail_edit.html"><@uiLabel text="index.ModifyMailbox" /></a></li>-->
+						<li><a href="point_list.html?action=list"><@uiLabel text="member.huiyuanjifen" /></a></li>
+						<li><a href="bonus.html"><@uiLabel text="member.MyCoupons" /></a></li>
+					</ul>
+				</li>
+				<li class="side_menu">
+					<h1 class="grey_menu"><@uiLabel text="index.huiyuanxinxi" /><span class="down"></span></h1>
+					<ul>
+						<li><a href="infot.html"><@uiLabel text="index.gerenxinxi" /></a></li>
+						</ul>
+				</li>
+				
+			</ul>
+		</div>
+	</div>
+
+<script>
+	$(function(){
+        $(".side_menu h1").click(function(){
+            var changeclass = $(this).find("span").attr("class");
+            if(changeclass=="down") {
+                $(this).next("ul").hide();
+                $(this).find("span").removeClass("down").addClass("top");
+            }else{
+                $(this).next("ul").show();
+                $(this).find("span").removeClass("top").addClass("down");
+			}
+        })
+        /*$(".side_menu h1 span").click(function(){
+			var changeclass = $(this).attr("class");
+			if(changeclass=="down"){
+				$(this).parent().next("ul").hide();
+				$(this).removeClass("down");
+				$(this).addClass("top");
+			}
+			else{
+				$(this).parent().next("ul").show();
+				$(this).removeClass("top");
+				$(this).addClass("down");
+			}
+		})*/
+	})
+</script>

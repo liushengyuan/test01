@@ -1,0 +1,215 @@
+<#include '/store/store_header.html' />
+<!--创建"会员地址列表"标签-->
+<#assign consigneesListTag= newTag("consigneesListTag") >    
+<!--调用"会员地址列表"标签-->          
+<#assign  consigneeList= consigneesListTag()>	
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<div class="store_center">
+<#include '/store/left_menu.html' />
+<div id="sotre_right_content" class="sotre_right_content">
+<div class="path">
+			<span style="color:#999;"><@uiLabel text="sellerAccount.Location"/>：</span>
+			<span>></span>
+			<a href="#"><@uiLabel text="seller.ExpressManager"/></a><span>></span><@uiLabel text="seller.AddressManager"/>
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;"><@uiLabel text="seller.AddressManager"/></a>
+					</li>
+					<div class="address">
+		
+		<a href="javascript:;" class="add_address"><span><@uiLabel text="sellerCenter.AddAddress"/></span></a>
+	</div>
+				</ul>
+			</div>
+	
+	<div class="password_explain">
+		<#-- <h2>温馨提示</h2>
+		
+		<ul>
+			<li>最多可以保存10个地址</li>
+			
+		</ul> -->
+		<h2><@uiLabel text="index.AddressTips" /></h2>
+		<p>1，<@uiLabel text="index.AddressTipsContents" /></p>
+		<p>2，<@uiLabel text="index.AddressTipsContents2" /></p>
+		
+	</div>
+	<div class="address_list">
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th style="width: 50px;" ><@uiLabel text="sellerCenter.AddressType" /></th>
+					<th class="a1"><@uiLabel text="index.Consignee" /></th>
+					<th class="a2"><@uiLabel text="index.Location" /></th>
+					<th class="a3"><@uiLabel text="index.StreetAddress" /></th>
+					<th class="a4"><@uiLabel text="index.PhoneOrMobile" /></th>
+					<th class="a5"><@uiLabel text="index.Sellercode" /></th>
+					<th class="a6"><@uiLabel text="index.Default" /></th>
+					<th class="a7"><@uiLabel text="index.CommOper" /></th>
+				</tr>
+			</thead>
+			<tbody>
+				<#if consigneeList?size gt 0 >
+				<#list consigneeList as address>
+				<tr>
+					<td>
+						<#if address.add_type?? >
+						<#if address.add_type == 1 >
+							<@uiLabel text="sellerCenter.SendGoods" />
+						<#elseif address.add_type == 2 >
+							<@uiLabel text="sellerCenter.ReturnGoods" />
+						</#if>
+						</#if>
+					</td>
+					<td>${address.name!''}</td>
+					<td>${address.province!''}-${address.city!''}-${address.region!''}</td>
+					<td style="text-align:left">${address.addr!''}</td>
+					<td>
+						<p class="a_tel">${address.tel!''}</p>
+						<p class="a_phone">${address.mobile!''}</p>
+					</td>
+					<td>${address.zip!''}</td>
+					<td><#if address.def_addr == 0 ><@uiLabel text="sellerCenter.No" /></#if><#if address.def_addr == 1 ><@uiLabel text="sellerCenter.Yes" /></#if></td>
+					<td>
+						<a href="javascript:;" rel="${address.addr_id}" class="edit" style="position: relative;top:14px;"></a>
+						<span class="address_del" ></span>
+						<a href="javascript:;" style="position: relative;top:-22px;" class="address_del" rel="${address.addr_id}" ></a>
+					</td>					
+				</tr>
+				</#list>
+				<#else>
+				<tr>
+					<td colspan="9">
+						<@uiLabel text="index.NoShippingAddress" />，<a href="javascript:;" class="addressadd"><@uiLabel text="index.AddingOneAddress" /></a>
+					</td>
+				</tr>
+				</#if>
+			</tbody>	
+		</table>
+	</div>
+	<!--添加会员地址。使用js load方法调用member/address_add.html页面  -->
+	<div class="address_add" style="overflow:hidden;">
+	</div>
+	<!-- 修改会员地址 。使用js load方法调用member/address_edit.html页面 -->
+	<div class="address_edit" style="overflow:hidden;">
+	</div>
+	
+</div>
+
+</div>
+
+
+
+<script>
+	$(function(){
+		/*添加会员地址专用*/
+		$(".add_address,.addressadd").click(function(){
+			$(".address_add").load("address_add.html",function(){
+				$(".address_list").hide();
+				$(".address_edit").hide();
+				$(".grey_top").hide();
+				$(".address_add").show();
+				/*添加用户地址js*/
+			
+				$("#btnSubmit").click(function(){
+					var membername = $(".member_name_title").val();
+					if(membername.indexOf(" ")!=-1){
+						alert("<@uiLabel text='sellerCenter.NoAllowedSpace' />！");
+						return false;
+					}
+					var value = $("#region_id").val();
+					if (value == "" || value == "0"){
+						alert("<@uiLabel text='goods.IncompleteInformationRegion' />"); 
+						return false;
+					}
+					$("#member_addr").ajaxSubmit({
+						url : "${ctx}/api/shop/memberAddress!add2.do",
+						dataType : 'json',
+						success : function(data) {	
+							alert(data.message)
+							if(data.result==1)
+								location.href = "address.html"
+						},
+						error : function(e) {
+							alert("<@uiLabel text='goods.chuxiancuowuqingchongshi' />");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			});
+		});
+		/*修改地址专用*/
+		$(".edit").click(function(){
+			var editid = $(this).attr("rel");
+			
+			$(".address_edit").load("address_edit.html?addressid="+editid,function(){
+				$(".address_list").hide();
+				$(".address_edit").show();
+				$(".grey_top").hide();
+				$(".address_add").hide();
+				
+				/*修改用户地址*/
+				$("#address_edit").click(function(){
+					var membername = $(".member_name_title").val();
+					if(membername.indexOf(" ")!=-1){
+						alert("<@uiLabel text='sellerCenter.NoAllowedSpace' />！");
+						return false;
+					}
+					var value = $("#region_id").val();
+					if (value == "" || value == "0"){
+						alert("<@uiLabel text='goods.IncompleteInformationRegion' />"); 
+						return false;
+					}
+					$(".validate").ajaxSubmit({
+						url : "${ctx}/api/shop/memberAddress!edit2.do?addressid="+editid,
+						dataType : 'json',
+						success : function(data) {	
+							alert(data.message)
+							if(data.result==1)
+								location.href = "address.html"
+						},
+						error : function(e) {
+							alert("<@uiLabel text='goods.chuxiancuowuqingchongshi' />");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			})
+		})
+		/*删除地址*/
+		$(".address_del").click(function(){
+			if(confirm("<@uiLabel text='sellerCenter.IsDelete' />?")){
+				var deleteid = $(this).attr("rel");
+				$.ajax({
+					url : "${ctx}/api/shop/memberAddress!delete.do?addr_id="+deleteid,
+					dataType : 'json',
+					success : function(data) {	
+						alert(data.message)
+						if(data.result==1)
+							location.href = "address.html"
+					},
+					error : function(e) {
+						alert("<@uiLabel text='goods.chuxiancuowuqingchongshi' />");
+					}
+				})  
+			}
+			else{
+				location.href="address.html";
+			}
+		})
+	});		
+</script>
+	<!--会员中心首页右侧结束-->
+
+
+</div>
+<#include '/common/seller_footer.html' />

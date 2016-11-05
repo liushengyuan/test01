@@ -1,0 +1,234 @@
+
+<dl>
+	<dt class="required">
+		<em class="pngFix"></em><@uiLabel text="apply.CompanyName"/>
+	</dt>
+	<dd>
+		<input type="text" name="com_company_name" class="text w400"
+			id="com_company_name" isrequired="true" />
+	</dd>
+</dl>
+<dl>
+	<dt class="required">
+		<em class="pngFix"></em><@uiLabel text="apply.LicenseNo"/>
+	</dt>
+	<dd>
+		<input type="text" name="com_registration_number" class="text w200"
+			id="com_registration_number" isrequired="true" fun="reclick" />
+	</dd>
+</dl>
+<dl>
+<dt class="required"><em class="pngFix"></em><@uiLabel text="apply.ShopLicense"/><span id="license_imgText"></span></dt>
+	<dd>
+		<div class="apply_license_img" status="license_img">
+		</div>
+		<input type="file" id="license_img" status="license_img"/>
+		&nbsp;&nbsp;<span class="applyPro"><@uiLabel text="apply.PhotoFormat"/></span>
+		<input type="hidden" name="store_license_img" id="license_imgImg"/>
+		<#-- <input type="hidden" name="store_store_auth" value="0" id="license_imgStatus"/> -->
+	</dd>
+</dl>
+<dl>
+	<dt class="required"><em class="pngFix"></em><@uiLabel text="apply.OpenProve"/>:<span id="prove_imgText"></span></dt>
+	<dd>
+		<div class="apply_prove_img" status="prove_img">
+		</div>
+		<input type="file" id="prove_img" status="prove_img"/>
+		&nbsp;&nbsp;<span class="applyPro"><@uiLabel text="apply.PhotoFormat"/></span>
+		<input type="hidden" name="store_prove_img" id="prove_imgImg"/>
+	</dd>
+</dl>
+<#--<dl>
+	<dt class="required"><em class="pngFix"></em>银行开户名：</dt>
+	<dd><input type="text" name="bank_account_name" class="text w200" id="bank_account_name" isrequired="true" /></dd>
+</dl>-->
+<dl>
+	<dt class="required"><em class="pngFix"></em><@uiLabel text="apply.BankAccount"/>：</dt>
+	<dd><input type="text" name="bank_account_number" class="text w200" id="bank_account_number" isrequired="true" /></dd>
+</dl>
+<!-- 中文状态下，选择银行联动信息 -->
+<#if locale=="zh">
+	<dl>
+		<dt class="required">
+			<em class="pngFix"></em><@uiLabel text="apply.BankName"/>：
+		</dt>
+		<select id="bank_account_name" onchange="loadBankProvince();" name="bank_account_name" isrequired="true">
+				<option value="">
+					--<@uiLabel text="apply.PlaseChose"/>--
+				</option>
+		</select>
+		<div class="pngFix"><@uiLabel text="apply.BankTips"/></div>	
+	</dl>
+	<dl>
+		<dt class="required">
+			<em class="pngFix"></em><@uiLabel text="apply.WhereProvince"/>：
+		</dt>
+		<select id="bank_Province"  onchange="loadBankCity();" name="bank_province_id" isrequired="true">
+				<option value="">
+					--<@uiLabel text="apply.PlaseChose"/>--
+				</option>
+		</select>
+	</dl>
+	<dl>
+		<dt class="required">
+			<em class="pngFix"></em><@uiLabel text="apply.WhereCity"/>：
+		</dt>
+		<select id="bank_City" class="text w200"  onchange="loadToBankName();" name="bank_city_id" isrequired="true">
+				<option value="">
+					--<@uiLabel text="apply.PlaseChose"/>--
+				</option>
+		</select>
+	</dl>
+	<dl>
+		<dt class="required">
+			<em class="pngFix"></em><@uiLabel text="apply.BankOnlineName"/>：
+		</dt>
+		<select id="bank_name" class="text "  name="bank_region_id" isrequired="true">
+				<option value="">
+					--<@uiLabel text="apply.PlaseChose"/>--
+				</option>
+		</select>
+	</dl>
+<!-- 俄文状态下，手动输入 -->
+<#elseif locale=="ru">
+	<dl>
+		<dt class="required">
+			<em class="pngFix"></em><@uiLabel text="apply.BankName"/>：
+		</dt>
+		<dd>
+			<input type="text" name="bank_account_name" class="text w200"
+				 isrequired="true" />
+		</dd>
+	</dl>
+	<dl>
+		<dt class="required">
+			<em class="pngFix"></em><@uiLabel text="apply.WhereProvince"/>：
+		</dt>
+		<dd>
+			<input type="text" name="bank_province_id" class="text w200"
+				 isrequired="true" />
+		</dd>
+	</dl>
+	<dl>
+		<dt class="required">
+			<em class="pngFix"></em><@uiLabel text="apply.WhereCity"/>：
+		</dt>
+		<dd>
+			<input type="text" name="bank_city_id" class="text w200"
+				 isrequired="true" />
+		</dd>
+	</dl>
+	<dl>
+		<dt class="required">
+			<em class="pngFix"></em><@uiLabel text="apply.BankOnlineName"/>：
+		</dt>
+		<dd>
+			<input type="text" name="bank_region_id" class="text w200"
+				 isrequired="true" />
+		</dd>
+	</dl>
+</#if>
+<#-- <dl>
+	<dt class="required"><em class="pngFix"></em>开户银行网点名称：</dt>
+	<dd><input type="text" name="bank_name" class="text w200" id="bank_name" isrequired="true" /></dd>
+</dl>-->
+<dl>
+	<dt <#--class="required"--> <em class="pngFix"></em><@uiLabel text="apply.LianNumber"/>：</dt>
+	<dd><input type="text" name="bank_code" class="text w200" id="bank_code" <#-- isrequired="true"-->  /></dd>
+</dl>
+<#-- <dl>
+	<dt class="required"><em class="pngFix"></em>开户银行地址：</dt>
+	<dd><@regionSelect province_name='bank_province'
+		city_name='bank_city' region_name='bank_region'/> 
+		<input type="text" name="bank_address" class="text w200" id="bank_address" isrequired="true" />
+	</dd>
+</dl> -->
+<dl>
+	<dt class="required">
+		<em class="pngFix"></em><@uiLabel text="apply.FinanceContact"/>：
+	</dt>
+	<dd>
+		<input type="text" name="prove_name" class="text w200" id="prove_name"
+			isrequired="true"/>
+	</dd>
+</dl>
+<dl>
+	<dt class="required">
+		<em class="pngFix"></em><@uiLabel text="apply.FinanceCertType"/>：
+	</dt>
+	<dd>
+<#-- 		<input type="text" name="company_tel" class="text w200" id="telephone"
+			isrequired="true" dataType="tel_num" /> -->
+		<select name="prove_type" id="prove_type">
+			<option value="1"><@uiLabel text="apply.IDCard"/></option>
+			<option value="2"><@uiLabel text="apply.Passpord"/></option>
+			<option value="3"><@uiLabel text="apply.OtherIDCard"/></option>
+		</select>
+	</dd>
+</dl>
+<dl>
+	<dt class="required"><em class="pngFix"></em><@uiLabel text="apply.FinanceIDCard"/>：</dt>
+	<dd><input type="text" name="prove_number" class="text w200" id="prove_number" isrequired="true" fun="click"/></dd>
+</dl>
+<dl>
+	<dt class="required" ><em class="pngFix" ></em><@uiLabel text="apply.FinancePhone"/>：</dt>
+	<dd><input type="text" name="prove_mobile" class="text w200" id="prove_mobile" isrequired="true"  dataType="mobile" /></dd>
+</dl>
+<#-- <dl>
+	<dt class="required">
+		<em class="pngFix"></em>联系人固定电话：
+	</dt>
+	<dd>
+		<input type="text" name="company_tel" placeholder="区号+电话号码（010-88888888）" class="text w200" id="telephone"
+			isrequired="true" dataType="tel_num" />
+	</dd>
+</dl> -->
+<dl>
+	<!--<dt class="required">-->
+	<dt>
+			<em class="pngFix"></em><@uiLabel text="apply.CompanyFixedNumber"/>：
+	</dt >
+		
+		&nbsp;&nbsp;<input type="text" name="company_tel2"  placeholder="<@uiLabel text='apply.AreaCode'/>" size="6"
+				id="telephone2"   />-<input type="text" name="company_tel" class="text w200" placeholder="<@uiLabel text='apply.ApplyPhoneNumber'/>"
+				id="telephone"   />
+	
+</dl>
+
+<dl>
+	<dt class="required">
+		<em class="pngFix"></em><@uiLabel text="apply.BusContactPerson"/>：
+	</dt>
+	<dd>
+		<input type="text" name="prove_name2" class="text w200" id="prove_name2"
+			isrequired="true"/>
+	</dd>
+</dl>
+<dl>
+	<dt class="required"><em class="pngFix" ></em><@uiLabel text="apply.BusContactNumber"/>：</dt>
+	<dd><input type="text" name="prove_mobile2" class="text w200" id="prove_mobile2" isrequired="true" dataType="mobile" /></dd>
+</dl>
+<dl>
+	<dt class="required" >
+		<em class="pngFix"></em><@uiLabel text="apply.EmergencyPerson"/>：
+	</dt>
+	<dd>
+		<input type="text" name="prove_name3" class="text w200" id="prove_name3"
+			 isrequired="true"/>
+	</dd>
+</dl>
+<dl>
+	<dt class="required" ><em class="pngFix" ></em><@uiLabel text="apply.EmergencyNumber"/>：</dt>
+	<dd><input type="text" name="prove_mobile3" class="text w200" id="prove_mobile3"  isrequired="true" dataType="mobile" /></dd>
+</dl>
+<script type="text/javascript">
+    /* function reclick(value){
+    	 var com_registration_number = $("#com_registration_number").val();
+    	 var reg=/^\d{15}$/;
+    	 if(!reg.test(com_registration_number)){
+    		 return "营业执照必须是15位的数字";
+    	 }
+    	 return true;
+    } */
+
+</script>

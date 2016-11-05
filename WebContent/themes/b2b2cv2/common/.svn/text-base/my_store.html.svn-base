@@ -1,0 +1,49 @@
+<#-- 引入国际化模板函数 -->
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<#--<#if member?? >
+<dt><span class="ico"></span><@uiLabel text="index.MyShop" /><i class="arrow"></i></dt>
+<dd>
+    <div class="my_carttitle">
+        <h4>
+        ${member.uname!''}
+        </h4>
+        <a href="${ctx}/member/member.html" class="arrow"><@uiLabel text="index.MyUserCenter" /><i></i></a></div>
+    <div class="user-centent-menu">
+        <ul>
+            <li><a href="${ctx}/member/address.html" class="arrow"><@uiLabel text="index.MyAddress" /><i></i></a></li>
+            <li><a href="${ctx}/member/order.html" class="arrow"><@uiLabel text="index.PortalUserOrder" /><i></i></a></li>
+            <li><a href="${ctx}/member/comments.html" class="arrow"><@uiLabel text="index.MyComments" /><i></i></a></li>
+            <li><a href="${ctx}/member/favorite.html" class="arrow"><@uiLabel text="index.MyFavorites" /><i></i></a></li>
+            <li><a href="${ctx}/member/ask.html" class="arrow"><@uiLabel text="index.PortalUserAdvisory" /><i></i></a></li>
+            <li><a href="${ctx}/member/point.html" class="arrow"><@uiLabel text="index.MyPoints" /><i></i></a></li>
+        </ul>
+    </div>
+    <div class="browse-history">
+        <div class="part-title">
+            <h4><@uiLabel text="index.MerchantClickHere" /></h4>
+            <a href="${ctx}/store/business_center.html?menu=store_index"><@uiLabel text="index.EnterMerchantCenter" /></a>
+        </div>
+    </div>
+</dd>
+</#if>-->
+<div class="user-account-infoa" >
+    <div class="user-account-innera"  >
+        <span class="account-unsigneda" style="margin-top:5px;" > 
+        <#if member?? >
+            <img src="${ctx}/themes/b2b2cv2/images/1.1.png"  style="float:left;">
+           <div style="margin-top:0px;float:right;">
+            <a href="${ctx}/member/member.html">${member.uname!''}</a>
+            <span class="ua-line">|</span>
+            <a href="javascript:void(0);" id="logout"><@uiLabel text="index.PortalDropout" /></a>
+       </div>
+        <#else>
+           <img src="${ctx}/themes/b2b2cv2/images/1.1.png"  style="float:left;">
+           <div style="margin-top:0px;float:right">
+            <a href="${ctx}/login.html"><font color="#E62E04"><@uiLabel text="index.PortalLogin" /></font></a>
+            <span class="ua-line">|</span>
+            <a href="${ctx}/register.html"><@uiLabel text="index.PortalRegister" /></a>
+           </div>
+        </#if>
+        </span>
+    </div>
+</div>

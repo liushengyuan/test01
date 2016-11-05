@@ -1,0 +1,122 @@
+<#include '/store/store_header.html' />
+<#assign StoreWithdrawalDetailTag = newTag("storeWithdrawalDetailTag")>
+
+<#assign withdrawal = StoreWithdrawalDetailTag()>
+<#assign list=withdrawal.List />
+<#assign myStoreDetailTag = newTag("myStoreDetailTag")>
+
+<#assign store = myStoreDetailTag()>
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+<div class="path">
+			<span style="color:#999;"><@uiLabel text="sellerAccount.Location"/>：</span><!-- 您的位置 -->
+			<span>></span>
+			<a href="#"><@uiLabel text="seller.CashAccountManager"/></a><span>></span><@uiLabel text="seller.CashAccountDetail"/><!--提现账户管理--><!-- 账户提现明细 -->
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;"><@uiLabel text="seller.CashAccountDetail"/></a><!-- 账户提现明细 -->
+					</li>
+				</ul>
+			</div>
+			<div class="groupbuy_form">
+		<form id="wdedit" class="wdedit">
+		<table border="1px" cellspacing="0">
+	<thead>
+						<tr>
+							<th ><@uiLabel text="sellerWithdrawCashDetails.SerialNumber"/></th><!-- 流水号 -->
+							<th ><@uiLabel text="sellerWithdrawCashDetails.CreateTime"/></th><!-- 创建时间 -->
+							<th ><@uiLabel text="sellerWithdrawCashDetails.CashType"/></th><!-- 类型 -->
+							<th ><@uiLabel text="sellerWithdrawCashDetails.AccountNumber"/></th><!-- 帐号 -->
+							<th ><@uiLabel text="sellerWithdrawCashDetails.Money"/></th><!-- 金额 -->
+							<th ><@uiLabel text="sellerWithdrawCashDetails.FundingSources"/></th><!-- 资金渠道 -->
+							<th ><@uiLabel text="sellerWithdrawCashDetails.DetailsStatic"/></th><!-- 状态 -->
+							<th ><@uiLabel text="sellerWithdrawCashDetails.DetailsRemark"/></th><!-- 备注 -->
+							<th ><@uiLabel text="sellerWithdrawCashDetails.withdrawCashEetils"/></th><!-- 详情 -->
+							<th ><@uiLabel text="sellerWithdrawCashDetails.AccountMoney"/></th><!-- 帐号金额 -->
+							 <th  ><@uiLabel text="sellerWithdrawCashDetails.DetailsOperation"/></th><!-- 流水号 --> 
+							
+						</tr>
+				</thead>	
+				<tbody>	
+						<#if list.totalCount != 0 >
+						
+						<#list list.result as wd>
+						<tr>
+						<#-- <input type="hidden" name="id" value="${wd.id!''}"/> -->
+							<td >${wd.serial_number!''}</td>
+						
+						<td ><@dateformat time="${wd.create_date?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+ 							
+ 							<td>	<#if wd.type==1> <@uiLabel text="sellerAccount.withdrawcash"/> <#else><@uiLabel text="sellerWithdrawCashDetails.Unknown"/> </#if></td><!-- 提现 --><!--未知  -->
+							<td >${wd.card!''}</td>
+							<td>${wd.number}</td>
+							<td >${wd.capital_channel}</td>
+						<!-- 放款完成  --><td><#if wd.state==1><@uiLabel text="sellerWithdrawCashDetails.LoanComplete"/></#if><#if wd.state==2><@uiLabel text="sellerWithdrawCashDetails.NotApproved"/></#if><#if wd.state==0><@uiLabel text="sellerWithdrawCashDetails.Unapproved"/></#if><#if wd.state==3><@uiLabel text="sellerWithdrawCashDetails.DetialsCancelled"/></#if><#if wd.state==4><@uiLabel text="sellerWithdrawCashDetails.DetailsHasAgreed"/></#if></td><!--不批准   --><!-- 未审批 --><!-- 已取消 --><!--已同意  -->
+							<td >${wd.note}</td>
+							<td >${wd.details}</td>
+							<td>${store.account}</td> 
+						<td><#if wd.state==0><input type="button" ref="${wd.id!''}" id="update" value="<@uiLabel text="sellerWithdrawCashDetails.DetailDelete"/>" class="submit to_save updatedelete" style="min-width: 50px;display: inline;"/></#if></td><!-- 删除 -->
+						</tr>
+					</#list> 
+					
+					
+				</#if>
+			</tbody>		
+								
+			
+</table>
+<@pager pageno="${page!'1'}" pagesize="${list.pageSize}" totalcount="${list.totalCount}" />
+		</form>
+	</div>
+</div>
+</div>
+</div>
+<style type="text/css"> 
+  td, th {
+text-align: center;
+width: 90px;
+ border-bottom: 1px solid #100F0F ;
+}
+
+table
+  {
+ margin-top: 20px;
+ 
+ border-collapse: collapse
+ 
+  }
+ 
+</style>
+<script type="text/javascript">
+
+ $(function(){
+	
+	$(".updatedelete").click(function(){
+		if (!confirm("<@uiLabel text='sellerWithdrawCashDetails.ConfirmDelete'/>")) { //确认要删除提现申请吗?
+
+			return;
+		}
+		var id=$(this).attr("ref");
+		//alert(id);
+		 var options = {
+				url : "${ctx}/api/b2b2c/storeApi!wdEdit.do?id="+id+"&ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					location.href="${ctx}/store/withdrawal_detail.html";
+				},
+				error : function(e) {
+					alert("<@uiLabel text='login.ErroToTry'/>");//出现错误 ，请重试
+				}
+			};
+		$("#wdedit").ajaxSubmit(options); 
+	}); 
+	
+})
+ 
+ </script>

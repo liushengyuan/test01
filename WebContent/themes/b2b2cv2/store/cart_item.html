@@ -1,0 +1,25 @@
+<#include '/store/store_header.html' />
+
+
+
+<#assign  cartTag= newTag("cartTag")>
+
+<#assign  itemList = cartTag("{'catid':1}")>
+<div　class="cart-wrap">
+　　<#if (itemList?size>0)>
+　　<!--循环输出商品列表-->
+<#list  itemList as item  >
+　　　　<li>
+　　　　　　<h6>${item.name}</h6>
+　　　　　　<h6>${item.num}</h6>
+　　　　　
+　　　　</li>
+　　</#list>
+
+　　<#else>
+<!-- <h6>${member.member_id}</h6> -->
+
+　　　　<h6>购物车没有商品！</h6>
+<h6>${member.member_id}</h6>
+　　</#if>
+</div>

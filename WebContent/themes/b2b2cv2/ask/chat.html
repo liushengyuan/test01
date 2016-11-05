@@ -1,0 +1,138 @@
+<#-- 引入国际化模板函数 -->
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<#assign image = "com.enation.framework.directive.ImageDirectiveModel"?new()>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.js"></script>
+<#assign chatTag = newTag("chatTag")> 
+<#assign chatList = chatTag()>
+<#assign chatUserIdTag = newTag("chatUserIdTag")>
+<#assign member = chatUserIdTag()>
+<#assign chatStoreTag = newTag("chatStoreTag")>
+<#assign store = chatStoreTag()>
+<#assign recentTag = newTag("recentTag")>
+<#assign memberList = recentTag()>
+<#assign memberLanguageTag = newTag("memberLanguageTag")>
+<#assign languageList = memberLanguageTag()!''>
+<#assign chatAllTag = newTag("chatAllTag")>
+<#assign chatAllList = chatAllTag()>
+<#assign goodsIdTag = newTag("goodsIdTag")>
+<#assign goods = goodsIdTag()!>
+<style>
+body {
+    padding: 20px;
+}
+#message {
+    height: 330px;
+    overflow: auto;
+    width: 600px;
+    float: left;
+}
+.message{
+	height: 330px;
+    overflow: auto;
+    width: 600px;
+    float: left;
+}
+#history {
+    height: 330px;
+    overflow: auto;
+    width: 600px;
+    float: left;
+}
+.Msg {
+    height: 500px;
+    width: 100%;
+}
+
+.friends:hover{
+	background-color: #CCC;	
+}
+
+.xiangq a{ display:inline-block; width:147px; float:left; text-align:center;text-decoration: none; letter-spacing: -2px;padding-top:5px; color:#eb5515; height:47px; line-height:20px;}
+.xiangq a:hover{ color:#ccc;}
+.xxx{display:block;}
+</style>
+<script  src="${ctx}/themes/b2b2cv2/js/html5.js"  ></script>
+<script>
+function recentBlock(){
+	$('#goods').css('display','none');
+	$('#goods_head').css('background-color','#FFF');
+	$('#recent').css('display','block');
+	$('#recent_head').css('background-color','#CCC');
+}
+function goodsBlock(){
+	$('#recent').css('display','none');
+	$('#recent_head').css('background-color','#FFF');
+	$('#goods').css('display','block');
+	$('#goods_head').css('background-color','#CCC');
+}
+//这个脚本是 ie6和ie7 通用的脚本  
+function custom_close(){  
+	/* if(confirm("您确定要关闭本页吗？")){ */  
+	window.opener=null;  
+	window.open('','_self');  
+	window.close();  
+	//}  
+	  
+}  
+
+/* $(function(){
+	var imgstr = $("#changeimg").attr("src");
+	alert(imgstr);
+	var a = imgstr.lastIndexOf("/store");
+	var b =  imgstr.substring(a);
+	$("#changeimg").attr("src","http://www.tradeease.net/statics/attachment"+b);
+}) */
+</script>
+   
+	<div style="width:900px; height:550px; margin:50px 0px 0px 150px;">
+		<div style="height:50px; width:900px; background-color: #eb5515;">
+			<img src="${ctx}/themes/b2b2cv2/images/chatlogo.png" style="margin:8px 0px 10px 10px;float:left;"><div style="float:left;color:#FFF;font-size:18px; line-height: 50px;">收件人：${store.name!''}</div>
+			<a href="javascritp:void(0);" id="Click_close" onClick="custom_close()"><img src="${ctx}/themes/b2b2cv2/images/close.png" style="position: absolute; left:1030px;"></a>
+		</div>
+		<div style="width:600px; height:500px; float:left;">
+			<#include '/ask/main.html' />
+		</div>
+		<div style="width:296px; height:500px; float:left;border:2px #ccc solid;">
+			<div class="xiangq" style="width:296px; height:50px; background-color: #FFF; border-bottom: 2px #ccc solid;">
+				<!-- <div id="goods_head" style="cursor:pointer;width:96px;height:48px;float:left;     font-weight: bold; line-height: 50px; text-align: center;color:#eb5515;" onclick="goodsBlock()">商品详情</div>
+				<div id="recent_head" style="cursor:pointer;width:96px;height:48px;float:left; font-weight: bold; line-height: 50px; text-align: center;color:#eb5515; background-color:#CCC;" onclick="recentBlock()">联系人</div> -->
+				
+				<a href="#" style="border-right:2px #ccc solid;" id="goods_head" onclick="goodsBlock()" ><@uiLabel text="tongxun.xiangqing" /></a>
+				<a href="#" id="recent_head" onclick="recentBlock()" ><@uiLabel text="tongxun.lianxiren" /></a>
+			       </div>
+			<div id="goods" style="width:296px; height:450px;display:none;">
+				<#if goods?size!=0>
+					<#list goods as good>
+						<#if good.goods_id!=-1>
+							<a href="${ctx}/goods-${good.goods_id}.html"><@image src="${good.thumbnail!''}" style="width:160px; margin:40px 15px 0px 15px;" /></a>
+							<#if locale=="zh">
+								<a href="${ctx}/goods-${good.goods_id}.html"><span style="display:block; width:120px; text-align: center;margin-left:40px; margin-top:40px;">${good.name}</span></a>
+							<#elseif locale=="ru">
+							<a href="${ctx}/goods-${good.goods_id}.html"><span style="display:block; width:120px; text-align: center;margin-left:40px; margin-top:40px;">${good.name_ru!''}</span></a>
+							</#if>
+						<#else>
+							<@uiLabel text="tongxun.zanwu" />
+						</#if>
+					</#list>
+				</#if>
+			</div>
+			<div id="recent" style="overflow:auto; width:296px; height:450px;">
+				<#list memberList as member>
+					<a id="${member.member_id}" onclick="readNewMsg(${member.member_id})" href="${ctx}/ask/chat.html?storeId=${member.member_id}" style="text-decoration: none;">
+						<div class="friends" style="width:296px; border:1px solid; height:50px; text-align: center; line-height: 50px;">
+							<#if new_Chat?size!=0>
+								<#list new_Chat as chat>
+									<#if member.member_id==chat.sender>
+										<#if chat.state==2>
+											(<@uiLabel text="tongxun.new" />)
+										</#if>
+									</#if>
+								</#list>
+							</#if>
+						${member.name}<br/>
+					</div></a>
+				</#list>
+			</div>
+		</div>
+	</div>
+ 

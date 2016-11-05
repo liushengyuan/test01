@@ -1,0 +1,65 @@
+<#include '/store/store_header.html' />
+<#assign storeBillTag=newTag("storeBillTag")>
+<#assign storeBill=storeBillTag("{'id':${id}}")>
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			<a href="#">结算管理</a><span>></span>本期结算
+		</div>
+		<div class="store_right_main">
+			<div class="bill_alert bill-alert-block mt10">
+				<div style="width:800px">
+					<h3 style="float:left">本期结算</h3>
+					<div style="float:right;">
+						<input type="button" class="submit go_save_selectcat" value="本期结算无误，我要确认" id="nextBtn" disabled="disabled">
+					</div>
+					<div style="clear:both"></div>
+				</div>
+				<ul>
+					<li>结算单号：${storeBill.sn}  <@dateformat time="${storeBill.start_time?c}" pattern="yyyy-MM-dd "/>&nbsp;至&nbsp;<@dateformat time="${storeBill.end_time?c}" pattern="yyyy-MM-dd "/></li>
+					<li>出账时间：<@dateformat time="${storeBill.bill_time?c}" pattern="yyyy-MM-dd HH:mm"/></li>
+					<li>本期应收：${storeBill.bill_price} = ${storeBill.price} (订单金额) - ${storeBill.commi_price} (佣金金额) - ${storeBill.returned_price} (退单金额) + ${storeBill.returned_commi_price} (退还佣金)</li>
+					<li>结算状态：<#if storeBill.status==1>
+									已出账
+								<#elseif storeBill.status==2>
+									已确认
+								<#elseif storeBill.status==3>
+									已审核
+								<#else>
+									已付款
+								</#if>	</li>
+				</ul>
+			</div>
+			<div class="tabmenu">
+  				<ul class="tab pngFix">
+  					<li class="active">
+  						<a href="./商家中心_files/商家中心.html">订单列表</a>
+  					</li>
+  					<li class="normal">
+  						<a href="">退款订单</a>
+  					</li>
+  				</ul>
+  			</div>
+  			<div class="store_orderlist">
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	load_order_list(1);
+})
+function load_order_list(page){
+	$("#store_orderlist").load("store/bill/store_bill_order.html?startTime=${storeBill.start_time}&endTime=${storeBill.end_time}&page="+page,function(){
+		$("#store_orderlist .page li a").click(function(){
+			var pageno= $(this).attr("page");
+			loadRecord_wrapper(pageno);
+		});
+	});	
+}
+</script>
+<#include '/common/footer.html'/>

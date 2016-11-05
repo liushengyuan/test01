@@ -1,0 +1,80 @@
+<#include 'common/header.html' />
+<#include 'common/reception_header.html'/>
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/help.css" />
+ <#assign dataSearchTag=newTag("dataSearchTag") />
+<div class="content">
+	<!--帮助中心-->
+	<div class="besides">
+		<div class="help2_wh">
+			<div class="help_left">
+				<h1><@uiLabel text="message.Aboutwebsite" /></h1>
+				<ul>
+					<#assign webPage = dataSearchTag('{"modelid":2,"catid":34}') />
+					<#list webPage.result as article>
+						<li <#if !article_has_next>class= "last"</#if>>
+							<a href="help-${article.cat_id}-${article.id}.html"><#if locale=="zh">
+							
+							${article.title!''}
+							<#else>
+							${article.keyword!''}
+							</#if></a>
+						</li>
+					</#list>
+				</ul>
+			</div>
+		<!-- 	<div class="help_left">
+				<h1><@uiLabel text="message.NewPeople" /></h1>
+				<ul style="height:450px">
+					<#assign webPage = dataSearchTag('{"modelid":2,"catid":33}') />
+					<#list webPage.result as article>
+						<li <#if !article_has_next>class= "last"</#if>>
+							<a href="help-${article.cat_id}-${article.id}.html">${article.title!''}</a>
+						</li>
+					</#list>
+				</ul>
+			</div> -->
+			<div class="help_left">
+			<h1><@uiLabel text="index.maibang" /></h1>
+				<!-- <h1><@uiLabel text="message.SellerRule" /></h1> -->
+				<ul>
+					<#assign webPage = dataSearchTag('{"modelid":2,"catid":36}') />
+					<#list webPage.result as article>
+						<li <#if !article_has_next>class= "last"</#if>>
+							<a href="help-${article.cat_id}-${article.id}.html"><#if locale=="zh">
+							
+							${article.title!''}
+							<#else>
+							${article.keyword!''}
+							</#if></a>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			
+			<div class="help_left">
+			<h1><@uiLabel text="message.SellerRule" /></h1>
+				<!-- <h1><@uiLabel text="index.maibang" /></h1> -->
+				<ul>
+					<#assign webPage = dataSearchTag('{"modelid":2,"catid":35}') />
+					<#list webPage.result as article>
+						<li <#if !article_has_next>class= "last"</#if>>
+							<a href="help-${article.cat_id}-${article.id}.html"><#if locale=="zh">
+							
+							${article.title!''}
+							<#else>
+							${article.keyword!''}
+							</#if></a>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			
+			
+		
+	</div>
+
+	</div>		
+	<div style="width:100%;height:1px;overflow:hidden;display:block;clear:both;"></div>
+</div>
+<#include 'common/footer.html' />

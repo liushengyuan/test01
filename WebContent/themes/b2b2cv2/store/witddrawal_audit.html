@@ -1,0 +1,117 @@
+<#include '/store/store_header.html' /> 
+
+<#assign WithdrawalTag = newTag("withdrawalTag")>
+
+<#assign withdrawal = WithdrawalTag()>
+<#assign list=withdrawal.List />
+<#assign myStoreDetailTag = newTag("myStoreDetailTag")>
+
+<#assign store = myStoreDetailTag()>
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			<a href="#">帐户管理</a><span>></span>帐户提现管理
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;">帐户提现明细</a>
+					</li>
+				</ul>
+			</div>
+			<div class="groupbuy_form">
+		<form id="wdedit" class="wdedit">
+		<table cellpadding="0" cellspacing="0">
+	<thead>
+						<tr>
+							<th style="width:10%">流水号</th>
+							<th style="width:10%">创建时间</th>
+							<th style="width:10%">类型</th>
+							<th style="width:10%">帐号</th>
+							<th style="width:10%">金额</th>
+							<th style="width:10%">资金渠道</th>
+							<th style="width:10%">状态</th>
+							<th style="width:10%">备注</th>
+							<th style="width:10%">详情</th>
+							<th style="width:10%">帐号金额</th>
+							<th style="width:10%" >操作</th>
+							
+						</tr>
+				</thead>		
+						<#if list.totalCount != 0 >
+						<tbody>
+						<#list list.result as wd>
+						<tr>
+						<input type="hidden" name="id" value="${wd.id!''}"/>
+						<input type="hidden" name="store_id" value="${wd.store_id!''}"/>
+						<input type="hidden" name="number" value="${wd.number!''}"/>
+					
+							 <td style="width:10%">${wd.serial_number}</td> 
+						
+						<td style="width:10%"><@dateformat time="${wd.create_date?c}" pattern="yyyy-MM-dd HH:mm"/></td>
+ 							
+ 							<td>	<#if wd.type==0> 提现 <#else> 未知</#if></td>
+							<td style="width:10%">${wd.account}</td>
+							<td style="width:10%">${wd.number}</td>
+							<td style="width:10%">${wd.capital_channel}</td>
+						<td>	<#if wd.state==1> 完成 <#else> 未审批</#if></td>
+							<td style="width:10%">${wd.note}</td>
+							<td style="width:10%">${wd.details}</td>
+							<td>${store.account}</td> 
+						<td><p><input type="button" id="ok" value="通过" class=""/></p>
+						<p><input type="button" id="no" value="反对" class=""/></p>
+						</td>
+						</tr>
+					</#list> 
+					</tbody>
+				</#if>
+</table>
+		</form>
+	</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+
+ $(function(){
+	
+	$("#ok").click(function(){
+		
+		 var options = {
+				url : "${ctx}/api/b2b2c/storeApi!wdAudit.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					location.href="${ctx}/store/allWithdrawal.html";
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#wdedit").ajaxSubmit(options); 
+	}); 
+	$("#no").click(function(){
+		
+		 var options = {
+				url : "${ctx}/api/b2b2c/storeApi!wdNoAgree.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					location.href="${ctx}/store/allWithdrawal.html";
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+		$("#wdedit").ajaxSubmit(options); 
+	}); 
+	
+})
+ 
+ </script>

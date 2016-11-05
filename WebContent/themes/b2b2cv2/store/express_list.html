@@ -1,0 +1,186 @@
+<#assign  title="配送商管理" />
+<#include '/store/store_header.html' />
+<!--创建"会员地址列表"标签-->
+<#assign logisDetailTag=newTag("logisDetailTag")>    
+<!--调用"会员地址列表"标签-->          
+<#assign logisDetail=logisDetailTag()>	
+<div class="store_center">
+<#include '/store/left_menu.html' />
+<div id="sotre_right_content" class="sotre_right_content">
+<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			<a href="#">物流管理</a><span>></span>配送商管理
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;">配送商管理</a>
+					
+					</li>
+					<div class="address">
+		
+		<!-- <a href="javascript:;" class="add_address"><span>新增配货商</span></a> -->
+	</div>
+				</ul>
+			</div>
+	<div class="address_list">
+		 <table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th class="a1">中文名称</th>
+					<th class="a2">英文名称</th>
+					<th class="a3" style="width:200px;">物流商logo</th>
+					<th class="a4">物流产品</th>
+					<th class="a5">时效</th>
+				</tr>
+			</thead>
+			<tbody>
+				<#if logisDetail?size gt 0 >
+				<#list logisDetail as logis>
+				<tr>
+					<td>${logis.name!''}</td>
+					<td>${logis.ename!''}</td>
+					<td style="width:200px;"><img alt="" src="${logis.url}" height='60px' width='110px'/></td>
+					<td>
+					   ${logis.type}
+					</td>
+					<td>${logis.time!''}</td>
+				</tr>
+				</#list>
+				<#else>
+				<tr>
+					<td colspan="9">
+						平台配送商信息为空<!-- 您尚未添加收货地址，<a href="javascript:;" class="addressadd">添加一个</a> -->
+					</td>
+				</tr>
+				</#if>
+			</tbody>	
+		</table>
+	<!-- </div>
+	添加会员地址。使用js load方法调用member/address_add.html页面 
+	<div class="address_add" style="overflow:hidden;">
+	</div>
+	修改会员地址 。使用js load方法调用member/address_edit.html页面
+	<div class="address_edit" style="overflow:hidden;"> -->
+	</div>
+	
+</div>
+
+</div>
+
+
+
+<script>
+	$(function(){
+		/*添加会员地址专用*/
+		$(".add_address,.addressadd").click(function(){
+			$(".address_add").load("address_add.html",function(){
+				$(".address_list").hide();
+				$(".address_edit").hide();
+				$(".grey_top").hide();
+				$(".address_add").show();
+				/*添加用户地址js*/
+			
+				$("#btnSubmit").click(function(){
+					var membername = $(".member_name_title").val();
+					if(membername.indexOf(" ")!=-1){
+						alert("姓名中不允许有空格！");
+						return false;
+					}
+					$("#member_addr").ajaxSubmit({
+						url : "${ctx}/api/shop/memberAddress!add2.do",
+						dataType : 'json',
+						success : function(data) {	
+							alert(data.message)
+							if(data.result==1)
+								location.href = "address.html"
+						},
+						error : function(e) {
+							alert("出现错误 ，请重试");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			});
+		});
+		/*修改地址专用*/
+		$(".edit").click(function(){
+			var editid = $(this).attr("rel");
+			
+			$(".address_edit").load("address_edit.html?addressid="+editid,function(){
+				$(".address_list").hide();
+				$(".address_edit").show();
+				$(".grey_top").hide();
+				$(".address_add").hide();
+				
+				/*修改用户地址*/
+				$("#address_edit").click(function(){
+					var membername = $(".member_name_title").val();
+					if(membername.indexOf(" ")!=-1){
+						alert("姓名中不允许有空格！");
+						return false;
+					}
+					$(".validate").ajaxSubmit({
+						url : "${ctx}/api/shop/memberAddress!edit2.do?addressid="+editid,
+						dataType : 'json',
+						success : function(data) {	
+							alert(data.message)
+							if(data.result==1)
+								location.href = "address.html"
+						},
+						error : function(e) {
+							alert("出现错误 ，请重试");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			})
+		})
+		/*删除地址*/
+		$(".address_del").click(function(){
+			if(confirm("确定要删除吗")){
+				var deleteid = $(this).attr("rel");
+				$.ajax({
+					url : "${ctx}/api/shop/memberAddress!delete.do?addr_id="+deleteid,
+					dataType : 'json',
+					success : function(data) {	
+						alert(data.message)
+						if(data.result==1)
+							location.href = "address.html"
+					},
+					error : function(e) {
+						alert("出现错误 ，请重试");
+					}
+				})  
+			}
+			else{
+				location.href="address.html";
+			}
+		})
+	});		
+	 //  全选或全不选
+    function checkAll(obj) {
+        $(".s_orderlist").find("input[name=orderIndexs][type='checkbox']").each(function (i) {
+            this.checked = obj.checked;
+        });
+    }
+    //  全不选
+    function uncheckAll() {
+        $(".s_orderlist").find("input[name=orderIndexs][type='checkbox']").each(function (i) {
+            this.checked = false;
+        });
+    }
+</script>
+	<!--会员中心首页右侧结束-->
+
+
+</div>
+<#include '/common/seller_footer.html' />

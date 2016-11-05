@@ -1,0 +1,34 @@
+<#assign storeOrderModifyPriceTag=newTag("storeOrderModifyPriceTag")> 
+<#assign order=storeOrderModifyPriceTag('"order_sn":${order_sn}')/>
+<#assign uiLabel ="com.enation.framework.directive.I18nDirectiveModel"?new()>
+<div class="dialog_content" style="margin: 0px; padding: 0px;">
+	<div class="sotre_bonus">
+		<form id="editPrice_form" action="#" method="post">
+			<input type="hidden" value="${order.sn}" name="ordersn"> 
+			<dl>
+				<dt style="width: 26%;" ><@uiLabel text="orderprice.price" />：</dt>
+				<dd style="width: 73%;" >
+					<#if order.currency=="CNY">
+						￥
+					</#if>
+					<input type="text" value="${order.goods_amount!0}" name="goods_amount" class="text" style="width:150px;" dataType="float" isrequired="true">
+					<#if order.currency=="RUB">
+						р.
+					</#if>
+				</dd>
+			</dl>
+			<dl>
+				<dt style="width: 26%;" ><@uiLabel text="orderprice.yunfei" />：</dt>
+				<dd style="width: 73%;" >
+					<#if order.currency=="CNY">
+						￥
+					</#if>
+					<input value="${order.shipping_amount!0}" type="text" name="shipping_amount" class="text" style="width:150px;" dataType="float" isrequired="true">
+					<#if order.currency=="RUB">
+						р.
+					</#if>
+				</dd>
+			</dl>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,175 @@
+<#include '/common/header.html' />
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>
+<link type="text/css" rel="stylesheet" href="${ctx}/themes/b2b2cv2/active160608/3active.css" />
+<div id="3active-banner">
+	<img  src="${ctx}/themes/b2b2cv2/active160608/discount.jpg" width="100%"/>
+</div>
+<div class="active3-continter">
+		<!-- 6月8休闲食品-->
+		<#assign goodsList=goodsListTag("'tagid':'200','goodsnum':'15'")>
+    	<#if goodsList?exists && goodsList?size gt 0>
+			<div class="active3-center" >
+				    <h3 id="an_1" class="product-tittle">休闲食品</h3>
+					<ul>
+						<#list goodsList as goods>
+						<li class="active3-product">
+						    <a href="${ctx}/goods-${goods.goods_id}.html" target="_blank">
+						    	<@image src="${goods.big!''}" alt="${goods.name!''}" height="230" width="210"  class="active3-img"/>
+								<!-- <img src="active1.png" alt="" height="230" width="210"  class="active3-img"> -->
+								<h3 class="active3-title" >
+			                    <a href="${ctx}/goods-${goods.goods_id}.html" target="_blank" class="active3-titlenr">
+			                    	${goods.name!''}
+			                    </a>             			
+			                    </h3>
+			                   <div class="active3-price">
+				                    <ul >
+				                        <li class="active3_newprice">
+				                                                                                ￥${goods.price!''} /件  
+				                        </li>
+				                       <!--  <li class="active3_oldprice">
+				                            ${goods.cost_price_ru!''}р./ Штука
+				                        </li> -->
+				                    </ul>
+		               			</div>
+                                <a href="${ctx}/goods-${goods.goods_id}.html" target="_blank"  class="active3_button">立即购买</a> 
+						    </a>
+						</li>
+						</#list>
+					</ul>
+			</div>
+		</#if>
+		<!--  6月8糖果-->
+		<#assign goodsList=goodsListTag("'tagid':'201','goodsnum':'15'")>
+    	<#if goodsList?exists && goodsList?size gt 0>
+			<div class="active3-center" >
+				    <h3 id="an_2" class="product-tittle">糖果</h3>
+					<ul>
+						<#list goodsList as goods>
+						<li class="active3-product">
+						    <a href="${ctx}/goods-${goods.goods_id}.html" target="_blank">
+						    	<@image src="${goods.big!''}" alt="${goods.name!''}" height="230" width="210"  class="active3-img"/>
+								<!-- <img src="active1.png" alt="" height="230" width="210"  class="active3-img"> -->
+								<h3 class="active3-title" >
+			                    <a href="${ctx}/goods-${goods.goods_id}.html" target="_blank" class="active3-titlenr">
+			                    	${goods.name!''}
+			                    </a>             			
+			                    </h3>
+			                   <div class="active3-price">
+				                    <ul >
+				                        <li class="active3_newprice">
+				                                                                                ￥${goods.price!''} /件  
+				                        </li>
+				                       <!--  <li class="active3_oldprice">
+				                            ${goods.cost_price_ru!''}р./ Штука
+				                        </li> -->
+				                    </ul>
+		               			</div>
+                                <a href="${ctx}/goods-${goods.goods_id}.html" target="_blank"  class="active3_button">立即购买</a> 
+						    </a>
+						</li>
+						</#list>
+					</ul>
+			</div>
+		</#if>	
+		<!-- 6月8酒水&饮品-->
+		<#assign goodsList=goodsListTag("'tagid':'202','goodsnum':'15'")>
+    	<#if goodsList?exists && goodsList?size gt 0>
+			<div class="active3-center" >
+				    <h3 id="an_3" class="product-tittle">酒水&饮品</h3>
+					<ul>
+						<#list goodsList as goods>
+						<li class="active3-product">
+						    <a href="${ctx}/goods-${goods.goods_id}.html" target="_blank">
+						    	<@image src="${goods.big!''}" alt="${goods.name!''}" height="230" width="210"  class="active3-img"/>
+								<!-- <img src="active1.png" alt="" height="230" width="210"  class="active3-img"> -->
+								<h3 class="active3-title" >
+			                    <a href="${ctx}/goods-${goods.goods_id}.html" target="_blank" class="active3-titlenr">
+			                    	${goods.name!''}
+			                    </a>             			
+			                    </h3>
+			                   <div class="active3-price">
+				                    <ul >
+				                        <li class="active3_newprice">
+				                                                                                ￥${goods.price!''} /件  
+				                        </li>
+				                       <!--  <li class="active3_oldprice">
+				                            ${goods.cost_price_ru!''}р./ Штука
+				                        </li> -->
+				                    </ul>
+		               			</div>
+                                <a href="${ctx}/goods-${goods.goods_id}.html" target="_blank"  class="active3_button">立即购买</a> 
+						    </a>
+						</li>
+						</#list>
+					</ul>
+			</div>
+		</#if>	
+				<div class="menufloat" id="menufloat">
+                    <div style="margin-top:150px; width:145px;">
+                    	<!-- <a href="#dazhe1" class="an_title" >Женская одежда</a>	 -->
+			       		<!-- <a href="#dazhe1" class="an_1" >ХИТ продаж</a>
+			       		<a href="#dazhe2" class="an_2" >Скидка 80%</a> -->
+			        	<a href="#an_1" class="an_1" >休闲食品</a>
+			        	<a href="#an_2" class="an_2" >糖果</a>
+			        	<a href="#an_3" class="an_3" >酒水&饮品</a>
+			        	<!-- <a href="#dazhe3" class="an_3" >Скидки до 50%</a>
+			        	<a href="#dazhe4" class="an_4" >Скидки до 30%</a> -->
+			        </div>
+                </div>
+</div>
+<!-- <div class="aactivebottom">
+<div>活动产品数量有限。活动时间5月31号至6月8号2016年。详细内容参见www.trade-ease.ru。活动机构：易智付科技（北京）有限公司，地址：北京西城区阜成门路22号620-626室，邮编：100037，营业执照：110108010780857</div>
+</div> -->
+<!-- <script type="text/javascript" src="jquery-1.5.1.min.js"></script> -->
+<script type="text/javascript">
+//四色五入方法
+function changeTwoDecimal_f(x) {
+    var f_x = parseFloat(x);
+    var f_x = Math.round(x * 100) / 100;
+    var s_x = f_x.toString();
+    var pos_decimal = s_x.indexOf('.');
+    if (pos_decimal < 0) {
+        pos_decimal = s_x.length;
+        s_x += '.';
+    }
+    while (s_x.length <= pos_decimal + 2) {
+        s_x += '0';
+    }
+    return s_x;
+}
+function float_nav(dom){
+	var right_nav=$(dom);
+	var nav_height=right_nav.height();
+	function right_nav_position(bool){
+		var window_height=$(window).height();
+		var nav_top=(window_height-nav_height)/2;
+		if(bool){
+			right_nav.stop(true,false).animate({top:nav_top+$(window).scrollTop()},400);
+		}else{
+			right_nav.stop(true,false).animate({top:nav_top},300);
+		}	
+		right_nav.show();
+	}
+	
+	if(!+'\v1' && !window.XMLHttpRequest ){
+		$(window).bind('scroll resize',function(){
+			if($(window).scrollTop()>300){
+				right_nav_position(true);			
+			}else{
+				right_nav.hide();	
+			}
+		})
+	}else{
+		$(window).bind('scroll resize',function(){
+			if($(window).scrollTop()>300){
+				right_nav_position();
+			}else{
+				right_nav.hide();
+			}
+		})
+	}	
+}
+float_nav('#menufloat');
+</script>
+<#include '/common/footer.html'/>

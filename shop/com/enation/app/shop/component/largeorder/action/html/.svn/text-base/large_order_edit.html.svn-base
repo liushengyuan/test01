@@ -1,0 +1,195 @@
+<#assign dataformat="com.enation.framework.directive.DateformateDirective"?new()/>
+<style>
+.input_text{
+	width: 200px;
+}
+</style>
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 20px">
+		<form method="post" class="validate" id="editBonusTypeForm">
+			<table>
+				<tr>
+					<th><label class="text">店铺名称：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.store_name" value="${bigOrder.store_name!''}"
+						dataType="string"
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">商品名称：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.goods" maxlength="60" 
+						dataType="string" value="${bigOrder.goods!''}"
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">商品数量：</label></th>
+					<td><input class="easyui-numberbox input_text"
+						data-options="required:true" type="text" value="${bigOrder.goods_num!''}"
+						name="bigOrder.goods_num" dataType="int" isrequired="true" />
+					</td>
+				</tr>
+				<tr>
+					<th><label class="text">订单金额：</label></th>
+					<td><input class="easyui-numberbox input_text"
+						data-options="required:true" type="text" value="${bigOrder.order_amount!''}"
+						name="bigOrder.order_amount" dataType="float" isrequired="true" />
+					</td>
+				</tr>
+				<tr>
+					<td style="padding-left: 30px;">订单货币：</td>
+					<td>
+						<select name="bigOrder.currency">
+							<option value="RUB" <#if bigOrder.currency=="RUB">selected</#if>>卢布</option>
+							<option value="CNY" <#if bigOrder.currency=="CNY">selected</#if>>人民币</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td style="padding-left: 30px;">支付方式：</td>
+					<td>
+						<select name="bigOrder.payment_type">
+							<option value="0" <#if bigOrder.payment_type==0>selected</#if>>未支付</option>
+							<option value="1" <#if bigOrder.payment_type==1>selected</#if>>Yandex Money</option>
+							<option value="2" <#if bigOrder.payment_type==2>selected</#if>>首信易支付</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th><label class="text">收货人姓名：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.ship_name" maxlength="60" value="${bigOrder.ship_name!''}"
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">收货人地址：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.ship_addr" maxlength="60" value="${bigOrder.ship_addr!''}"
+						dataType="string"
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">收货人邮件：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.ship_email" maxlength="60" 
+						dataType="email"  value="${bigOrder.ship_email!''}"
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">收货人电话：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.ship_tel" maxlength="60" 
+						dataType="string" value="${bigOrder.ship_tel!''}"
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">备注：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true" type="text"
+						name="bigOrder.remark" maxlength="60"
+						dataType="string"  value="${bigOrder.remark!''}"
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<td style="padding-left: 30px;">订单状态</td>
+					<td>
+						<select name="bigOrder.status" 
+						data-options="required:true" isrequired="true"
+						class="inputSelect valid">
+							<option value="100">--请选择--</option>	
+							<option value="2" <#if bigOrder.status==2>selected</#if>>已付款</option>
+							<option value="1" <#if bigOrder.status==1>selected</#if>>已付款待确认</option>
+							<option value="0" <#if bigOrder.status==0>selected</#if>>待付款</option>
+							<option value="-2" <#if bigOrder.status==-2>selected</#if>>退货</option>
+							<option value="7" <#if bigOrder.status==7>selected</#if>>已完成</option>
+							<option value="6" <#if bigOrder.status==6>selected</#if>>已收货</option>
+							<option value="-1" <#if bigOrder.status==-1>selected</#if>>退款</option>
+							<option value="5" <#if bigOrder.status==5>selected</#if>>已发货</option>
+							<option value="-4" <#if bigOrder.status==-4>selected</#if>>申请换货</option>
+							<option value="-3" <#if bigOrder.status==-3>selected</#if>>申请退货</option>
+							<option value="4" <#if bigOrder.status==4>selected</#if>>未发货</option>
+							<option value="9" <#if bigOrder.status==9>selected</#if>>订单已生效</option>
+							<option value="8" <#if bigOrder.status==8>selected</#if>>已取消</option>
+							<option value="-7" <#if bigOrder.status==-7>selected</#if>>已换货</option>
+							<#--<#list statusMap?keys as key>
+								<option value="${key}">${statusMap.get(key)}</option> 
+							</#list>-->
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td style="padding-left: 30px;">付款状态</td>
+					<td>
+						<select name="bigOrder.pay_status" 
+						data-options="required:true" isrequired="true"
+						class="inputSelect valid">
+							<option value="100">--请选择--</option>	
+							<option value="3" <#if bigOrder.pay_status==3>selected</#if>>已经退款</option>
+							<option value="2" <#if bigOrder.pay_status==2>selected</#if>>已确认付款</option>
+							<option value="0" <#if bigOrder.pay_status==0>selected</#if>>未付款</option>
+							<option value="5" <#if bigOrder.pay_status==5>selected</#if>>部分付款</option>
+							 <#--<#list payStatusMap?keys as key>
+								<option value="${key}">${payStatusMap.get(key)}</option> 
+							</#list>-->
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td style="padding-left: 30px;">货运状态</td>
+					<td>
+						<select name="bigOrder.ship_status" 
+						data-options="required:true" isrequired="true"
+						class="inputSelect valid">
+							<option value="100">--请选择--</option>
+							<option value="3" <#if bigOrder.ship_status==3>selected</#if>>已发货</option>
+							<option value="2" <#if bigOrder.ship_status==2>selected</#if>>未发货</option>
+							<option value="1" <#if bigOrder.ship_status==1>selected</#if>>配货中 </option>
+							<option value="0" <#if bigOrder.ship_status==0>selected</#if>>未配货</option>
+							<option value="5" <#if bigOrder.ship_status==5>selected</#if>>部分发货</option>
+							<option value="4" <#if bigOrder.ship_status==4>selected</#if>>已退货</option>
+							<option value="9" <#if bigOrder.ship_status==9>selected</#if>>已收货</option>
+							<option value="8" <#if bigOrder.ship_status==8>selected</#if>>已换货</option>
+							 <#--<#list shipMap?keys as key>
+								<option value="${key}">${shipMap.get(key)}</option>
+							 </#list>-->
+						</select>
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" name="bigOrder.order_id" value="${bigOrder.order_id!''}">
+			<input type="hidden" name="bigOrder.sn" value="${bigOrder.sn!''}">
+			<input type="hidden" name="bigOrder.create_time" value="${bigOrder.create_time!''}">
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	/*$(function() {
+		
+		//类型切换
+		$("input[type=radio]").click(
+				function() {
+					var value = this.value;
+					if (value == 1 || value == 2) {
+						$('#sendTimeStart').datebox('enable');
+						$('#sendTimeEnd').datebox('enable'); 
+					} else {
+						$('#sendTimeStart').datebox('disable');
+						$('#sendTimeEnd').datebox('disable');
+					}
+
+					if (value == 2) {
+						$("#min_tr").show();
+					} else {
+						$("#min_tr").hide();
+					}
+				});
+	});*/
+
+</script>

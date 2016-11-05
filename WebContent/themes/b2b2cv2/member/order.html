@@ -1,0 +1,426 @@
+<#if locale=="zh">
+    <#assign  title="我的订单" />
+ <#elseif locale=="ru">
+     <#assign title="мой заказ" />
+ </#if>
+<#include 'member_header.html' />
+<!-- 获取会员订单列表标签 -->
+<#assign memberOrderListTag = newTag("storeMemberOrderListTag")>
+<!-- 调用会员订单列表标签 -->
+<#assign memberOrderList = memberOrderListTag("{'keyword':'${keyword!''}'}")>
+<#assign order = memberOrderList.ordersList>
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<#assign paystatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 该商品是否在秒伤活动内 -->
+<#assign showGoodSkillTag= newTag("showGoodSkillTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>
+<!-- 调用会员订单状态数量标签 -->
+<#assign storeMemberOrderNumTag = newTag("storeMemberOrderNumTag")>
+
+<link rel="stylesheet" href="${ctx}/themes/b2b2cv2/css/orderList.css" type="text/css"
+<#if locale=="zh">
+<script  src="${ctx}/themes/b2b2cv2/js/Order.js"  ></script>
+<#elseif locale=="ru">
+<script  src="${ctx}/themes/b2b2cv2/js/Order_ru.js"  ></script>
+</#if>
+<div class="user_order">
+<div class="order-type" id="J_orderType">
+	<div class="order-type-list first-line">
+        <strong><@uiLabel text="index.PortalUserOfOrdersConcern" />：</strong>
+        <a <#if memberOrderList.status?exists && memberOrderList.status == 999>class="current"</#if> href="order.html?status=999"><@uiLabel text="index.PortalUserNewOrders" /><em>(${storeMemberOrderNumTag('{"status":999}')})</em></a>
+        <a <#if memberOrderList.status?exists && memberOrderList.status == 0>class="current"</#if> href="order.html?status=0"><@uiLabel text="index.PortalOrderAwaitingPayment" /><em>(${storeMemberOrderNumTag('{"status":0}')})</em></a>
+        <a <#if memberOrderList.status?exists && memberOrderList.status == 1>class="current"</#if> href="order.html?status=1"><@uiLabel text="index.PortalUserBeAcknowledged" /><em>(${storeMemberOrderNumTag('{"status":1}')})</em></a>
+        <a <#if memberOrderList.status?exists && memberOrderList.status == 2>class="current"</#if> href="order.html?status=2"><@uiLabel text="index.PortalUserBeShipped" /><em>(${storeMemberOrderNumTag('{"status":2}')})</em></a>
+        <a <#if memberOrderList.status?exists && memberOrderList.status == 5>class="current"</#if> href="order.html?status=5"><@uiLabel text="buyer.HasShiped" /><em>(${storeMemberOrderNumTag('{"status":5}')})</em></a>
+        <a <#if memberOrderList.status?exists && memberOrderList.status == 6>class="current"</#if> href="order.html?status=6"><@uiLabel text="index.PortalUserHasReceipt" /><em>(${storeMemberOrderNumTag('{"status":6}')})</em></a>
+        <a <#if memberOrderList.status?exists && memberOrderList.status == 11>class="current"</#if> href="order.html?status=11"><@uiLabel text="buyer.HasPayedOrder" /><em>(${storeMemberOrderNumTag('{"status":11}')})</em></a>
+<!--         <a href="#"><@uiLabel text="index.PortalUserCancellation" /><em>(0)</em></a> -->
+		<a <#if memberOrderList.status?exists && memberOrderList.status == 10>class="current"</#if> href="order.html?status=10"><@uiLabel text="index.PortalUserDisputes" /><em>(${storeMemberOrderNumTag('{"status":10}')})</em></a>
+<!--         <a id="ORDER_DISORDER" href="javascript:void(0)"><@uiLabel text="index.PortalUserDisputes" /><em>(0)</em></a> -->
+    </div>
+    <div class="order-type-list">
+        <a <#if memberOrderList.status?exists && memberOrderList.status == 7>class="current"</#if> href="order.html?status=7"><@uiLabel text="index.PortalOrderCompleted" /><em>(${storeMemberOrderNumTag('{"status":7}')})</em></a>
+        <a <#if memberOrderList.status?exists && memberOrderList.status == -3>class="current"</#if> href="order.html?status=-3"><@uiLabel text="index.PortalUserApplicationReturns" /><em>(${storeMemberOrderNumTag('{"status":-3}')})</em></a>
+        <a <#if memberOrderList.status?exists && memberOrderList.status == -2>class="current"</#if> href="order.html?status=-2"><@uiLabel text="order.hasReturnedGoods" /><em>(${storeMemberOrderNumTag('{"status":-2}')})</em></a>
+        <a <#if memberOrderList.status?exists && memberOrderList.status == -1>class="current"</#if> href="order.html?status=-1"><@uiLabel text="index.PortalUserRefunded" /><em>(${storeMemberOrderNumTag('{"status":-1}')})</em></a>
+        <a <#if memberOrderList.status?exists && memberOrderList.status == 8>class="current"</#if> href="order.html?status=8"><@uiLabel text="index.PortalUserCancelled" /><em>(${storeMemberOrderNumTag('{"status":8}')})</em></a>
+    </div>
+</div>
+<!-- 	<div class="order_title_nav"> -->
+<!-- 		<ul> -->
+<!-- 			<li <#if !memberOrderList.status?exists  && !memberOrderList.keyword?exists >class="selected"</#if>><a href="order.html"><span>所有订单</span></a></li>						 -->
+<!-- 			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_NOT_PAY>class="selected"</#if>><a href="order.html?status=0"><span>等待付款</span></a></li> -->
+<!-- 			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_PAY>class="selected"</#if>><a href="order.html?status=1"><span>已付款待确认</span></a></li> -->
+<!-- 			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_PAY_CONFIRM>class="selected"</#if>><a href="order.html?status=2"><span>已付款</span></a></li> -->
+<!-- 			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_ALLOCATION>class="selected"</#if>><a href="order.html?status=3"><span>配货中</span></a></li> -->
+<!-- 			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_SHIP>class="selected"</#if>><a href="order.html?status=5"><span>已发货</span></a></li> -->
+<!-- 			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_CANCELLATION>class="selected"</#if>><a href="order.html?status=8"><span>已取消</span></a></li> -->
+<!-- 			<li <#if memberOrderList.status?exists && memberOrderList.status == memberOrderList.ORDER_COMPLETE>class="selected"</#if>><a href="order.html?status=7"><span>已成功</span></a></li> -->
+<!-- 			<!--  -->
+<!-- 				<li <#if keyword?exists>class="selected"</#if>><a href="javascript:;" id="searchtab" onclick="$('#btnSearch').click()"><span>搜索结果</span></a></li> -->
+<!-- 			 --> 
+<!-- 		</ul> -->
+<!-- 	</div> -->
+	<!-- 订单搜索 -->
+	<div class="user_ordersearch">
+		<span class="ordershearch_result"><@uiLabel text="index.PortalOrderSearch" /><strong><#if keyword??>${memberOrderList.totalCount!0}<#else>0</#if></strong><@uiLabel text="index.PortalOrderSize" /></span>
+		<span class="ordershearch_button"><input class="searOrderBtn" id="btnSearch" type="button" value="<@uiLabel text="index.SearchInOrder" />"/></span>
+		<span class="ordershearch_word"><input class="inputText default" id="search_keyword" autocomplete="off" type="text" placeholder="<@uiLabel text="index.EnterOrderCommodityImage" />" value="${keyword!''}" /></span>
+	</div>
+	<!-- 订单列表 -->
+	<div class="order_list">
+		<#if order?size gt 0 >
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th colspan="4" style="width:480px;"><@uiLabel text="index.PortalUserProductName" /></th>
+					<th style="width:50px;"><@uiLabel text="index.PortalUserProductsPrice" /></th>
+					<th style="width:50px;"><@uiLabel text="index.PortalUserProductsNumber" /></th>
+<!--  				<th><@uiLabel text="index.PortalUserOrderAmount" /></th>-->
+					<th><@uiLabel text="index.NeedToPay" /></th>
+					<th><@uiLabel text="buyer.PaymentMethod" /></th>
+					<th><@uiLabel text="buyer.PaymentStatus" /></th>
+					<th><@uiLabel text="index.PortalUserOrderStatus" /></th>
+					<th><@uiLabel text="index.PortalUserTradingOperations" /></th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list order as orders>
+					
+					<!-- 订单详细 -->
+					<#assign orderDetailTag = newTag("orderDetailTag")>
+					<!--调用“订单详细”标签，并传递参数-->
+					<#assign orderDetail = orderDetailTag('{"ordersn":"${orders.sn}"}')>	
+					<!-- 订单下商品列表 -->
+					<tr>
+						<td class="orderlist_title" colspan="20" >
+							<span>
+								${orders.payment_name}
+								<em>
+								<#-- ${orders.order_amount?string.currency}-->
+								<!-- 订单总金额 -->
+<#--							<#if orders.currency=="CNY">
+									￥${orders.order_amount!0.00}
+								<#elseif orders.currency=="RUB">
+									${orders.order_amount!''}р.
+								</#if>-->
+								<!-- 订单需要支付的金额 -->
+								<#if orders.currency=="CNY">
+									￥${orders.need_pay_money!0.00}
+								<#elseif orders.currency=="RUB">
+									${orders.need_pay_money!''}р.
+								</#if>
+								</em>
+							</span>
+							<div class="orderlist_t">
+								<#if orderDetail.status == orderState.ORDER_NOT_PAY >
+										<#if !orderDetail.isCod && orderDetail.pay_status==orderState.PAY_NO||!orderDetail.isCod && orderDetail.pay_status == orderState.PAY_PARTIAL_PAYED> 
+												<a href="${ctx}/api/shop/payment.do?orderid=${orderDetail.order_id}" class="green_btn"><@uiLabel text="index.PortalUserPaymentOrder" /></a>
+										</#if>
+								</#if> 
+								<#if orderDetail.status==orderState.ORDER_SHIP> 
+									<a href="javascript:;" orderid="${orderDetail.order_id}" class="green_btn rogBtn"><@uiLabel text="index.PortalUserConfirmReceipt" /></a>
+								</#if>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="orderlist_sn" colspan="20" >
+							<span> <@uiLabel text="index.PortalUserOrderNumber" />：${orders.sn!'' } </span>
+							<span> <@uiLabel text="index.PortalUserOrderTime" />：<@dateformat time="${orders.create_time?c}" pattern="yyyy-MM-dd HH:mm"/> </span>
+							<span>
+							<#assign calcutateOrderTimeTag = newTag("calcutateOrderTimeTag")>
+					        <#assign calcutateOrderTime = calcutateOrderTimeTag('{"order_id":"${orders.order_id}"}')>
+					        <#if calcutateOrderTime??>
+					           <#list calcutateOrderTime as a>
+					              <#if a.start_time?? && a.end_time??>
+					                  <span>
+					                                        秒杀商品请在20分钟内付款，逾期自动取消&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+											      <!-- 倒计时 距离本期结束 -->
+											      <p id="activityTime${a_index}" style="float:right;font-size:8px;color:red">
+											      	<span id="d${a_index}" class="seckil-time" style="margin-left:5px;"></span><strong style="float: left;">天</strong>
+											      	<span id="h${a_index}" class="seckil-time" style="margin-left:5px;"></span><strong style="float: left;">时</strong>
+										 	      	<span id="m${a_index}" class="seckil-time" style="margin-left:5px;"></span><strong style="float: left;">分</strong>
+											      	<span id="s${a_index}" class="seckil-time" style="margin-left:5px;"></span><strong style="float: left;">秒</strong>
+											      </p>
+											       <h5 id="activityText${a_index}" style="float:right;font-size:8px;color:#6D6A6A">即将开始：&nbsp;</h5>
+											      <script type="text/javascript">
+												 	 <#assign groupBuyActSurplusTag=newTag("groupBuyActSurplusTag")>
+												  	 <#assign time=groupBuyActSurplusTag("{'end_time':${a.start_time!''} }")>
+												  	 <#assign end_time=groupBuyActSurplusTag("{'end_time':${a.end_time!''} }")>
+											      //倒计时
+											      	  var start${a_index}=${time.cha};
+											      	  var end${a_index} = ${end_time.cha};
+											      	  var startToEnd_time${a_index} = end${a_index}-start${a_index};
+											      	  var startOrEnd${a_index};
+												      var tms${a_index} = [];
+												      var day${a_index} = [];
+												      var hour${a_index} = [];
+												      var minute${a_index} = [];
+												      var second${a_index} = [];
+												      function takeCount${a_index}() {
+												          for (var i = 0, j = tms${a_index}.length; i < j; i++) {
+												              tms${a_index}[i] -= 1;
+												              //计算天、时、分、秒、
+												              var days${a_index} = Math.floor(tms${a_index}[i] / (1 * 60 * 60 * 24));
+												              var hours${a_index} = Math.floor(tms${a_index}[i] / (1 * 60 * 60)) % 24;
+												              var minutes${a_index} = Math.floor(tms${a_index}[i] / (1 * 60)) % 60;
+												              var seconds${a_index} = Math.floor(tms${a_index}[i] / 1) % 60;
+												              if (days${a_index} < 0) days${a_index} = 0;
+												              if (hours${a_index} < 0) hours${a_index} = 0;
+												              if (minutes${a_index} < 0) minutes${a_index} = 0;
+												              if (seconds${a_index} < 0) seconds${a_index} = 0;
+												              //将天、时、分、秒插入到html中
+												              if(startOrEnd${a_index}==1){
+												            	  $("#activityText${a_index}").html("还剩余:&nbsp;");
+												              }
+												              if(days${a_index}==0&&hours${a_index}==0&minutes${a_index}==0&seconds${a_index}==0){
+												            	  if(startOrEnd${a_index}==0){
+												            		  tms${a_index}[i]=startToEnd_time${a_index};
+												            		  startOrEnd${a_index}=1;
+												            	  }else if(startOrEnd${a_index}==1){
+												            	  	  $("#activityTime${a_index}").html("");
+												            	      $("#activityText${a_index}").html("订单已取消");
+												            	  }
+												              }
+												                $("#d${a_index}").html(days${a_index});
+												                $("#h${a_index}").html(hours${a_index});
+												                $("#m${a_index}").html(minutes${a_index});
+												                $("#s${a_index}").html(seconds${a_index});
+												          }
+												          setTimeout("takeCount${a_index}()", 1000);
+												      }
+												  	  var tm${a_index} = ${time.cha};
+												  	  if(tm${a_index}<=0){
+												  		  tms${a_index}[tms${a_index}.length] = "${end_time.cha!}";
+												  		  startOrEnd${a_index}=1;
+												  	  }else{
+											              tms${a_index}[tms${a_index}.length] = "${time.cha!}";
+											              startOrEnd${a_index}=0;
+												  	  }
+										             day[${a_index}] = "d${a_index}";
+										             hour[${a_index}] = "h${a_index}";
+										             minute[${a_index}] = "m${a_index}";
+										             second[${a_index}] = "s${a_index}";
+										         </script> 
+										         <script>
+									             takeCount${a_index}();
+										         </script>
+										  </span>
+					              </#if>
+					           </#list>
+					        </#if>	
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="orderlist_goodslist" colspan="6" style="padding:6px 0px 0px 0px;">
+					<#assign orderItemListTag = newTag("orderItemListTag")>
+					<#assign orderItemList = orderItemListTag("{'orderid':${orders.order_id}}")>
+							<table class="orderitem_goodslist" cellpadding="0" cellspacing="0">
+								<#list orderItemList as item>
+									<tr>
+										<td class="order_image" style="border:0px none;">
+											<a target="_blank" href="../goods-${item.goods_id}.html">
+											
+													<@image height="50" src="${item.image!''}"  style="cursor: pointer;" />
+											</a>
+										</td>
+										<td class="order_listtiele" style="border:0px none;">
+										<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+										<#assign product = goodsBaseDataTag("{'goodsid':"+item.goods_id+"}")>
+											<a style="margin-left: 5px;"  target="_blank" href="../goods-${item.goods_id}.html">
+										<#-- 	${item.name}-${item.goods_id} -->
+											<#if locale=="zh">
+			                                	<#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+							                         <#if showGoodSkill?size  gt   0>
+							                            <#list showGoodSkill as a>
+							                               <#if a.start_time  gt a.nowtime>
+							                              ${product.name!""}#${item.goods_id!}<span ><a style="margin-left: 5px;font-size: 11px;color: red ; text-decoration:underline "  href="../newSkill20160701/seckill_activity.html"><ul>秒杀商品,即将开始前往活动主页</ul></a></span>
+							                              <#elseif a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+							                               ${product.name!""}#${item.goods_id!}<span ><a style="margin-left: 5px;font-size: 11px;color: red;text-decoration:underline" style="margin-left: 15px;font-size: 15px;color: red" href="../newSkill20160701/seckill_activity.html"><ul>秒杀商品,正在抢购中前往活动主页</ul></a></span>
+							                              </#if>
+							                            </#list>
+							                         <#else>
+							                            ${product.name!""}#${item.goods_id!}
+							                         </#if>
+                                			<#elseif locale=="ru">
+                                				${product.name_ru!""}#${item.goods_id!}
+                                			</#if>
+                                			
+											</a>
+										</td>
+										<td class="order_listprice" style="border:0px none;">
+										<!-- 	${item.price?string.currency} -->
+										<#if item.currency=="CNY">
+												               <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+						                         <#if showGoodSkill?size  gt   0>
+							                           <#list showGoodSkill as a>
+							                           			<#if a.start_time  gt a.nowtime>
+							                           			<span style="text-decoration: line-through;font-family: Meiryo;font-size: 11px;color: red" >秒杀价：&yen;${a.activity_price}</span>
+							                           			</br><span style="font-size: 11px;color: red">原价：${item.price?string.currency}</span>
+							                           			 <#elseif a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+							                           			 <span style="text-decoration: line-through;font-family: Meiryo;font-size: 11px;color: red" >原价：&yen;${a.original_price}</span>
+							                           			</br><span style="font-size: 11px;color: red;width:110px;line-height: 20px;display: block;">秒杀价：${item.price?string.currency}</span>
+							                           			 </#if>	
+							                           </#list>
+						                         <#else>
+						                           ${item.price?string.currency}
+						                        </#if>
+										<#elseif item.currency=="RUB">
+											${item.price!0.00}р.
+										</#if>
+										</td>
+										<td class="order_listnum" style="border:0px none;">
+											${item.num}
+										</td>
+									</tr>
+								</#list>
+							</table>	
+						</td>
+						<td class="orderlist_pay">
+								<strong>
+								<#-- ${orders.order_amount?string.currency} -->
+								<!-- 订单总金额 -->
+							<#--<#if orders.currency=="CNY">
+									￥${orders.order_amount!0.00}
+								<#elseif orders.currency=="RUB">
+									${orders.order_amount!''}р.
+								</#if>-->	
+								<!-- 订单需要支付的金额 -->
+								<#if orders.currency=="CNY">
+									￥${orders.need_pay_money!0.00}
+								<#elseif orders.currency=="RUB">
+									${orders.need_pay_money!''}р.
+								</#if>
+								</strong>
+								<p><@uiLabel text="index.PortalUserShippingCosts" />
+								<#-- (${(orders.shipping_amount!0)?string.currency}) -->
+								<#if orders.currency=="CNY">
+									(￥${(orders.shipping_amount!0)})
+								<#elseif orders.currency=="RUB">
+									(${(orders.shipping_amount!0)}р.)
+								</#if>
+								</p>
+<!-- 								<p>${orders.payment_name}</p> -->
+						</td>
+						<td class="orderlist_staus" style="width:100px">
+								<p>${orders.payment_name}</p>
+						</td>
+						<td class="orderlist_staus" style="width:100px">
+								<#if locale=="zh">
+								<p><@paystatus status="${orders.pay_status}" type="pay" /></p>
+								</#if>
+								<#if locale=="ru">
+								<p><#if orders.pay_status=0>Неоплаченный</#if></p>
+								<p><#if orders.pay_status=1>В ожидании подтверждения оплаты</#if></p>
+								<p><#if orders.pay_status=2>Платеж подтвержден</#if></p>
+								<p><#if orders.pay_status=3>Деньги были возвращены</#if></p>
+								<p><#if orders.pay_status=4>Частичное возмещение</#if></p>
+								<p><#if orders.pay_status=5>Частичная оплата</#if></p>
+								</#if>
+						</td>
+						<td class="orderlist_staus">
+								<#if locale=="zh">
+								<p><@orderstatus status="${orders.status}" type="order" /></p>
+								</#if>
+								<#if locale=="ru">
+								<p><#if orders.status=-7>Уже заменен</#if></p>
+								<p><#if orders.status=-4>Попросить замену</#if></p>
+								<p><#if orders.status=-3>Попросить вернуть деньги</#if></p>
+								<p><#if orders.status=-2>Возврат товара</#if></p>
+								<p><#if orders.status=-1>Возврат денег</#if></p>
+								<p><#if orders.status=0>Подтвержден</#if></p>
+								<p><#if orders.status=1>В ожидании подтверждения оплаты</#if></p>
+								<p><#if orders.status=2>Уже оплачен</#if></p>
+								<p><#if orders.status=5>Уже отправлен</#if></p>
+								<p><#if orders.status=6>Заказ получен</#if></p>
+								<p><#if orders.status=7>Завершен</#if></p>
+								<p><#if orders.status=8>Отменен</#if></p>
+								<p><#if orders.status=4>В ожидании отправки</#if></p>
+								<p><#if orders.status=9>Заказа в силе</#if></p>
+								<p><#if orders.status=3>Заказ в стадии подготовки</#if></p>
+								<p><#if orders.status=-6>Отказано в замене</#if></p>
+								<p><#if orders.status=-5>Отказано в возврате денег</#if></p>
+								</#if>
+ 								<a href="order_detail.html?ordersn=${orders.sn}"><@uiLabel text="index.PortalUserOrderDetails" /></a>
+						</td>
+						<td class="orderlist_tools">
+							<#if orders.status == orderState.ORDER_NOT_PAY>
+								<#if orders.isOnlinePay  >
+									<a href="${ctx}/api/shop/payment.do?orderid=${orders.order_id}" class="green_btn"><@uiLabel text="index.PortalUserPayNow" /></a>
+								</#if>	
+								<#if orders.status==orderState.ORDER_NOT_PAY>
+									<a href='javascript:;' class="cancelBtn" sn="${orders.sn}" rel="${orders.order_id}" ><@uiLabel text="index.PortalUserCancelOrder" /></a>
+								</#if>
+							<#elseif orders.status == 5 >
+								<a href="javascript:;"   class="rogBtn" orderid="${orders.order_id}"><@uiLabel text="index.PortalUserConfirmReceipt" /></a>
+								<a href="${ctx}/member/express_detail.html?ordersn=${orders.sn}"  ><@uiLabel text="sellerCenter.SeeExpress"/></a>
+							<#elseif orders.status==6 >
+								<a href="javascript:;"  class="thawBtn" orderid="${orders.order_id}"><@uiLabel text="index.PortalUserThawOrder" /></a>
+							<#elseif orders.status==7 >
+								<a href="${ctx}/member/return.html?ordersn=${orders.sn}"><@uiLabel text="index.PortalUserApplicationReturns" /></a>
+								<a href="${ctx}/member/waitcommont.html">评价商品</a>
+							<#else>
+								<a href="order_detail.html?ordersn=${orders.sn}"><@uiLabel text="index.PortalUserOrderViewOrder" /></a>
+							</#if>
+						</td>
+					<tr>
+					<tr>
+						<td class="teble_blank" colspan="20">&nbsp;</td>
+					</tr>
+				</#list>
+			</tbody>
+		</table>
+		<#else>
+			<div class="empty" ><@uiLabel text="index.PortalUserNoOrders" /></div>
+		</#if>
+		<@pager pageno="${memberOrderList.page}" pagesize="${memberOrderList.pageSize}" totalcount="${memberOrderList.totalCount}" />
+	</div>
+	<!-- 隐藏取消订单弹出框 -->
+	<#include 'order_cancel.html'/>
+</div>
+<script>
+var ordersearchTipText = "<@uiLabel text="index.EnterOrderCommodityImage" />";
+function odersearch(){
+	var orderkeyword = $.trim($("#search_keyword").val());
+	if(orderkeyword == ordersearchTipText){
+		orderkeyword = '';
+	}
+	if(orderkeyword==''){
+		alert("<@uiLabel text="index.BuyersCenterAlertH" />");
+	}else{
+		location.href="order.html?keyword=" + orderkeyword;
+	}
+}
+$(function(){	
+	$("#search_keyword").keypress(function(event){
+		$("#search_keyword").attr("class","inputText");
+		if(event.keyCode=="13" ){
+			odersearch();
+		}
+	});
+	$("#search_keyword").click(function(){
+		if($(this).val() == ordersearchTipText){
+			$(this).val("");
+		}
+	});
+	$("#search_keyword").blur(function(){
+		if($(this).val() == ''){
+			$(this).val(ordersearchTipText);
+		}
+	});
+	
+	$("#btnSearch").click(function(){
+		odersearch();
+	});
+	Order.init();	
+});
+</script>
+<!-- 会员中心公用底部 -->
+</div>
+<#include '../common/footer.html'/>
+		

@@ -1,0 +1,28 @@
+<#assign uiLabel ="com.enation.framework.directive.I18nDirectiveModel"?new()>
+<#assign sellerExpressDetailTag=newTag("sellerExpressDetailTag") >
+<#assign express=sellerExpressDetailTag('{"expressId":${expressId}}') >
+<div class="form_wrap">
+	<form id="express_edit_form"  class="validate"   action="" method="post">
+		<input type="hidden" name="express.express_id" value="${expressId}"/>
+		<input type="hidden" name="old_express_name" value="${express.express_name!''}"/>
+		<table cellspacing="0" cellpadding="0" border="0" >
+			<tbody>
+				<tr>
+					<th ><em></em><@uiLabel text='sellerCenter.ProviderName' />：</th>
+					<td style="width: 460px;"  >
+						<input value="${express.express_name}" type="text"  class="input_text"  isrequired="true" name="express.express_name"   autocomplete="off">
+					</td>
+				</tr>
+					<th><@uiLabel text='sellerCenter.SendGoodsTime' />：</th>
+					<td><input value="${express.express_deliver_time}" type="text"  class="input_text" style="margin-left:0px;"   name="express.express_deliver_time"  id="tel" dataType="tel_num"   autocomplete="off"></td>
+				</tr>					
+				<tr>
+					<th></th>	
+					<td>
+						<div class="btn"><input type="button"  class="yellow_btn" id="express_edit" value="<@uiLabel text='sellerCenter.SaveAndReturn' />"></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>

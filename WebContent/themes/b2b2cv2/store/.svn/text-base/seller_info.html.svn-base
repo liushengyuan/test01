@@ -1,0 +1,199 @@
+<#include '/store/store_header.html' />
+
+<div class="store_center">
+	<#include '/store/left_menu.html' /> <#assign sellerInfoDetailTag =
+	newTag("sellerInfoDetailTag")> <#assign memberinfo =
+	sellerInfoDetailTag()>
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color: #999;"><@uiLabel text="sellerAccount.Location"/>：</span> <span>></span> <a href="#"><@uiLabel text="seller.ShopManager"/></a><span>></span><@uiLabel text="seller.KeeperInfoManager"/>
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active"><a href="javascript:;"><@uiLabel text="seller.KeeperInfoManager"/></a></li>
+				</ul>
+			</div>
+			<div class="groupbuy_form">
+				<form id="seller_info" class="validate">
+					<input type="hidden" name="member_id"
+						value="${memberinfo.member_id!''}" />
+					<dl>
+						<dt><@uiLabel text="apply.CardOnName"/></dt>
+						<dd>
+							<p>
+								<input type="text" class="text w400" name="name"
+									value="${memberinfo.name!''}" isrequired="true"
+									readonly="readonly" />
+							</p>
+							<!--<p class="hint">证件上的姓名</p>-->
+						</dd>
+					</dl>
+					<dl>
+						<dt><@uiLabel text="apply.CardNumber"/></dt>
+						<dd>
+							<p>
+								<input type="text" class="text w400" name="id_number"
+									value="${memberinfo.id_number!''}" isrequired="true"
+									readonly="readonly" />
+							</p>
+							<!--<p class="hint">证件号码</p>-->
+						</dd>
+					</dl>
+					<dl>
+						<dt><@uiLabel text="apply.RegisterEmail"/></dt>
+						<dd>
+							<p>
+								<input type="text" class="text w400" name="email"
+									value="${memberinfo.email!''}" isrequired="true"
+									readonly="readonly" />
+							</p>
+							<!--<p class="hint">注册邮箱</p>-->
+						</dd>
+					</dl>
+<#--				<dl>
+						<dt>出生日期<@uiLabel text="sellerAccount.Location"/></dt>
+						<dd>
+							<p>
+								<input name="birthday" id="birthday" value=<@dateformat
+								time="${memberinfo.birthday!''}" pattern="yyyy-MM-dd HH:mm"/>
+								class="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd '})"
+								type="text">
+
+							</p>
+							<p class="hint">出生日期</p>
+						</dd>
+					</dl>-->	
+<#--				<dl>
+						<dt>性别<@uiLabel text="sellerAccount.Location"/></dt>
+						<dd>
+							<p>
+								<select name="sex">
+									<option value="-1"<#if
+										memberinfo.sex==-1>selected</#if>>&nbsp;男&nbsp;</option>
+									<option value="0"<#if
+										memberinfo.sex==0>selected</#if>>&nbsp;女&nbsp;</option>
+								</select>
+							</p>
+							<p class="hint">性别</p>
+						</dd>
+
+					</dl>-->
+					<dl>
+						<dt><@uiLabel text="apply.ApplyPhone"/></dt>
+						<dd>
+							<p>
+								<input type="text" class="text w400" name="mobile"
+									value="${memberinfo.mobile!''}" isrequired="true" dataType="mobile" />
+							</p>
+							<!--<p class="hint">手机</p>-->
+						</dd>
+					</dl>
+					<dl>
+						<dt><@uiLabel text="apply.FixedPhone"/></dt>
+						<dd>
+							<p>
+								<input type="text" class="text w400" name="tel" id="tel"
+									value="${memberinfo.tel!''}" />
+							</p>
+							<!--<p class="hint">电话</p>-->
+						</dd>
+					</dl>
+					<dl>
+						<dt><@uiLabel text="sellerStoreHolderInfo.faxNumber"/>：</dt>
+						<dd>
+							<p>
+								<input type="text" class="text w400" name="fax"  id="fax"
+									value="${memberinfo.fax!''}" />
+							</p>
+							<!--<p class="hint">传真号码</p>-->
+						</dd>
+					</dl>
+					<dl>
+						<dt><@uiLabel text="apply.PersonAddress"/></dt>
+						<dd>
+							<p>
+								<input type="text" class="text w400" name="address"
+									value="${memberinfo.address!''}" isrequired="true" />
+							</p>
+							<!--<p class="hint">地址</p>-->
+						</dd>
+					</dl>
+					<dl>
+						<dt><@uiLabel text="index.Sellercode"/>：</dt>
+						<dd>
+							<p>
+								<input type="text" class="text w400" name="zip"
+									value="${memberinfo.zip!''}" isrequired="true"  dataType="post_code"  />
+							</p>
+							<!--<p class="hint">邮政编码</p>-->
+						</dd>
+					</dl>
+					<dl class="bottom">
+						<dt>&nbsp;</dt>
+						<dd>
+							<input type="button" id="updateMember" value="<@uiLabel text="sellerStoreHolderInfo.modifySaveHolder"/>"
+								class="submit to_save" />
+						</dd>
+					</dl>
+
+				</form>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(function() {
+
+			$("#updateMember")
+					.click(
+							function() {
+								if (!$("#seller_info").checkall())
+									return false;
+								//校验电话号码
+								if(formatTel()==false){
+									return false;
+								}
+								//校验传真号码
+								if(formatFax()==false){
+									return false;
+								}
+								var options = {
+									url : "${ctx}/api/b2b2c/storeApi!sellerInfoEdit.do?ajax=yes",
+									type : "POST",
+									dataType : 'json',
+									success : function(data) {
+										alert(data.message);
+
+									},
+									error : function(e) {
+										alert("出现错误 ，请重试");
+									}
+								};
+								$("#seller_info").ajaxSubmit(options);
+							});
+
+		})
+		function formatTime(value, row, index) {
+			var val = getFormatDateByLong(value, "yyyy-MM-dd");
+			return val;
+		}
+		function formatTel(){
+			var tel=$.trim($("#tel").val());
+			if(tel){
+				if(!$.isTel(tel)){
+					alert("电话号格式不正确");
+					return false;
+				}
+			}
+			
+		}
+		function formatFax(){
+			var fax=$.trim($("#fax").val());
+			if(fax.length>0){
+				if(!$.isTel(fax)){
+					alert("传真号码格式不正确");
+					return false;
+				}
+			}
+		}
+	</script>

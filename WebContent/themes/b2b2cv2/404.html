@@ -1,0 +1,38 @@
+<#include '/common/header.html' />
+<!-- <div style="width:100%;height:200px;text-align:center;margin:30px 0px;">
+	<@image src="${ctx}/themes/b2b2c/images/new404.jpg" alt="未找到页面"/>
+</div>-->
+<style type="text/css">
+body {margin: 0px; padding:0px; font-family:"微软雅黑", Arial, "Trebuchet MS", Verdana, Georgia,Baskerville,Palatino,Times; font-size:16px;}
+div{margin-left:auto; margin-right:auto;}
+a {text-decoration: none; color: #1064A0;}
+a:hover {color: #0078D2;}
+img { border:none; }
+h1,h2,h3,h4 {
+/*	display:block;*/
+	margin:0;
+	font-weight:normal; 
+	font-family: "微软雅黑", Arial, "Trebuchet MS", Helvetica, Verdana ; 
+}
+h1{font-size:44px; color:#0188DE; padding:20px 0px 10px 0px;}
+h2{color:#0188DE; font-size:16px; padding:10px 0px 40px 0px;}
+
+#page{width:910px; padding:20px 20px 40px 20px; margin-top:80px;}
+.button2{width:180px; height:auto; margin-left:0px; margin-top:10px; background:#009CFF; border-bottom:4px solid #0188DE; text-align:center;}
+.button a{width:180px; height:28px; display:block; font-size:14px; color:#fff; }
+.button a:hover{ background:#5BBFFF;}
+</style>
+
+</head>
+<body>
+
+
+<div id="page" style="border-style:dashed;border-color:#e4e4e4;line-height:30px;background:url(sorry.png) no-repeat right;height:300px;border-bottom:#e4e4e4 dashed 4px;margin-top:10px;">
+	<h1><@uiLabel text="index.NotFindThisPage" /></h1>
+	<h2>Sorry, the site now can not be accessed. </h2>
+	<font color="#666666"><@uiLabel text="index.VisitedPage" /></font><br /><br />
+	<div class="button2">
+		<a href="${ctx}/index.html"><@uiLabel text="index.ReturnHome" /></a>
+	</div>
+</div>
+<#include '/common/footer.html' />

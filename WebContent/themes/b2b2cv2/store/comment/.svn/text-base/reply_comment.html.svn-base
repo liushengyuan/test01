@@ -1,0 +1,47 @@
+<!-- 获取店铺评论、咨询实体 -->
+<#assign storeCommentTag=newTag("storeCommentTag")>
+<#assign storeComment=storeCommentTag()/>
+<#assign uiLabel ="com.enation.framework.directive.I18nDirectiveModel"?new()>
+<div class="reply_form">
+	<form id="replyForm">
+		<table>
+			<tr>
+				<th><@uiLabel text="replyComment.dangqianzhuangtai"/>：</th><!--当前状态  -->
+				<td>
+					<#if storeComment.status==0><@uiLabel text="replyComment.weishenhe"/></#if><!--未审核  -->
+					<#if storeComment.status==1><@uiLabel text="replyComment.shenhetongguo"/></#if><!--审核通过  -->
+					<#if storeComment.status==2><@uiLabel text="replyComment.shenhejujue"/></#if><!--审核拒绝  -->
+				</td>
+			</tr>
+<#--			<#if storeComment.status==0>
+				<tr>
+					<th>审核：</th>
+					<td>
+						<input type="radio" name="status" value="1" checked="checked"/>通过 
+						<input type="radio" name="status" value="2"/>拒绝	
+					</td>
+				</tr>
+				<#else>
+				<input type="hidden" name="status" value="${storeComment.status}"/></element>	
+			</#if>-->
+			<input type="hidden" name="status" value="${storeComment.status}"/>
+			<tr>		
+				<#if type=="2">
+					<th><@uiLabel text="replyComment.zixunneirong"/>：</th><!--咨询内容  -->
+				<#else>
+					<th><@uiLabel text="replyComment.pinglunneirong"/>：</th><!--评论内容  -->
+				</#if>
+				<td>${storeComment.content!''}
+					<input type="hidden" name="comment_id" value="${storeComment.comment_id}">
+				</td>
+			</tr>
+			<tr>
+				<th><@uiLabel text="replyComment.huifuneirong"/>：</th><!--回复内容 -->
+				<td>
+					<textarea name="reply">${storeComment.reply!''}</textarea>
+				</td>
+			</tr>
+			
+		</table>
+	</form>
+</div>

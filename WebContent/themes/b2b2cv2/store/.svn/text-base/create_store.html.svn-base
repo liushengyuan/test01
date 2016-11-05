@@ -1,0 +1,28 @@
+<#include '/store/store_header2.html' />
+<div class="store_main">
+	<div class="open_store">
+		<h1><@uiLabel text="index.WelcomeToMerchantCenter" /></h1>
+			<#if storeMember.is_store==0>
+				<h3 class="store_prompt"><@uiLabel text="index.ShopToRemind" /></h3>
+				<div class="no_store">
+					<a href="${ctx}/store/apply/step1.html" class="" ><@uiLabel text="index.ImmediateOpenShop" /></a>
+					<h4><@uiLabel text="index.CheckShopType" /></h4>
+				</div>
+			<#else>
+				<#if myStoreDetail.disabled==0>	
+				 <#if locale=="zh">
+					<p style="width:100%;height:30px;line-height:30px;margin-top:20px;font-weight:bold;font-size:16px;"><@uiLabel text="index.WaitToAuditing" /></p>
+				 <#elseif locale=="ru">
+				    <p style="width:100%;height:50px;line-height:25px;margin-top:20px;font-weight:bold;font-size:16px;"><@uiLabel text="index.WaitToAuditing" /></p>
+				 </#if>
+				<#elseif myStoreDetail.disabled==2>
+					<p style="width:100%;height:30px;line-height:30px;margin-top:20px;font-weight:bold;font-size:16px;"><@uiLabel text="index.ShopDisable" /></p>
+				<#elseif myStoreDetail.disabled==-1>
+					<p style="width:100%;height:30px;line-height:30px;margin-top:20px;font-weight:bold;font-size:16px;"><@uiLabel text="index.NotPassTo" />${myStoreDetail.check_description!''}.......</p>
+					<p style="width:100%;height:30px;line-height:30px;margin-top:20px;font-weight:bold;font-size:16px;"><a href="${ctx}/store/apply/reApply.html"><@uiLabel text="index.ClickToReSubmit" /></a></p>
+				</#if>
+			</#if>
+	</div>
+</div>		
+<#include '/common/seller_footer.html' />
+

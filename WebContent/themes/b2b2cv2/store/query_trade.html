@@ -1,0 +1,197 @@
+<#assign  title="放款明细" />
+<#include '/store/store_header.html' />
+<!-- 获取买家消息列表标签 -->
+<!--<#assign sendMessageTag = newTag("sendMessageTag")>-->
+<!-- 调用买家消息列表标签 -->
+<!--<#assign sendMessage = sendMessageTag()>-->
+<!-- 将调用的结果赋值给变量 -->
+<!--<#assign sendMessageList = sendMessage.result>-->
+<#assign tradeTag = newTag("tradeTag")>
+<#assign trade = tradeTag()>
+<#assign tradeList = trade.result>
+<script language="javascript" type="text/javascript" src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"></script>
+
+<link rel="stylesheet" href="${ctx}/themes/b2b2cv2/css/easydialog.css" type="text/css"/>
+<#if locale=="zh">
+   <script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/easydialog.js"></script>
+   <script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/easydialog.min.js"></script> 
+<#elseif locale=="ru">
+  	<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/easydialog_ru.js"></script>
+  	<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/easydialog_ru.min.js"></script> 
+</#if>
+<style type="text/css">
+.textarea #message_text{
+    font: 12px/20px Arial;
+    color: #777;
+    background-color: #FFF;
+    vertical-align: top;
+    display: inline-block;
+    height: 60px;
+    padding: 4px;
+    border: 1px solid #CCC;
+    outline: 0px none;
+}
+</style>
+<div class="store_center">
+<#include '/store/left_menu.html' />
+<div class="sotre_right_content">
+	<div class="path">
+            <span style="color:#999;"><@uiLabel text="sellerAccount.Location"/>：</span><!--您的位置  -->
+            <span>></span>
+            <span><@uiLabel text="seller.AccountManager"/></span><span>></span><@uiLabel text="seller.LoanDetail"/><!--资金账户管理  --><!--放款明细  -->
+    </div>
+        <!-- <form method="post" id="messageSearch" action="">-->
+                <table class="search-form">
+                    <tbody>
+                    <tr >
+                    <td style="width:20px;border-bottom-color: #FFFFFF;">&nbsp;</td>
+                       <!--  <td>
+                            <label class="button-border">
+                                <input value="发消息" onclick="addAdvisory();" class="yellow_btn" type="button">
+                            </label>
+                        </td>--> 
+                        <td style="width:200px;border-bottom-color: #FFFFFF;">&nbsp;</td>
+                        <td style="border-bottom-color: #FFFFFF;">&nbsp;</td>
+                        <th style="border-bottom-color: #FFFFFF;width:200px;"><@uiLabel text="sellerCardLoan.qishiTime"/></th><!--起始时间   -->
+                        <td style="width:50px;border-bottom-color: #FFFFFF;">&nbsp;</td>
+                        <td  style="border-bottom-color: #FFFFFF;width:400px;">
+                            <input name="start_trade_time" id="start_trade_time" class="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" type="text">
+                            –
+                            <input name="end_trade_time" id="end_trade_time" class="text" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" type="text">
+                        </td>
+                        <td style="width:50px;border-bottom-color: #FFFFFF;">&nbsp;</td>
+                         <td style="border-bottom-color: #FFFFFF;">
+                            <select name="searchTime" id="searchTime" class="button b_fr" onchange="sellersearch();" >
+									<option value="0"><@uiLabel text="sellerCardLoan.LoanAll"/></option><!--全部  -->
+									<option value="1" ><@uiLabel text="sellerCardLoan.OneMonth"/></option><!--最近一个月  -->
+									<option value="3" ><@uiLabel text="sellerCardLoan.ThreeMonth"/></option><!-- 最近三个月 -->
+									<option value="6" ><@uiLabel text="sellerCardLoan.SixMonth"/></option><!--最近六个月  -->
+							</select>
+                        </td>
+                        <td style="width:50px;border-bottom-color: #FFFFFF;">&nbsp;</td>
+                        <td style="border-bottom-color: #FFFFFF;">
+                            <label class="submit-border">
+                                <input id="sellersearch" class="yellow_btn" value="查询" type="button" style="margin-right:15px;"><!--查询  -->
+                            </label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+           <!--  </form>-->
+             <div class="address_list" style="border-bottom-color:#FFF;">
+					<table cellpadding="0" cellspacing="0">
+						<thead>
+							<tr style="border-top: 1px solid #DDDDDD;">
+								<th class="a2"><@uiLabel text="sellerCardLoan.rukuanshijian"/></th><!--入款时间  -->
+								<th class="a2"><@uiLabel text="sellerCardLoan.orderId"/></th><!--订单号 -->
+								<th class="a2"><@uiLabel text="sellerCardLoan.translationNumber"/></th><!--交易流水号  -->
+								<th class="a2"><@uiLabel text="sellerCardLoan.fangkuanjine"/></th><!--放款金额  -->
+								<th class="a2"><@uiLabel text="sellerCardLoan.huilv"/></th><!--汇率 -->
+								<th class="a2"><@uiLabel text="sellerCardLoan.yongjin"/>（￥）</th><!--佣金  -->
+								<th class="a2"><@uiLabel text="sellerCardLoan.shishoujine"/>（￥）</th><!--订单实收金额（￥）  -->
+						<!-- 		<th style="width:73px">操作</th>  -->
+							</tr>
+						</thead>
+						<tbody id="scroll-box">
+						<#list tradeList as trade>
+						<tr>
+						   <td><@dateformat time="${trade.business_time!''}" pattern="yyyy-MM-dd HH:mm"/></td>
+						   <td >${trade.order_sn!''}</td>
+						   <td >${trade.unique_id!''}</td>
+						   <td >${trade.order_amount_ru!''}</td>
+						   <td >${trade.exchange_rate!''}</td> 
+						   <td >${trade.brokerage!''}</td>
+						   <td >${trade.actual_account!''}</td>
+					<!-- 	   <td><button class='yellow_btn' onclick=lookMessage(${trade.unique_id!''})> 详情 </button></td>  -->
+						</tr>
+						</#list>
+						<tbody>
+						
+					</table>
+				</div>
+
+
+	<@pager pageno="${page!'1'}" pagesize="${trade.pageSize}" totalcount="${trade.totalCount}" />
+</div>
+</div>
+<script type="text/javascript">
+    function addAdvisory() {
+        easyDialog.open({
+            container: {
+                header: '<@uiLabel text="index.ImgBoxAlertOne" />：',
+                content: $("#imgBox").html()
+            }
+        });
+    }
+    //使用异步请求保存信息
+    function saveMessageForBox(){
+    	var actyformObj = event.srcElement.parentNode.parentNode.parentNode;
+    	var url = "${ctx}/api/b2b2c/sellerMessage!sellerMassMessages.do?ajax=yes";
+    	if(actyformObj.message_title.value==""){
+    		alert("<@uiLabel text="index.ImgBoxAlertTwo" />");
+    		return;
+    	}
+    	if(actyformObj.message_text.value==""){
+    		alert("<@uiLabel text="index.ImgBoxAlertThree" />");
+    		return;
+    	}
+    	acceptMembers=actyformObj.acceptMembers.value;
+    	var formDate="message_title="+actyformObj.message_title.value+"&message_text="+actyformObj.message_text.value;
+    	if(acceptMembers!=""){
+    		formDate=formDate+"&acceptMembers="+acceptMembers;
+    		url = "${ctx}/api/b2b2c/sellerMessage!sellerLoginMessages.do?ajax=yes";
+    	}
+    	//关闭弹出框
+    	easyDialog.close();
+    	jQuery.ajax({
+    		url: url,//要访问的后台地址
+            type: "post",//使用get方法访问后台
+            data: formDate,
+            success: function (data) {//msg为返回的数据，在这里做数据绑定
+					alert(data);
+					location.reload();
+            }
+        });
+    }
+    //切换群发和按登录名发送
+    function setForeUserLogin(obj,type){
+    	if(type=='qunfa'){
+    		$(obj).parent().next().next().css("display","block");
+    		$(obj).css("display","none");
+    	}
+    	if(type=='danfa'){
+    		$(obj).parent().prev().prev().find("a").css("display","");
+    		$(obj).prev().val("");
+    		$(obj).parent().css("display","none");
+    	}
+
+    }
+    //查看发送的消息
+    function lookMessage(messageId) {
+        easyDialog.open({
+            container: {
+                header: '<@uiLabel text="index.DialogNewsDetails" />',
+                content: '&nbsp;&nbsp;<@uiLabel text="index.ProtalMesMessageTitle" /> :&nbsp;&nbsp; ' + $("#t"+ messageId).html() + '<br/><br/>&nbsp;&nbsp;<@uiLabel text="index.DialogMessageContent" />：&nbsp;&nbsp;' + $("#c" + messageId).html(),
+                noFn: true
+            }
+        });
+    }
+    function sellersearch(){
+    	var start_trade_time = $("#start_trade_time").val();
+    	var end_trade_time = $("#end_trade_time").val();
+    	var searchTime = $("#searchTime").val();
+    	if(start_trade_time.length!=0 && end_trade_time.length!=0 ){
+    		location.href="query_trade.html?start_trade_time=" + start_trade_time +"&end_trade_time=" + end_trade_time;
+    	}else{
+    		location.href="query_trade.html?searchTime="+searchTime;
+    		//alert(searchTime);
+    	}
+    }
+    $(function(){
+	$("#sellersearch").click(function(){
+		sellersearch();
+	})
+ })
+</script>
+</div>
+<#include '/common/seller_footer.html' />

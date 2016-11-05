@@ -1,0 +1,172 @@
+<#include '/store/store_header.html' />
+<#assign storeTagsGoods=newTag("storeTagsGoodsTag")>
+<#assign storeTagsGoodsList=storeTagsGoods("'mark':'${mark!''}'")>
+<div class="store_center">
+<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;"><@uiLabel text="tagGoodsShow.yourlocation"/>：</span><!--您的位置  -->
+			<span>></span>
+			<a href="#"> <@uiLabel text="sellerLabel.fenleiguanli"/> </a><span>></span><@uiLabel text="sellerLabel.biaoqianlibiao"/><!--分类管理  --><!-- 标签列表 -->
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a hre="#"><@uiLabel text="sellerLabel.biaoqianlibiao"/></a><!--标签列表  -->
+					</li>
+				</ul>
+				<a class="ncu_btn3" id="add" href="javascript:void(0);" mark="${mark}" tagid="${tagid}" style="right:300px;"><@uiLabel text="sellerLabel.tianjiashangp"/></a><!--添加商品  --> 
+				<a class="ncu_btn3" id="delete" href="javascript:void(0);" style="right:160px;"><@uiLabel text="sellerLabel.piliangshangchu"/></a> <!--批量删除  -->
+				<a class="ncu_btn3" id="saveSort" href="javascript:void(0);" ><@uiLabel text="sellerLabel.baocunpaixu"/></a> <!--保存排序  -->
+			</div>
+			<!-- 标签列表 -->
+			<form id="goodsTagForm">
+			<input type="hidden" name="tagId" value="${tagid}"/>
+			<div class="store_tab_list">
+				<div class="s_commont_list">
+	  				<table class="groupbuy_list_table sotre_tab_list"  id="detailFind">
+	  					<tbody>
+	  						<tr>
+	  							<th style="width:400px;text-align:center;"><@uiLabel text="sellerLabel.shangpinmingch"/></th><!--商品名称  -->
+	  							<th style="width:300px;text-align:center;"><@uiLabel text="sellerLabel.paixu"/></th><!--排序  -->
+	  							<th style="width:100px;text-align:center;"><@uiLabel text="sellerLabel.Option"/></th><!--操作  -->
+	  						</tr>
+	  					</tbody>
+	  					<tbody>
+	  						<#list storeTagsGoodsList.goodsTag.result as storeTagGoods>
+	  							<tr>
+	  								<td style="width:400px;">
+	  									<input type="checkbox" name="reg_id" value="${storeTagGoods.goods_id}" class="select_tab_store">
+	  									<span>
+		  									 <#if (storeTagGoods.name?length>10)>
+												${storeTagGoods.name?substring(0,10)}
+											<#else>
+										    	${storeTagGoods.name}
+											</#if>
+										</span>	
+	  								</td>
+	  								<td style="width:300px;">
+	  									<input type="hidden" name="regId" value="${storeTagGoods.goods_id}">
+								    	<input type="text" name="ordernum" class="ordernum input_text" value="${storeTagGoods.ordernum!'0'}" reg_id="${storeTagGoods.goods_id}"/>
+								    	<input type="hidden" id="order_num_${storeTagGoods.goods_id}" value="${storeTagGoods.ordernum!'0'}">
+	  								</td>
+	  								<td class="storegoodslist_tools">
+	  									<a href="javascript:void" name="delteRel" reg_id="${storeTagGoods.goods_id}" class="tool2"><i></i><@uiLabel text="sellerLabel.delete"/></a><!--删除  -->
+	  								</td>
+	  							</tr>
+	  						</#list>
+	  					</tbody>
+	  				</table>
+	  			</div>	
+			</div>
+			</form>
+		</div>	
+	</div>
+</div>
+
+<script type="text/javascript">
+
+$(function(){
+	//禁用Enter键表单自动提交
+    document.onkeydown = function(event) {
+        var target, code, tag;
+        if (!event) {
+            event = window.event; //针对ie浏览器
+            target = event.srcElement;
+            code = event.keyCode;
+            if (code == 13) {
+                tag = target.tagName;
+                if (tag == "TEXTAREA") { return true; }
+                else { return false; }
+            }
+        }
+        else {
+            target = event.target; //针对遵循w3c标准的浏览器，如Firefox
+            code = event.keyCode;
+            if (code == 13) {
+                tag = target.tagName;
+                if (tag == "INPUT") { return false; }
+                else { return true; } 
+            }
+        }
+    };
+	$("#saveSort").click(function(){
+		var options = {
+				url : "${ctx}/api/b2b2c/tag!saveSort.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					if(data.result==1){
+						location.reload();
+					}
+				},
+				error : function(e) {
+					alert("输入的排序值只能是数字，检查后请重试");
+				}
+		};
+		$("#goodsTagForm").ajaxSubmit(options);
+	});
+	$(".ordernum").blur(function(){
+		var reg_id= $(this).attr("reg_id");
+		if($(this).val()!=$("#order_num_"+reg_id).val()){
+			$(this).attr("name","ordernum");
+		}
+	});
+	$("a[name='delteRel']").click(function(){
+		var reg_id=$(this).attr("reg_id");
+		if (!confirm("确认要删除商品吗？")) {
+			return;
+		}
+		$.ajax({
+			url : "${ctx}/api/b2b2c/tag!deleteRel.do?ajax=yes&tagId=${tagid}&reg_id="+reg_id,
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+				alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function() {
+				alert("出现错误，请重试");
+			}
+		});
+	});
+	$("#delete").click(function(){
+		var len=$("input[type='checkbox']:checked").length;
+		if(len==0){
+			alert("请选项要删除的商品");
+			return false;
+		}
+		if (!confirm("确认要删除商品吗？")) {
+			return;
+		}
+		var options = {
+				url : "${ctx}/api/b2b2c/tag!deleteRel.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					if(data.result==1){
+						location.reload();
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+		};
+		$("#goodsTagForm").ajaxSubmit(options);
+	});
+	$("#add").click(function(){
+		var mark=$(this).attr("mark");
+		var tagid=$(this).attr("tagid");
+		location.href="store_goods_list.html?type=tag&mark="+mark+"&market_enable=1&tagId="+tagid+"&menu=store_goods";
+	});
+	
+	selectMenu(4);
+})
+</script>
+
+<#include '/common/footer.html' />

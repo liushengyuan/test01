@@ -1,0 +1,233 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+
+<div id="loading"></div>
+<div class="main">
+	<form id="giftform">
+	<div style="height: auto">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+				data-options="plain:true" onclick="append()">添加</a> <a
+				href="javascript:void(0)" class="easyui-linkbutton"
+				data-options="plain:true" onclick="del()">删除</a>
+		</div>
+	 <!-- 	 
+	 <select name="state"  id="state" >
+			    	<option >全部</option>
+			    	<option value="0">保存</option>
+			    	<option value="1">发送</option>
+	</select>
+		 --> 
+	<div class="clear height10"></div>
+	<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'gift!gift_listJson.do',pageList: [10,15,19,30],pageSize:${pageSize},fitColumns:'true'" 
+				pagination="true" width="width" id="giftdata">
+				<thead>
+					<tr>
+						<th data-options="field:'gift_id',checkbox:true"></th>
+						<th data-options="field:'name',width:80">活动名称</th>
+						<th data-options="field:'start_time',width:88" formatter="formatBegintime">活动开始时间</th>
+						<th data-options="field:'end_time',width:88" formatter="formatEndtime">活动终止时间</th>
+						<th  data-options="field:'type',width:40" formatter="formatAtype">活动类型</th>
+						<th data-options="field:'rule',width:300">活动规则</th>
+						<th data-options="field:'state',width:40" formatter="formatState">发布状态</th>
+						<th  data-options="field:'save_time',width:88" formatter="formatCreatetime">活动保存时间</th>
+						<th data-options="field:'action',width:30,align:'center'"
+							formatter="formatOperation">操作</th>
+						<!-- <th data-options="field:'action',width:10,align:'center'"
+							formatter="formatSendMessage">发送</th> -->
+					</tr>
+				</thead>
+			</table>
+			</div>
+			<div id="divdia" style="display: none;width: 800px;height: 400px;"></div>
+		</form>
+	
+</div>
+
+<#include '/admin/footer.html' >
+
+<script type="text/javascript">
+	function append(gift_id) {
+		var map = {}; // Map map = new HashMap();
+		if (!gift_id) {
+			map["href"] = "gift!add_gift.do";
+			map["formId"] = "#addForm";
+			map["url"] = "gift!saveAdd.do?ajax=yes";
+			map["title"] = "添加优惠活动";
+			map["loadshow"] = "正在添加......";
+		} else {
+			map["href"] = "gift!edit_gift.do?giftId="+gift_id;
+			map["formId"] = "#editForm";
+			map["url"] = "gift!saveEditGift.do?ajax=yes";
+			map["title"] = "修改优惠活动";
+			map["loadshow"] = "正在修改......";
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#giftdata";
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 800,
+			height :400,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					var savebtn = $(this);//获取按钮本身
+					savebtn.linkbutton("disable"); //禁用	
+					map["btn"]=savebtn;
+					submitForm(map);
+				}
+			}, {
+				text : '清空',
+				handler : function() {
+					clearForm(map);
+				}
+			} ]
+		});
+	}
+	function submitForm(map) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show(map["loadshow"]);
+			
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.show(result.message);
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					$.Loading.hide();
+				},
+				error : function(e) {
+					map["btn"].linkbutton("enable"); 
+					alert("出现错误 ，请重试");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}else{
+			map["btn"].linkbutton("enable"); 
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+
+	function formatOperation(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='append("
+				+ row.gift_id + ")' ></a>";
+		return val;
+	}
+	//信息发布
+	function send(){
+		$("#giftform").ajaxSubmit({
+			url:"${ctx}/shop/admin/gift!savePublish.do?ajax=yes",
+			dataType : 'json',
+			success:function(result){
+					location.href="${ctx}/member/infot.html";
+			},
+			error:function(){
+				alert("非法参数");
+			}			
+		})
+	}
+	//信息发布按钮
+	 function formatSendMessage(value, row, index) {
+		var val = "<a class='send' title='发送'  onclick='send("
+				+ row.gift_id + ")' ></a>";
+		return val;
+	} 
+	
+	function del() {
+		var rows = $('#giftdata').datagrid("getSelections");
+		if (rows.length < 1) {
+			$.Loading.error("请选择删除的优惠活动");
+			return;
+		}
+		if (!confirm("确认要删除优惠活动吗?")) {
+			return;
+		}
+		var options = {
+			url : "gift!deleteGift.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				$.Loading.success(result.message);
+				if (result.result == 1) {
+					var rows = $('#giftdata').datagrid("getSelections");
+					for ( var i = 0; i < rows.length; i++) {
+						var index = $('#giftdata').datagrid('getRowIndex',
+								rows[i]);
+						$('#giftdata').datagrid('deleteRow', index);
+					}
+				}
+				if (result.result == 0) {
+					$.Loading.error(result.message);
+				}
+			},
+			error : function(e) {
+				alert("出现错误 ，请重试");
+			}
+		};
+		$('#giftform').ajaxSubmit(options);
+	}
+
+	function formatBegintime(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss"); 
+	}
+
+	function formatEndtime(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+	
+	function formatAction (value,row,index){
+		var status= row.state;
+		if(status==0){
+			var val="<a href='javascript:void(0);' onclick='javascript:auth(1,"+row.gift_id+")'  title='保存'>保存</a>";
+			val+="&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:void(0);' onclick='javascript:auth(2,"+row.gift_id+")'  title='保存'>发送</a>  ";
+		}		
+		return val;
+	}
+	
+	function formatState(value,row,index){
+		var val = "保存";
+		if(value==0){
+			val = "保存";
+		}
+		if(value==1){
+			val = "发送";
+		}
+		return val;   		
+	}
+	function formatCreatetime(value, row, index) {
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}
+	
+	function formatAtype(value,row,index){
+		var val;
+		if(value==0){
+			val="无";
+		}else if(value==1){
+			val="买赠活动";
+		}else if(value==2){
+			val="打折"
+		}
+		return val;
+	}
+</script>

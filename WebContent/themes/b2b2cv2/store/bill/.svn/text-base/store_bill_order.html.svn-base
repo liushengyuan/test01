@@ -1,0 +1,52 @@
+<#assign storeOrderListTag=newTag("storeOrderListTag")>
+<#assign storeOrderList=storeOrderListTag()>
+<table class="search_form">
+ 	<tbody>
+		<tr>
+			<td style="width:180px">&nbsp;</td>
+			<th >订单编号：</th>
+			<td ><input type="text" class="text" name=keyword value=""></td>
+			<th>买家：</th>
+			<td ><input type="text" class="text" name="buyerName" value=""></td>
+			<td class=""><input type="button" class="submit" id="btnSearch" value="搜索"></td>
+		</tr>
+	</tbody>
+</table>
+	<!-- 订单列表详细 -->
+<table class="s_orderlist"  cellpadding="0" cellspacing="0">
+	<thead>
+		<tr class="s_orderlist_title">
+			<th >订单编号</th>
+			<th >下单时间</th>
+			<th >成交时间</th>
+			<th >订单金额</th>
+			<th >操作</th>
+		</tr>
+	</thead>
+ 	<#if storeOrderList.totalCount != 0 >
+ 		<tbody>
+ 		<#list storeOrderList.storeOrder.result as order>
+  		<tr>
+			<td>
+				${order.sn}
+			</td>
+			<td>
+				<@dateformat time="${order.create_time?c}" pattern="yyyy-MM-dd HH:mm"/>
+			</td>
+			<td>
+				${order.price?string.currency}
+			</td>
+			<td>
+				查看
+			</td>
+		</tr>
+		</#list>
+		<tr>
+		</tr>		  		
+		</tbody>
+	</table>
+	<@pager pageno="${storeOrderList.page!'1'}" pagesize="${storeOrderList.pageSize}" totalcount="${storeOrderList.totalCount}" />
+	<#else>	
+	</table>
+	<p class="no_blank">暂无符合条件的数据记录</p>
+</#if> 

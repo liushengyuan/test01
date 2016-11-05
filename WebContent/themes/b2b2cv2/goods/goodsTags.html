@@ -1,0 +1,92 @@
+<#include '/store/store_header.html' />
+<#assign storeTagsListTag=newTag("storeTagsListTag")/>
+<#assign storeTagsList=storeTagsListTag()!''/>
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;"><@uiLabel text='goodtags.yourlocation' />：</span><!-- 您的位置 -->
+			<span>></span>
+			<a href="#"> <@uiLabel text="sellerLabel.fenleiguanli"/></a><span></span><@uiLabel text="sellerLabel.biaoqianlibiao"/><!--分类管理--><!-- 标签列表 -->
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a hre="#"><@uiLabel text="sellerLabel.biaoqianlibiao"/></a><!--标签列表  -->
+					</li>
+				</ul>
+			</div>
+			<#if storeTagsList??>
+			<table cellspacing="0" cellpadding="0" border="0"  width="100%" class="store_taglist">
+				<thead>
+					<tr>
+						<th style="width:500px;"><@uiLabel text="sellerLabel.biaoqianmingcheng"/></th><!--标签名称  -->
+						<th style="width:200px;"><@uiLabel text="sellerLabel.Option"/></th><!--操作  -->
+					</tr>
+				</thead>
+				<tbody>
+					<#list storeTagsList as storeTag>
+						<tr><#if locale=="zh">
+							 <td style="width:500px;">${storeTag.tag_name}</td>
+							 <#elseif locale=="ru">
+							  <td style="width:500px;">${storeTag.name_ru!''}</td>
+							 </#if>
+							  <td style="width:200px;">
+							    <!-- 	<a href="javascript:void"  value="${storeTag.tag_id}" name="edit" tag_id="${storeTag.tag_id}"></a> -->
+							    <#if locale=="zh">
+							    	<a href="tagGoodsShow.html?tagid=${storeTag.tag_id}&mark=${storeTag.mark}&menu=store_goods" name="showInfo" ><@uiLabel text="sellerLabel.biaoqianshangpshezhi"/></a><!--标签商品设置  -->
+							    <#elseif locale=="ru">
+							        <a href="tagGoodsShow.html?tagid=${storeTag.tag_id}&mark=${storeTag.mark}&menu=store_goods" name="showInfo" style="width:200px;" ><@uiLabel text="sellerLabel.biaoqianshangpshezhi"/></a><!--标签商品设置  -->
+							    </#if>
+							  </td>
+						</tr>
+					</#list>
+				</tbody>
+			</table>
+			<#else>
+		  		<p class="no_blank"><@uiLabel text="sellerLabel.meiyouneirong"/></p><!--暂无符合条件的数据记录  -->
+		  	</#if>
+		</div>
+	</div>
+</div>		
+<!--  
+<script type="text/javascript">
+$(function(){
+	
+	$("a[name='edit']").click(function(){
+		dialog = $.dialog({
+			title : "编辑标签",
+			width : 475,
+			height : 312,
+			lock : true,
+			min : false,
+			max : false
+		});
+		$.ajax({
+			url : "${ctx}/goods/tagInfo.html?type=2&tag_id="+$(this).attr("tag_id"),
+			cache : false,
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '修改',
+					callback : function() {
+						tagInfo("2");
+						return false;
+					}
+				}]);
+			},
+			error : function() {
+				alert("出现错误，请重试");
+			}
+		});	
+	});
+})
+</script>
+-->
+<script>
+	$(function(){
+		selectMenu("${menu}" , 4);
+	})
+</script>
+<#include '/common/footer.html' />

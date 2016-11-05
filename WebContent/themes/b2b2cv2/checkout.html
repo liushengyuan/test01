@@ -1,0 +1,67 @@
+<#-- 创建会员是否登录标签 -->
+<#assign memberIsLoginTag= newTag("memberIsLoginTag")>
+<#-- 获取是否登录  -->
+<#assign isLogin = memberIsLoginTag() >	
+
+<#if !isLogin>
+    <script>
+		//local.href="${ctx}/login.html?forward=member/member.html"
+		window.location.href="${ctx}/login.html?forward=checkout.html"
+	</script>
+</#if>
+<#if locale=="zh">
+	<#assign  title="核对订单信息" />
+<#elseif locale=="ru">
+	<#assign  title="Проверка заказа" />
+</#if>
+
+<#include 'common/header.html'/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/checkout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/cart.css" />
+<#if locale=="zh">
+   <script  src="${ctx}/themes/b2b2cv2/js/storecheckout.js"  ></script>
+<#elseif locale=="ru">
+   <script  src="${ctx}/themes/b2b2cv2/js/storecheckout_ru.js"  ></script>
+</#if>
+<!-- 购物流程 -->
+<div class="flow_path">
+	<div class="cart_logo">
+		<a href="${ctx}/index.html"><@image src="${staticserver}/images/logo-1x.png" class="pngFix" style="width:150px;height:40px;" /></a>
+	</div>
+	<div class="flow_pathlist">
+		<ul>
+			<li class="">
+				<i class="process1"></i>
+				<span style="background:#27E346;"></span>
+				<p style="color:green;"><@uiLabel text="goods.MyShoppingCart" /></p>
+				<strong></strong>
+			</li>
+			<li class="selected">
+				<i class="process2"></i>
+				<span></span>
+				<p><@uiLabel text="goods.FillCheck" /></p>
+				<strong></strong>
+			</li>
+			<li class="">
+				<i class="process3"></i>
+				<span></span>
+				<p style="color:red;"><@uiLabel text="goods.OrdersSubmittedSuccessfully" /></p>
+				<strong></strong>
+			</li>
+		</ul>
+	</div>
+</div>
+<div id="main">
+
+	<!--上不填写信息单、购买流程结束-->
+	<#include 'checkout/storecheckout.html'/>
+</div>
+<script>
+	$(function(){
+		var addressred = $(".address .selected").attr("style");
+		if(addressred="display: none;"){
+			$(".address").addClass("relborder");
+		}
+	})
+</script>
+<#include 'common/footer.html'/>

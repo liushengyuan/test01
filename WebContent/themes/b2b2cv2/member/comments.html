@@ -1,0 +1,84 @@
+<#if locale=="zh">
+    <#assign title="我的评论" />
+ <#elseif locale=="ru">
+     <#assign title="Мои замечания" />
+ </#if>
+<#include 'member_header.html' />
+<!-- 获取会员我的咨询标签 -->
+<#assign memberCommentListTag = newTag("memberCommentListTag")>
+<!-- 调用会员我的咨询标签 -->
+<#assign commentsList = memberCommentListTag()>
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class="selected"><a href="comments.html"><span><@uiLabel text="index.MyComments" /></span></a></li>
+			<li class=""><a href="waitcommont.html" ><span><@uiLabel text="index.PortalUserGoodsReviewed" /></span></a></li>
+		</ul>
+	</div>
+	<!-- 评论列表 -->
+	<div class="user_comment">
+		<h1><@uiLabel text="index.MyComments" /></h1>
+		<#if commentsList?size gt 0 >
+		<ul>
+			<#list commentsList.commentsList as comment>
+				<li>
+					<div class="comment_title">
+						<span><a href="${ctx}/goods-${comment.goods_id}.html" target="_blank">${comment.name}</a></span>
+						<span><@dateformat time="${comment.dateline?c}" pattern="yy-MM-dd HH:mm"/></span>
+						<em>
+						<#if comment.status == 1> 
+							<@uiLabel text="index.PortalUserApprovalAdvisory" />
+						<#elseif comment.status == 2> 
+							<@uiLabel text="index.PortalUserAuditRefuse" />:&nbsp;&nbsp;${comment.check_description!}
+						 <#else>
+						 	<@uiLabel text="index.PortalUserPendingAdvisory" />
+						 </#if>
+						</em>
+					</div>
+					<div class="comment_inpro">
+						<strong><@uiLabel text="index.MyComments" />：</strong>
+						<span>
+							<p  style="word-break:break-word">${comment.content}</p>
+							<i class="comment_img">
+							<#if comment.img?? && comment.img!= '' && comment.img!='null'>
+								<img src="${comment.img}"  />
+							</#if>	
+							</i>	
+						</span>
+					</div>
+					<#if comment.replystatus == 1>
+						<div class="comment_reply">
+							<strong><@uiLabel text="index.PortalUserCustomerReply" />：</strong><span>${comment.reply}</span>
+						</div>
+					</#if>
+				</li>
+			</#list>
+		</ul>
+		<#else>
+			<p class="no_commont"><@uiLabel text="index.PortalUserNoComments" /></p>
+		</#if>
+	</div>
+</div>
+<script>
+	$(function() {
+		
+		$(".comment_img img").mouseover(function(){
+			$(this).attr("style","width:200px;height:200px;")
+		})
+		$(".comment_img img").mouseout(function(){
+			$(this).attr("style","width:60px;height:60px;")
+		})
+		
+		$(".waitcomment").click(function() {
+			$(".tab ul li").removeClass("selected");
+			$(this).parent().addClass("selected");
+			$(".commontwait").load("waitcommont.html", function() {
+				$(".commontlist").hide();
+				$(".commontwait").show();
+				Favorite.init();
+			})
+		})
+	})
+</script>
+</div>
+<#include '../common/footer.html'/>

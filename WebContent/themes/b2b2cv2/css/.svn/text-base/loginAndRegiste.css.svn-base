@@ -1,0 +1,552 @@
+@charset "utf-8";
+/* CSS Document */
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+    font-size: 12px;
+    font-family: "Microsoft YaHei", "微软雅黑", "宋体";
+}
+
+.fl {
+    clear: both;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+}
+
+a {
+    color: #039;
+    text-decoration: none;
+}
+
+#top {
+    border-bottom: 1px solid #b50029;
+    height: 97px;
+    margin-bottom: 40px;
+}
+
+.header2 {
+    height: 97px;
+    position: relative;
+}
+
+.header2, .layout {
+    margin: 0 auto;
+    width: 990px;
+}
+
+.logo2 {
+    height: 53px;
+    left: 0;
+    position: absolute;
+    top: 30px;
+    /* width: 281px; */
+}
+
+.logo2 a {
+    background: url("../images/logo-1x.png") no-repeat;
+    display: block;
+    height: 53px;
+    overflow: hidden;
+    text-decoration: none;
+    text-indent: -9999px;
+    width: 181px;
+    float:left;
+}
+
+.logo2 span{float:left; height:53px; display: block; line-height:50px; font-size:24px;}
+
+#content {
+    margin: auto;
+    width: 990px;
+}
+
+.maincontent {
+    float: left;
+    width: 483px;
+}
+
+.outerbox {
+    padding: 0 0 10px 20px;
+}
+
+.notebox {
+    background: none repeat scroll 0 0 #fff9e1;
+    border: 1px solid #ffdb83;
+    color: #e71;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+.lefttitle, .titleweight {
+    float: left;
+    font-size: 13px;
+    margin-bottom: 10px;
+    padding: 5px 10px 0 0;
+    text-align: right;
+    width: 130px;
+}
+
+.rtcon {
+    padding: 0 0 10px 140px;
+}
+
+.rtcon .txtinput, .rtcon .txtinputb {
+    border: 1px solid #ccc;
+    font-size: 16px;
+    height: 35px;
+    line-height: 35px;
+    margin-bottom: 10px;
+    padding: 2px 3px;
+    vertical-align: middle;
+    width: 315px;
+}
+
+.txtinput2 {
+    width: 150px;
+}
+
+.rtcon_img {
+    vertical-align: middle;
+    padding-bottom: 5px;
+    /*margin-left: 8px;*/
+    width:150px;
+    height:35px;
+}
+
+.m_forget{
+    line-height: 35px;
+    float: right;
+}
+.text_i{display:block; padding-left:160px; font-style:normal; height:30px;}
+
+.pwdbox {
+    margin-top: -10px;
+    position: relative;
+}
+
+.rtcon .checkinput, .verify .checkinput {
+    margin-right: 5px;
+}
+
+.rtcon label *, .verify label * {
+    vertical-align: middle;
+}
+
+.pwd {
+    display: none;
+    left: 253px;
+    position: absolute;
+    top: -6px;
+}
+
+.arrowleft {
+    background: url("/portal/images/register.png") no-repeat scroll -60px 0 rgba(0, 0, 0, 0);
+    display: block;
+    float: left;
+    height: 15px;
+    margin-top: 6px;
+    position: relative;
+    width: 11px;
+}
+
+.pwd p {
+    background: none repeat scroll 0 0 #fff;
+    border: 1px solid #999;
+    float: left;
+    margin-left: -1px;
+    padding: 5px 10px;
+}
+
+button, input, select, textarea {
+    font: 100% Arial, Helvetica, sans-serif;
+}
+
+.btnout {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: #f2cc68;
+    background: -moz-linear-gradient(center top, #fff5d9, #ffe4ba) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fff5d9), to(#ffe4ba));
+    border-color: #f2cc68 #f2cc68 #e1a82b;
+    border-image: none;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 2px 1px rgba(234, 195, 110, 0.55);
+    cursor: pointer;
+    display: block;
+    font-size: 18px;
+    /*height: 45px;*/
+    margin: 0 10px 10px 0;
+    text-align: center;
+    width: 315px;
+}
+
+.btnout .sgbtn {
+    background: none repeat;
+    border: 0 none;
+    color: #693a0d;
+    cursor: pointer;
+    outline: 0 none;
+    overflow: visible;
+    padding: 10px 0;
+    width: 210px;
+    text-align: center;
+}
+.btnout .sgbtn3{*margin-left:-40px;}
+
+.n-grey-button {
+    background: -moz-linear-gradient(center top, #fff, #f0f0f0) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#f0f0f0));
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    box-shadow: 0 2px 1px rgba(6, 0, 1, 0.13);
+    color: #333;
+    cursor: pointer;
+    outline: medium none;
+    overflow: visible;
+    text-align: center;
+    text-indent: inherit;
+}
+
+.outerbox a.n-yellow-button, .outerbox a.n-grey-button, .outerbox a.unavailable-button {
+    display: inline-block;
+    line-height: 35px;
+}
+
+.outerbox .n-yellow-button, .outerbox .n-grey-button, .outerbox .unavailable-button {
+    font-size: 12px;
+    height: 36px;
+    margin-right: 10px;
+    vertical-align: middle;
+    width: 210px;
+}
+
+.newtot {
+    padding-top: 13px;
+}
+
+.bound {
+    border-bottom: 1px solid #e9e9e9;
+    font-size: 13px;
+    height: 10px;
+    margin: 5px 0 25px 35px;
+    text-align: center;
+}
+
+.bound span {
+    background: none repeat scroll 0 0 #fff;
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 auto -10px;
+    position: relative;
+    width: 38px;
+}
+
+.faceico, .googleico {
+    background: url("/portal/images/register.png") no-repeat scroll 0 -420px rgba(0, 0, 0, 0);
+    display: inline-block;
+    height: 28px;
+    width: 132px;
+}
+
+.googleico {
+    background-position: 0 -476px;
+    margin-left: 10px;
+}
+
+.signhelp {
+    padding: 30px 20px 40px 40px;
+}
+
+.signhelp .customerword {
+    position: relative;
+    z-index: 5;
+}
+
+.minorcontent {
+    float: right;
+    width: 390px;
+}
+
+.protectbox {
+    margin-bottom: 10px;
+}
+
+/* 底部 */
+.user-help-wrap {
+    background-color: #ededed;
+    border-top: 1px solid #ddd;
+    padding: 20px 0;
+}
+
+.foot-website {
+    margin: 0 auto;
+    width: 1230px;
+}
+
+.foot-icon {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.foot-icon ul {
+    display: inline-block;
+    height: 41px;
+}
+
+.foot-icon ul li {
+    float: left;
+    width: 80px;
+    height: 40px;
+    text-indent: -999em;
+    overflow: hidden;
+    margin: 0 8px 0 0;
+    list-style: none;
+    background: url(/portal/images/home-index-sprite.png) no-repeat -550px -600px
+}
+
+.foot-icon ul li.p-logo-a {
+    background-position: -550px -905px;
+    width: 80px;
+}
+
+.foot-icon ul li.p-logo-b {
+    background-position: -750px -805px;
+    width: 80px;
+}
+
+.foot-icon ul li.p-logo-c {
+    background-position: -750px -882px;
+    width: 80px;
+}
+
+.foot-icon ul li.p-logo-d {
+    background-position: -750px -960px;
+    width: 80px;
+}
+
+.foot-icon ul li.p-logo-e {
+    background-position: -990px -590px;
+    width: 80px;
+}
+
+.foot-icon ul li.p-logo-f {
+    background-position: -990px -640px;
+    width: 80px;
+}
+
+.foot-icon ul li.p-logo-g {
+    background-position: -980px -685px;
+    width: 80px;
+}
+
+.foot-icon ul li.p-logo-h {
+    background-position: -980px -725px;
+    width: 80px;
+}
+
+.foot-icon ul li.p-logo-i {
+    background-position: -980px -775px;
+    width: 80px;
+}
+
+.foot-icon ul li.p-logo-j {
+    background-position: -990px -885px;
+    width: 80px;
+}
+
+.foot-site {
+    color: #ddd;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.foot-site a {
+    color: #666;
+    padding: 0 5px;
+}
+
+.foot-copyright {
+    color: #999;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* 注册 */
+.col-main {
+    float: left;
+    min-height: 1px;
+    width: 100%;
+}
+
+.col-left {
+    margin-right: 250px;
+}
+
+.register-list dl {
+    margin-bottom: 15px;
+    padding-left: 240px;
+    position: relative;
+}
+
+.register-list dt {
+    left: 0;
+    padding-right: 10px;
+    position: absolute;
+    text-align: right;
+    top: 5px;
+    width: 230px;
+}
+
+.register-list dt em {
+    color: #f00;
+    font-weight: normal;
+}
+
+.register-list dt * {
+    vertical-align: middle;
+}
+
+em {
+    font-style: normal;
+}
+
+.register-list dt strong {
+    font-size: 13px;
+    font-weight: 100;
+}
+
+.register-list dd {
+    font-size: 13px;
+}
+
+.register-list .input1, .register-list .input2 {
+    border: 1px solid #ccc;
+    font-size: 16px;
+    height:35px;
+    line-height: 35px;
+    margin-right: 10px;
+    padding: 2px 3px;
+    vertical-align: middle;
+    width: 315px;
+}
+
+.success-remind {
+    background: url("/portal/images/register.png") repeat scroll 0 -188px rgba(0, 0, 0, 0);
+    display: inline-block;
+    height: 16px;
+    overflow: hidden;
+    vertical-align: middle;
+    width: 16px;
+}
+
+.register-list dd p {
+    color: #999;
+    font-size: 12px;
+    height: 10px;
+    visibility: hidden;
+}
+
+.register-list .enter-error .onShow {
+    visibility: visible;
+    color: #f00;
+}
+
+.identityinfo {
+    padding-top: 7px;
+}
+
+.identityinfo li {
+    float: left;
+    margin-left: 2px;
+    margin-right: 25px;
+}
+
+.identityinfo li input {
+    margin: -3px 5px 0 0;
+    vertical-align: middle;
+}
+
+.loadicon {
+    vertical-align: middle;
+}
+
+.col-right {
+    float: left;
+    margin-left: -280px;
+    width: 280px;
+}
+
+.module1, .module2, .module3 {
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+}
+
+.module1 .signin {
+    padding: 0 20px 5px;
+}
+
+.module1 .signin p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.module1 .signin .n-grey-button {
+    margin-right: 10px;
+    padding: 3px 15px;
+    vertical-align: middle;
+    font-size: 12px;
+}
+
+.module2 {
+    padding: 10px 0 10px 20px;
+}
+
+.col-right h2 {
+    font-weight: 700;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+.service-pledge {
+    margin: 4px 0;
+    padding: 10px 0 10px 0px;
+}
+
+.service-pledge ul {
+    overflow: hidden;
+}
+
+.service-pledge ul li {
+    background: url("/portal/images/register.png") no-repeat scroll 0px -216px rgba(0, 0, 0, 0);
+    color: #666;
+    padding-left:10px;
+    font-size: 11px;
+    line-height: 15px;
+    /*padding: 6px 0 6px 12px;*/
+    margin-left:0px;
+    height:28px;
+}
+.service-pledge ul li a{display:inline;}
+
+.module2 p {
+    line-height: 14px;
+    padding-right: 20px;
+}
+
+.module3 {
+    padding: 10px 20px;
+}
+
+.module3 li {
+    background: url("/portal/images/register.png") no-repeat scroll 0 -213px rgba(0, 0, 0, 0);
+    padding: 3px 5px 3px 7px;
+}
+

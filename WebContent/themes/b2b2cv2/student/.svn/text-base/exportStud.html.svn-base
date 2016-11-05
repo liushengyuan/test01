@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<#assign studentList=newTag("exportStudTag")>
+<#assign studList=studentList("{'ids':'${ids}'}")>
+<table name="学生列表">
+	<tr>
+		<th>序号</th>
+		<th>学生姓名</th>
+		<th>学生年龄</th>
+		<th>学生成绩</th>
+	</tr>
+	<#list studList as stud>
+		<tr id="" >
+			<td >${stud_index+1}</td>
+			<td>${stud.name}</td>
+			<td>${stud.age}</td>
+			<td >${stud.score}</td>
+		</tr>
+	</#list>
+</table>

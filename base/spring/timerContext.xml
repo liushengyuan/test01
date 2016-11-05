@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd" default-autowire="byName" default-lazy-init="false">
+
+	
+	<!-- 每天执行task -->		 
+	<bean id="everyDayTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="jobExecuter" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>everyDay</value>
+		</property>
+	</bean>
+	
+	<!-- 每小时执行task -->	
+	<bean id="erverHourTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="jobExecuter" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>everyHour</value>
+		</property>
+	</bean>
+	<!-- 每月执行task -->		 
+	<bean id="everyMonthTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="jobExecuter" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>everyMonth</value>
+		</property>
+	</bean>
+	
+
+	<!-- 每天执行表达式，每晚23：30 -->
+	<bean id="erverDayTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="everyDayTask" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0 30 23 * * ?</value>
+		</property>
+	</bean>
+	
+	<!--  每小时执行表达式 -->
+	<bean id="erverHourTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="erverHourTask" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0 0 0/1 * * ?</value>
+		</property>
+		 
+	</bean>
+	<!--  每月执行表达式 -->
+	<bean id="everyMonthTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="everyMonthTask" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0 1 0 1 * ?</value>
+		</property>
+	</bean>
+	
+	<!-- 对账 -->
+	<bean id="checkBillTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="checkBillTask" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0 0 2 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="checkBillTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="checkBill" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>doCheckBill</value>
+		</property>
+	</bean>
+	<!-- 放款task -->		 
+	<bean id="loanTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="myTradeApiAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>loan</value>
+		</property>
+	</bean>
+	<!-- 打折活动定时任务  5秒执行一次，开始时间大于当前时间开启，小于结束时间关闭 -->
+	<bean id="activityTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="activityTask" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	<!-- 活动task -->
+	<bean id="activityTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="allActivityAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>update</value>
+		</property>
+	</bean>
+	<!-- 秒杀活动定时任务  10秒执行一次，未支付取消订单-->
+	<bean id="activityOrderTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="activityOrderTask" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0/10 * * * * ?</value>
+		</property>
+	</bean>
+	<!-- 活动task -->
+	<bean id="activityOrderTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="allActivityAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>changeOrder</value>
+		</property>
+	</bean>
+	<!-- 打折活动定时任务  59秒执行一次，开始时间大于当前时间开启，小于结束时间关闭 -->
+	<bean id="activityTimeDiscount"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="activityDiscountTask" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0/59 * * * * ?</value>
+		</property>
+	</bean>
+	<!-- 活动task -->
+	<bean id="activityDiscountTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="allActivityAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>updateDiscount</value>
+		</property>
+	</bean>
+	<!-- 每5分钟执行方法 -->
+	<!-- <bean id="updatepic"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="updatepicurl" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	<bean id="updatepicurl"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="allActivityAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>updatePic</value>
+		</property>
+	</bean> -->
+	<!-- 每天执行表达式，每晚23：30 -->
+	<bean id="loanTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="loanTask" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0 20 14 * * ?</value>
+		</property>
+	</bean>
+	<bean id="pointTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="myPointApiAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>point</value>
+		</property>
+	</bean>
+	<bean id="pointTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="pointTask" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	<bean id="mpTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="myMpApiAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>mp</value>
+		</property>
+	</bean>
+	<bean id="mpTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="mpTask" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	<!-- 物流轨迹查询2俄罗斯业务 顺丰 -->
+	<bean id="sfRouteRu"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="myRouteApiAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>routefsru</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
+	<bean id="sfruTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="sfRouteRu" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>* 0/59 * * * ?</value>
+		</property>
+	</bean>
+	<!-- 物流轨迹查询2俄罗斯。-->
+	<!-- 物流轨迹查询2国内业务 顺丰 -->
+	<bean id="mpRoute"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="myRouteApiAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>route</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
+	<bean id="mpRTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="mpRoute" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>* 0/59 * * * ?</value>
+		</property>
+	</bean>
+	<!-- 物流轨迹查询2国内业务。 -->
+	<!-- 物流轨迹查询1俄速通 -->
+  	<bean id="mpeRoute"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="myRouteApiAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>eroute</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
+	<bean id="mpeRTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="mpeRoute" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>* 0/59 * * * ?</value>
+		</property>
+	</bean>
+	<!-- 物流轨迹查询1。 -->
+	<!-- 团购定时任务 -->
+	<!-- 增加虚拟购买数量 -->
+	<bean id="myGroupBuy"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="everyHourGroupbuyAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>edit</value>
+		</property>
+	</bean>
+	<bean id="groupBuyTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="myGroupBuy" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0 0 0/1 * * ?</value>
+		</property>
+	</bean>
+	<!-- 顺丰轨迹查询jfw测试用的 -->
+<!--	<bean id="myShunFeng"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="everyRouteApiAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>route</value>
+		</property>
+	</bean>
+	<bean id="shunfengTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="myShunFeng" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>0/25 * * * * ?</value>
+		</property>
+	</bean>-->
+	<!-- 俄通收轨迹查询定时任务 -->
+	<bean id="myETSRoute"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		 
+		<property name="targetObject">
+			<ref bean="myRouteESTApiAction" />
+		</property>
+		 
+		<property name="targetMethod">
+			<value>etsroute</value>
+		</property>
+	</bean>
+	<bean id="estTime"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="myETSRoute" />
+		</property>
+		 
+		<property name="cronExpression">
+			<value>* 0/59 * * * ?</value>
+		</property>
+		
+	</bean>
+	<!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序   -->
+	<bean id="startQuertz" lazy-init="false" autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="erverDayTime" />
+				<ref bean="erverHourTime" />
+				<ref bean="everyMonthTime"/>
+				<ref bean="checkBillTrigger"/>
+				<ref bean="loanTime"/>
+				<ref bean="pointTime"/>
+				<ref bean="mpTime"/>
+				<ref bean="activityTime"/>
+				<ref bean="activityOrderTime"/>
+				<ref bean="activityTimeDiscount"/>
+				<!-- <ref bean="updatepic"/> -->
+				<ref bean="mpRTime"/>
+				<ref bean="mpeRTime"/>
+				<ref bean="sfruTime"/>
+				<ref bean="groupBuyTime"/>
+				<!--<ref bean="shunfengTime"/>-->
+				<ref bean="estTime"/>
+			</list>
+		</property>
+	</bean>
+
+</beans>

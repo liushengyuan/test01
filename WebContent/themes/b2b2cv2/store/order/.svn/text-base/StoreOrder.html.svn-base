@@ -1,0 +1,424 @@
+<#include '/store/store_header.html' />
+<#-- <script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"  ></script> -->
+<!-- 获取店铺订单标签 -->
+<#assign storeorderList=newTag("storeOrderListTag")/>
+<#assign orderList=storeorderList()/>
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<#assign paystatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<!-- 调用会员订单状态数量标签 -->
+<#assign storeOrderNumTag = newTag("storeOrderNumTag")>
+<!-- 该商品是否在秒伤活动内 -->
+<#assign showGoodSkillTag= newTag("showGoodSkillTag")>
+<style>
+.order-type-list {
+	padding: 0px 0px 10px 10px; position: relative; zoom: 1;
+}
+.order-type .first-line {
+	margin-bottom: 5px; border-bottom-color: rgb(222, 230, 236); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+.order-type-list strong {
+	left: 0px; top: 5px; width: 100px; text-align: right; position: absolute;
+}
+.order-type-list a {
+	margin: 2px 0px 0px; padding: 3px 10px; display: inline-block; white-space: nowrap;
+}
+.order-type-list a b {
+	color: rgb(255, 85, 0);
+}
+.order-type-list a em {
+	color: rgb(153, 153, 153); font-style:normal;
+}
+.order-type-list .current {
+	background: #27A9E3; color: rgb(255, 255, 255); text-decoration: none;
+}
+.order-type-list .current b {
+	color: rgb(255, 255, 255);
+}
+.order-type-list .current em {
+	color: rgb(255, 255, 255);
+}
+</style>
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;"><@uiLabel text="sellerAccount.Location"/>：</span>
+			<span>></span>
+			<a href="#"><@uiLabel text="seller.TradeManager"/></a><span>></span><@uiLabel text="seller.OrderList"/>
+		</div>
+		<input type="hidden" value="${order_state!''}" class="left_selected">
+		<div class="store_right_main">
+		<div class="user_order">
+			<div class="order-type" id="J_orderType">
+				<div class="order-type-list first-line">
+			        <input type="hidden" id="order_state" value="${orderList.order_state!''}" />
+			        <a <#if order_state?exists && order_state == "new">class="current"</#if> href="StoreOrder.html?order_state=new"><@uiLabel text="index.PortalUserNewOrders"/><em>(${storeOrderNumTag('{"status":999}')})</em></a>
+			        <a <#if order_state?exists && order_state == "0">class="current"</#if> href="StoreOrder.html?order_state=0"><@uiLabel text="index.PortalOrderAwaitingPayment"/><em>(${storeOrderNumTag('{"status":0}')})</em></a>
+			        <a <#if order_state?exists && order_state == "1">class="current"</#if> href="StoreOrder.html?order_state=1"><@uiLabel text="index.PortalUserBeAcknowledged"/><em>(${storeOrderNumTag('{"status":1}')})</em></a>
+			        <a <#if order_state?exists && order_state == "2">class="current"</#if> href="StoreOrder.html?order_state=2"><@uiLabel text="index.PortalUserBeShipped"/><em>(${storeOrderNumTag('{"status":2}')})</em></a>
+			        <a <#if order_state?exists && order_state == "5">class="current"</#if> href="StoreOrder.html?order_state=5"><@uiLabel text="buyer.HasShiped"/><em>(${storeOrderNumTag('{"status":5}')})</em></a>
+			        <a <#if order_state?exists && order_state == "6">class="current"</#if> href="StoreOrder.html?order_state=6"><@uiLabel text="index.PortalUserHasReceipt"/><em>(${storeOrderNumTag('{"status":6}')})</em></a>
+			<!--         <a href="#"><@uiLabel text="index.PortalUserCancellation" /><em>(0)</em></a> -->
+			<a <#if order_state?exists && order_state == "11">class="current"</#if> href="StoreOrder.html?order_state=11"><@uiLabel text="buyer.HasPayedOrder"/><em>(${storeOrderNumTag('{"status":11}')})</em></a>
+			<a <#if order_state?exists && order_state == "10">class="current"</#if> href="StoreOrder.html?order_state=10"><@uiLabel text="index.PortalUserDisputes"/><em>(${storeOrderNumTag('{"status":10}')})</em></a>
+<!-- 			        <a id="ORDER_DISORDER" href="javascript:void(0)">纠纷订单<em>(0)</em></a> -->
+			    </div>
+			    <div class="order-type-list">
+			        <a <#if order_state?exists && order_state == "7">class="current"</#if> href="StoreOrder.html?order_state=7"><@uiLabel text="index.PortalOrderCompleted"/><em>(${storeOrderNumTag('{"status":7}')})</em></a>
+			        <a <#if order_state?exists && order_state == "-3">class="current"</#if> href="StoreOrder.html?order_state=-3"><@uiLabel text="sellerCenter.ApplyReturnGoods"/><em>(${storeOrderNumTag('{"status":-3}')})</em></a>
+			        <a <#if order_state?exists && order_state == "-2">class="current"</#if> href="StoreOrder.html?order_state=-2"><@uiLabel text="order.hasReturnedGoods"/><em>(${storeOrderNumTag('{"status":-2}')})</em></a>
+			        <a <#if order_state?exists && order_state == "-1">class="current"</#if> href="StoreOrder.html?order_state=-1"><@uiLabel text="index.PortalUserRefunded"/><em>(${storeOrderNumTag('{"status":-1}')})</em></a>
+			        <a <#if order_state?exists && order_state == "8">class="current"</#if> href="StoreOrder.html?order_state=8"><@uiLabel text="index.PortalUserCancelled"/><em>(${storeOrderNumTag('{"status":8}')})</em></a>
+			    </div>
+			</div>
+<!-- 			<div class="tabmenu"> -->
+<!-- 				<input type="hidden" id="order_state" value="${orderList.order_state!''}" /> -->
+<!-- 				<ul class="tab pngFix"> -->
+<!-- 					<li <#if order_state?? && order_state=="all"> class="active"  <#else> class="normal"  </#if> ><a href="javascript:void(0);" order_state="all" name="order_state">所有订单</a></li> -->
+<!-- 		  			<li <#if order_state?? && order_state=="0"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="0" name="order_state">等待付款</a></li> -->
+<!-- 		  			<li <#if order_state?? && order_state=="wait_pay"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="wait_pay" name="order_state">等待收款</a></li> -->
+<!-- 		  			<li <#if order_state?? && order_state=="wait_ship"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="wait_ship" name="order_state">等待发货</a></li> -->
+<!-- 		  			<li <#if order_state?? && order_state=="wait_rog"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="wait_rog" name="order_state">等待收货</a></li> -->
+<!-- 		  			<li <#if order_state?? && order_state=="7"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="7" name="order_state">已完成</a></li> -->
+<!-- 		  			<li <#if order_state?? && order_state=="8"> class="active" <#else> class="normal" </#if> ><a href="javascript:void(0);" order_state="8" name="order_state">已取消</a></li> -->
+<!-- 				</ul> -->
+<!-- 			</div> -->
+			<!-- 订单列表 -->
+			<div class="store_orderlist">
+				<table class="search_form">
+			  		<tbody>
+			  			<tr>
+			  			<#if locale=="zh">
+			  				<td style="width:180px">&nbsp;</td>
+			  				<th ><@uiLabel text="index.PortalUserOrderNumber"/>：</th>
+			  			<#elseif locale=="ru">
+			  				<td style="width:20px">&nbsp;</td>
+			  				<th style="width:100px;" ><@uiLabel text="index.PortalUserOrderNumber"/>：</th>
+			  			</#if>
+			  				<td ><input type="text" class="text" name=keyword value="${orderList.keyword!''}"></td>
+			  				<th><@uiLabel text="sellerOrderList.storeGoodsBuyers"/>：</th>
+        					<td ><input type="text" class="text" name="buyerName" value="${orderList.buyerName!''}"></td>
+        					<#if locale=="zh">
+			  				<th><@uiLabel text="index.PortalUserOrderTime"/>：</th>
+			  				<#elseif locale=="ru">
+			  				<th style="width:100px;"><@uiLabel text="index.PortalUserOrderTime"/>：</th>
+			  				</#if>
+			  				<td  class="storeorderlist">
+			  					<label><input class="text hasDatepicker" type="text" name="startTime" onClick="WdatePicker()" value="${orderList.startTime!''}" /><span class="storeorder_time"></span></label>
+			  					<i>-</i><label><input class="text hasDatepicker" type="text" name="endTime" onClick="WdatePicker()" value="${orderList.endTime!''}" ><span class="storeorder_time"></span></label>
+			  				</td>
+			  				<td class=""><input type="button" class="submit" id="btnSearch" value="<@uiLabel text="sellerOrderList.sousuo"/>"></td><!--搜索  -->
+			  			</tr>
+			  		</tbody>
+			  	</table>
+			  	<!-- 订单列表详细 -->
+			  	<table class="s_orderlist"  cellpadding="0" cellspacing="0">
+			  		<thead>
+			  			<tr class="s_orderlist_title">
+			  			<#if locale="zh">
+			  				<th class="s_orderlist_th2"><@uiLabel text="sellerOrderList.storeGoodsName"/></th>
+			  			<#elseif locale="ru">
+			  			    <th class="s_orderlist_th2" style="width:150px;"><@uiLabel text="sellerOrderList.storeGoodsName"/></th>
+			  			</#if>
+			  				<th class="s_orderlist_th3"><@uiLabel text="sellerOrderList.unitPrice"/></th>
+			  				<th class="s_orderlist_th3"><@uiLabel text="sellerOrderList.storeGoodsSum"/></th>
+			  				<th class="s_orderlist_th4"><@uiLabel text="sellerOrderList.storeGoodsBuyers"/></th>
+			  				<th class="s_orderlist_th5"><@uiLabel text="sellerOrderList.storeOrderPrice"/></th>
+			  				<th class="s_orderlist_th5"><@uiLabel text="sellerOrderList.storeOrderPaymentMethod"/></th>
+			  				<th class="s_orderlist_th5"><@uiLabel text="sellerOrderList.storeOrderPaymentStatus"/></th>
+			  				<th class="s_orderlist_th6"><@uiLabel text="sellerOrderList.storeOrderStatus"/></th>
+			  				<th class="s_orderlist_th7"><@uiLabel text="sellerOrderList.storeOrderOperating"/></th>
+			  			</tr>
+			  		</thead>
+			  		<#if orderList.totalCount != 0 >
+			  		<tbody>
+			  		<#list orderList.storeOrder.result as order>
+			  			<tr  style="line-height:12px;height:12px;padding:0px;">
+			  				<td colspan="20" style="border:0px none;">&nbsp;</td>
+			  			</tr>
+				  		<tr>
+				  			<th colspan="20" >
+				  				<span><@uiLabel text="index.PortalUserOrderNumber"/>：${order.sn}</span>
+				  				<span style="border:0px none;"><@uiLabel text="index.PortalUserOrderTime"/>：<@dateformat time="${order.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></span>
+				  			</th>
+				  		</tr>
+				  		<tr>
+				  			<!--创建“订单货物列表”标签-->
+							<#assign orderItemListTag = newTag("orderItemListTag")>
+							<!--调用“订单货物列表”标签，并传递参数-->
+							<#assign orderItemList = orderItemListTag("{'orderid':${order.order_id}}")>
+							<td style="width:650px;border-bottom:0px none;" colspan="3" >
+								<ul>
+								<#list orderItemList as item>
+									<li>
+										<div class="s_item_list_img">
+											<a target="_blank" href="${ctx}/goods-${item.goods_id}.html">
+				            					<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+				            				</a>
+				            			</div>
+				            			<div class="s_item_list_name">
+				            				<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+											<#assign product = goodsBaseDataTag("{'goodsid':"+item.goods_id+"}")>
+				            				<a target="_blank" href="${ctx}/goods-${item.goods_id}.html">
+				            				<#-- ${item.name} -->
+				            				<#if locale=="zh">
+                                				<#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+							                         <#if showGoodSkill?size  gt   0>
+							                            <#list showGoodSkill as a>
+							                               <#if a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+							                              ${product.name!""}#ID${item.goods_id!}<span ><a style="margin-left: 15px;font-size: 11px;color: red" style="margin-left: 15px;font-size: 15px;color: red" href="../seckill20160701/seckill0701.html">(秒杀商品)</a></span>
+							                              </#if>
+							                            </#list>
+							                         <#else>
+							                            ${product.name!""}#ID${item.goods_id!}
+							                         </#if>
+                                			<#elseif locale=="ru">
+                                				${product.name_ru!""}#ID${item.goods_id!}
+                                			</#if>
+				            				</a>
+				            			</div>
+				            			<div class="s_item_list_price">
+				            			<#-- 	${item.price?string.currency} -->
+				            			<#if item.currency=="CNY">
+											                  <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+						                         <#if showGoodSkill?size  gt   0>
+							                           <#list showGoodSkill as a>
+							                           			<#if a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+							                           			 <span style="text-decoration: line-through;font-family: Meiryo;font-size: 11px;color: red" >(原价：&yen;${a.original_price})</span>
+							                           			</br><span style="font-size: 11px;color: red;width:110px;line-height: 20px;display: block;">秒杀价：${item.price?string.currency}</span>
+							                           			 </#if>	
+							                           </#list>
+						                         <#else>
+						                           ${item.price?string.currency}
+						                        </#if>
+										<#elseif item.currency=="RUB">
+											${item.price!0.00}р.
+										</#if>
+				            			</div>
+				            			<div class="s_item_list_num">
+				            				${item.num!'0'}
+				            			</div>
+									</li>	
+								</#list>
+								</ul>
+							</td>
+							<td style="width:100px">
+								${order.ship_name!''}
+							</td>
+							<td style="width:100px">
+								<strong>
+							<#-- 	${order.order_amount?string.currency} -->
+								<#if order.currency=="CNY">
+									￥${order.order_amount}
+								<#elseif order.currency=="RUB">
+									${order.order_amount!''}р.
+								</#if>
+								</strong>
+								<p><@uiLabel text="sellerOrderList.storeOrderShippingCosts"/>
+								<#-- ${(order.shipping_amount!0)?string.currency} -->
+								<#if order.currency=="CNY">
+									(￥${(order.shipping_amount!0)})
+								<#elseif order.currency=="RUB">
+									(${(order.shipping_amount!0)}р.)
+								</#if>
+								</p>
+<!-- 								<p>${order.payment_name}</p> -->
+							</td>
+							<td class="orderlist_staus" style="width:100px">
+								<p>${order.payment_name}</p>
+							</td>
+							<td class="orderlist_staus" style="width:100px">
+								<#-- <p><@paystatus status="${order.pay_status}" type="pay" /></p> -->
+								<#if locale=="zh">
+								<p><@paystatus status="${order.pay_status}" type="pay" /></p>
+								</#if>
+								<p>
+								<#if locale=="ru">
+								<#if order.pay_status=0>Неоплаченный</#if>
+								<#if order.pay_status=1>В ожидании подтверждения оплаты</#if>
+								<#if order.pay_status=2>Платеж подтвержден</#if>
+								<#if order.pay_status=3>Деньги были возвращены</#if>
+								<#if order.pay_status=4>Частичное возмещение</#if>
+								<#if order.pay_status=5>Частичная оплата</#if>
+								</#if>
+								</p>
+							</td>
+							<td class="orderlist_staus" style="width:100px">
+								<#-- <p><@orderstatus status="${order.status}" type="order" /></p> -->
+								<#if locale=="zh">
+								<p><@orderstatus status="${order.status}" type="order" /></p>
+								</#if>
+								<p>
+								<#if locale=="ru">
+								<#if order.status=-7>Уже заменен</#if>
+								<#if order.status=-4>Попросить замену</#if>
+								<#if order.status=-3>Попросить вернуть деньги</#if>
+								<#if order.status=-2>Возврат товара</#if>
+								<#if order.status=-1>Возврат денег</#if>
+								<#if order.status=0>Подтвержден</#if>
+								<#if order.status=1>В ожидании подтверждения оплаты</#if>
+								<#if order.status=2>Уже оплачен</#if>
+								<#if order.status=5>Уже отправлен</#if>
+								<#if order.status=6>Заказ получен</#if>
+								<#if order.status=7>Завершен</#if>
+								<#if order.status=8>Отменен</#if>
+								<#if order.status=4>В ожидании отправки</#if>
+								<#if order.status=9>Заказа в силе</#if>
+								<#if order.status=3>Заказ в стадии подготовки</#if>
+								<#if order.status=-6>Отказано в замене</#if>
+								<#if order.status=-5>Отказано в возврате денег</#if>
+								</#if>
+								</p>
+								
+							</td>
+							<td style="width:100px" class="go_store_orderdetail">
+								<a target="_blank" href="order_detail.html?ordersn=${order.sn}&menu=transaction"><@uiLabel text="sellerOrderList.showStoreOrder"/></a> 
+								<#if order.ship_status==2 && order.pay_status==0>
+									<a href="javascript:modifyPrice(${order.sn});" class="add_address"><span><@uiLabel text="sellerOrderList.mondifyStoreOrderPrice"/></span></a> 
+								</#if>
+								<#if order.ship_status==2 && order.pay_status==2>
+								   <#assign storeOrderChooseTag=newTag("storeOrderChooseTag")/>
+                                   <#assign storeOrderChoose=storeOrderChooseTag("{'sn':${order.sn} }")/>
+                                   <#if storeOrderChoose?? && storeOrderChoose=="1">
+                                      <a href="express2.html?ordersn=${order.sn!''}" class="add_address"><span>发货</span></a> 
+                                   <#else>
+									<a href="javascript:logistics(${order.sn});" class="add_address"><span><@uiLabel text="sellerOrderList.storeOrderGoodsShip"/></span></a> 
+									</#if>
+								</#if>
+								<#if order.ship_status==3 && order.pay_status==2>
+									<a href="express_detail.html?ordersn=${order.sn}" class="add_address"><span><@uiLabel text="sellerCenter.SeeExpress"/></span></a> 
+								</#if>
+							</td>
+						</tr>
+			  		</#list>
+						<tr>
+						</tr>			  		
+			  		</tbody>
+			  	</table>
+			  	<@pager pageno="${orderList.page!'1'}" pagesize="${orderList.pageSize}" totalcount="${orderList.totalCount}" />
+			  	<#else>	
+			  		</table>
+			  		<#if locale=="zh">
+			  		<p class="no_blank"><@uiLabel text="sellerRefunds.RefundsNoRecord"/></p>
+			  		<#elseif locale=="ru">
+			  		<p class="no_blank"style="width:500px;"><@uiLabel text="sellerRefunds.RefundsNoRecord"/></p>
+			  		</#if>
+			  	</#if>
+			</div>
+		</div>
+	
+	</div>		
+</div>
+<div id="dd"></div>
+	<script type="text/javascript">
+		function logistics(order_sn) {
+			var address = $("#address").val();
+			$("#dd").empty();
+			$("#dd").append("<div id='logistics_div'></div>");
+			var html = $("#logistics_div").load("logistics_chose.html", {
+				"order_sn" : order_sn
+			});
+			var dialog = $.dialog({
+				title : '<@uiLabel text="sellerOrderList.chooseLogistics"/>',
+				width : 475,
+				top : 200,
+				content : html,
+				lock : true,
+				init : function() {
+				}
+			});
+		}
+
+		$("#btnSearch").click(function() {
+			search();
+		});
+		$("a[name='order_state']").click(function() {
+			$("#order_state").val($(this).attr("order_state"));
+			search();
+		});
+		function search() {
+			var keyword = $("input[name='keyword']").val();
+			var buyerName = $("input[name='buyerName']").val();
+			var startTime = $("input[name='startTime']").val();
+			var endTime = $("input[name='endTime']").val();
+			var order_state = $("#order_state").val();
+			location.href = "StoreOrder.html?keyword=" + keyword
+					+ "&buyerName=" + buyerName + "&startTime=" + startTime
+					+ "&endTime=" + endTime + "&order_state=" + order_state
+					+ "&menu=transaction";
+		}
+		function modifyPrice(order_sn) {
+			var map = {}; // 相当于Map map = new HashMap();
+			map["title"] = "<@uiLabel text='sellerOrderList.mondifyStoreOrderPrice'/>";
+			map["html"] = "orderprice_edit.html?order_sn=" + order_sn;
+			map["url"] = "${ctx}/api/store/storeOrder!modifyPrice.do";
+			map["form"] = "#editPrice_form";
+			openDialog(map);
+		}
+		function openDialog(map) {
+			dialog = $.dialog({
+				title : map["title"],
+				width : 480,
+				height : 170,
+				lock : true,
+				min : false,
+				max : false
+			});
+			$.ajax({
+				url : map["html"],
+				cache : false,
+				success : function(html) {
+					dialog.content(html);
+					dialog.button([{
+						name : '保存',
+						callback : function() {
+					        if(!$(map["form"]).validate()){
+								return false;
+							}
+					        if(!$(map["form"]).checkall()){
+								return false;
+							}
+							formSubmit(dialog, map);
+							return false;
+						}
+					}, {
+						name : '取消'
+					} ]);
+				},
+				error : function() {
+					$.alert("出现错误,请重试！");
+				}
+			});
+		}
+		function formSubmit(dialog, map) {
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if(result.result==1) {
+						dialog.title(result.message+"2秒后自动关闭").time(2);
+						dialog.reload();
+					} else {
+						alert(result.message);
+					}
+				},
+				error : function(e) {
+					alert("出现错误，请重试");
+				}
+			};
+			$(map["form"]).ajaxSubmit(options);
+			return false;
+		}
+	</script>
+	<script>
+		$(function(){
+			var leftselect = $(".left_selected").val();
+			if(leftselect=="wait_ship"){
+				selectMenu(1);
+			}else{
+				selectMenu(0);
+			}
+		})
+	</script>
+<#include '/common/footer.html'/>

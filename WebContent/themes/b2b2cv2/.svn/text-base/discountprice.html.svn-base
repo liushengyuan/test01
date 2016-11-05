@@ -1,0 +1,136 @@
+ <#-- 引入国际化模板函数 --> 
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()> 
+<#-- 创建获取会员信息标签 -->
+<#assign getMemberInfomationTag= newTag("getMemberInfomationTag") >
+<#-- 调用获取会员信息标签信息 -->
+<#assign member= getMemberInfomationTag() >
+<link rel="stylesheet" href="${ctx}/themes/b2b2cv2/css/style.css" type="text/css" />
+<script src="${ctx}/themes/b2b2cv2/js/dat.gui.min.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/prefixfree.min.js"></script> 
+<script src="${ctx}/themes/b2b2cv2/discount20160701/jquery.js"></script> 
+<script src="${ctx}/themes/b2b2cv2/discount20160701/index.js"></script> 
+
+ <div id="gui" ></div>		
+        <div id="canvas-container">
+        </div>
+<div >
+	<form style="display: none" id="add_addressForm" class="validate">
+		<input type="hidden" name="member_id" value="${member.member_id!''}" />
+		<table >
+			<tr>
+			<#if bonuslist?size gt 0 >
+	           <#list bonuslist as mb>
+				<td>
+					<div class="youhui_main">
+	<div class="coupon-items">
+	         <#if mb.type_money gt 0 && mb.type_money lt 50>
+	             <div class="coupon-item coupon-item-j">
+	         <#elseif mb.type_money  gte 50 && mb.type_money lt 200>
+	             <div class="coupon-item coupon-item-d">
+	         </#if>
+	        <div class="c-type">
+	            <div class="c-price">
+	                <strong>￥${mb.type_money!''}</strong>
+	            </div>
+	            <div class="c-limit">
+	                【消费满&nbsp;${mb.min_goods_amount!''}元&nbsp;可用】
+	            </div>
+	            <div class="c-time"><@dateformat time="${mb.use_start_date?c}" pattern="yyyy-MM-dd"/>--<@dateformat time="${mb.use_end_date?c}" pattern="yyyy-MM-dd"/></div>
+	            <div class="c-type-top"></div>
+	            <div class="c-type-bottom"></div>
+	        </div>
+
+	        <div class="c-msg">
+	            <div class="c-range">
+	                <div class="range-item">
+	                    <span class="label">券&nbsp;&nbsp;编&nbsp;&nbsp;号：</span>
+	                    <span class="txt">${mb.recognition!''}</span>
+	                </div>
+
+	                <div class="range-item">
+	                <span class="label">品类限制：</span>
+	                <span title="仅可购买指定商品" class="txt">仅可购买指定商品</span>
+	                </div>
+
+	                <div class="range-item">
+	                <span class="label">平台限制：</span>
+	                <span title="全平台" class="txt">全平台</span>
+	                </div>
+
+	                <div class="range-item">
+	                    <span class="label">&nbsp;&nbsp;</span>
+	                    <span class="txt">&nbsp;&nbsp;</span>
+	                </div>
+	            </div>
+	            <div class="op-btns">
+	                <#if mb.order_sn?? && mb.order_id??>
+	                     <#if mb.type_money gt 0 && mb.type_money lt 50>
+						 <a  style="margin-top: 70px;" target="_blank" class="btn" href="javascript:void(0)"><span class="txt" style="text-align: center;font-size: 19px;line-height: 20px;display: inline-block;margin-top: 4px;">已使用</span><b></b></a>
+				          <#elseif mb.type_money  gte 50 && mb.type_money lt 200>
+						 <a  style="margin-top: 70px;" target="_blank" class="btn" class="btn" href="javascript:void(0)"><span class="txt" style="text-align: center;font-size: 19px;line-height: 20px;display: inline-block;margin-top: 4px;">已使用</span><b></b></a>
+				          </#if>
+					<#else>
+					      <#if mb.type_money gt 0 && mb.type_money lt 50>
+					              <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 70px;" target="_blank" class="btn" href="javascript:void(0)"><span class="txt" style="text-align: center;font-size: 19px;line-height: 20px;display: inline-block;margin-top: 4px;" >免费</span><b></b></a>
+				          <#elseif mb.type_money  gte 50 && mb.type_money lt 200>
+					              <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 85px;" target="_blank" class="btn" href="javascript:void(0)"><span class="txt" style="text-align: center;font-size: 19px;line-height: 20px;display: inline-block;margin-top: 4px;" >免费</span><b></b></a>
+				          </#if>
+				    </#if>
+	            </div>
+	        </div>
+	        <div onclick="conformDo(this,'5757010603','32378877','078ADA5','zhangxiuyan1125');" class="c-del"></div>
+	        <#if mb.data==1>
+	           <div class="overdue-site"></div>
+	        </#if>     
+	    </div>
+	     
+</div>
+</div>
+</div>
+				</td>
+				 </#list>
+	    </#if>
+			</tr>
+			<tr  >
+				<td colspan="7"><input type="button" style="font-size: 16px;line-height:40px; background-color:#5bb75b;width:130px;margin-left: 330px;"  id="btn"  
+					value="领取优惠券"></td>
+			</tr>
+		</table>
+		 <input type="hidden" name="username" value="${member.uname!''}"> 
+		 <input type="hidden" name="password" value="${member.password!''}"> 
+	</form>
+</div>
+<script>
+	$(function() {
+		$("#btn").click(function(){
+			alert("333")
+				 var options = {
+							url : "/api/shop/member!loginForEmail.do",
+							type : "POST",
+							dataType : 'json',
+							success : function(data) {
+								if(data.result==1){
+									location.href ="/member/bonus.html";
+								}
+								else{
+									alert(data.message);
+								}
+							},
+							error : function(e) {
+								alert("出现错误，请重试!");
+							}
+					};
+				$('#add_addressForm').ajaxSubmit(options);
+	    });
+	})
+</script>
+ <script>
+            var fworks = new Fireworks();
+            var gui = new dat.GUI({
+                autoPlace: false,
+                load: guiPresets,
+                preset: 'Default'
+            });
+            var customContainer = document.getElementById('gui');
+            gui.remember(fworks);
+        </script>

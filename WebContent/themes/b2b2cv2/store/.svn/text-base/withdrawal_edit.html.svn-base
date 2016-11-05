@@ -1,0 +1,159 @@
+<#include '/store/store_header.html' />
+<#assign myStoreDetailTag = newTag("myStoreDetailTag")>
+
+<#assign store = myStoreDetailTag()>
+<#assign sellerInfoDetailTag = newTag("sellerInfoDetailTag")>
+
+<#assign member = sellerInfoDetailTag()>
+<#assign sellercardTag = newTag("sellercardTag")>
+
+<#assign sellercard = sellercardTag()>
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+<div class="path">
+			<span style="color:#999;"><@uiLabel text="withdrawalEdit.yourlocation"/>：</span><!--您的位置  -->
+			<span>></span>
+			<a href="#"><@uiLabel text="withdrawalEdit.tixianguanli"/></a><span>></span><@uiLabel text="withdrawalEdit.zhanghutixian"/><!--提现账户管理 --><!--账户提现填写管理  -->
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;"><@uiLabel text="withdrawalEdit.zhanghutixian"/></a><!--账户提现填写管理  -->
+					</li>
+				</ul>
+			</div>
+		<form id="withdrawal_info" class="withdrawal_info">
+		
+		<input type="hidden" name="member_id" value="${member.member_id!''}"/>
+		<input type="hidden" name="store_id" value="${store.store_id!''}"/>
+		<input type="hidden" name="account" value="${store.account!''}"/>
+		 <input type="hidden" name="card2" value="${sellercard.card_num!}"/> 
+			<dl>
+				<dt><@uiLabel text="withdrawalEdit.memberName"/>：</dt><!--会员名 -->
+        				<dd>
+				          	<p>
+				            <#--	${member.name!''}-->
+				            					            	<input  type="text" class="text w400" name="store_name" value="${member.name!''}" readonly="readonly"/>
+				            	
+				          	</p>
+          					
+        				</dd>
+			</dl>
+			<dl>
+				<dt><@uiLabel text="withdrawalEdit.canUseMoney"/>：</dt><!--可用金额  -->
+        				<dd>
+				          	<p>				            	<input  type="text" class="text w400" name="store_account" value="${store.account!''}" readonly="readonly"/>
+				          	
+				         <#--    	${store.account} -->
+				          	</p>
+          					
+        				</dd>
+			</dl>
+			<#-- <dl>
+				<dt>保证金额：</dt>
+        				<dd>
+				          	<p>
+				            	<input  type="text" class="text w400" name="name" value="${store.credit_account}"   />
+				          	</p>
+          					
+        				</dd>
+			</dl> -->
+			<dl>
+				<dt><@uiLabel text="withdrawalEdit.moneyway"/>：</dt><!--资金渠道-->
+        				<dd>
+				          	<p>
+				         
+				            	<input  type="text" class="text w400" name="capital_channel" value=""   />
+				          	</p>
+          					
+        				</dd>
+			</dl>
+			<dl>
+			
+				<dt><@uiLabel text="withdrawalEdit.zhanghao"/>：</dt><!--帐号  -->
+				
+        				<dd>
+				          	<p>
+				          	 	<#-- ${sellercard.card_num} -->
+				            	<input  type="text" class="text w400" name="card" value="${sellercard.card_num!}" readonly="readonly"/>
+				          	</p>
+          					
+        				</dd>
+        				
+        				
+			</dl>
+			<dl>
+				<dt><@uiLabel text="withdrawalEdit.beizhu"/>：</dt><!--备注  -->
+        				<dd>
+				          	<p>
+				            	<input  type="text" class="text w400" name="note" value=""  isrequired="true" />
+				          	</p>
+          					
+        				</dd>
+			</dl>
+			<dl>
+				<dt><@uiLabel text="withdrawalEdit.xiangqing"/>：</dt><!--详情 -->
+        				<dd>
+				          	<p>
+				            	<input  type="text" class="text w400" name="details" value=""  isrequired="true" />
+				          	</p>
+          					
+        				</dd>
+			</dl>
+			<dl>
+				<dt><@uiLabel text="withdrawalEdit.tixianjine"/>：</dt><!--提现金额  -->
+        				<dd>
+				          	<p>
+				            	<input  type="text" class="text w400" name="number" value=""  isrequired="true" id="number" />
+				          	</p>
+          					
+        				</dd>
+			</dl>
+			<dl class="bottom">
+			        	<dt>&nbsp;</dt>
+			        	<dd>
+							<input type="button" id="updateW" value="<@uiLabel text='withdrawalEdit.querentixian'/>" class="submit to_save"/><!--确认提现  -->
+			        	</dd>
+			      	</dl>
+			
+			
+		</form>
+	</div>
+</div>
+</div>
+<script type="text/javascript">
+
+$(function(){
+	
+	
+	$("#updateW").click(function(){
+		if($("#number").val()<=0){
+			alert("提现不能小于等于零或者为空");
+			return false;
+		}
+		//alert(${store.account});
+		 var options = {
+				url : "${ctx}/api/b2b2c/storeApi!withdrawalInfoEdit.do?ajax=yes&s_account="+${store.account},
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {
+					if(data.result==1){
+						alert(data.message);
+						location.href="${ctx}/store/withdrawal_detail.html";
+					}else{
+						alert(data.message);
+						location.reload();
+					}
+				},
+				error : function(data) {
+					alert("<@uiLabel text='withdrawalEdit.chuxiancuowuchongshi'/>");//出现错误 ，请重试
+					location.reload();
+				}
+			};
+		$("#withdrawal_info").ajaxSubmit(options); 
+	});
+	
+})
+</script>

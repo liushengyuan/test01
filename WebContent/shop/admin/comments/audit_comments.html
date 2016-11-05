@@ -1,0 +1,22 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="goodsInfoForm" method="post" class="validate" >
+		<input type="hidden" name="commentId" value="${commentId!''}">
+		<table>
+			<tr>
+				<td>商品评论审核是否通过：</td>
+				<td>
+					<input type="radio" value="1" checked="checked" name="status"/>是
+					<input type="radio" value="2" name="status"/>否
+				</td>
+			</tr>
+			<tr>
+				<td>审核理由：</td>
+				<td>
+						<textarea name="auditDiscribe" rows="3" cols="5" maxlength="255" class="input_text" data-options="required:true" isrequired="true" style="width: 350px; height: 100px;"></textarea>
+				</td>
+			</tr>
+		</table>
+		</form>
+	</div>
+</div>

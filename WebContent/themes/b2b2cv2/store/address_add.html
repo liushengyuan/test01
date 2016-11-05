@@ -1,0 +1,69 @@
+<#-- 引入国际化模板函数 --> 
+<#assign uiLabel ="com.enation.framework.directive.I18nDirectiveModel"?new()> 
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<div class="form_wrap">
+	<form id="member_addr"  class="validate"   action="" method="post">
+		<input type="hidden" name="type" value="1"/>
+		<table cellspacing="0" cellpadding="0" border="0" >
+			<tbody>
+				<tr>
+					<th><@uiLabel text='sellerCenter.AddressType' />：</th>
+					<td >
+						<select id="add_type"  name="add_type" style="width: 150px;" >
+							<option value="1" ><@uiLabel text='sellerCenter.SendGoods' /></option>
+							<option value="2" ><@uiLabel text='sellerCenter.ReturnGoods' /></option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th id="shippingAddress" >默认发货地址：</th>
+					<td>
+					<label><input type="radio"   value="0" checked="checked" name="def_addr"><@uiLabel text="index.CommonFalse" /></label> 
+					<label><input type="radio"   value="1"  name="def_addr"><@uiLabel text="index.CommonYes" /></label></td>
+				</tr>
+				<tr>
+					<th><em></em><@uiLabel text="index.AddressName" />：</th>
+					<td><input type="text"  class="input_text member_name_title"  isrequired="true" name="name"   autocomplete="off"></td>
+				</tr>	
+				<tr>
+					<th><@uiLabel text="index.AddressPhone" />：</th>
+					<td><input type="text" class="input_text" name="mobile" id="mobile" autocomplete="off" isrequired="true"></td>
+				</tr>	
+				<tr>
+					<th><@uiLabel text="index.AddressTelePhone" />：</th>
+					<td><input type="text"  class="input_text" style="margin-left:0px;"   name="tel"  id="tel" dataType="tel_num"   autocomplete="off"><span
+						class="infotips" style="float:left; padding-left:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<@uiLabel text="sellerCenter.PhoneMustFillInOne" /></span></td>
+				</tr>					
+				<tr>
+					<th><em></em><@uiLabel text="sellerCenter.Area" />：</th>
+					<td>		
+					<@regionSelect />
+					</td>
+				</tr>
+				<tr>
+					<th><em></em><@uiLabel text="index.AddressAddress" />：</th>
+					<td><input rows="3" cols="30" name="addr" isrequired="true" type="text"  value="" class="input_text"/></td>
+				</tr>
+				<tr>
+					<th><em></em><@uiLabel text="index.AddressZipCode" />：</th>
+					<td><input  type="text" class="input_text" isrequired="true" name="zip" id="zipcode" autocomplete="off"  dataType="post_code" ></td>
+				</tr>
+				<tr>
+					<th></th>	
+					<td>
+						<div class="btn"><input type="button"  class="yellow_btn" id="btnSubmit" value="<@uiLabel text='index.AddressSaveReturn' />"></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+<script>
+$("#add_type").change(function() {
+	if($(this).val() == 1)  {
+		$("#shippingAddress").html("<@uiLabel text='index.DefaultShippingAddress' />：");
+	} else if($(this).val() == 2) {
+		$("#shippingAddress").html("默认退货地址：");
+	}
+});
+</script>

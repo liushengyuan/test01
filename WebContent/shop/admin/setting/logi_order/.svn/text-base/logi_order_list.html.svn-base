@@ -1,0 +1,196 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+		<div class='buttonArea'>
+		<a href="${ctx}/shop/admin/logi!exportLogiOrder.do" class="button b_fr" id="export">导出物流统计</a>
+			<span id="searchbtn" style="float:left;display:block">	
+			</span>
+			<span style="float: right;height:28px;"> 
+				<a href="javascript:void(0)" class="button b_fr" id="aAdvanced"  >高级搜索</a>
+				<a href="javascript:void(0)" class="button b_fr" id="simpleSearch" onclick="searchGoods()">搜索</a>
+				<input id="searchKeyword" class="input_text b_fr mr5" type="text" value="" size="30"	placeholder="订单号或店铺名称" name="searchKeyWord"> 
+				<!-- <a href="javascript:void(0)" class="button b_fr" id="translate"  >一键翻译</a> -->
+			</span>
+		</div>
+		
+		<div style="display: block;" class="searchAdvanced" >
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+			<table width="98%" border="0" cellspacing="0" cellpadding="8">
+				<tr>
+					<td width="70" align="right">订单号</td>
+					<td>
+						<input type="text" value="" id="order_sn"  class="input_text" style="width: 95%;" >
+					</td>
+					<td width="70" align="right">店铺名称</td>
+					<td>
+						<input type="text" value="" id="store_name"class="input_text" style="width: 95%;">
+					</td>
+					<td width="70" align="right">物流单号</td>
+					<td>
+						<input class="input_text" name="ship_no" id="ship_no" style="width: 95%;" />
+					</td>
+					<td width="70" align="right">物流商</td>
+					<td>
+						<input type="text" value="" id="logi_name"  class="input_text" style="width: 95%;" >
+					</td>
+					<td>
+						<a id="searchAdvance" class="button blueButton" onclick="searchGoods()" href="javascript:;">开始搜索</a>
+					</td>
+				</tr>
+				<tr>
+					<td width="70" align="right">下单日期</td>
+					<td><input class="easyui-datebox" style="width: 90px;height: 28px;"
+						id="start_time" data-options="buttons:buttons" /><span>&nbsp;~&nbsp;</span>
+					</td>
+					<td>
+					<input class="easyui-datebox" style="width: 90px;height: 28px;" id="end_time"
+						data-options="buttons:e_buttons" />
+					</td>
+				</tr>
+			</table>
+		</div>
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"  url="${ctx}/shop/admin/logi!list_logiOrderJson.do" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="goodsdata"
+				sortName="order_id" sortOrder="desc">
+				<thead>
+					<tr>
+						<th data-options="field:'order_id',checkbox:true,width:100" ></th>
+						<th data-options="field:'sn',width:200" >订单号</th>
+						<th data-options="field:'store_name',width:100" >店铺名称</th>
+						<th data-options="field:'ship_no',width:150" formatter="formatAction">物流单号</th>
+						<th data-options="field:'logi_name',width:100">物流商</th>
+						<th data-options="field:'create_time',width:150" formatter="formatDate">下单日期</th>
+						<th data-options="field:'shiping_freight',width:50">运费</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="logiinfo" style="display: none;"></div>
+</div>
+<script type="text/javascript">
+function formatDate(value,row,index){
+	if(value==null||value==0){
+		return "";
+	}else if(value > 1){
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}else{
+		return value;
+	}
+}
+function formatAction(value,row,index){
+	var myvalue = value;
+	var val="<a title='"+value+"' href='javascript:void(0);' onclick='details(\""+ myvalue + "\")'>"+value+"</a>";
+	return val;
+}
+function details(my_ship_no){
+	 $("#logiinfo").show();
+	　　	$('#logiinfo').dialog({
+	　　		title: '查看物流信息',			
+	　　		width: 750,
+	　　		closed: false,
+	　　		cache: false, 
+	　　		href: 'logi!details_logiOrder.do?my_ship_no='+my_ship_no,	
+	　　	    modal: true,
+	　　	  buttons: []
+	　　	}); 
+} 
+
+var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+	buttons.splice(1, 0, {
+	text: '清空',
+	handler: function(target){
+		 $('#start_time').datebox('setValue',"");
+	}
+});
+
+var e_buttons = $.extend([], $.fn.datebox.defaults.buttons);
+	e_buttons.splice(1, 0, {
+	text: '清空',
+	handler: function(target){
+		 $('#end_time').datebox('setValue',"");
+	}
+});
+
+$(function(){
+	if("${optype!''}"=="stock"){
+		$("#searchbtn").hide();
+	};
+	$(".searchAdvanced").hide();
+	//高级查询按钮
+    $("#aAdvanced").click(function () {
+        if ($("#Advanced").val() == "0") {
+            $("#Advanced").val(1);
+            $("#simpleSearch").hide();
+            $("#aAdvanced").addClass("searchAdvancedS");
+        } else {
+            $("#Advanced").val(0);
+            $("#simpleSearch").show();
+            $("#aAdvanced").removeClass("searchAdvancedS");
+        }
+        $(".searchAdvanced").slideToggle("slow");
+    });
+})		
+
+//搜索
+function searchGoods(){
+	
+	var searchtype = $("#Advanced").val();
+	var keyword = $.trim($("#searchKeyword").val());
+	
+	var order_sn = $.trim($("#order_sn").val());
+	var store_name = $.trim($("#store_name").val());
+	var ship_no = $.trim($("#ship_no").val());
+	var logi_name = $.trim($("#logi_name").val());
+	
+	var start_time = $('#start_time').datebox('getValue');
+	var end_time = $('#end_time').datebox('getValue');
+	
+	$('#goodsdata').datagrid('load', {
+		 stype:searchtype,
+		 keyword:keyword,
+		 order_sn:order_sn,
+		 store_name:store_name,
+		 ship_no:ship_no,
+		 page:1,
+		 start_time:start_time,
+		 end_time:end_time,
+		 logi_name:logi_name
+    }); 
+}
+
+$("#export").click(function(){
+
+	var searchtype = $("#Advanced").val();
+	var keyword = $.trim($("#searchKeyword").val());
+	
+	var order_sn = $.trim($("#order_sn").val());
+	var store_name = $.trim($("#store_name").val());
+	var ship_no = $.trim($("#ship_no").val());
+	var logi_name = $.trim($("#logi_name").val());
+	
+	var start_time = $('#start_time').datebox('getValue');
+	var end_time = $('#end_time').datebox('getValue');
+	
+	var exportHref = "${ctx}/shop/admin/logi!exportLogiOrder.do?stype="+searchtype+"&keyword="+keyword
+		+"&order_sn="+order_sn+"&store_name="+store_name+"&ship_no="+ship_no+"&logi_name="+logi_name
+		+"&start_time="+start_time+"&end_time="+end_time
+	$("#export").attr("href",exportHref);
+ }); 	
+</script>
+
+<#include '/admin/footer.html' >
+
+
+

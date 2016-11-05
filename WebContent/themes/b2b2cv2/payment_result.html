@@ -1,0 +1,67 @@
+<#include 'common/header.html' />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<#--创建支付结果标签-->
+	<#assign paymentResultTag = newTag("paymentResultTag")   />
+	<#--获取支付结果-->
+	<#assign paymentResult= paymentResultTag()   />
+	<#--创建订单详细标签-->
+	<#assign orderDetailBySnTag = newTag("orderDetailBySnTag") />
+	<#--获取订单详细，传递参数orderid-->
+	<#assign order = orderDetailBySnTag("'ordersn':${paymentResult.ordersn!''}") />
+	<#--创建订单货物列表标签-->
+	<#assign orderItemListTag = newTag("orderItemListTag") />
+	<#--获取货物列表详细，传递参数orderid-->
+	<#assign itemsOrder = orderItemListTag("'orderid':${order.order_id}") />
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2cv2/css/paysuccess.css" />
+</head>
+
+<body>
+	<div class="zfcg">
+		<div class="zfcg-top"></div>
+		<div class="zfcg-img">
+			<#if paymentResult.result==1>
+						<@image src="${ctx}/themes/b2b2cv2/images/zhifuchenggong.jpg" alt="支付成功" />
+						<p>支付成功，<a href="member/order_detail.html?ordersn=${paymentResult.ordersn!''}">点此查看订单</a>${paymentResult.ordersn!''}</p>
+					<#else>
+						<@image src="${ctx}/themes/b2b2cv2/images/zhifushibai.png" alt="支付失败" />
+							<p>支付失败，原因为：${paymentResult.error!''}</p>
+					</#if>
+		</div>
+	</div>
+</body>
+	<input type="hidden" value="${order.sn}"  id="order"/>
+	<input type="hidden" value="${order.paymoney}"  id="ordermoney"/>
+	<#list itemsOrder as items >
+		<input  type="hidden" class="item_count" value="${items.goods_id}" name="${items.num}" id="${items.price}"/>
+	</#list>
+</html>
+<#include 'common/footer.html' />
+<script type="text/javascript">
+var order=$("#order").val();
+var ordermoney=$("#ordermoney").val();
+var itemValueNum = [];
+var itemValueId = [];
+var itemValuePrice = [];
+var shu=document.getElementsByClassName('item_count');
+$.each(shu,function(i,ss){
+	itemValueNum.push(shu[i].name);
+	itemValueId.push(shu[i].value);
+	itemValuePrice.push(shu[i].id);
+})
+var itemValue = [];
+$.each(shu,function(i,ss){
+	itemValue.push({id:itemValueId[i],count:itemValueNum,price:itemValuePrice[i]});
+})
+
+py('event','order' ,{
+    'id':order,
+    'money':ordermoney,
+    'items':itemValue
+    }).track('Qas.GEs.gL3LMH7qntBcoqKneieDrX');
+    </script>
+

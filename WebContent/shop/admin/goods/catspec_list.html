@@ -1,0 +1,189 @@
+<#include '/admin/header.html' >
+
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	 <div class="buttonArea">
+		<a href="javascript:void(0)" class="button blueButton"  onclick="append(${cat_id})">添加</a>
+		<#-- <a href="javascript:void(0)" class="button"  onclick="del()">删除</a> -->
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="tagform">
+			<table class="easyui-datagrid"
+			data-options="url:'catspec!listJson.do?cat_id=${cat_id}',pageList: [5,10,15],pageSize:5,fitColumns:'true'" pagination="true" width="width" id="tagdata">
+				<thead>
+				    <tr>
+				   		<!-- <th  data-options="field:'id',checkbox:true,width:100" ></th> -->
+				   		<th  data-options="field:'id',width:40">ID</th>
+				   	 	<th  data-options="field:'cat_id',width:40">分类ID</th>
+				   	 	<th  data-options="field:'spec_id',width:40">规格ID</th>
+				   	 	<th  data-options="field:'spec_name',width:100">规格名称</th>
+<!-- 				   	 	<th  data-options="field:'is_show',width:20" formatter="formatIsShow">显示</th>
+				   	 	<th  data-options="field:'team_image',width:100" formatter="formatTeamImage">图片地址</th>
+				   	 	<th  data-options="field:'line_color',width:40" formatter="formateLineColor">分割线颜色</th>
+				   	 	<th  data-options="field:'team_index',width:20">排序</th> -->
+				   	 	<th  data-options="field:'action',width:100" formatter="formatAction">操作</th>
+				   	 </tr>
+				</thead>
+			</table>
+		</form>
+		<div id="Taginfo" style="display: none;"></div>
+	</div>
+</div>
+
+
+ <script type="text/javascript">
+function formatAction(value,row,index){
+	var val="<a class='delete' title='删除' href='javascript:void(0);' onclick='del("+row.id+")'></a>";
+	return val;
+}
+/* function formatId(value,row,index){
+	var val=row.team_id;
+	return val;
+}
+
+function formatIsShow(value,row,index){
+	var val=row.is_show;
+	if(val==1){
+		return "Y";
+	}else{
+		return "N";
+	}
+}
+
+function formatTeamImage(value,row,index){
+	var val="<img alt='' src='"+row.team_image+"'  height='60px' width='75px;'>";
+	return val;	
+}
+function formateLineColor(value,row,index){
+	var val="<div style='background-color: #"+row.line_color+"'>"+row.line_color+"</div>"
+	return val;
+} */
+
+function del(id){ 
+/* 	 	var rows = $('#tagdata').datagrid("getSelections"); 
+	 	if(rows.length<1){
+	 		$.Loading.error("请选择要删除的推荐项");
+	 		return;
+	 	} */
+		if(!confirm("确认要删除这条记录吗？")){	
+			return ;
+		}
+		var options = {
+				url : "${ctx}/shop/admin/catspec!delete.do?ajax=yes&id="+id,
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+						$('#tagdata').datagrid('reload');
+					}else{
+						$.Loading.error(result.message);
+					}
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+				}
+		};
+		$('#tagform').ajaxSubmit(options);	
+		
+}
+ function append(id){
+	 $("#Taginfo").show();
+	　　	$('#Taginfo').dialog({
+	　　		title: '添加关联规格',			
+	　　		width: 400,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/catspec!add.do?cat_id='+id, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 handler:function(){
+	　　				 var disabled=  $(this).hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					var savebtn = $(this);
+	　　				 	addTeamForm(savebtn);		
+	　　				 }
+	　　			}
+	　　		}]
+	　　	});
+ }
+/*  function edit(teamId){
+	 $("#Taginfo").show();
+	　　	$('#Taginfo').dialog({
+	　　		title: '修改推荐类',			
+	　　		width: 750,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/team!edit.do?teamId='+teamId, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var disabled=  $(this).hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					var editbtn = $(this);
+		　　				editTeamForm(editbtn);		
+		　　			}
+　　				 }
+　　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#editTeamForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	}); 
+ } */
+function addTeamForm(savebtn){
+	var formflag= $("#addTeamForm").form().form('validate');
+	if(formflag){
+		 $.Loading.show("正在保存请稍后...");
+		 savebtn.linkbutton("disable");
+		var options = {
+			url : "${ctx}/shop/admin/catspec!saveAdd.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				$.Loading.success(result.message);
+				$("#Taginfo").dialog('close');
+				$('#tagdata').datagrid('reload');
+				savebtn.linkbutton("enable");
+		 	},
+			 error : function(e) {
+				 $.Loading.error("出现错误 ，请重试");	
+				 savebtn.linkbutton("enable");
+			}
+		};
+		$('#addTeamForm').ajaxSubmit(options);
+	}
+}
+/* function editTeamForm(editbtn){
+	var formflag= $("#editTeamForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		editbtn.linkbutton("disable");
+		var options = {
+				url : "${ctx}/shop/admin/team!saveEdit.do?ajax=yes",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+						$("#Taginfo").dialog('close');
+						$('#tagdata').datagrid('reload');
+					}else{
+						$.Loading.error(result.message);
+					}
+					editbtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error("出现错误 ，请重试");	
+			 		editbtn.linkbutton("enable");
+				}
+		};
+		$('#editTeamForm').ajaxSubmit(options);
+	}
+} */
+
+</script>

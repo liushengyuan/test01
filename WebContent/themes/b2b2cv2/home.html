@@ -1,0 +1,171 @@
+<#include 'common/header.html' />
+<#include 'common/reception_header.html'/>
+<!-- 创建店铺信息标签 -->
+<#assign checkUrlTag= newTag("checkUrlTag")>
+<!-- 调用查询店铺信息标签 -->
+<#assign checkUrl = checkUrlTag("{'show_c':${show_c!0},'store_id':${store_id!0}}")!''>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/store_style.css" />
+<!-- 创建店铺信息标签 -->
+<#assign myStoreDetailTag= newTag("myStoreDetailTag")>
+<!-- 调用查询店铺信息标签 -->
+<#assign store = myStoreDetailTag("{'type':0,'store_id':${store_id!0}}")!''>
+
+<!-- 创建店铺导航标签 --> 
+<#assign storeNavigationTag= newTag("storeNavigationTag") > 
+<!-- 查询店铺导航列表 --> 
+<#assign storeNavigation= storeNavigationTag("{'store_id':${store_id!0}}")!''>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/index_search.css"/>
+<#-- 店铺信息-->
+<div class="store_info">
+	${store.store_name}
+	<span class="store_number">&nbsp;&nbsp;No.${store_id}</span>
+</div>
+
+<!-- 店铺导航 -->
+<div class="store_nav">
+	<ul>
+		<li class="normal <#if show_c=='1'>active</#if> ">
+			<a href="home.html?show_c=1&store_id=${store_id}"><span><@uiLabel text="home.StoreHome" /><i></i></span>
+			</a>
+		</li>
+<#--		<li class="normal <#if show_c=='2'>active</#if>">
+			<a href="home.html?show_c=2&store_id=${store_id}"><span>信用评价<i></i>
+			</span> </a>
+		</li>-->
+		<li class="normal <#if show_c=='3'>active</#if>">
+			<a href="home.html?show_c=3&store_id=${store_id}"><span><@uiLabel text="home.StoreInfo" /><i></i>
+			</span> </a>
+		</li>
+		<#list storeNavigation as sl> 
+			<li class="normal">
+				<a target="<#if sl.target==1 >_blank</#if>" href="${sl.nav_url!''}">
+					<span>${sl.name}<i></i></span>
+				</a>
+			</li>
+		</#list>
+	</ul>
+</div>
+<div id="content">
+	<div class="layout <#if show_c!='3'> expanded</#if>">
+		<#if show_c=='2' >
+			<#include 'home/home_credit.html' />
+		<#elseif show_c='3' >
+			<#include 'home/home_info.html' />
+		<#elseif show_c='4' >
+			<#include 'home/home_goods_all.html' />
+		<#else>	
+			<#include 'home/home_context.html' /> 
+		</#if>	
+	</div>
+</div>
+</div>
+
+<script>
+<#if locale=="zh">
+	function openDialog(bonusid,obj){
+		var type_money = $(obj).attr("type_money");
+		var min_order_amount = $(obj).attr("min_order_amount");
+		dialog = $.dialog({
+			title : '领取优惠劵',
+			width : 300,
+			height : 120,
+			lock : true,
+			min : false,
+			max : false,
+			content:'${store.store_name}的店铺<span style="font-size: 20px;">'+type_money+'元</span>优惠劵(满'+min_order_amount+'元使用)',
+			button:[{
+				name : '领取',
+				focus: true,
+				callback : function() {
+					receiveBonus(dialog,bonusid);
+					return false;
+				}
+			}, {
+				name : '取消'
+			}]
+			
+		});
+	}
+	
+	function receiveBonus(dialog,bonusid){
+		$.ajax({
+			url : "${ctx}/api/b2b2c/promotion!receiveBonus.do?store_id=${store_id!0}&type_id="+bonusid,
+			cache : false,
+			dataType: "json",
+			success : function(data) {
+				if (data.result == 1) {
+					alert("领取成功");
+					dialog.reload();
+				}
+				if (data.result == 0) {
+					alert(data.message);
+				}
+				if(member==null||member==''){
+					login_dialog(window.location.href);
+				}
+				
+			},
+			error : function() {
+				alert("出现错误,请重试！");
+			}
+		});
+	}
+<#elseif locale=="ru">
+	function openDialog(bonusid,obj){
+		var type_money = $(obj).attr("type_money");
+		var min_order_amount = $(obj).attr("min_order_amount");
+		dialog = $.dialog({
+			title : 'Получите купоны',
+			width : 300,
+			height : 120,
+			lock : true,
+			min : false,
+			max : false,
+			content:'${store.store_name}Магазин<span style="font-size: 20px;">'+type_money+'p.</span>Купон(Используйте по'+min_order_amount+'p.крайней мере)',
+			button:[{
+				name : 'Получить',
+				focus: true,
+				callback : function() {
+					receiveBonus(dialog,bonusid);
+					return false;
+				}
+			}, {
+				name : 'Отменить'
+			}]
+			
+		});
+	}
+	
+	function receiveBonus(dialog,bonusid){
+		$.ajax({
+			url : "${ctx}/api/b2b2c/promotion!receiveBonus.do?store_id=${store_id!0}&type_id="+bonusid,
+			cache : false,
+			dataType: "json",
+			success : function(data) {
+				if (data.result == 1) {
+					alert("Успешно получить");
+					dialog.reload();
+				}
+				if (data.result == 0) {
+					alert(data.message);
+				}
+				if(member==null||member==''){
+					login_dialog(window.location.href);
+				}
+				
+			},
+			error : function() {
+				alert("Ошибка, пожалуйста попробуйте еще раз!");
+			}
+		});
+	}
+</#if>
+
+
+
+</script>
+<!-- 暂时注掉优惠券功能 -->
+<#-- <@uiLabel text="member.StoreCoupons" /> &ndash;&gt; -->
+<#-- <#include 'home/home_bonus.html' />  -->
+
+<#include 'common/footer.html' /> 

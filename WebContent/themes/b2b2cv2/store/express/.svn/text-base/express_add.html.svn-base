@@ -1,0 +1,30 @@
+<#assign uiLabel ="com.enation.framework.directive.I18nDirectiveModel"?new()>
+<div class="form_wrap">
+	<form id="express_add"  class="validate"   action="" method="post">
+		<input type="hidden" name="type" value="1"/>
+		<table cellspacing="0" cellpadding="0" border="0" >
+			<tbody>
+				<tr>
+					<th ><em></em><@uiLabel text='sellerCenter.ProviderName' />：</th>
+					<td style="width: 460px;"  >
+						<input type="text"  class="input_text"  isrequired="true" name="express.express_name"   autocomplete="off">
+					</td>
+				</tr>
+				<tr>
+					<th><@uiLabel text='sellerCenter.SendGoodsTime' />：</th>
+					<td>
+						<input type="text"  class="input_text" style="margin-left:0px;"  isrequired="true" name="express.express_deliver_time" id="deliver_time"  autocomplete="off">
+					</td>
+				</tr>					
+				<tr>
+					<th></th>	
+					<td>
+						<div class="btn">
+							<input type="button"  class="yellow_btn" id="btnSubmit" value="<@uiLabel text='sellerCenter.SaveAndReturn' />">
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>

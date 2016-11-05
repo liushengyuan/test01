@@ -1,0 +1,410 @@
+<#include '/store/store_header2.html' />
+<!-- 调用地区标签 -->
+<#assign regionSelect =
+"com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2cv2/css/uploadify.css" />
+<script type="text/javascript"
+	src="${ctx}/themes/b2b2cv2/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript"
+	src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"></script>
+
+<div class="store_main">
+	<div class="open_store">
+		<div class="open_store_form">
+			<form id="applyForm" class="validate">
+				<form id="applyForm" class="validate">
+					<input type="hidden" name="store_id"
+						value="${myStoreDetail.store_id!''}"> <input
+						type="hidden" name="member_id" value="${member.member_id!''}">
+					<input type="hidden" id="telephone3" value="${curMemberDetail.tel!''}">
+					<div id="step1">
+						<dl>
+							<dt class="required">
+								<em class="pngFix"></em>所在国家：
+							</dt>
+							<dd>
+								<select name="member_country" id="member_country" >
+									<option value="CHN" <#if curMemberDetail.member_country=='CHN'>selected</#if> >中国</option>
+									<option value="RUS" <#if curMemberDetail.member_country=='RUS'>selected</#if> >俄罗斯</option>
+								</select>
+							</dd>
+						</dl>
+						<dl>
+							<dt class="required">
+								<em class="pngFix"></em><@uiLabel text="apply.CardOnName"/>
+							</dt>
+							<dd>
+								<p>
+									<input type="text" name="member_name" class="text w200"
+										isrequired="true" dataType="string"
+										value="${curMemberDetail.name!''}" autocomplete="off" />
+								</p>
+							</dd>
+						</dl>
+						<dl>
+						<dt class="required">
+							<em class="pngFix"></em><@uiLabel text="apply.CardType"/>
+						</dt>
+						<dd>
+							<select name="member_prove_type" id="member_prove_type">
+								<option value="1" <#if curMemberDetail.member_prove_type==1>selected</#if> >身份证</option>
+								<option value="2" <#if curMemberDetail.member_prove_type==2>selected</#if> >港澳台身份证</option>
+							</select>
+						</dd>
+					</dl>
+						<dl>
+							<dt class="required">
+								<em class="pngFix"></em><@uiLabel text="apply.CardNumber"/>
+							</dt>
+							<dd>
+								<input type="text" name="member_id_number" class="text w200"
+									id="member_id_number" isrequired="true"
+									value="${curMemberDetail.id_number!''}" fun="checkIDNumber" />
+							</dd>
+						</dl>
+						<dl>
+							<dt class="required">
+								<em class="pngFix"></em><@uiLabel text="apply.RegisterEmail"/>
+							</dt>
+							<dd>
+								<input type="text" name="member_email" class="text w200"
+									id="member_email" isrequired="true" value="${member.email!''}"
+									dataType="email" readonly="true" />
+							</dd>
+						</dl>
+						
+						<dl>
+							<dt class="required">
+								<em class="pngFix"></em><@uiLabel text="apply.ApplyPhone"/>
+							</dt>
+							<dd>
+								<input type="text" name="member_mobile" class="text w200"
+									id="mobile" value="${curMemberDetail.mobile!''}"
+									isrequired="true" dataType="mobile" /><span style="color:red;" id="mobileAlert"></span>
+							</dd>
+						</dl>
+						<dl>
+					    	<dt class="required">
+					    	<em class="pngFix"></em>手机验证码：
+					    	</dt>
+					    		<dd><input isrequired="true" placeholder="验证码" type="text" name="valiCode" id="validate" style="width:100px" class="text w140"/><input class="text w260" id="button" style="width:160px;height:30px;margin-left: 20px;" type="button"  value="获取验证码" onclick="getValidate()" /></dd>
+							</dl>
+						<!--  <dl>
+							<dt>
+								<em class="pngFix"></em>传真：
+							</dt>
+							<dd>
+								<input type="text" name="member_fax" class="text w200"
+									id="telephone" value="${curMemberDetail.fax!''}"
+									dataType="tel_num" />
+							</dd>
+						</dl>-->
+						<div class="zca" style="font-size:18px;margin-top:0px;">
+					          <input type="hidden" id="valiDateCode" name="valiDateCode" />
+					       <div/>
+						<dl>
+					<!--<dt class="required">-->
+					<dt>
+							<em class="pngFix"></em><@uiLabel text="apply.FixedPhone"/>
+					</dt >
+						
+						&nbsp;&nbsp;<input type="text" name="member_tel2"  placeholder="<@uiLabel text='apply.AreaCode'/>" size="6"
+								id="telephone2"   />-<input type="text" name="member_tel" class="text w200" placeholder="<@uiLabel text='apply.ApplyPhoneNumber'/>"
+								id="telephone"   />
+						
+					</dl>
+						<!-- wancheng -->
+						<dl>
+							<dt class="required">
+								<em class="pngFix"></em><@uiLabel text="index.AddressAddress"/>
+							</dt>
+							<dd>
+								<input type="text" name="member_address"
+									value="${curMemberDetail.address!''}" class="text w400"
+									isrequired="true" />
+							</dd>
+						</dl>
+						<dl>
+							<dt class="required">
+								<em class="pngFix"></em><@uiLabel text="index.Sellercode"/>：
+							</dt>
+							<dd>
+								<input type="text" name="member_zip" class="text w200"
+									id="store_zip" value="${curMemberDetail.zip!''}"
+									isrequired="true" dataType="post_code" />
+							</dd>
+						</dl>
+						<dl>
+							<dt class="required">
+								<em class="pngFix"></em><@uiLabel text="apply.OpenShopType"/>
+							</dt>
+							<dd>
+								<p>
+									&nbsp;<label><input name="store_type" type="radio" value="1" <#if myStoreDetail.store_type==1>checked</#if> /><@uiLabel text="apply.Person"/></label> 
+									&nbsp; &nbsp;<label><input name="store_type" type="radio" value="2" <#if myStoreDetail.store_type==2>checked</#if> /><@uiLabel text="apply.Company"/></label>
+								</p>
+							</dd>
+						</dl>
+						<dl class="bottom">
+							<dt>&nbsp;</dt>
+							<dd>
+								<p class="mb10">
+									<input type="button" class="submit" value="<@uiLabel text='apply.NextStep'/>" id="apply" />
+								</p>
+							</dd>
+						</dl>
+					</div>
+					<#--
+					<div id="step2" style="display: none;"><#include
+						'/store/apply/reApply_setp2.html'/></div>
+					-->
+				</form>
+		</div>
+	</div>
+</div>
+</div>
+<script type="text/javascript">
+	$(function() {
+		/* 	bindFileEvent($("#id_img"));
+		 bindFileEvent($("#license_img")); */
+		//加载页面的时候，根据国家线是对应的证件类型
+		if($("#member_country").val()=="CHN"){
+			$("#member_prove_type option").remove();
+			$("#member_prove_type").append("<option value='1' <#if member.member_prove_type==1>selected</#if> >身份证</option>");
+			$("#member_prove_type").append("<option value='2' <#if member.member_prove_type==2>selected</#if> >港澳台身份证</option>");
+		} else if($("#member_country").val()=="RUS") {
+			$("#member_prove_type option").remove();
+			$("#member_prove_type").append("<option value='3'>俄罗斯身份证</option>");
+		}
+		$("#apply").click(function() {
+			var validate=$("#validate").val();
+			var valiDateCode=$("#valiDateCode").val();
+			if($.trim(validate)!=$.trim(valiDateCode)){
+				alert("验证码输入有误,请重新输入");
+				return false;
+			}
+			var mobile = $('#mobile').val();
+ 		    if($.trim(mobile)==''){
+ 			  $("#mobileAlert").html("此项为必填");
+ 			    return false;
+ 			 }
+ 		   if( valiDateCode == 0){
+		    	alert("验证码超时");
+		    	return false;
+		    }else{
+		    	if($.trim(validate)!=$.trim(valiDateCode)){
+					alert("验证码输入有误,请重新输入");
+					return false;
+				}
+		    }
+			if (!$("#applyForm").checkall())
+				return false;
+			$("#apply").attr({
+				"disabled" : "disabled"
+			});
+			var options = {
+				url : "${ctx}/api/b2b2c/storeApi!editMemberForApply.do?ajax=yes",
+				type : "POST",
+				async : false,
+				dataType : "json",
+				success : function(result) {
+					if (result.result == 0) {
+						alert(result.message);
+					} else {
+						//alert(result.message);
+						location.href = "${ctx}/store/apply/reApply_setp2.html?store_type="+result.store_type;
+					}
+					$("#apply").removeAttr("disabled");
+				},
+				error : function(e) {
+					alert("出现错误，请重试");
+				}
+			};
+			$('#applyForm').ajaxSubmit(options);
+		});
+		/* 	$("#region_id").setValidator(function(){
+		 var value = $("#region_id").val();
+		 if( value=="" || value=="0" ) return "地区信息不完整";
+		 else return true;
+		 }); */
+	});
+
+	/* function bindFileEvent(obj){
+	 var status=$(obj).attr("status");
+	 $(obj).uploadify({
+	 'buttonText':'上传',		//显示文字
+	 'fileObjName':'image',		//文件对象名称
+	 'fileTypeDesc': '请选择',//允许上传的文件类型的描述，在弹出的文件选择框里会显示 
+	 'fileTypeExts': '*.gif; *.jpg; *.png',//允许上传的文件类型，限制弹出文件选择框里能选择的文件 
+	 'uploader' : '${ctx}/api/base/upload-image.do?subFolder=store',
+	 'swf'      : '${ctx}/themes/b2b2cv2/uploadify.swf',
+	 'height':'30',				//高度
+	 'width':'80',
+	 'multi':false,				//是否支持多文件上传
+	 'progressData':'percentage',//设置文件上传时显示的数据
+	 'uploadLimit':1,
+	 'onFallback':function(){				//falsh兼容
+	 alert("麻烦了，不兼容falsh!");
+	 },							
+	 'onUploadSuccess':function(file,data,response){
+	 var img =jQuery.parseJSON(data);
+	 $("#"+status+"Text").html("已上传");
+	 $("#"+status+"Img").val(img.fsimg);
+	 $("#"+status+"Status").val(2);
+	 $(".apply_"+status).html("<img src='"+img.img+"'style='width:100px;height:100px'/>");
+	 },
+	 'onSelectError':function(file,errorCode,errorMsg){
+	 if(errorCode==SWFUpload.QUEUE_ERROR.INVALID_FILETYPE){
+	 this.queueData.errorMsg="请上传正确的格式";
+	 }
+	 }
+	 });
+	 } */
+		//根据所在国显示不同证件类型
+		$("#member_country").change(function () {
+			if($("#member_country").val()=="CHN"){
+				$("#member_prove_type option").remove();
+				$("#member_prove_type").append("<option value='1' <#if member.member_prove_type==1>selected</#if> >身份证</option>");
+				$("#member_prove_type").append("<option value='2' <#if member.member_prove_type==2>selected</#if> >港澳台身份证</option>");
+			} else if($("#member_country").val()=="RUS") {
+				$("#member_prove_type option").remove();
+				$("#member_prove_type").append("<option value='3'>俄罗斯身份证</option>");
+			}
+		});
+	//检测身份证
+	function checkIDNumber(value) {
+		var idNumber = $("#member_id_number").val();
+		if($("#member_prove_type").val()==1){
+			var type = 1;
+			var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+			if (!reg.test(idNumber)) {
+				return "身份证格式不正确！";
+			}
+		} else if($("#member_prove_type").val()==2) {
+			if(idNumber.length>12){
+				return "港澳台身份证格式不正确！";
+			}
+		} else if($("#member_prove_type").val()==3) {
+			if(idNumber.length>12){
+				return "俄罗斯身份证格式不正确！";
+			}
+		}
+/* 		$.ajax({
+			url : "${ctx}/api/b2b2c/storeApi!checkIdNumber.do?ajax=yes",
+			type : "POST",
+			async : false,
+			data : "id_number=" + idNumber,
+			dataType : "json",
+			success : function(json) {
+				type = json.result;
+			}
+		});
+		if (type == 0)
+			return "身份证重复"; */
+		return true;
+	}
+	 function checkPhone(value) {
+		if($("#member_country").val()==1){
+			var reg = /^[\d|-|\+]{11}$/;
+			if (!reg.test(value)) {
+				return "手机号码格式不正确！";
+			}
+		} else if($("#member_country").val()==2) {
+			var reg = /^[\d|-|\+]{10}$/;
+			var reg1 = /^[\d|-|\+]{7}$/;
+			if (!reg.test(value) && !reg1.test(value)) {
+				return "手机号码格式不正确！";
+			}
+		}
+		return true;
+	}
+	 
+	 
+	function checkStoreName(value) {
+		var storeName = $("input[name='store_name']").val();
+		var type = 1;
+		if (storeName.length > 20) {
+			return "店铺名称请控制在20个字符以内";
+		}
+		/* 	$.ajax({
+		 url:"${ctx}/api/b2b2c/storeApi!checkStoreName.do?ajax=yes",
+		 type:"POST",
+		 data:"storeName="+storeName,
+		 async: false,
+		 dataType:"json",
+		 success:function(json){
+		 type=json.result;
+		 }		
+		 });	
+		 if(type==0)
+		 return "店铺名称重复"; */
+		return true;
+
+	}
+	$(function(){
+		var telephone = $("#telephone3").val();
+		var num = telephone.split("-");
+		$("#telephone2").attr("value",num[0]);
+		$("#telephone").attr("value",num[1]);
+	})
+	//获取手机号的验证码。发送验证码到手机
+var curCount=120;
+ var code=0;
+function getValidate(){
+ var mobile = $('#mobile').val();
+ if($.trim(mobile)==''){
+	  $("#mobileAlert").html("手机号不能为空");
+	  return ;
+	 }else{
+		$("#mobileAlert").html("")
+	 }
+	if($("#member_country").val()=="CHN"){
+		var reg =/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/; 
+		if(!reg.test(mobile)){
+			    $("#mobileAlert").html("手机格式不正确");
+			    return;
+		}else{
+			 $("#mobileAlert").html("")
+		}
+	} else if($("#member_country").val()=="RUS") {
+		var reg = /^[\d|-|\+]{10}$/;
+		var reg1 = /^[\d|-|\+]{7}$/;
+		if (!reg.test(mobile) && !reg1.test(mobile)) {
+			$("#mobileAlert").html("手机格式不正确");
+			return;
+		}else{
+			$("#mobileAlert").html("")
+		}
+	}
+ $("#button").attr("disabled", "true");  
+    $("#button").val("请在" + curCount + "秒内输入验证码");  
+    InterValObj = window.setInterval(SetRemainTime, 1000); // 启动计时器，1秒执行一次
+ $.ajax({
+  url:"${ctx}/api/shop/member!sendCode1.do?ajax=yes&mobile="+mobile,
+  type:"POST",
+  dataType:"json",
+  success:function(json){
+   if(json.result==0){
+      alert(json.message);
+   }else{
+    $("#valiDateCode").val(json.message);
+   }
+  }
+ });
+}
+ function SetRemainTime() {  
+      if (curCount == 0) { 
+    	  $("#valiDateCode").attr("value",0);
+          window.clearInterval(InterValObj);// 停止计时器  
+          $("#button").removeAttr("disabled");// 启用按钮  
+          $("#button").val("重新发送验证码");
+          curCount = 60;
+          code = ""; // 清除验证码。如果不清除，过时间后，输入收到的验证码依然有效  
+      }else {  
+          curCount--;  
+          $("#button").val("请在" + curCount + "秒内输入验证码");  
+      }  
+  } 
+</script>
+<#include '/common/footer.html' />

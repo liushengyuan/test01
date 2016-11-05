@@ -1,0 +1,43 @@
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+
+<div class="main" style="background-color: white;">
+
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="editTeamProductForm" method="post" class="validate">
+			<table width="100%">
+				<tr>
+					<th>索引值：</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="product_index"
+						name="brandTagRel.brand_index" value="${brandTagRel.brand_index!''}" data-options="required:true"></input></td>
+				</tr>
+				<tr>
+					<th>上传图片文件：</th>
+					<td colspan="3"><input type="button" class="button blueButton" onclick="setTeamImage()" value="上传图片"></input></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td><img alt="" src="${brandTagRel.rel_logo!''}" id="show_product_picture" height="120px" width="150px;">
+					</td>
+				</tr>
+
+			</table>
+			<input type="hidden" name="brandTagRel.rel_logo" id="update_product_image" value="${brandTagRel.rel_logo!''}" class="easyui-validatebox" data-options="required:true">
+			<input type="hidden" name="brandTagRel.id" id="update_product_id" value="${brandTagRel.id}" class="easyui-validatebox" data-options="required:true">
+		</form>
+	</div>
+ 
+</div>
+
+<script language="javascript">
+getImage=function getTeamImage(obj){
+	$("#show_product_picture").attr("src",obj);
+	$("#update_product_image").val(obj);
+}
+function setTeamImage(){
+	openImgDlg(getImage);
+}
+</script>

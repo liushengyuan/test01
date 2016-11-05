@@ -1,0 +1,70 @@
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.input_text {
+	width: 150px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="editForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th width="100px">活动名称</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="name"
+						value="${gift.name!''}" name="gift.name" data-options="required:true"></input>
+					</td>
+
+				</tr>
+				 <tr>
+					<th>活动开始时间</th>
+					<td><input class="easyui-datebox input_text" type="text" id="start_time"
+						value="<@dateformat time='${(gift.start_time)}' pattern='yyyy-MM-dd hh:mm:ss'/>" name="start_time" data-options="required:true"></input>
+					</td>
+					<th>活动结束时间</th>
+					<td><input class="easyui-datebox input_text" type="text" id="end_time"
+						value="<@dateformat time='${(gift.end_time)}' pattern='yyyy-MM-dd hh:mm:ss'/>" name="end_time" data-options="required:true"></input>
+					</td>
+				</tr> 
+				
+				<tr>
+					<th>优惠类型：</th>
+					<td><select class="easyui-validatebox" name="gift.type">
+							<option value=0 <#if gift.type==0>selected="selected"</#if>>无</option>
+							<option value=1 <#if gift.type==1>selected="selected"</#if>>买赠活动</option> 
+							<option value=2 <#if gift.type==2>selected="selected"</#if>>打折</option>		
+					</select></td>
+				</tr>
+				<tr>
+					<th>发布状态：</th>
+					<th style="text-align: left;">
+						<input type="radio"   value="0"  name="state" <#if gift.state==0> checked="checked" </#if>/>保存
+						<input type="radio"  value="1"  name="state" <#if gift.state==1> checked="checked" </#if> />发布
+					</th>
+				</tr>	
+				
+<!-- 				<tr>
+					<th>活动规则</th>
+					<td> <textarea style="width: 275px; height: 112px;" name="gift.rule"></textarea>
+					</td>
+				</tr>
+ -->				
+		<!-- 		<tr>
+					<th>活动规则</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="giftrule"
+						value="${gift.rule!''}" name="gift.rule"
+						data-options="required:true"></input>
+					</td>
+				</tr> -->
+				<tr>
+					<th>活动规则</th>
+					<td> 
+						<textarea style="width: 275px; height: 112px;" id="giftrule" name="gift.rule" data-options="required:true">${gift.rule!''}</textarea>
+					</td>
+				</tr>
+				
+			</table>
+			<input type="hidden" name="gift.gift_id" value="${gift.gift_id!''}">
+		</form>
+	</div>
+</div>

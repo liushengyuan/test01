@@ -1,0 +1,193 @@
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()/>
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+<#-- 引入国际化模板函数 -->
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="editTeamForm" method="post" class="validate">
+			<table width="100%">
+				<input type="hidden" value="${allActivity.id}" name="allActivity.id" />
+				<tr>
+					<th><span style="color:red;">*</span>中文名称</th>
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="name" name="allActivity.name" maxlength="20" data-options="required:true" value="${allActivity.name!''}"></input>
+					</td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>索引值</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="index" validType="number"
+						name="allActivity.index" maxlength="5" value="${allActivity.index}" data-options="required:true"></input></td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>活动开始日期</th>
+					<td><input class="easyui-datebox" validType="date"  id="start_date" value="<@dateformat time='${allActivity.start_time}' pattern='yyyy-MM-dd'/>"
+						name="start_date" data-options="required:true"></input></td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>活动开始时间</th>
+					<td><input class="easyui-timebox" type="time" id="start_time" value="<@dateformat time='${allActivity.start_time}' pattern='HH:mm'/>"
+						name="start_time" data-options="required:true"></input></td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>活动结束日期</th>
+					<td><input class="easyui-datebox" validType="date"  id="end_date" value="<@dateformat time='${allActivity.end_time}' pattern='yyyy-MM-dd'/>"
+						name="end_date" data-options="required:true"></input></td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>活动结束时间</th>
+					<td><input class="easyui-timebox" type="time" id="end_time" value="<@dateformat time='${allActivity.end_time}' pattern='HH:mm'/>"
+						name="end_time" data-options="required:true"></input></td>
+				</tr>
+				<tr>
+					<th>分割线颜色</th>
+					<td>
+						<select class="easyui-validatebox" name="allActivity.line_color">
+            				<option value="0098ff" <#if allActivity.line_color=="0098ff">selected="selected"</#if>>蓝色</option>
+            				<option value="00c3c4" <#if allActivity.line_color=="00c3c4">selected="selected"</#if>>浅蓝色</option>
+            				<option value="000080" <#if allActivity.line_color=="000080">selected="selected"</#if>>海军蓝</option> 
+            				<option value="f384a2" <#if allActivity.line_color=="f384a2">selected="selected"</#if>>粉红色</option>
+            				<option value="bb9752" <#if allActivity.line_color=="bb9752">selected="selected"</#if>>褐色 </option>
+            				<option value="fc5e00" <#if allActivity.line_color=="fc5e00">selected="selected"</#if>>橘红色</option>
+            				<option value="ffc100" <#if allActivity.line_color=="ffc100">selected="selected"</#if>>黄色</option>
+            				<option value="666"    <#if allActivity.line_color=="666">selected="selected"</#if>>黑灰色</option>
+            				<option value="7fa400" <#if allActivity.line_color=="7fa400">selected="selected"</#if>>浅绿色</option> 
+            				<option value="9728b7" <#if allActivity.line_color=="9728b7">selected="selected"</#if>>紫色</option>
+            				<option value="00a635" <#if allActivity.line_color=="00a635">selected="selected"</#if>> 青色</option>
+            				<option value="40E0D0" <#if allActivity.line_color=="40E0D0">selected="selected"</#if>>绿宝石</option>
+            				<option value="FF00FF" <#if allActivity.line_color=="FF00FF">selected="selected"</#if>>洋红</option> 
+            				<option value="6A5ACD" <#if allActivity.line_color=="6A5ACD">selected="selected"</#if>>蓝灰色</option>
+            				<option value="00FF00" <#if allActivity.line_color=="00FF00">selected="selected"</#if>>酸橙色</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>类型</th>
+					<td><select class="easyui-validatebox"  id="ssss" style="width: 65px;" name="allActivity.type" >
+							<option value="0" <#if allActivity.type==0> selected="selected" </#if>>打折</option>
+							<option value="1" <#if allActivity.type==1> selected="selected" </#if>>秒杀</option>
+						</select>
+					</td>
+				</tr>
+				<!-- <tr id="discount">
+					<th><span style="color:red;">*</span>输入折扣率</th>
+					<td><input class="easyui-validatebox input_text" type="text" 
+						 name="allActivity.discountnumber" maxlength="20" data-options="required:true" validType="number" value="${allActivity.discountnumber!'1'}"></input>(单位：%)
+					</td>
+				</tr> -->
+				<tr>
+					<th>是否开启</th>
+					<td><input class="easyui-validatebox input_text" type="radio"
+						style="width: 10px;" name="allActivity.is_show" value="1" <#if allActivity.is_show==1> checked </#if>/>
+						开启&nbsp;&nbsp; <input type="radio" name="allActivity.is_show" value="0" <#if allActivity.is_show==0> checked </#if>/>
+						停用</td>
+				</tr>
+				<tr id="m1">
+					<th>是否限购</th>
+					<td><input  class="radioItem" type="radio"
+						style="width: 10px;" name="allActivity.limitbuy" value="1" id="notSuperChk" checked="true" <#if allActivity.limitbuy==1> checked </#if>/>
+						是&nbsp;&nbsp; <input type="radio" class="radioItem" name="allActivity.limitbuy" value="0" id="superChk" <#if allActivity.limitbuy==0> checked </#if> />
+						否</td>
+				</tr>
+				<tr id="roletr">
+					<th><span style="color:red;">*</span>限购数量</th>
+					<td><input class="easyui-validatebox input_text" type="text" 
+						 name="allActivity.limitnumber" maxlength="20" data-options="required:true" validType="number" value="${allActivity.limitnumber!''}"></input>
+					</td>
+				</tr>
+				<tr id="m2">
+					<th>是否虚拟库存数量</th>
+					<td><input  class="radiovirtual" type="radio"
+						style="width: 10px;" name="allActivity.virtual" value="1" id="notvirtual" checked="true" <#if allActivity.virtual==1> checked </#if> />
+						是&nbsp;&nbsp; <input type="radio" class="radiovirtual" name="allActivity.virtual" value="0" id="virthual" <#if allActivity.virtual==0> checked </#if> />
+						否</td>
+				</tr>
+				<tr id="virtualnum">
+					<th><span style="color:red;">*</span>虚拟倍数</th>
+					<td><input class="easyui-validatebox input_text" type="text" 
+						 name="allActivity.virtualcount" maxlength="20" data-options="required:true" validType="number" value="${allActivity.virtualcount!''}"></input>
+					</td>
+				</tr>
+				<tr id="m3">
+					<th>是否使用优惠券</th>
+					<td><input  class="bonus" type="radio"
+						style="width: 10px;" name="allActivity.bonus_select" value="1"  checked="true" <#if allActivity.bonus_select==1> checked </#if>/>
+						是&nbsp;&nbsp; <input type="radio" class="bonus" name="allActivity.bonus_select" value="0" <#if allActivity.bonus_select==0> checked </#if> />
+						否</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script language="javascript">
+$(function(){
+    var limit= $("input[class='radioItem']:checked").val();
+    if(limit==1){
+    	$("#roletr").show();
+    }else{
+    	$("#roletr").hide();
+    }
+	$("#notSuperChk").click(function(){
+		if(this.checked)
+		$("#roletr").show();
+	});
+	$("#superChk").click(function(){
+		if(this.checked)
+		$("#roletr").hide();
+	});	
+	
+   var limitvirtual= $("input[class='radiovirtual']:checked").val();
+   if(limitvirtual==1){
+   	$("#virtualnum").show();
+   }else{
+   	$("#virtualnum").hide();
+   }
+   $("#notvirtual").click(function(){
+		if(this.checked)
+		$("#virtualnum").show();
+	});
+	$("#virthual").click(function(){
+		if(this.checked)
+		$("#virtualnum").hide();
+	});	
+	
+});
+$(function(){
+	 var count= $("#ssss").val();
+	 if(count==0){
+		 $("#m1").css('display','none');
+		 $("#m2").css('display','none');
+		 $("#m3").css('display','none');
+		 $("#roletr").css('display','none');
+		 $("#virtualnum").css('display','none');
+		 $(".window-shadow").css('height','390')
+	 }else{
+		 $("#m1").show();
+		 $("#m2").show();
+		 $("#m3").show();
+		 $("#roletr").show();
+		 $("#virtualnum").show();
+	 }
+	 $("#ssss").change(function(){
+		 if($('#ssss option:selected').val()==0){
+			 $("#m1").css('display','none');
+			 $("#m2").css('display','none');
+			 $("#m3").css('display','none');
+			 $("#roletr").css('display','none');
+			 $("#virtualnum").css('display','none');
+			 $(".window-shadow").css('height','390')
+		 }else{
+			 $("#m1").show();
+			 $("#m2").show();
+			 $("#m3").show();
+			 $("#roletr").show();
+			 $("#virtualnum").show();
+		 }
+   })
+});
+</script>
+

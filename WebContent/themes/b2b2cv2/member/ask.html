@@ -1,0 +1,70 @@
+<#if locale=="zh">
+    <#assign  title="我的咨询" />
+ <#elseif locale=="ru">
+     <#assign title="Мои консультации" />
+ </#if>
+<#include 'member_header.html' />
+
+<!-- 获得会员咨询列表标签 -->
+<#assign memberAskListTag = newTag("memberAskListTag")>
+<!-- 调用会员咨询列表标签 -->
+<#assign memberAskList = memberAskListTag()>
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class="selected"><a href="ask.html"><span><@uiLabel text="index.PortalUserAdvisory" /></span></a></li>
+		</ul>
+	</div>
+	<!-- 我的咨询，与评论样式相同 -->
+	<div class="user_comment">
+		<h1><@uiLabel text="index.PortalUserAdvisory" /></h1>
+		<#if memberAskList?size gt 0 >
+		<ul>
+			<#list memberAskList.commentsList as comment>
+				<li>
+					<div class="comment_title">
+						<span><a href="${ctx}/goods-${comment.goods_id}.html" target="_blank"><#if locale=="zh">${comment.name!''}<#elseif locale=="ru">${comment.name_ru!''}</#if></a></span>
+						<span><@dateformat time="${comment.dateline?c}" pattern="yy-MM-dd HH:mm"/></span>
+						<em>
+						<#if comment.status == 1> 
+							<@uiLabel text="index.PortalUserApprovalAdvisory" />
+						<#elseif comment.status == 2> 
+							<@uiLabel text="index.PortalUserAuditRefuse" />
+						 <#else>
+						 	<@uiLabel text="index.PortalUserPendingAdvisory" /> 
+						 </#if>
+						</em>
+					</div>
+					<div class="comment_inpro">
+						<div><h3><@uiLabel text="index.PortalUserAdvisory" />:</h3></div>
+						<span>
+							<p>${comment.content}</p>
+							<i class="comment_img">
+							<#if comment.img?? && comment.img!= '' && comment.img!='null'>
+								<img src="${comment.img}"  />
+							</#if>	
+							</i>	
+						</span>
+					</div>
+					<#if comment.replystatus == 1>
+						<div class="comment_reply">
+							<strong style="color:#666"><@uiLabel text="index.PortalUserCustomerReply" />：</strong><span style="color:#999">${comment.reply}</span>
+						</div>
+					</#if>
+				</li>
+			</#list>
+			
+		</ul>
+		
+		<#else>
+		
+			<p class="no_commont"><@uiLabel text="index.PortalUserNoAdvice" /></p>
+		</#if>
+	</div>
+	<div class="page">
+		<@pager pageno="${memberAskList.page!'1'}" pagesize="${memberAskList.pageSize}" totalcount="${memberAskList.totalCount}" />
+	</div>
+</div>	
+		
+	</div>
+		<#include '../common/footer.html'/>

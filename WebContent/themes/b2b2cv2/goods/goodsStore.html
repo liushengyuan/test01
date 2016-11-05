@@ -1,0 +1,95 @@
+<#assign goodsStoreTag=newTag("goodsStoreTag")> <#assign
+goodsStore=goodsStoreTag("{'goods_id':${goods_id}}")> <#-- 商品规格标签 -->
+<#assign goodsSpecTag=newTag("goodsSpecTag")/> <#assign
+goodsSpec=goodsSpecTag("{'goods_id':${goods_id}}") />
+
+<!--创建"商品基本信息"标签-->
+<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+
+
+<style>
+h2 {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+#goodsStore tr td {
+	padding-left: 10px;
+}
+</style>
+<form id="goodsStoreForm">
+	<input type="hidden" name="goods_id" value="${goods_id}">
+	<table cellspacing="0" cellpadding="0" width="100%" id="goodsStore">
+		
+		<#if goodsSpec.have_spec?exists && goodsSpec.have_spec==1 &&
+		goodsSpec.productList?exists >
+		<p style="text-align:right;">
+		批量设置库存: <input type="number" id="piliang"/>
+		<input type="button" value="确定" onClick="sure()" />
+		</p>
+		 <#--商品规格库存标签--> <#assign
+		goodsSpecStoreTag=newTag("goodsSpecStoreTag") /> <#assign
+		goodsSpecStoreList=goodsSpecStoreTag("{'goods_id':${goods_id}}") />
+		<table cellspacing="0" cellpadding="0" border="0" class="spec_table"
+			width="98%">
+			<thead>
+				<tr>
+					<th><#if locale=="zh"> 货号 <#elseif locale=="ru"> Номер товара
+						</#if></th>
+					<th><#if locale=="zh"> 商品名称 <#elseif locale=="ru"> Название
+						товара </#if></th> <#list goodsSpec.specList as spec>
+					<th class="w1"><#if locale=="zh"> ${spec.spec_name!} <#elseif
+						locale=="ru"> ${spec.spec_name_ru!} </#if></th> </#list>
+					<th style="text-align: center;"><#if locale=="zh"> 库存 <#elseif
+						locale=="ru"> Инвентаризация </#if></th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list goodsSpec.productList as product>
+				<tr>
+					<td>${product.sn}</td>
+					<td><!--调用"商品基本信息"标签，并传递参数--> <#assign
+						goods = goodsBaseDataTag("{'goodsid':${product.goods_id}}")>
+						<#if locale=="zh">
+							${goods.name!}
+						<#elseif locale=="ru">
+							${goods.name_ru!}
+						</#if>
+					</td> <#list product.specList as spec>
+					<td><#if locale=="zh"> ${spec.spec_value!} <#elseif
+						locale=="ru"> ${spec.spec_value_ru!} </#if></td> </#list>
+					<td><input type="hidden" value="${product.product_id}"
+						name="productIds" /> <input type="hidden" value="${goods_id}"
+						name="goods_id" /> <#assign n=0 /> <#if
+						(goodsSpecStoreList?size>0)> <#list goodsSpecStoreList as
+						goodsStore> <#if product.product_id==goodsStore.productid > <input
+						type="hidden" value="${goodsStore.storeid}" name="storeIds" /> <input
+						type="text" value="${goodsStore.enable_store}" name="storeNum"
+						class="more_storenum" /> <#assign n=1 /> </#if> </#list> </#if>
+						<#if n==0> <input type="hidden" value="0" name="storeIds" /> <input
+						type="text" value="0" name="storeNum" style="text-align: center;height:15px; line-height:15px;"
+						class="more_storenum" /> </#if></td>
+				</tr>
+				</#list> <#else>
+				<tr>
+					<th><#if locale=="zh"> 库存数量： <#elseif locale=="ru"> Количество
+						инвентаризации </#if></th>
+					<td><#if goodsStore.store??> <input type="text" name="store"
+						value="${goodsStore.store.enable_store}"
+						style="text-align: center;" class="one_storenum" /> <input
+						type="hidden" name="storeid"
+						value="${goodsStore.store.storeid!'0'}" /> <#else> <input
+						type="text" name="store" value="0" style="text-align: center;"
+						class="one_storenum"> <input type="hidden" name="storeid"
+						value="0" /> </#if>
+					</td>
+				</tr>
+				</#if>
+		</table>
+		</form>
+		<script type="text/javascript">
+		function sure(){
+			var s=$("#piliang").val();
+			$(".more_storenum").attr("value",s);
+		}
+		</script>

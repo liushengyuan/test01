@@ -1,0 +1,689 @@
+<#include '/store/store_header2.html' />
+<!-- 调用地区标签 -->
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2cv2/css/uploadify.css" />
+<script type="text/javascript"
+	src="${ctx}/themes/b2b2cv2/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript"
+	src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"></script>
+
+<div class="store_main">
+	<div class="open_store">
+		<div class="open_store_form">
+			<form id="applyForm" class="validate">
+				<form id="applyForm" class="validate">
+					<input type="hidden" name="store_id" value="${myStoreDetail.store_id!''}"> 
+					<input type="hidden" name="member_id" value="${member.member_id!''}" id="member_id" >
+					<input type="hidden" name="store_type" value="${store_type!''}">
+					<input type="hidden" name="is_save" value="0" id="isStore">
+					<dl>
+						<dt class="required">
+							<em class="pngFix"></em><@uiLabel text="apply.ApplyShopName"/>
+						</dt>
+						<dd>
+							<p>
+								<input type="text" name="store_name" class="text w400"
+									isrequired="true" dataType="string" autocomplete="off"
+									value="${myStoreDetail.store_name!''}" fun="checkStoreName"
+									onblur="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,'')" />
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShopNameMaxChar"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShopNameDoNotChi"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShopNameNotModify"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShopNameNotRepeat"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShopNameNotAgainstRaw"/>
+							</p>
+
+						</dd>
+					</dl>
+					<dl>
+						<dt class="required">
+							<em class="pngFix"></em>店铺所在国:
+						</dt>
+						<dd>
+							<p>
+								<select name="store_country" >
+									<option value="CHN" <#if myStoreDetail.store_country=='CHN'>selected</#if>>中国</option>
+									<option value="RUS" <#if myStoreDetail.store_country=='RUS'>selected</#if>>俄罗斯</option>
+								</select>
+							</p>
+						</dd>
+					</dl>
+					<dl>
+						<dt class="required">
+							<em class="pngFix"></em>市场选择:
+						</dt>
+						<dd>
+							<p>
+								<select name="store_market"  >
+									<option value="CHN" <#if myStoreDetail.store_market=='CHN'>selected</#if>>中国市场</option>
+									<option value="RUS" <#if myStoreDetail.store_market=='RUS'>selected</#if>>俄罗斯市场</option>
+								</select>
+							</p>
+						</dd>
+					</dl>
+					<dl>
+						<dt class="required">
+							<em class="pngFix"></em><@uiLabel text="apply.Extension"/>
+						</dt>
+						<dd>
+							<p>
+								<textarea id="store_banner" type="text" name="store_banner"
+									size="60" rows="5" isrequired="true" class="text w400"
+									maxlength="50" cols="62" onkeyup="showInputLength(1)">${myStoreDetail.store_banner!''}</textarea>
+								&nbsp;(<@uiLabel text="apply.InputWord"/>:<span id="briefSpan">0</span>)
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ExtenMaxChar"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ExtenFeature"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ExtenFreeTran"/>
+							</p>
+						</dd>
+					</dl>
+					<dl>
+						<dt class="required">
+							<em class="pngFix"></em><@uiLabel text="apply.ShopIntro"/>
+						</dt>
+						<dd>
+							<p>
+								<textarea type="text" name="store_description"
+									id="store_description" rows="5" isrequired="true"
+									class="text w400" maxlength="300" cols="62"
+									onkeyup="showInputLength(2)">${myStoreDetail.description!''}</textarea>
+								&nbsp;(<@uiLabel text="apply.InputWord"/><span id="briefSpan1">0</span>)
+							</p>
+						</dd>
+					</dl>
+
+					<dl>
+						<dt>
+							<em class="pngFix"></em><@uiLabel text="apply.ShopKeyWord"/>
+						</dt>
+						<dd>
+							<p>
+							<table id="tableCont" style="margin:0;" cellspacing="0">
+
+								<tbody>
+									<tr>
+										<td><input type="text" name="productFeature_description"
+											value="${curStoreFeature.featureName_0!''}"></td>
+										<td><input type="text" name="productFeature_description"
+											value="${curStoreFeature.featureName_1!''}"></td>
+										<td><input type="text" name="productFeature_description"
+											value="${curStoreFeature.featureName_2!''}"></td>
+									</tr>
+									<tr class="background_tr">
+										<td><input type="text" name="productFeature_description"
+											value="${curStoreFeature.featureName_3!''}"></td>
+										<td><input type="text" name="productFeature_description"
+											value="${curStoreFeature.featureName_4!''}"></td>
+										<td><input type="text" name="productFeature_description"
+											value="${curStoreFeature.featureName_5!''}"></td>
+									</tr>
+									<tr id="hiddenFeatureTr_5" class="background_tr"
+										<#if !curStoreFeature.featureName_6??> style="display:
+										none;"</#if>>
+										<td><input type="text" name="productFeature_description"
+						value="${curStoreFeature.featureName_6!''}"></td>
+					<td><input type="text" name="productFeature_description"
+						value="${curStoreFeature.featureName_7!''}"></td>
+					<td><input type="text" name="productFeature_description"
+						value="${curStoreFeature.featureName_8!''}"></td>
+				</tr>
+									<tr id="hiddenFeatureTr_8" class="background_tr"
+										<#if !curStoreFeature.featureName_6??> style="display:
+										none;"</#if>>
+										<td><input type="text" name="productFeature_description"
+						value="${curStoreFeature.featureName_9!''}"></td>
+					<td><input type="text" name="productFeature_description"
+						value="${curStoreFeature.featureName_10!''}"></td>
+					<td><input type="text" name="productFeature_description"
+						value="${curStoreFeature.featureName_11!''}"></td>
+				</tr>
+									<tr id="hiddenFeatureTr_11" class="background_tr"
+										style="display: none;">
+									</tr>
+								</tbody>
+							</table>
+							<a id="aShowFeature"<#if
+								!curStoreFeature.featureName_6??>status="show"
+								href="javascript:hideFeature();"><@uiLabel text="apply.KeyWordAddMore"/></a><#else>status="hidden"
+							href="javascript:hideFeature();"><@uiLabel text="apply.KeyWordHied"/></a></#if>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.KeyWordMaxChar"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.KeyWordTips"/>
+							</p>
+						</dd>
+					</dl>
+					<dl>
+						<dt>
+							<em class="pngFix"></em><@uiLabel text="apply.ProductType"/>
+						</dt>
+						<dd>
+							<p>
+							<table id="tableContTo" style="margin:0;" cellspacing="0">
+
+								<tbody>
+									<tr>
+										<td><input type="text" name="productCategore_description"
+											value="${curStoreFeature.categoreName_0!''}"></td>
+										<td><input type="text" name="productCategore_description"
+											value="${curStoreFeature.categoreName_1!''}"></td>
+										<td><input type="text" name="productCategore_description"
+											value="${curStoreFeature.categoreName_2!''}"></td>
+									</tr>
+									<tr class="background_tr">
+										<td><input type="text" name="productCategore_description"
+											value="${curStoreFeature.categoreName_3!''}"></td>
+										<td><input type="text" name="productCategore_description"
+											value="${curStoreFeature.categoreName_4!''}"></td>
+										<td><input type="text" name="productCategore_description"
+											value="${curStoreFeature.categoreName_5!''}"></td>
+									</tr>
+									<tr id="hiddenCategoryTr_" class="background_tr"
+										<#if !curStoreFeature.categoreName_6??>style="display:
+										none;"</#if>>
+										<td><input type="text" name="productCategore_description"
+						value="${curStoreFeature.categoreName_6!''}"></td>
+					<td><input type="text" name="productCategore_description"
+						value="${curStoreFeature.categoreName_7!''}"></td>
+					<td><input type="text" name="productCategore_description"
+						value="${curStoreFeature.categoreName_8!''}"></td>
+				</tr>
+									<tr id="hiddenCategoryTr_" class="background_tr"
+										<#if !curStoreFeature.categoreName_6??>style="display:
+										none;"</#if>>
+										<td><input type="text" name="productCategore_description"
+						value="${curStoreFeature.categoreName_9!''}"></td>
+					<td><input type="text" name="productCategore_description"
+						value="${curStoreFeature.categoreName_10!''}"></td>
+					<td><input type="text" name="productCategore_description"
+						value="${curStoreFeature.categoreName_11!''}"></td>
+				</tr>
+									<tr id="hiddenCategoryTr_" class="background_tr"
+										style="display: none;">
+									</tr>
+								</tbody>
+							</table>
+							<a id="aShowCategory"<#if !curStoreFeature.categoreName_6??>
+								status="show" href="javascript:hideCategory();"><@uiLabel text="apply.KeyWordAddMore"/></a><#else>status="hidden"
+							href="javascript:hideCategory();"><@uiLabel text="apply.KeyWordHied"/></a></#if>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShopProductType"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShoptProductTips"/>
+							</p>
+						</dd>
+					</dl>
+					<dl>
+						<dt >
+							<@uiLabel text="apply.ShopAddress"/>
+						</dt>
+						<dd>
+							<input type="text" id="store_location"
+								class="text w200" name="store_location" value="${myStoreDetail.store_location!''}"><span
+								 ></span>
+						</dd>
+					</dl>
+					<dl>
+						<dt class="required">
+							<em class="pngFix"></em><@uiLabel text="apply.BelongTo"/>
+						</dt>
+						<dd>
+							<select name="parent_store" id="parent_store">
+								<option value="0" <#if myStoreDetail.parent_store==0>selected</#if>><@uiLabel text="apply.IndependShop"/></option>
+							</select>
+						</dd>
+					</dl>
+					<#if store_type=='1'> 
+						<#include 'reApply_setp4.html'/> 
+					<#else> 
+						<#include 'reApply_setp3.html'/> 
+					</#if>
+
+					<dl class="bottom">
+						<dt>&nbsp;</dt>
+						<dd>
+							<p class="mb10">
+								<input type="button" class="submit" value="<@uiLabel text='apply.LastStep'/>" id="return" />
+								<input type="button" class="submit" value="<@uiLabel text='apply.ImmeOpenShop'/>" id="apply" />
+							</p>
+						</dd>
+					</dl>
+					</div>
+				</form>
+		</div>
+	</div>
+</div>
+</div>
+<script type="text/javascript">
+window.onload = function() {
+	bindFileEvent($("#id_img"));
+	bindFileEvent($("#id2_img"));
+	bindFileEvent($("#bcard_img"));
+	bindFileEvent($("#license_img"));
+	bindFileEvent($("#logo_img"));
+	bindFileEvent($("#prove_img"));
+}
+	$("#return").click(function() {
+		location.href = "${ctx}/store/apply/reApply.html";
+	});
+
+	 //键盘离开时更新字数
+    function showInputLength() {
+        var s = applyForm.store_banner.value.length;
+        var s1 = applyForm.store_description.value.length;
+        document.getElementById("briefSpan").innerHTML = s;
+        document.getElementById("briefSpan1").innerHTML = s1;
+        if (s > 50) {
+            document.getElementById("briefSpan").style.color = "red";
+        }
+        if (s1 > 300) {
+            document.getElementById("briefSpan1").style.color = "red";
+        }
+    }
+	$("#apply").click(function(){
+		var regNumber = /^\d{12,20}$/;
+		var bank_account_number = $("#bank_account_number").val();
+		if(!regNumber.test(bank_account_number)){
+			alert("公司银行账号长度为12-20位数字");
+			return false;
+		}
+		if(!$("#applyForm").checkall())
+			return false;
+		$("#apply").attr({"disabled":"disabled"}); 
+		var options = {
+				url : "${ctx}/api/b2b2c/storeApi!reApply.do?ajax=yes",
+				type : "POST",
+				async: false,
+				dataType : "json",
+				success : function(result) {
+					if(result.result==0){
+						alert(result.message);
+					}else{
+						alert(result.message);
+						location.href="${ctx}/store/business_center.html?menu=store_index";
+					}
+					$("#apply").removeAttr("disabled");
+			 	},
+			 	error : function(e) {
+			 		alert("出现错误，请重试");
+				}
+			};
+		$('#applyForm').ajaxSubmit(options);
+	});
+
+function bindFileEvent(obj) {
+	var status = $(obj).attr("status");
+	$(obj)
+			.uploadify(
+					{
+						'buttonText' : '上传', //显示文字
+						'fileObjName' : 'image', //文件对象名称
+						'fileTypeDesc' : '请选择',//允许上传的文件类型的描述，在弹出的文件选择框里会显示 
+						'fileTypeExts' : '*.gif; *.jpg; *.png',//允许上传的文件类型，限制弹出文件选择框里能选择的文件 
+						'uploader' : '${ctx}/api/base/upload-image.do?subFolder=store',
+						'swf' : '${ctx}/themes/b2b2cv2/uploadify.swf',
+						'height' : '30', //高度
+						'width' : '80',
+						'multi' : false, //是否支持多文件上传
+						'progressData' : 'percentage',//设置文件上传时显示的数据
+						'uploadLimit' : 8,
+						'onFallback' : function() { //falsh兼容
+							alert("麻烦了，不兼容falsh!");
+						},
+						'onUploadSuccess' : function(file, data, response) {
+							var img = jQuery.parseJSON(data);
+							$("#" + status + "Text").html("已上传");
+							$("#" + status + "Img").val(img.img);
+							//$("#"+status+"Status").val(2);
+							$(".apply_" + status).html("<img src='"+img.img+"'style='width:100px;height:100px'/>");
+						},
+						'onSelectError' : function(file, errorCode,
+								errorMsg) {
+							if (errorCode == SWFUpload.QUEUE_ERROR.INVALID_FILETYPE) {
+								this.queueData.errorMsg = "请上传正确的格式";
+							}
+						}
+					});
+}
+</script>
+<script type="text/javascript">
+function checkStoreName(value) {
+	var storeName = $("input[name='store_name']").val();
+	var type = 1;
+	if (storeName.length > 26) {
+		return "店铺名称请控制在25个字符以内";
+	}
+	$.ajax({
+		url : "${ctx}/api/b2b2c/storeApi!checkStoreName.do?ajax=yes",
+		type : "POST",
+		data : "storeName=" + storeName,
+		async : false,
+		dataType : "json",
+		success : function(json) {
+			type = json.result;
+		}
+	});
+	if (type == 0)
+		return "店铺名称重复";
+	return true;
+
+}
+    function hideFeature(){
+        var status = $("#aShowFeature").attr("status");
+        if(status == "show"){
+            $("#tableCont").find("tr[id^='hiddenFeatureTr_']").show();
+            $("#tableCont").find("tr[id^='hiddenFeatureTr_'] input").val("");
+            $("#aShowFeature").attr("status" , "hidden");
+            $("#aShowFeature").text("隐藏");
+        }else{
+            $("#tableCont").find("tr[id^='hiddenFeatureTr_']").hide();
+            $("#aShowFeature").attr("status" , "show");
+            $("#aShowFeature").text("添加更多");
+        }
+    }
+    function hideCategory(){
+        var status = $("#aShowCategory").attr("status");
+        if(status == "show"){
+            $("#tableContTo").find("tr[id^='hiddenCategoryTr_']").show();
+            $("#tableCont").find("tr[id^='hiddenFeatureTr_'] input").val("");
+            $("#aShowCategory").attr("status" , "hidden");
+            $("#aShowCategory").text("隐藏");
+        }else{
+            $("#tableContTo").find("tr[id^='hiddenCategoryTr_']").hide();
+            $("#aShowCategory").attr("status" , "show");
+            $("#aShowCategory").text("添加更多");
+        }
+    }
+	//首先加载开户银行的名称
+	$(document).ready(function(){
+		//回显数据 首先进行查询
+		var member_id = $("#member_id").val();
+		$.ajax({
+			url: "${ctx}/api/shop/goods!loadBankMessage.do?member_id="+member_id,
+			type : "GET",
+			async : false,
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					//alert("成功返回！！！！");
+					//alert(result.data[0].store_id);
+					//总行id和名称 
+					var total_bank_id = result.data[0].bank_account_name;
+					var total_bank_name = result.data[0].bank_name;
+					var bank_account_name = $("#bank_account_name");
+					bank_account_name.empty();
+					bank_account_name.append("<option value='"+total_bank_id+"'>"+total_bank_name+"</option>");
+					//所在省id和名称 
+					var bank_provinceid = result.data[0].bank_provinceid;
+					var bank_province = result.data[0].bank_province;
+					var Province = $("#bank_Province");
+					Province.empty();
+					Province.append("<option value='"+bank_provinceid+"'>"+bank_province+"</option>")
+					//所在市id和名称 
+					var bank_cityid = result.data[0].bank_cityid;
+					var bank_city = result.data[0].bank_city;
+					var City = $("#bank_City");
+					City.empty();
+					City.append("<option value='"+bank_cityid+"'>"+bank_city+"</option>")
+					//所在支行id和名称 
+					var bank_regionid = result.data[0].bank_regionid;
+					var bank_region = result.data[0].bank_region;
+					var Region = $("#bank_name");
+					Region.empty();
+					Region.append("<option value='"+bank_regionid+"'>"+bank_region+"</option>")
+					//alert(bank_region);
+				}else{
+					alert("失败");
+				}
+				
+			}
+		});
+		
+		//加载银行名称的数据 
+		loadBankName();
+		loadProvince();
+		loadCity();
+		loadRegion();
+		//加载所在省的信息 bank_Province 
+//		loadBankProvince();
+//		var obj = $("#bank_account_name");
+//		var areaid = 1;
+//		var areaname = "中国银行";
+//		obj.append("<option value='"+areaid+"'>"+areaname+"</option>");
+	});
+	function loadBankName(){
+		$.ajax({
+			url: "${ctx}/api/shop/goods!loadBankTotalName.do",
+			type : "GET",
+			async : false,
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					//alert("成功");
+					//alert(result.data[0].text);
+					var obj = $("#bank_account_name");
+					//遍历
+					for(var i=0;i<(result.data).length;i++){
+						//取出其中一条地址信息
+						var bank = result.data[i];
+						//添加到下拉列表
+						obj.append("<option value='"+bank.id+"'>"+bank.text+"</option>");
+					};
+				}else{
+					alert("失败");
+				}
+				
+			}
+		});
+	}
+	function loadBankProvince(){
+		var name_select = "--请选择--";
+		$("#bank_Province").empty();
+		$("#bank_Province").append("<option value=''>"+name_select+"</option>");
+		$("#bank_City").empty();
+		$("#bank_City").append("<option value=''>"+name_select+"</option>");
+		$("#bank_name").empty();
+		$("#bank_name").append("<option value=''>"+name_select+"</option>");
+		$.ajax({
+			url: "${ctx}/api/shop/goods!loadBankProvince.do",
+			type : "GET",
+			async : false,
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					//alert("成功");
+					//alert(result.data[0].text);
+					var obj = $("#bank_Province");
+					//遍历
+					for(var i=0;i<(result.data).length;i++){
+						//取出其中一条地址信息
+						var bankProvince = result.data[i];
+						//添加到下拉列表
+						obj.append("<option value='"+bankProvince.id+"'>"+bankProvince.name+"</option>");
+					};
+				}else{
+					alert("失败");
+				}
+				
+			}
+		});	
+	}
+	//加载市的信息
+	function loadBankCity(){
+		//获取省的id
+		var p1 = $("#bank_Province").val();
+		//修改市的属性
+		//$("#bank_City").attr("length",1);
+		//$("#bank_City").options.length=10;
+		//$("#bank_City").innerHTML = "";
+		//$("#bank_City").empty(2);
+		var name_select = "--请选择--";
+		$("#bank_City").empty();
+		$("#bank_City").append("<option value=''>"+name_select+"</option>");
+		$("#bank_name").empty();
+		$("#bank_name").append("<option value=''>"+name_select+"</option>");
+		$.ajax({
+			url: "${ctx}/api/shop/goods!loadBankCity.do?p1="+p1,
+			type : "GET",
+			async : false,
+			//data: "p1":p1,
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					//alert("成功");
+					//alert(result.data[0].text);
+					var obj = $("#bank_City");
+					//遍历
+					for(var i=0;i<(result.data).length;i++){
+						//取出其中一条地址信息
+						var bankCity = result.data[i];
+						//添加到下拉列表
+						obj.append("<option value='"+bankCity.id+"'>"+bankCity.name+"</option>");
+					};
+				}else{
+					alert("失败");
+				}
+				
+			}
+		});			
+	}
+	//加载开户银行网点名称
+	function loadToBankName(){
+		//获取银行名称
+		var totalname = $("#bank_account_name").val();
+		//获取地区的id
+		var areaid = $("#bank_City").val();
+		//发生改变时清空支行的信息 
+		$("#bank_name").empty();
+		var name_select = "--请选择--";
+		$("#bank_name").append("<option value=''>"+name_select+"</option>");
+		$.ajax({
+			url: "${ctx}/api/shop/goods!loadBankName.do?totalname="+totalname+"&areaid="+areaid,
+			type : "GET",
+			async : false,
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					//alert("成功");
+					//alert(result.data[0].text);
+					var obj = $("#bank_name");
+					//遍历
+					for(var i=0;i<(result.data).length;i++){
+						//取出其中一条地址信息
+						var bankName = result.data[i];
+						//添加到下拉列表
+						obj.append("<option value='"+bankName.id+"'>"+bankName.name+"</option>");
+					};
+				}else{
+					alert("失败");
+				}
+				
+			}
+		});
+	}
+	function loadProvince(){
+		$.ajax({
+			url: "${ctx}/api/shop/goods!loadBankProvince.do",
+			type : "GET",
+			async : false,
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					//alert("成功");
+					//alert(result.data[0].text);
+					var obj = $("#bank_Province");
+					//遍历
+					for(var i=0;i<(result.data).length;i++){
+						//取出其中一条地址信息
+						var bankProvince = result.data[i];
+						//添加到下拉列表
+						obj.append("<option value='"+bankProvince.id+"'>"+bankProvince.name+"</option>");
+					};
+				}else{
+					alert("失败");
+				}
+				
+			}
+		});
+	}
+	function loadCity(){
+		//获取省的id
+		var p1 = $("#bank_Province").val();
+		
+		$.ajax({
+			url: "${ctx}/api/shop/goods!loadBankCity.do?p1="+p1,
+			type : "GET",
+			async : false,
+			//data: "p1":p1,
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					//alert("成功");
+					//alert(result.data[0].text);
+					var obj = $("#bank_City");
+					//遍历
+					for(var i=0;i<(result.data).length;i++){
+						//取出其中一条地址信息
+						var bankCity = result.data[i];
+						//添加到下拉列表
+						obj.append("<option value='"+bankCity.id+"'>"+bankCity.name+"</option>");
+					};
+				}else{
+					alert("失败");
+				}
+				
+			}
+		});
+	}
+	function loadRegion(){
+		//获取银行名称
+		var totalname = $("#bank_account_name").val();
+		//获取地区的id
+		var areaid = $("#bank_City").val();
+		$.ajax({
+			url: "${ctx}/api/shop/goods!loadBankName.do?totalname="+totalname+"&areaid="+areaid,
+			type : "GET",
+			async : false,
+			dataType : "json",
+			success : function(result) {
+				if(result.result==1){
+					//alert("成功");
+					//alert(result.data[0].text);
+					var obj = $("#bank_name");
+					//遍历
+					for(var i=0;i<(result.data).length;i++){
+						//取出其中一条地址信息
+						var bankName = result.data[i];
+						//添加到下拉列表
+						obj.append("<option value='"+bankName.id+"'>"+bankName.name+"</option>");
+					};
+				}else{
+					alert("失败");
+				}
+				
+			}
+		});
+	}
+	//bank_account_name  bank_Province  bank_City bank_name
+</script>

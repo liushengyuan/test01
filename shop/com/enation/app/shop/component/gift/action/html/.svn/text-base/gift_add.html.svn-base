@@ -1,0 +1,59 @@
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 20px">
+		<form id="addForm" method="post" class="validate" theme="xhtml">
+			<table>	
+				<tr>
+					<th width="100px">活动名称</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="name"
+						name="gift.name" data-options="required:true"></input>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>活动开始时间</th>
+					<td><input class="easyui-datetimebox input_text" type="text" id="giftstart_time"
+						name="start_time" data-options="required:true"></input>
+					</td>
+					<th>活动终止时间</th>
+					<td><input class="easyui-datetimebox input_text" type="text" id="giftend_time"
+						name="end_time" data-options="required:true"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>活动类型：</th>
+					<td>
+					<select class="easyui-validatebox" name="gift.type">
+							<option value=0>无</option>
+							<option value=1>买赠活动</option>
+							<option value=2>打折</option>
+					</select>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>发布状态：</th>
+					<th style="text-align: left;">
+						<input type="radio" value="0"  id="giftstate" name="state"/>保存
+						<input type="radio" value="1" id="giftstate" name="state"/>发布
+					</th>
+				</tr>	
+				 
+				<tr>
+					<th>活动规则</th>
+					<td> <textarea style="width: 275px; height: 112px;" name="gift.rule"></textarea>
+					</td>
+				</tr>
+				
+			</table>
+		</form>
+		</div>
+	</div>
+</div>

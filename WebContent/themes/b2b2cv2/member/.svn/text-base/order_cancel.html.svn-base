@@ -1,0 +1,17 @@
+<style>
+.ui_border tr td{border:0px none;text-align:left;height:0px;background:none;width:0px;border-radius:none;}
+</style>
+<div class="member_order_cancel">
+<form method="post" action="" id="cancelForm" style="display: none;">
+	<div class="order_cancel">
+		<label>
+			<span><@uiLabel text="index.PortalUserReasonForCancellation" />：</span>
+			<textarea type="text" name="reason" class="order_reason"></textarea>
+		</label>
+	</div>
+	备注：使用优惠券下多家店铺订单，部分取消订单后，优惠券不退还。谢谢您的谅解！
+	<div class="order_cancel_tools">
+		<input type="button" value="<@uiLabel text="index.PortalUserConfirmCancelOrder" />" id="cancelBtn" class="yellow_btn">
+	</div>
+</form>
+</div>

@@ -1,0 +1,87 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.input_text{
+	width: 95%;
+}
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="bonusform">
+	<div class='buttonArea' >
+		<span style="float: right;"> 
+		 	<span id="simpleSearch">
+		 		<!-- <span>加盟商名称:</span>
+				<input type="text"  id="name" class="input_text" style="width: 200px"/>&nbsp;&nbsp;&nbsp; -->
+				<span style="font-size:16px;color:red;"><b>访问总数：${ip_count!''}&nbsp;</b></span>
+				<span style="font-size:16px;color:red;"><b>今天访问数：${todayIPCount!''}&nbsp;</b></span>
+		 		<span>起始时间:</span>
+		 		<input class="easyui-datebox" type="text" data-options="required:true" name="start_time" id="start_time" data-options="formatter:myformatter,parser:myparser"/>&nbsp;
+		 		<input class="easyui-datebox" type="text" data-options="required:true" name="stop_time" id="stop_time" data-options="formatter:myformatter,parser:myparser"/>&nbsp;
+				<a href="javascript:void(0)" class="easyui-linkbutton" id="search" data-options="plain:true" onclick="searchAlliaction()">搜索</a>
+				<a href="${ctx}/b2b2c/admin/allianceCount!export.do" class="button b_fr" id="export">导出</a>
+				<a href="${ctx}/b2b2c/admin/allianceCount!pieChart.do" class="button b_fr" id="export">访问地-饼状图</a>
+				<a href="${ctx}/b2b2c/admin/allianceCount!dataTable.do" class="button b_fr" id="export">访问数-折线图</a>
+			</span> 
+		</span>
+		<!-- <input id="Advanced" name="Advanced" type="hidden" value="0" /> -->
+		</div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'allianceCount!flowCountList.do',pageList: [10,15,20,30],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="advertisedata">
+				<thead>
+					<tr>
+						<th data-options="field:'flow_id',checkbox:true,width:100" ></th>
+						
+						<th data-options="field:'user_addr',width:150" align="center">访问地</th>
+						<th data-options="field:'ip_count',width:50" align="center">访问数</th>
+						<th data-options="field:'order_count',width:50" align="center">完成订单数量</th>
+						
+						<th data-options="field:'action',width:60" formatter="formatOperation" align="center">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	
+	<div id="divdia" style="display: none;"></div>
+	
+</div>
+<script type="text/javascript">
+	function formatOperation(value, row, index) {
+		var start_time = $("#start_time").datebox('getValue');
+		var stop_time = $("#stop_time").datebox('getValue');
+		var val = "";
+		var val="<a class='edit' title='查看详情' href='#' onclick=\"newTab('查看详情','${ctx}/b2b2c/admin/allianceCount!userFlowDetail.do?flow_id="+row.flow_id+"&start_time="+start_time+"&stop_time="+stop_time+"')\"></a>";
+		return val;
+	}
+
+	//搜索
+	function searchAlliaction(){
+		var start_time = $("#start_time").datebox('getValue');
+		var stop_time = $("#stop_time").datebox('getValue');
+		$("#advertisedata").datagrid('load', {
+			start_time:start_time,
+			stop_time:stop_time,
+			page:1
+   	 	});
+	}
+
+	$("#export").click(function(){
+		var start_time = $("#start_time").datebox('getValue');
+		var stop_time = $("#stop_time").datebox('getValue');
+		var exportHref = "${ctx}/b2b2c/admin/allianceCount!flowCountExport.do?start_time="+start_time+"&stop_time="+stop_time;
+		$("#export").attr("href",exportHref);
+ 	});
+
+	function formatDate(value,row,index){
+		if(value==null||value==0){
+			return "";
+		}
+		else{
+			return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+		}
+	}
+</script>
+<#include '/admin/footer.html' >

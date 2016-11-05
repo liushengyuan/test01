@@ -1,0 +1,58 @@
+
+<script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"  ></script>
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2cv2/css/base.css" />
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2cv2/css/default.css" />
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2cv2/css/store.css" />
+<script src="${ctx}/themes/b2b2cv2/js/jquery.js"></script>
+<#assign smsList=newTag("smsmobileListTag")>
+<#assign smsPage = smsList()>
+<#assign smsmobileList=smsPage.result>
+<form id="studentForm" action="" method="post">
+	<div style="text-align: left;" >
+		<span>请输入你查询的手机号:</span>
+		<input type="text" name="v_mobile" id="nameId" value=""/>
+		<input type="button"   id="querystudentId" value="查询"/>
+	</div>
+	<div>
+	<table class="s_orderlist" id="tableId"  cellpadding="0" cellspacing="0">
+  		<thead>
+  			<tr class="">
+  				<th class="s_orderlist_th1" width="15%">业务编码</th>
+  				<th class="s_orderlist_th1" width="15%">发送手机号</th>
+  				<th class="s_orderlist_th1" width="15%">发送内容</th>
+  				<th class="s_orderlist_th1" width="15%">短信类型</th>
+  				<th class="s_orderlist_th1" width="15%">发送状态</th>
+  				<th class="s_orderlist_th1" width="20%">发送时间</th>
+  			</tr>
+  		</thead>
+  		<tbody  id="dataBody">
+  		<#if smsmobileList??>
+  		<#list smsmobileList as sms>
+  			<tr id="" >
+  				<td>${sms.v_servicecode!''}</td>
+  				<td>${sms.v_mobile!''}</td>
+  				<td>${sms.v_content!''}</td>
+  				<td>${sms.v_smstype!''}</td>
+  				<td>${sms.v_status!''}</td>
+  				<td><@dateformat time="${sms.sendtime!''}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+  			</tr>
+  		</#list>
+  		</#if>
+  		</tbody>
+  	</table>
+  	<@pager pageno="${page!'1'}" pagesize="${smsPage.pageSize}" totalcount="${smsPage.totalCount}" />
+  	</div>
+</form>
+<script>
+	//查询
+	$(function(){
+		$("#querystudentId").click(function(){
+			var name=$("#nameId").val();
+			location.href="/sms/smsmobile.html?v_mobile="+name;
+		});
+	})
+	
+</script>

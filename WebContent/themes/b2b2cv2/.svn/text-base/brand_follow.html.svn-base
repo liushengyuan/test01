@@ -1,0 +1,642 @@
+<#include 'common/header.html' />
+<#include 'common/reception_header.html'/>
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/home.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/index_search.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/home_news.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/home_brand.css"/>
+<script src="${ctx}/themes/b2b2cv2/js/home_index.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.scrollLoading.js"></script>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/layout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/goods_list.css" />
+
+<script src="${ctx}/themes/b2b2cv2/js/jquery.raty.min.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/waypoints.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/search_category_menu.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/search_goods.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/class_area_array.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.datalazyload.js" ></script>
+<!-- 项目维护 时期弹出框-->
+<!-- 项目维护 -->
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>
+<!-- 文章 -->
+<#assign dataSearchTag=newTag("dataSearchTag") />
+<!-- 获取推荐类和推荐商品参数 -->
+<#assign teamListTag= newTag("teamListTag")>
+<#if locale=="zh">
+	<#assign teamMap= teamListTag("'market':'1'")!''>
+<#elseif locale=="ru">
+	<#assign teamMap= teamListTag("'market':'2'")!''>
+</#if>
+<!--创建"商品基本信息"标签-->
+<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+<#assign brandBaseDataTag = newTag("brandBaseDataTag")>
+<!-- 获取品牌列表标签 -->
+<#assign brandListByList = newTag("brandListByList")>
+<#-- 创建品牌搜索标签 -->
+<#assign getBrandPageTag= newTag("getBrandPageTag") >
+<#-- 获取搜索结果 -->
+<#assign webpage = getBrandPageTag('{"pageSize":18}') >
+<!--品牌会员登录  -->
+<#assign memberAttentionTag = newTag("memberAttentionTag")>
+<!--会员品牌动态  -->
+<#assign memberDetailTag = newTag("memberDetailTag")>
+<#assign memberDetail = memberDetailTag()>
+<div class="clear"></div>
+<#assign advListTag= newTag("advListTag")>
+<!-- 调用广告信息,传递参数acid:1 -->
+<#if locale=="zh">
+	<#assign adv = advListTag("'acid':'1'")!'' >
+<#elseif locale=="ru">
+	<#assign adv = advListTag("'acid':'4'")!'' >
+</#if>
+<#-- 获取选择器 -->
+<#assign searchSelectorTag= newTag("searchSelectorTag") >
+<#assign goodsSelector = searchSelectorTag() >
+
+<#-- 各种未选中的选择器 -->
+<#assign propMap= goodsSelector.prop >
+<#assign catList= goodsSelector.cat >
+<#assign brantrist= goodsSelector.brand >
+<#assign sortList= goodsSelector.sort![] >
+<#assign priceList= goodsSelector.price![] >
+<!-- 获取广告列表 -->
+<#assign advList = adv.advList />
+<#include 'common/toup.html' />
+
+<!-- 首页大屏广告 -->
+<#assign adIndexTag = newTag("adIndexTag")>
+<#assign adIndex= adIndexTag()>
+
+<#if !member?? >
+<#if adIndex.adindex_disable?? >
+<#if adIndex.adindex_disable==1 >
+<style>
+#advert {
+${adIndex.outer_css}
+}
+#advert #closeAdvert {
+${adIndex.close_css}
+	background-image: url('${ctx}/themes/b2b2cv2/images/anniu.png');
+	background-position:-47px -95px;
+}
+#advert .go2Register {
+${adIndex.jump_css}
+  outline:#5D0C0C 1px solid;  
+}
+#advert .go2Register:hover{color:#f60;}
+.bbb {
+	width: 220px;
+	float: left;
+	margin-left: 0px;
+	padding-left: 0px;
+	padding-top: 5px;
+}
+.aaa {
+	width:39px;
+	height:38px;
+ 	background-image: url('${ctx}/themes/b2b2cv2/images/anniu.png');
+ 	background-position:-90px -104px; 
+	float: left;
+	margin-top:3px;
+	margin-bottom: auto;
+}
+#advert a{color:blue;}
+#advert a:hover{color:#f60;}
+</style>
+	
+<div id="advert" style="cursor: default;" >
+	<div id="closeAdvert"></div>
+	<a href="http://www.trade-ease.ru/" target="_blank" class="wylj" style="position:fixed;margin-left:423px;margin-top:225px;font-size:17px;">www.trade-ease.ru</a>
+	<a href="http://www.trade-ease.ru/" target="_blank" style="position:fixed;margin-left:500px;margin-top:370px;font-size:17px;">www.trade-ease.ru</a>
+	<a href="http://www.trade-ease.ru/" target="_blank" class="go2Register" >
+ 		<div class="bbb" style="font:Calibri;">Нажмите,чтобы войти.</div>
+ 		<div class="aaa" ></div>
+ 		
+	</a>
+</div>
+	
+<script type="text/javascript">
+/* $("#advert").click(function(){
+	 window.open("www.trade-ease.ru","_blank");
+	  //location.href = "/goods_discount_list.html";
+	});  */
+	$("#closeAdvert").click(function() {
+		$("#advert").css("display","none");	
+		 $('#advert').unbind("click");
+	});
+	if(window.name ==""){
+		$("#advert").css("display","");
+		window.name="first";
+	}else{
+		$("#advert").css("display","none");	
+	}
+</script>
+</#if>
+</#if>
+</#if>
+
+<div id="body">
+   <div style="height:40px; background:#fff; border-bottom:2px solid #aa1e2b;">
+ 
+	<div class="grid" style="height:40px;line-height:40px">
+	<#if locale=="zh">
+		<span class="ao_leim" id="show"><@uiLabel text="index.AllItem" />
+			<div class="categories-main" id="categories-main" style="display: block;position: absolute;z-index:9999; border:none; width:225px;display: none;">
+                    <#list goodsCat.cat_tree as cat>
+                        <div class="categories-list-box fenlei_div">
+                            <dl data-role="first-menu" class="cl-item cl-item-electronics">
+                                
+                                <#if cat_index==0>
+                                <dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_a.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>素颜霜&nbsp;/&nbsp;</i>
+											<i>阿玛尼唇釉&nbsp;/&nbsp;</i>
+											<i>VANT</i>
+										</p>
+                                	</a>
+                                </dt>
+                                <#elseif cat_index==1>
+                                	<dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_b.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>进口零食&nbsp;/&nbsp;</i>
+											<i>代餐奶昔</i>
+										</p>
+                                	</a>
+                                	</dt>
+                                	<#elseif cat_index==2>
+                                	<dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_c.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>奶粉&nbsp;/&nbsp;</i>
+											<i>纸尿裤&nbsp;/&nbsp;</i>
+											<i>铁锌钙</i>
+										</p>
+                                	</a>
+                                	</dt>
+                                	<#elseif cat_index==3>
+                                	<dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_d.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>运动鞋&nbsp;/&nbsp;</i>
+											<i>箱包&nbsp;/&nbsp;</i>
+											<i>女装</i>
+										</p>
+                                	</a>
+                                	</dt>
+                                	<#elseif cat_index==4>
+                                	<dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_e.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>净水饮水/ </i>
+											<i>烹饪锅具</i>
+										</p>
+                                	</a>
+                                	</dt>
+                                </#if>
+                                <dd data-role="first-menu-main" class="sub-cate sub_catea">
+
+                                    <div class="sub-cate-main">
+                                        <#if cat.hasChildren>
+                                            <#assign children2=cat.children />
+                                            <#list children2 as cat2>
+                                                <dl data-role="two-menu" class="sub-cate-items">
+                                                    <dt>
+                                                        <a href="${ctx}/goods_list.html?cat=${cat.cat_id}_${cat2.cat_id}">
+                                                       <!--  ${cat.name } -->
+                                                        <#if locale=="zh">
+                                                        
+                                                        	<font style="color:#${cat2.font_color!''}"> 
+                                 	  						${cat2.name}
+                                 	  						</font> 
+                                 						<#elseif locale=="ru">
+                                 	  						${cat2.name_ru!''}
+                                 						</#if>
+                                                        </a>
+                                                    </dt>
+                                                    <br/>
+                                                    <#if cat2.hasChildren >
+                                                        <#assign children3=cat2.children />
+                                                      <dd style="position: relative;">
+	                                                        <#list children3 as cat3>
+	                                                                <a href="${ctx}/goods_list.html?cat=${cat.cat_id}_${cat2.cat_id}_${cat3.cat_id}">
+	                                                                <!-- ${cat3.name} -->
+	                                                               	<#if locale=="zh">
+	                                                               	<font style="color:#${cat3.font_color!''}"> 
+	                                 	  								${cat3.name}
+	                                 	  								</font>
+	                                 							  	<#elseif locale=="ru">
+	                                 	  						 		${cat3.name_ru!''}
+	                                 								</#if>
+	                                                                </a>
+	                                                        </#list>
+                                                        </dd>
+                                                    </#if>
+                                                </dl>
+                                            </#list>
+                                        </#if>
+                                    </div>
+                                </dd>
+                            </dl>
+
+                        </div>
+                    </#list>
+                  </div>
+		</span>
+		<span style=" font-size:14px;padding-left:10px">
+			<a href="${ctx}/index.html" style="text-decoration: none">首页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/country_index.html" style="text-decoration: none">国家地区馆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			
+			<!-- <a href="${ctx}/help-36-74.html" ><@uiLabel text="index.DeliverGoods" />&nbsp&nbsp&nbsp</a>
+			<a href="${ctx}/help-35-99.html" >&nbsp&nbsp&nbsp&nbsp<@uiLabel text="index.Pay" />&nbsp</a>
+			<a href="${ctx}/help-35-63.html" >&nbsp&nbsp&nbsp&nbsp&nbsp<@uiLabel text="index.Refund" />&nbsp</a> -->
+			<a href="http://www.trade-ease.ru/" target="_blank" title="前往俄罗斯网站" style="float: right;" ><img style="width: 38px;height: 25px;margin-top: 7px;border:1px solid  #EEEEE0;" src="${ctx}/themes/b2b2cv2/images/els.jpg"></a>
+			<a href="http://www.tradeease.net/" target="_blank" title="前往中国网站"  style="float: right;margin-right:20px;"><img style="width: 38px;height: 25px;margin-top: 7px;border:1px solid  #EEEEE0;" src="${ctx}/themes/b2b2cv2/images/china.jpg"></a>
+		</span>
+		<#elseif locale=="ru">
+			<span style="width:220px;height:40px;padding:13px 65px 12px 65px;background:#ad2633;font-weight:bold;font-size: 150%;color:#fff"><@uiLabel text="index.AllItem" /></span>
+			
+			<span style=" font-size:14px;font-family:Lucida Sans Unicode;padding-left:15px">
+			<a href="${ctx}/qingyun/qingyun_store.html" ><@uiLabel text="index.Albatron" /></a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="${ctx}/yabaolu/yabaolu_store.html" ><@uiLabel text="apply.YaBaoLuShop" /></a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="${ctx}/helpc-33-50.html" ><@uiLabel text="index.DeliverGoods" />&nbsp&nbsp&nbsp</a>
+			<a href="${ctx}/helpc-33-49.html" >&nbsp&nbsp&nbsp<@uiLabel text="index.Pay" />&nbsp</a>
+			<a href="${ctx}/helpc-33-52.html" >&nbsp&nbsp&nbsp&nbsp&nbsp<@uiLabel text="index.Refund" />&nbsp</a>
+			</span>
+		</#if>
+		</div>
+	</div>
+	</div>
+    <div class="grid grid-c2-e6" style="width:100%;">
+        <div class="col-main" style="width:100%;">
+            <div class="main-wrap fllist_div" style="width:100%;">
+            
+                <!-- 品牌动态 -->
+                <div class="brand_ftitle">
+                	<div class="main-layout myInfo-layout">
+                		<#if memberDetail.member.face!=''>
+				        <a class="myInfo-avatar" href="">
+				        	<img  id="face" src="${memberDetail.member.face!''}" style="width: 72px;height: 74px;"/>
+				            <s onclick='$("#file").trigger("click")'>编辑</s>
+				        </a>
+				       <#else>
+				       <a class="myInfo-avatar" href="">
+				        	<img  id="face" src="${ctx}/themes/b2b2cv2/images/brandimage/no_picture.jpg" style="width: 72px;height: 74px;"/>
+				            <s onclick='$("#file").trigger("click")'>编辑</s>
+				        </a>
+				        </#if>
+				        <form id="faceForm">
+							<input type="file" name="file" id="file" style="display:none;"/>
+						</form>
+				        
+				        <div class="myInfo-con">
+				        <#if memberDetail??>
+				           <#if memberDetail.member??>
+				            Hi,${memberDetail.member.uname}
+				            </#if>
+				        </#if>    
+				            <span>
+				                	您总共关注了
+				                <a href="/my_attention_brand.html" style="text-decoration: none">
+				                  <em>
+				                  <#if memberDetail??>
+				                    <#if memberDetail.count??>
+				                       ${memberDetail.count}
+				                   </#if>
+				                  </#if>  
+				                  </em>个品牌</a>
+				                <a href="/my_attention_brand.html" class="bigfont" style="text-decoration: none">查看全部品牌</a>
+				            </span>
+				        </div>
+				    </div>
+                </div>
+                <div class="myBrandNav">
+				    <ul class="main-layout clearfix">
+				        <li class="act"><a href="/brand_follow.html">品牌动态</a></li>
+				        <li><a href="/brand_find.html">发现品牌</a></li>
+				    </ul>
+				</div>
+				<!-- 关注的品牌 -->
+				            <#if webpage.result?exists && webpage.result?size gt 0>
+				              <#list webpage.result as brand>
+				               <#assign product = brandBaseDataTag("{'brand_id':'${brand.brand_id}'}")>
+						          <#if product?? && product?size gt 0>   
+				              <div class="myBrand-con">
+					<div class="main-layout">
+						<div class="brandList-item">
+						    <div class="brandList-item-hd">
+						        <p class="logo">
+						            <a target="_blank" href="/goods_list.html?brand=${brand.brand_id}" class="name">
+		                                <@image width="90" height="45" src="${brand.logo!''}"/>
+		                            </a>
+		                            <#assign attention =memberAttentionTag('{"brand_id":${brand.brand_id}}') > 
+		                            <#if attention??>
+		                              <#if attention.is_true??>
+				              		   <#if attention.is_true==1>
+						              <a  id="attion_${brand.brand_id!''}" onclick="qxattention('${brand.brand_id!''}')" onmouseover="mousemove('${brand.brand_id!''}')" onmouseleave="mouselave('${brand.brand_id!''}')" data-brandid="3261618" class="ui-brand-btn j_CollectBrand ui-brand-collected" data-spm-anchor-id="a3206.6624149.228035741.2">
+						                <span id="qx_${brand.brand_id!''}" class="spanatteion" payz="0">已关注</span><b></b>
+						              </a>
+					              	  <#else>
+						              	<a  id="attion_${brand.brand_id!''}" onclick="attention('${brand.brand_id!''}')" data-brandid="3261618" class="ui-brand-btn j_CollectBrand" data-spm-anchor-id="a3206.6624149.228035741.2">
+						                	<span id="pay_${brand.brand_id!''}" class="spanatteion" payz="1">关注</span><b></b>
+						              	</a>
+					              	  </#if>
+					              	 <#else>
+					              	     <a  id="attion_${brand.brand_id!''}" onclick="attention('${brand.brand_id!''}')" data-brandid="3261618" class="ui-brand-btn j_CollectBrand" data-spm-anchor-id="a3206.6624149.228035741.2">
+					                  <span id="pay_${brand.brand_id!''}" class="spanatteion" payz="1">关注</span><b></b>
+					                     </a>
+					              	 </#if>	
+					              <#else>
+					          	   <a  id="attion_${brand.brand_id!''}" onclick="attention('${brand.brand_id!''}')" data-brandid="3261618" class="ui-brand-btn j_CollectBrand" data-spm-anchor-id="a3206.6624149.228035741.2">
+					                <span id="pay_${brand.brand_id!''}" class="spanatteion" payz="1">关注</span><b></b>
+					              </a>
+				                  </#if>
+			                       <!--  <a class="ui-brand-btn j_CollectBrand ui-brand-collected"><span>已关注</span><b></b></a> -->
+			                    </p>
+						        <!-- <ul class="nav j_BrandListNav">
+						            <li class="active" data-type="0">全部</li>
+						        </ul> -->
+						        <a target="_blank" href="/goods_list.html?brand=${brand.brand_id}" class="more">查看全部  ></a>
+						    </div>
+						    <div class="brandList-item-con">
+						        <div class="brandList-item-slide j_BrandListCon j_BrandListCon0">
+			                        <ul class="clearfix brandList-item-list">
+			                        <#assign product = brandBaseDataTag("{'brand_id':'${brand.brand_id}'}")>
+									        <#if product?? && product?size gt 0>   
+									          <#list product as goods>      
+		                                <li> 
+											<div class="item ">
+											    <div class="img">
+											        <p class="title"><a title="${goods.name!''}" href="/goods-${goods.goods_id}.html">  <@image width="190" height="190" src="${goods.thumbnail!''}" /></a></p>
+											        <!-- <a href="" target="_blank" class="prod-item-mask"></a> -->
+											        <p class="tips">新品</p>
+											    </div>
+											    <p class="price"><em>¥${goods.price!""}</em></p>
+											    <p class="title"><a title="${goods.name!''}" href="/goods-${goods.goods_id}.html">${goods.name!''}</a></p>
+											</div>
+	                                    </li>
+	                                    </#list>
+											</#if>
+	                            	</ul>
+			                    </div>
+			                   
+						    </div>
+						</div>
+					</div>
+					</#if>
+					</#list>
+				</#if>
+				</div>
+				<!-- end -->
+            </div>
+        </div>
+    </div>
+</div>
+<@pager pageno="${webpage.currentPageNo!'1'}" pagesize="${webpage.pageSize}" totalcount="${webpage.totalCount}" />
+<div class="public-Information clearfix js-old-information">
+    <dl class="dl1">
+        <dt></dt>
+        <dd style="line-height:11px;">
+            <strong><@uiLabel text="index.PortalAboutUS" /></strong>
+            <p style="padding-top:10px; line-height: 1.5;">黑龙江特色商品、各类进口商品大集，链接中国和世界的桥梁。</p>
+            <br>
+            <a href="${ctx}/helpc-34-72.html"><@uiLabel text="home.somec" /> &gt;&gt;</a>
+        </dd>
+    </dl>
+    <dl class="dl2">
+        <dt class="dt_1"></dt>
+        <dd style="line-height:11px;">
+            <strong><@uiLabel text="home.somea" /></strong>
+            <p style="padding-top:10px; line-height: 1.5;"><@uiLabel text="home.somee" /></p>
+            <br>
+            <a href="${ctx}/helpc-33-48.html"><@uiLabel text="home.somec" /> &gt;&gt;</a>
+        </dd>
+    </dl>
+    <dl class="dl3">
+        <dt class="dt_2"></dt>
+        <dd style="line-height:11px;">
+            <strong><@uiLabel text="home.someb" /></strong>
+            <p style="padding-top:10px; line-height: 1.5;"><@uiLabel text="home.somef" /></p>
+            <br>
+            <a href="${ctx}/helpc-33-83.html"><@uiLabel text="home.somec" /> &gt;&gt;</a>
+        </dd>
+    </dl>
+</div>
+<script language="javascript">
+	function mousemove(brand_id){
+		$("#attion_"+brand_id).removeClass();
+		$("#attion_"+brand_id).addClass("ui-brand-btn j_CollectBrand ui-brand-collected");
+		$("#attion_"+brand_id).find("span").html("取消");
+	}
+	function mouselave(brand_id){
+		$("#attion_"+brand_id).removeClass();
+		$("#attion_"+brand_id).addClass("ui-brand-btn j_CollectBrand");
+		$("#attion_"+brand_id).find("span").html("已关注");
+	}
+    $("#show").hover(function(){
+		$("#categories-main").css("display", "block");
+	},
+	function(){
+		$("#categories-main").css("display", "none");
+	})
+	$("#categories-main").mouseover(function(){
+		$("#categories-main").show();
+	})
+	$("#categories-main").mouseleave(function(){
+		$("#categories-main").hide();
+	})
+</script>
+<script language="javascript">
+
+	$(function() {
+	 	$(".lazy").each(function(index,element){
+			 if($(this).attr("src")!='/themes/b2b2cv2/images/loading.gif'){
+			 	$(this).attr("src","/themes/b2b2cv2/images/loading.gif"); 
+		 	}	
+		}); 
+		$(".lazy").scrollLoading();	
+	});
+    (function (category) {
+        category.fn.hoverDelay = function () {
+            return this.each(function () {
+                $(this).mouseenter(function () {
+                    $(this).addClass("cl-item-unfold").siblings().removeClass("cl-item-unfold");
+                }).mouseleave(function () {
+                    $(this).removeClass("cl-item-unfold");
+                })
+            })
+        }
+    })(jQuery);
+    (function (industry) {
+        industry.fn.tabHoverDelay = function () {
+            return this.each(function (i) {
+                var tabs = $(".tabbed-pane-panel").find(".industry-main");
+                $(this).click(function () {
+                    $(this).addClass("on-click").siblings().removeClass("on-click");
+                    $(tabs[i]).css({"z-index": "6", "opacity": "1"}).siblings().css({
+                        "z-index": "1",
+                        "opacity": "0"
+                    });
+                })
+            })
+        }
+    })(jQuery);
+    (function (switchable) {
+        switchable.fn.switchHoverDelay = function () {
+            return this.each(function (i) {
+                var switchables = $(".tabbed-pane-panel").find(".industry-main");
+                $(this).mouseenter(function () {
+                    $(".ui-switchable-prev-btn").css({"display": "inline"});
+                    $(".ui-switchable-next-btn").css({"display": "inline"});
+                    $(this).addClass("on-click").siblings().removeClass("on-click");
+                    $(switchables[i]).css({"z-index": "6", "opacity": "1"}).siblings().css({
+                        "z-index": "1",
+                        "opacity": "0"
+                    });
+                }).mouseleave(function () {
+                    $(".ui-switchable-prev-btn").css({"display": "none"});
+                    $(".ui-switchable-next-btn").css({"display": "none"});
+                })
+            })
+        }
+    })(jQuery);
+
+    $(function () {
+        var page = 1;
+        var i = 5; //每版放5个图片
+        //向后 按钮
+        $("a.ui-switchable-prev-btn").click(function () {    //绑定click事件
+            var content = $("ul .key-visual-content");
+            var v_width = "1200px";
+            var divLeft = $("ul .key-visual-content").css("left");
+            $("ul .key-visual-content").css({"left": "-2400px"});
+        });
+        //往前 按钮
+        $("a.ui-switchable-next-btn").click(function () {
+        });
+    });
+
+</script>
+<script type="text/javascript">
+function attention(brand_id){
+	  var isLogin = ${isLogin?string};
+	  if(isLogin){
+		  var is_true=$("#pay_"+brand_id).attr("payz");
+		  var brand_id=brand_id;
+		   $.ajax({
+				url: "api/shop/logis!myattion.do?ajax=yes&brand_id="+brand_id+"&is_true="+is_true,
+				type : "POST",
+				async : false,
+				dataType : "json",
+				success : function(result) {
+					if(result!=null){
+						if(result.result==1){
+							alert("关注成功！");
+							/* $("#numberview_"+brand_id).html(result.data.count); */
+							location.href=ctx+"/brand_follow.html";
+						}else{
+							alert("失败");
+						}
+					}
+				}
+			});
+		}else{
+			$.Loading.show("您未登录,请先登录");
+			setTimeout( function(){
+				}, 19 * 1000 );
+			location.href=ctx+"/login.html?forward=brand_index.html";				
+		}
+}
+function qxattention(brand_id){
+	  var isLogin = ${isLogin?string};
+	  if(isLogin){
+		  var is_true=$("#qx_"+brand_id).attr("payz");
+		  var brand_id=brand_id;
+		   $.ajax({
+				url: "api/shop/logis!myattion.do?ajax=yes&brand_id="+brand_id+"&is_true="+is_true,
+				type : "POST",
+				async : false,
+				dataType : "json",
+				success : function(result) {
+					if(result!=null){
+						if(result.result==1){
+							alert("取消关注成功！");
+							/* $("#numberview_"+brand_id).html(result.data.count); */
+							location.href=ctx+"/brand_follow.html";
+						}else{
+							alert("失败");
+						}
+					}
+				}
+			});
+		}else{
+			$.Loading.show("您未登录,请先登录");
+			setTimeout( function(){
+				}, 19 * 1000 );
+			location.href=ctx+"/login.html?forward=brand_follow.html";				
+		}
+}
+$("#file").change(function(){
+	var options = {
+			url : "/api/cordova/member!changeFace.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if (result.result == 1) {
+					$("#face").attr("src",result.message);
+				}else{
+					alert("图片出错！")
+				}
+			},
+			error : function(e) {
+				alert("上传异常！");
+			}
+		};
+		$("#faceForm").ajaxSubmit(options);
+	});
+
+</script>
+<script>
+    $(function () {
+        $(".categories-list-box dl").hoverDelay();
+        $("#tabbedIndustryMenus li").tabHoverDelay();
+        $("#key-visual li").switchHoverDelay();
+    });
+   
+</script>
+
+<!-----footer------>
+<#include 'common/footer.html'/>

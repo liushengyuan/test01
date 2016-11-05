@@ -1,0 +1,61 @@
+<#-- 引入国际化模板函数 --> 
+<#assign uiLabel ="com.enation.framework.directive.I18nDirectiveModel"?new()> 
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<div class="form_wrap">
+	<form id="member_addr"  class="validate"   action="" method="post">
+		<input type="hidden" name="type" value="0"/>
+		<table cellspacing="0" cellpadding="0" border="0" >
+			<tbody>
+				
+				<tr>
+					<th id="shippingAddress" ><@uiLabel text="index.DefaultShippingAddress" />：</th>
+					<td>
+					<label><input type="radio" checked="checked"   value="0" name="def_addr"><@uiLabel text="index.CommonFalse" /></label> 
+					<label><input type="radio"   value="1" name="def_addr"><@uiLabel text="index.CommonYes" /></label></td>
+				</tr>
+				<tr>
+					<th><em style="color: red;">*</em><@uiLabel text="index.AddressName" />：</th>
+					<td><input type="text" class="input_text member_name_title" name="name" autocomplete="off" isrequired="true"></td>
+				</tr>	
+				<tr>
+					<th><em style="color: red;">*</em><@uiLabel text="index.AddressPhone" />：</th>
+					<td><input type="text" class="input_text" name="mobile" id="mobile" autocomplete="off" isrequired="true" dataType="mobile"></td>
+				</tr>	
+				<tr>
+					<th><@uiLabel text="index.AddressTelePhone" />：</th>
+					<td><input type="text"  class="input_text" style="margin-left:0px;"  name="tel"  id="tel" dataType="tel_num" autocomplete="off"><span
+						class="infotips" style="float:left; padding-left:100px;"><@uiLabel text="sellerCenter.PhoneMustFillInOne" /></span></td>
+				</tr>					
+				<tr>
+					<th><em style="color: red;">*</em><@uiLabel text="sellerCenter.Area" />：</th>
+					<td>		
+					<@regionSelect />
+					</td>
+				</tr>
+				<tr>
+					<th><em style="color: red;">*</em><@uiLabel text="index.AddressAddress" />：</th>
+					<td><input rows="3" cols="30" name="addr" type="text" class="input_text" isrequired="true"/></td>
+				</tr>
+				<tr>
+					<th><em style="color: red;">*</em><@uiLabel text="index.AddressZipCode" />：</th>
+					<td><input type="text" class="input_text" isrequired="true" name="zip" id="zipcode" autocomplete="off"  isrequired="true" dataType="post_code" ></td>
+				</tr>
+				<tr>
+					<th></th>	
+					<td>
+						<div class="btn"><input type="button"  class="yellow_btn" id="btnSubmit" value="<@uiLabel text='index.AddressSaveReturn' />"></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+<script type="text/javascript">
+	$("#region_id").setValidator(function() {
+		var value = $("#region_id").val();
+		alert(value);
+	if (value == "" || value == "0")
+		return "<@uiLabel text='goods.IncompleteInformationRegion' />";
+	
+});
+</script>

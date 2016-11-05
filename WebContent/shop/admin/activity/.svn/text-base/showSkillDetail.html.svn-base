@@ -1,0 +1,151 @@
+<#include '/admin/header.html' >  <#assign
+dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.input_text{
+	width: 95%;
+}
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="orderform">
+		<div  style="height: auto">
+		<span style="float: right;"> 
+		 	<span id="simpleSearch">
+		 	    <span style="font-size: 18px;font-weight: bold;color: red">购买秒杀产品的一共有：${limitcount!''}个人,一共产生${counttotal!''}条记录&nbsp;&nbsp;</span>
+		 		<td width="70" align="right">下单时间</td>
+					<td><input class="easyui-datebox" style="width: 90px;height: 28px;"
+						id="start_time" data-options="buttons:buttons" /> <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+						<input class="easyui-datebox" style="width: 90px;height: 28px;" id="end_time"
+						data-options="buttons:e_buttons" /></td>
+
+		 		<span>订单状态</span>
+		 		<select id="status" class="inputSelect valid">
+					<option value="">---所有---</option> <#list statusMap?keys as key>
+					<option value="${key}">${statusMap.get(key)}</option> </#list>
+				</select> &nbsp;&nbsp;
+			 	<input id="searchKeyword" class="input_text" type="text" value="" size="30" style="width: 240px" placeholder="请输入订单号,买家名称,活动名称" name="searchKeyWord">
+				<a href="javascript:void(0)" class="easyui-linkbutton" id="search" data-options="plain:true" onclick="searchOrder()">搜索</a>
+			</span> 
+		</span>
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+		</div>
+
+
+     <div class="clear height10"></div>
+
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/allActivity!listSkillJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" width="width" id="orderdata" >
+				<thead>
+					<tr>
+						<th  data-options="field:'order_id',checkbox:true,width:40" >会员名称</th>
+				   	 	<th  data-options="field:'uname',width:100" formatter="formember">会员名称</th>
+				   	 	<th  data-options="field:'sn',width:100" formatter="forsn">订单号</th>
+				   	 	<th  data-options="field:'name',width:100" formatter="formatGoodsName" >商品名称 </th>
+				   	 	<th  data-options="field:'need_pay_money',width:60" formatter="forMoney" >付款金额 </th>
+				   	 	<th  data-options="field:'address_id',width:100" >会员ip </th>
+				   	 	<th  data-options="field:'active_name',width:60" >活动名称 </th>
+				   	 	<th  data-options="field:'create_time',width:100" formatter="formatTime" >订单创建时间</th>
+				   	 	<th data-options="field:'status',width:60,sortable:true" formatter="forStruts">订单状态</th>
+						<th data-options="field:'pay_status',width:69,sortable:true" formatter="forpay">付款状态</th>
+						<th data-options="field:'ship_status',width:69,sortable:true" formatter="forship">发货状态</th>
+						<th data-options="field:'reason',width:160,sortable:true" >订单原因</th>
+						
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+function formatGoodsName(value,row,index){
+	 var val="<a href=\"../../goods-"+row.goods_id+".html\" target=\"_blank\">"+row.name+"</a><input type=\"hidden\" value=\""+row.goods_id+"\" name=\"goods_id\"/>";
+	 return val;
+	}
+function forsn(value,row,index){
+	//var val="<a href='#' onclick=\"newTab('查看订单详细','${ctx}/b2b2c/admin/storeOrder!orderDetail.do?orderId="+row.order_id+"&sn="+row.sn+"&logi_no="+row.logi_no+"&uname="+row.uname+"&ship="+row.ship_name+"&status="+row.status+"')\">"+row.sn+"</a>"
+	var val="<a href='#' onclick=\"newTab('查看订单详细"+(row.sn).substring(0,6)+"','${ctx}/shop/admin/order!detail.do?orderId="+row.order_id+"&sn="+row.sn+"&logi_no="+row.logi_no+"&uname="+row.uname+"&ship="+row.ship_name+"&status="+row.status+"')\">"+row.sn+"</a>"
+	return val;
+}
+function formember(value,row,index){
+	var val="<a  href='#' onclick=\"newTab('查看订单详细"+(row.sn).substring(0,6)+"','/shop/admin/member!detail.do?memberId="+row.member_id+"')\">"+row.uname+"</a>";
+	//var val="<a href='#' onclick=\"newTab('查看订单详细','${ctx}/b2b2c/admin/storeOrder!orderDetail.do?orderId="+row.order_id+"&sn="+row.sn+"&logi_no="+row.logi_no+"&uname="+row.uname+"&ship="+row.ship_name+"&status="+row.status+"')\">"+row.sn+"</a>"
+	return val;
+}
+function forMoney(value, row, index) {
+	if(row.currency=="RUB"){
+		var val = value+"р.";
+	}else if(row.currency=="CNY"){
+		var val = "￥" + value;
+	}
+	return val;
+}
+function formatTime(value,row,index){
+	var val = getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	return val;
+}
+//订单状态
+function forStruts(value, row, index) {
+	var val;
+	val = getType(${status_Json},value);
+	return val;
+}
+
+//付款状态
+function forpay(value,row,index){
+	var val;
+	val = getType(${payStatus_Json},value);
+	return val;
+}
+
+//发货状态
+function forship(value,row,index){
+	var val;
+	val = getType(${ship_Json},value);
+	return val;
+}
+
+
+function getType(exMap,value){
+	var val;
+	$.each(exMap,function(key,values){ 
+	    if(value==key){
+	    	val=values;
+	    }
+	});
+	return val;
+}
+var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+buttons.splice(1, 0, {
+text: '清空',
+handler: function(target){
+	 $('#start_time').datebox('setValue',"");
+}
+});
+
+var e_buttons = $.extend([], $.fn.datebox.defaults.buttons);
+e_buttons.splice(1, 0, {
+text: '清空',
+handler: function(target){
+	 $('#end_time').datebox('setValue',"");
+}
+});
+function searchOrder(){
+	var keyword = $.trim($("#searchKeyword").val());
+	var start_time = $('#start_time').datebox('getValue');
+	var end_time = $('#end_time').datebox('getValue');  
+	var status = $("#status").val();
+	$("#orderdata").datagrid('load', {
+		 keyword:keyword,
+		 start_time:start_time,
+		 end_time:end_time,
+		 status:status,
+		 page:1
+    });
+}
+</script>
+
+<#include '/admin/footer.html' >
+
+

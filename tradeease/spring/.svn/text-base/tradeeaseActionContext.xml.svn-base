@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd" default-autowire="byName" default-lazy-init="false">
+	<!-- 定义此应用的组件扫描包 -->
+	<context:component-scan base-package="com.enation.app.tradeease" />
+	<bean id="buyerMessageManager" class="com.enation.app.tradeease.core.service.message.impl.BuyerMessageManager" parent="baseSupport"></bean>
+	<bean id="sellerMessageManager" class="com.enation.app.tradeease.core.service.message.impl.SellerMessageManager" parent="baseSupport"></bean>
+	<bean id="sellerGoodsListManager" class="com.enation.app.tradeease.core.service.goods.impl.SellerGoodsListManager" parent="baseSupport"></bean>
+	<bean id="tradeManager" class="com.enation.app.tradeease.core.service.trade.impl.TradeManager" parent="baseSupport"></bean>
+	<bean id="accountDetailManager" class="com.enation.app.tradeease.core.service.accont.impl.AccountDetailManager" parent="baseSupport"></bean>
+	<bean id="myAccountManager" class="com.enation.app.tradeease.core.service.accont.impl.MyAccountManager" parent="baseSupport"></bean>
+	<bean id="sellerCardManager" class="com.enation.app.tradeease.core.service.accont.impl.SellerCardManager" parent="baseSupport"></bean>
+	<bean id="checkBill" class="com.enation.app.tradeease.core.service.bill.CheckBill" ></bean>
+	
+	<bean id="smsMobileManager" class="com.enation.app.tradeease.core.service.smsmobile.imp.SmsMobileManager" parent="baseSupport"></bean>
+	<bean id="chatManager" class="com.enation.app.tradeease.core.service.chat.impl.ChatManager" parent="baseSupport"></bean>
+	<bean id="recentManager" class="com.enation.app.tradeease.core.service.chat.impl.RecentManager" parent="baseSupport"></bean>
+	<bean id="favoriteManagerApp" class="com.enation.app.tradeease.core.service.cordova.impl.FavoriteManagerApp" parent="baseSupport"></bean>
+	<bean id="cartManagerApp" class="com.enation.app.tradeease.core.service.cordova.impl.CartManagerApp" parent="baseSupport"></bean>
+	<bean id="memberOrderManagerApp" class="com.enation.app.tradeease.core.service.cordova.impl.MemberOrderManagerApp" parent="baseSupport"></bean>
+	<bean id="orderManagerApp" class="com.enation.app.tradeease.core.service.cordova.impl.OrderManagerApp" parent="baseSupport"></bean>
+	<bean id="allianceCountManager" class="com.enation.app.shop.core.service.impl.AllianceCountManager" parent="baseSupport"></bean>
+	<bean id="storeManagerApp" class="com.enation.app.tradeease.core.service.cordova.impl.StoreManagerApp" parent="baseSupport"></bean>
+</beans>

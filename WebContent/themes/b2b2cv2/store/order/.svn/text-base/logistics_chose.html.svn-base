@@ -1,0 +1,149 @@
+<#assign sellerExpressListTag = newTag("sellerExpressListTag") >
+<#assign expressList = sellerExpressListTag() >
+<#assign selectSellerAddressTag= newTag("selectSellerAddressTag") >    
+<#assign  addressList= selectSellerAddressTag() >
+<#assign uiLabel ="com.enation.framework.directive.I18nDirectiveModel"?new()>
+<link type="text/css" rel="stylesheet" href="${ctx}/themes/b2b2cv2/css/logistics.css" />
+<div id="chose">
+	<form id="chose_logistics">
+		<table width="100%" id="logisticsTable">
+			<tr class="tdstyle">
+				<!-- <td height="70" width="150" align="center" class="logistic_td"><input type="radio"
+					value="1" name="def_addr"><@uiLabel text="logistics.number"/></td>填写运单号  -->
+				<td width="150" class="logistic_td"></td> <!--进口版本：禁掉俄速通发货  -->
+				<td height="70" width="122" align="center"  style="position:relative; left:-80px" class="logistic_td"><input type="radio"
+					value="1" name="def_addr" >线下发货</td><!--填写运单号  -->
+				<td width="150" class="logistic_td"></td> <!--进口版本：禁掉俄速通发货  -->
+				<td height="70" align="center" width="200" class="logistic_td"><input type="hidden"
+					value="2" name="def_addr"></td><!--俄速通在线发货 <@uiLabel text="logistics.online"/> -->
+				<td height="70" align="center" width="150" class="logistic_td"><input type="radio" 
+					value="3" name="def_addr"><@uiLabel text="logistics.action"/></td><!--顺丰发货  -->
+			</tr>
+			<tr>
+				<td class="logistic_td"></td>
+				<td><input name="" type="button" class="logistic_td"
+					onclick="chose()" style="position: relative; left:55px;" value="<@uiLabel text='logistics.next'/>" /></td><!--下一步  -->
+				</td>
+				<td class="logistic_td"></td>
+			</tr>
+		</table>
+	</form>
+</div>
+<div class="table_div" id="logisticsInformation" style="display: none;">
+	<div>
+		<form id="tagform">
+			<!-- 卖家配送类型 -->
+			<input type="hidden" name="ship_type" value="2" >
+			<input type="hidden" name="order_sn" value="${order_sn}" >
+			<table style="width: 350px;" >
+				<tr>
+					<td height="70" align="center" valign="middle">
+						<@uiLabel text="logistics.Shipping"/>: <!--配送商  -->
+						<#if expressList?size gt 0>
+							<select name="express_id" >
+								<#list expressList as express >
+									<option value="${express.express_id!0}" >${express.express_name!''}</option>
+								</#list>
+							</select>
+						<#else>
+							<input type="hidden" name="express_id" value="0">
+							<input type="text" name="express_name" value="">
+						</#if>
+					</td>
+				</tr>
+					<tr>
+						<td height="70" align="center" valign="middle">
+							<@uiLabel text="logistics.address"/>: <!--发货地址  -->
+							<#if addressList?size gt 0>
+								<select name="addr_id" >
+								<#list addressList as address >
+									<option value="${address.addr_id!0}" >${address.province!''}-${address.city!''}-${address.region!''}-${address.addr!''}</option>
+								</#list>
+								</select>
+							<#else>
+								<input type="hidden" name="addr_id" value="0">
+								<input type="text" name="addr_store" value="">
+							</#if>
+						</td>
+					</tr>
+				<tr>
+					<td height="70" align="center" valign="middle"><@uiLabel text="logistics.yundanhao"/>: <input
+						type="text" id="tracksNo" name="tracksNo" ></td><!--填写运单号  -->
+				</tr><!-- 填写运单号 -->
+				<!--  <tr>
+					<td height="70" align="center" valign="middle" class="storeorderlist" >
+						<span style="float: left; padding-left: 88px;" >发货日期:</span> 
+						<label>
+							<input class="text hasDatepicker" type="text" name="ship_time" onClick="WdatePicker()" />
+							<span class="storeorder_time"></span>
+						</label>
+						
+					</td>
+				</tr>-->
+				<tr>
+					<td>
+						<input name="" type="button" onclick="finish()" value="<@uiLabel text='logistics.queding'/>" /><!--确定  -->
+					</td>
+				</tr>
+			</table>
+		</form>
+		<div class="fl"></div>
+	</div>
+</div>
+<script>
+	function chose() {
+		var checked = true;
+		var radios = document.getElementsByName("def_addr");
+		for ( var i = 0; i < radios.length; i++) {
+			if (radios[i].checked) {
+				if (radios[i].value == 2) {
+					location.href = "express.html?ordersn=${order_sn}";
+				}
+				if (radios[i].value == 1) {
+					document.getElementById("logisticsInformation").style.display = "";
+					document.getElementById("chose").style.display = "none";
+				}
+				if (radios[i].value == 3) {
+					location.href = "express2.html?ordersn=${order_sn}";
+				}
+				return;
+			}
+		}
+		if (checked) {
+			alert("<@uiLabel text='logistics.chose'/>");//请选择你要进行的操作
+			return;
+		}
+
+	}
+
+	function finish(obj) {
+		var tracksNo = $.trim($("#tracksNo").val());
+		var regNo = /^[A-Za-z0-9]+$/;
+		if(!regNo.test(tracksNo)){
+			alert("运单号只能为数字字母组成");
+			return false;
+		}
+		if(tracksNo.length==0){
+			alert("请输入运单号");
+			return false;
+		}
+	
+		var options = {
+				url : '${ctx}/api/b2b2c/express!inputTracksNo.do?ajax=yes',
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if(result.result==1) {
+						alert(result.message);
+						location.reload();
+					} else {
+						alert(result.message);
+					}
+				},
+				error : function(e) {
+					alert("<@uiLabel text='logistics.erro'/>!");//出现错误，请重试
+				}
+			};
+		$("#tagform").ajaxSubmit(options);
+	}
+</script>

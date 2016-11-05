@@ -1,0 +1,47 @@
+<div id="ask_form_wrapper">
+	<form method="post" id="askForm">
+		<input type="hidden" name="goods_id" value="${goods.goods_id}" />
+		<input type="hidden" name="store_id" value="${goods.store_id}" />
+		<input type="hidden" name="commenttype" value="2" />
+		<#if locale=="zh">
+		<h2><@uiLabel text="goods.Advisory" /></h2>
+		<#elseif locale=="ru">
+  	<h4 style="font-weight:normal;color:#aaa;"><img style="width:30px;height:35px;float:left;" src="${ctx}/themes/b2b2cv2/images/question.png"/><span style="width:940px;float:left;"><@uiLabel text="goods.Advisory1"/></span></h4>
+</#if>
+		
+		
+		<label>
+			<h3 style="display: inline;"><@uiLabel text="goods.ConsultingServices" />：</h3>
+			<textarea  name="content" id="ask_content" ><@uiLabel text="goods.YourQuestionHere" /></textarea>
+		</label>
+ 		<div class="ask_btn" style="float:none;display:block;text-align:left;margin:10px 0px">
+			<a href="javascript:;" class="blue_btn" id="askBtn" style="margin-left:375px"><@uiLabel text="goods.SubmitAdvisory" /></a>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+$(function(){	
+	$("#ask_content").focus(function(){
+		if(this.value=="<@uiLabel text='goods.YourQuestionHere' />"){
+			this.value="";	
+		}
+	}).blur(function(){
+		if( $.trim(this.value)==""){
+			this.value="<@uiLabel text='goods.YourQuestionHere' />";
+		}
+	});
+	$("#askBtn").click(function(){
+		var cval = $('#ask_content').val();
+		if(cval == '' ||cval=='<@uiLabel text='goods.YourQuestionHere' />' ){
+			alert("<@uiLabel text='goods.YourInquiryContent' />");
+			return;
+		}
+		else if(cval.length>1000){
+			alert("<@uiLabel text='goods.PleaseEnterOne' />");
+			return;
+		}
+		CommentForm.formSubmit($(this),$("#askForm"));
+	});
+});
+</script>

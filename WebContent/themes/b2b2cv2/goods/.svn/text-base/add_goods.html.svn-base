@@ -1,0 +1,988 @@
+<#include '/store/store_header.html' />
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/uploadify.css" />
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/goodsSpec.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<#if locale=="zh">
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.uploadify.min.js"></script>
+<#elseif locale=="ru">
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.uploadify.min_ru.js"></script>
+</#if>
+
+<link rel="stylesheet" href="../../editor/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="../../editor/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="../../editor/kindeditor-4.1.10/kindeditor.js"></script>
+<#if locale=="zh">
+<script charset="utf-8" src="../../editor/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<#elseif locale=="ru">
+<script charset="utf-8" src="../../editor/kindeditor-4.1.10/lang/ru.js"></script>
+</#if>
+
+<script charset="utf-8" src="../../editor/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<!-- 品牌列表 -->
+<#assign brandTag=newTag("brandListTag")/>
+<#assign brandList=brandTag()/>
+
+<!-- 商品分类 -->
+<#assign storeGoodsCatTag=newTag("storeGoodsCatTag")/>
+<#assign storeGoodsCat=storeGoodsCatTag("{'catid':'${catid}'}")/>
+<!--运费显示  -->
+<#assign freightSfCalcuteTag=newTag("freightSfCalcuteTag")/>
+<#assign freightSfCalcute=freightSfCalcuteTag()/>
+<#-- 创建店铺商品分类标签 --> 
+<#assign storeGoodsCatListTag= newTag("storeGoodsCatListTag") > 
+<#-- 查询店铺商品分类列表 0表示查子分类 --> 
+<#assign storeGoodsCatList= storeGoodsCatListTag("'type':0")!''>
+
+<!-- 模板列表 -->
+<#assign storeTemplateTag=newTag("storeTemplateTag")/>
+<#assign storeTemplate=storeTemplateTag()/>
+
+<#-- 商品规格标签 -->
+<#-- <#assign storeGoodsSpecTag=newTag("storeGoodsSpecTag") />
+<#assign goodsSpecList=storeGoodsSpecTag() /> -->
+<#assign storeGoodsSpecTag=newTag("storeGoodsSpecForCatTag") />
+<#assign goodsSpecList=storeGoodsSpecTag("{'catid':'${catid}'}") />
+<#-- 店铺投放市场标签 -->
+<#assign judgeStoreMarketTag = newTag("judgeStoreMarketTag") >
+<#assign storeMarket = judgeStoreMarketTag()!'' >
+
+<div class="store_center">
+<#--<#include '/store/left_menu.html' />-->
+    <div id="sotre_right_content" class="sotre_right_content_add_goods">
+        <div class="path">
+            <span style="color:#999;"><@uiLabel text="sellerAccount.Location"/>：</span>
+            <span>></span>
+            <a href="#"><@uiLabel text="sellerAddGood.producttype"/></a><span>></span><@uiLabel text="sellerAddGood.fubushangpin"/>
+        </div>
+        <#if locale=="zh">
+        <div class="select_cat_img">
+            <ul>
+                <li class="step a2" title="<@uiLabel text="sellerAddGood.xjspszfl"/>"></li>
+                <li class="step b1" title="<@uiLabel text="sellerAddGood.txspxxxx"/>"></li>
+                <li class="step c2" title="<@uiLabel text="sellerAddGood.spfbcg"/>"></li>
+            </ul>
+        </div>
+        <#elseif locale=="ru">
+         <div class="select_cat_img">
+            <ul>
+                <li style="margin-left:-30px;" class="step a2" title="<@uiLabel text="sellerAddGood.xjspszfl"/>"></li>
+                <li class="step b1" title="<@uiLabel text="sellerAddGood.txspxxxx"/>"></li>
+                <li style="width:370px;" class="step c2" title="<@uiLabel text="sellerAddGood.spfbcg"/>"></li>
+            </ul>
+        </div>
+        </#if>
+        <input type="hidden" id="setLanguageForGoodsOption" <#if locale=="zh">value="zh"<#elseif locale=="ru">value="ru"</#if>>
+        <div class="store_add_goods">
+            <form method="post" id="storeGoodsForm" name="storeGoodsForm" class="validate">
+                <input type="hidden" name="storeGoods.cat_id" value="${catid}">
+                <input type="hidden" name="storeGoods.type_id" value="${storeGoodsCat.typeid}">
+                <input type="hidden" name="storeGoods.audit_status" value="0">
+                <div class="goods_attribute">
+                    <div class="goods_cat">
+                        <@uiLabel text="sellerAddGood.producttype"/>：
+                        <#list storeGoodsCat.parentList as parent>
+                            <#if parent_index != 0>
+                                <span>&nbsp;&gt;&nbsp;</span>
+                            </#if>
+                            <span>
+	                        <#if locale=="zh">
+	                        	 ${parent.name!}
+	                        <#elseif locale=="ru">
+	                        	 ${parent.name_ru!}
+	                        </#if>
+                            </span>
+                        </#list>
+                    </div>
+                    <h1>1、<@uiLabel text="sellerAddGood.goodsbaseInfo"/></h1>
+                    <div class="addgoods">
+                        <dl>
+                            <dt class="required">
+                                <span style="color:red;">*</span><@uiLabel text="sellerAddGood.goodsName"/>：
+                            </dt>
+                            <dd>
+                                <p>
+                                    <input type="text" class="text store_goodsname" name="storeGoods.name"
+                                           fun="checkGoodsName" <#-- datatype="string" --> isrequired="true"
+                                           style="width: 500px;"/>
+                                <p>
+                                <p class="hint"><@uiLabel text="sellerAddGood.goodsrule"/></p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt class="required">
+                                <span style="color:red;">*</span><@uiLabel text="sellerAddGood.goodsKeyWord"/>：
+                            </dt>
+                            <dd>
+                                <p> 
+                                     <input type="hidden" id="store_logis_id" name="store_id" value="${myStoreDetail.store_id}"/>
+                                    <input type="hidden" id="meta_keywords" name="storeGoods.meta_keywords" />
+                                    <input type="text" class="text store_metaKeyword" name="metaKeyword" datatype="string" isrequired="true"/>
+                                    <#-- <input type="button" id="addKeywordMore" value="添加更多" class="keyword_more"/> -->
+                                <p>
+                                <p class="hint"><@uiLabel text="sellerAddGood.goodsKeyWordRule"/></p>
+                                <p id="keywordMoreP">
+                                    <input type="text" class="text store_metaKeyword" name="metaKeyword" datatype="string" />
+                                    <input type="text" class="text store_metaKeyword" name="metaKeyword" datatype="string" />
+                                    <input type="text" class="text store_metaKeyword" name="metaKeyword" datatype="string" />
+                                    <input type="text" class="text store_metaKeyword" name="metaKeyword" datatype="string" />
+                                    <input type="text" class="text store_metaKeyword" name="metaKeyword" datatype="string" />
+                                    <input type="text" class="text store_metaKeyword" name="metaKeyword" datatype="string" />
+                                    <input type="text" class="text store_metaKeyword" name="metaKeyword" datatype="string" />
+                                    <input type="text" class="text store_metaKeyword" name="metaKeyword" datatype="string" />
+                                    <input type="text" class="text store_metaKeyword" name="metaKeyword" datatype="string" />
+                                </p>
+                            </dd>
+                        </dl>
+                      <!--   <dl>
+                            <dt nc_type="no_spec">商品编号：</dt>
+                            <dd nc_type="no_spec">
+                                <p>
+                                    <input type="text" class="text" name="storeGoods.sn" datatype="string"/>
+                                </p>
+                                <p class="hint">用于您对商品的管理，不会对买家展示</p>
+                            </dd>
+                        </dl>--> 
+                       <!--  <dl>
+					       <dt><span style="color: red">*</span>地区选择：</dt>
+					       <dd>		
+					         <@regionSelect />
+					       </dd>
+                        </dl> -->
+                        <dl>
+                            <dt nc_type="no_spec">
+                                <span style="color:red;">*</span>产地：
+                            </dt>
+                            <dd nc_type="no_spec">
+                                <p>
+                                    <input type="text" class="text" id="poriginId" name="storeGoods.porigin" isrequired="true"/>  
+                                </p>
+                            </dd>
+                        </dl>
+                        <dl>
+					       <dt><span style="color: red">*</span>发货地：</dt>
+					       <dd>		
+					            <select name="storeGoods.deliveryregion">
+                                    <option value="0">国内</option>
+                                    <option value="1">保税仓</option>
+                                    <option value="2">俄罗斯</option>
+                                    <option value="3">澳大利亚</option>
+                                    <option value="4">新西兰</option>
+                                    <option value="5">韩国</option>
+                                    <option value="6">德国</option>
+                                    <option value="7">其他</option>
+                                   <!--  <option value="7">请选择</option> -->
+                                </select>
+					       </dd>
+                        </dl>
+                        <dl>
+					       <dt><span style="color: red">*</span>所属馆：</dt>
+					       <dd>		
+					            <select name="storeGoods.is_belong" fun="checkisbelong" >
+                                    <option value="6">请选择</option>
+                                    <option value="1">龙江物产</option>
+                                    <option value="0">俄罗斯馆</option>
+                                    <option value="2">澳大利亚馆</option>
+                                    <option value="3">新西兰馆</option>
+                                    <option value="4">韩国馆</option>
+                                    <option value="5">德国馆</option>
+                                </select>
+					       </dd>
+                        </dl>
+                         <dl>
+                            <dt><span style="color: red">*</span>商品品牌：</dt>
+                            <dd>
+                                <select name="storeGoods.brand_id" >
+                                 <option value="0">请选择</option>
+								<#list brandList as brand>
+                                    <option value="${brand.brand_id}">${brand.name}</option>
+								</#list>
+                                </select>
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <h1>2、<@uiLabel text="sellerAddGood.spxiaoshouxinxi"/></h1>
+					  
+                    <div class="addgoods" id="addgoodsprice"><!-- style="display: none;" -->
+<#--	暂不启用市场价格 -->     
+<#--                        <dl>
+                            <dt nc_type="no_spec">
+                                <span class="red">*</span>市场价格：
+                            </dt>
+                            <dd nc_type="no_spec">
+                                <input type="text" class="text" fun="checkPriceNum" name="storeGoods.mktprice" dataType="float"
+                                       isrequired="true"/>
+                            </dd>
+                        </dl>-->
+                      <dl><dt nc_type="no_spec"><span class="red" style="color:#f00;">*</span><@uiLabel text="goods.shifouzhekou" />:</dt><dd><select id="is_discount" name="storeGoods.is_discount" isrequired="true">
+								<!--<option value ="">请选择</option>  -->
+						 		<option value ="0"><@uiLabel text="sellerProductList.no" /></option>
+						 		<option value ="1"><@uiLabel text="sellerProductList.yes" /></option>
+						 	</select></dd></dl>
+                         <dl>
+
+<#-- 					<#if  storeMarket?? > -->
+<#--                     <#if  storeMarket=='RUS' >  -->
+                        <dl>
+                            <!-- <dt nc_type="no_spec">
+                                <span style="color:red;">*</span><@uiLabel text="sellerAddGood.RublePrices" />：
+                            </dt> -->
+                            <dd nc_type="no_spec">
+                                <p>
+                                    <input type="hidden" id="ruPrice" class="text" fun="checkPriceNum" name="storeGoods.price_ru" dataType="float" 
+                                    	<#if storeMarket=='RUS' > isrequired="true"</#if> /><!-- 如果投放市场为俄罗斯，卢布价格为必填 -->
+                                </p>
+                            </dd>
+                        </dl>
+                       <dl>
+                            <!-- <dt nc_type="no_spec">
+                                <span style="color:red;"></span><@uiLabel text="sellerAddGood.RubleWhricePrices"/>：
+                            </dt> -->
+                            <dd nc_type="no_spec">
+                                <p>
+                                    <input type="hidden" class="text" fun="checkPriceNum" name="storeGoods.whprice_ru" dataType="float"/><#-- isrequired="true"  -->
+                                </p>
+                            </dd>
+                        </dl>
+<#--                     <#elseif  storeMarket=='CHN' > -->
+                        <dl>
+                            <dt nc_type="no_spec">
+                                <span style="color:red;">*</span><@uiLabel text="sellerAddGood.RenminbiPrices" />：
+                            </dt>
+                            <dd nc_type="no_spec">
+                                <p>
+                                    <input type="text" class="text" fun="checkPriceNum" id="rmbPrice" name="storeGoods.price" dataType="float" 
+                                    	<#if  storeMarket=='CHN' >isrequired="true"</#if> /><!-- 如果投放市场为中国，RMB价格为必填 -->
+                                </p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt nc_type="no_spec">
+                             <@uiLabel text="sellerAddGood.RenminbiWhricePrices"/>：
+                            </dt>
+                            <dd nc_type="no_spec">
+                                <p>
+                                    <input type="text" class="text" fun="checkPriceNum" name="storeGoods.whprice" dataType="float" />
+                                </p>
+                            </dd>
+                        </dl>
+<#--                    </#if> -->
+<#--                    </#if> -->
+                        <dl>
+                           <!--  <dt nc_type="no_spec">
+	                            <span style="color:red;">*</span>
+	                            <@uiLabel text="sellerAddGood.DollarPrices"/>：
+                            </dt> -->
+                            <dd nc_type="no_spec">
+                                <p>
+                                    <input type="hidden" class="text" fun="checkPriceNum" name="storeGoods.price_en" dataType="float" /><!-- isrequired="true" -->
+                                </p>
+                               <!--  <p class="hint"><@uiLabel text="sellerAddGood.cankaojiage"/></p> -->
+                            </dd>
+                        </dl>
+                        <dl>
+                            <!-- <dt nc_type="no_spec"><@uiLabel text="sellerAddGood.DollarWhricePrices"/>：</dt> -->
+                            <dd nc_type="no_spec">
+                                <p>
+                                    <input type="hidden" class="text" fun="checkPriceNum" name="storeGoods.whprice_en" dataType="float" />
+                                </p>
+                            </dd>
+                        </dl>
+                       
+                        <dl>
+                            <dt nc_type="no_spec"><@uiLabel text="sellerAddGood.WholesaleVolume"/>：</dt>
+                            <dd nc_type="no_spec">
+                                <p>
+                                    <input type="text" class="text" fun="checkNum" name="storeGoods.wholesale_volume" dataType="int" />
+                                </p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt nc_type="no_spec"><@uiLabel text="goods.shangpinzuixiaogoumai"/>：</dt>
+                            <dd nc_type="no_spec">
+                                <p>
+                                    <input type="text" class="text" fun="checkNum" name="storeGoods.min_number" dataType="int" value="1" />
+                                </p>
+                            </dd>
+                        </dl>
+<#--	暂不启用成本价 -->
+<#--                        <dl>
+                            <dt nc_type="no_spec">
+                                <span style="color:red;">*</span>成本价：
+                            </dt>
+                            <dd nc_type="no_spec">
+                                <input type="text" class="text" name="cost" dataType="float" isrequired="true"/>
+                            </dd>
+                        </dl>-->
+					</div>
+                    <h1>3、<@uiLabel text="sellerAddGood.productDescriptionInfo"/><font color="red">（<@uiLabel text="sellerAddGood.pictureRule"/>）</font></h1><!-- 温馨提示：请先上传商品图片再上传商品描述里面的图片，为了图片完美展示，请上传大约为600x600像素左右的图片 -->
+
+                    <div class="addgoods">
+                        <dl>
+                            <dt><@uiLabel text="sellerAddGood.goodsPicture"/>：</br></dt>
+                            <dd>
+                                <div class="goods_image" id="goods_image">
+                                    <input type="file" value="<@uiLabel text="sellerAddGood.tupianpiliangshangchuan"/>" id="allFile" <#if locale=="zh">status="批量上传"<#elseif locale=="ru">status="Оптом закачивать"</#if>/>
+                                    <span><@uiLabel text="sellerAddGood.piliangshangchuanRule"/></span><br/>
+								<#list 1..8 as t>
+                                    <div style="float: left;height:200px;position:relative;width:100px;text-align:center;margin-right:5px;">
+										<@image name="img${t}"  id="img${t}" src="${ctx}/themes/b2b2cv2/images/default_goods_image_tiny.gif" width="100" height="100" />
+                                        <br/>
+                                        <input type="hidden" name="goods_fs" id="fs_img${t}" fs="${t}"/>
+                                        <input type="hidden" name="status" value="2" id="fs_status${t}"/>
+                                        <input name="image_default" type="radio" id="fs_defimg${t}" <#if t==1>checked</#if>/><@uiLabel text="sellerAddGood.shizhutu"/>
+                                        <input type="file" id="goods${t}" fs="${t}" status="<@uiLabel text="sellerAddGood.pictureUpLoad"/>"/>
+                                        <input type="button" name="clean" value="<@uiLabel text="sellerAddGood.qingchu"/>" fs="${t}" class="del_addgoods"/>
+                                    </div>
+								</#list>
+                                 <#--    <input type="hidden" name="image_default"/> -->
+                                </div>
+                            </dd>
+                        </dl>
+<#-- 暂不启用商品品牌 -->
+<#--                       -->
+                        <dl>
+                            <dt><@uiLabel text="sellerAddGood.productDescription"/>：</dt>
+                            <dd>
+                                <p>
+                                    <!-- <textarea name="storeGoods.intro" cols="100" rows="8" id="intro"
+                                              style="resize: none;"></textarea> -->
+                                     <textarea name="storeGoods.intro" cols="100" rows="8" style="width:750px;height:200px;"></textarea>
+                                </p>
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <h1>4、<@uiLabel text="sellerAddGood.goodsBaoZhangInfo"/></h1>
+                    <div class="addgoods">
+                        <dl>
+                            <dt>
+                            	<span style="color:red;">*</span>
+                                <span><@uiLabel text="sellerAddGood.BaoZhangZhongLiang"/>（Kg）</span>
+                            </dt>
+                            <dd>
+                                <p>
+                                    <input type="text" class="text" name="weight"  dataType="float" isrequired="true"/>
+                                </p>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt>
+                            	<span style="color:red">*</span>
+                                <span><@uiLabel text="sellerAddGood.BaoZhangChiCun"/>（cm）</span>
+                            </dt>
+                            <dd>
+                                <p>
+                                    <input type="text" class="text" name="storeGoods.depth" dataType="float" isrequired="true"/>（<@uiLabel text="sellerAddGood.longLabel"/>）
+                                </p>
+                                <p style="margin-top: 5px;">
+                                    <input type="text" class="text" name="storeGoods.width" dataType="float" isrequired="true"/>（<@uiLabel text="sellerAddGood.PictureWigth"/>）
+                                </p>
+                                <p style="margin-top: 5px;">
+                                    <input type="text" class="text" name="storeGoods.height" dataType="float" isrequired="true"/>（<@uiLabel text="sellerAddGood.PictureHight"/>）
+                                </p>
+                            </dd>
+                        </dl>
+                          <dl id="show" style="display: none;">
+                            <dt>运费规则:</dt>
+                            <dd>
+                              <#if freightSfCalcute??>
+                               <p>重量限制<span style="color:red">*</span>:${freightSfCalcute.min_weight}&le;重量&lt;${freightSfCalcute.max_weight}kg</p>
+                               <p>尺寸要求<span style="color:red">*</span>:${freightSfCalcute.min_long}&le;长&lt;${freightSfCalcute.max_long}&nbsp;&nbsp;${freightSfCalcute.min_width}&le;宽&lt;${freightSfCalcute.max_width}&nbsp;&nbsp;${freightSfCalcute.min_high}&le;高&lt;${freightSfCalcute.max_high}</p>
+                               </#if>
+                            </dd>
+                         </dl>
+              <!--           <dl>
+                            <dt>
+                            	<span style="color:red;">*</span>
+                                <span><@uiLabel text="sellerAddGood.shangpinyunfei"/></span>商品运费
+                            </dt>
+                            <dd>
+                                <p>
+                                	<select name="storeGoods.freightType" id="freightType"  >
+
+                                	<#--	<option value="1" >包邮</option>
+                                		<option value="2" >自定义运费</option>
+                                		 <option value="3" >平台物流运费计算</option> -->
+<!-- 
+                                		<option value="1" ><@uiLabel text="sellerAddGood.baoyou"/></option>包邮
+                                		<option value="2" ><@uiLabel text="sellerAddGood.zidingyiyunfei"/></option>自定义运费 
+<#--                                 		<option value="3" ><@uiLabel text="sellerAddGood.pingtaiwuliuyunfei"/></option>平台物流运费计算
+ -->
+                             <!--    	</select>
+                                </p>
+                            </dd>
+                        </dl> --> 
+                         <dl>
+                            <dt>
+                            	<span style="color:red;">*</span>
+                                <span>商品运费 </span>
+                            </dt>
+                            <dd>
+                                <p>
+                                	<select name="storeGoods.freightType" id="freightType"  >
+
+                                		<option value="1" >包邮</option>
+                                		<option value="0" >自定义运费</option>
+                            
+                                	</select>
+                                </p>
+                            </dd>
+                        </dl>
+                    </div>
+                    <h1>5、<@uiLabel text="sellerAddGood.GoodsGuiGeInfo"/></h1>
+                    <div class="addgoods">
+                        <div id="spec-input">
+                            <input type="hidden" name="haveSpec" id="haveSpec" value="0"/>
+                        <#if goodsSpecList??>
+                        <#list goodsSpecList as spec>
+                            <dl class="spec-bg">
+                                <dt>
+                                <#if locale=="zh">
+                                	${spec.spec_name!}
+                                <#elseif locale=="ru">
+                                 	${spec.spec_name_ru!}
+                                </#if>
+                                </dt>
+                                <dd>
+                                    <ul class="spec" <#if locale=="zh">specname="${spec.spec_name}"<#elseif locale=="ru">specname="${spec.spec_name_ru!}"</#if>>
+                                        <#list spec.valueList as specValue>
+                                            <li>
+													<span>
+		            									<input class="chk" autocomplete="off" type="checkbox"
+                                                               value="${specValue.spec_value_id}"
+                                                               spec_value="<#if locale=='zh'>${specValue.spec_value}<#elseif locale=='ru'>${specValue.spec_value_ru}</#if>"
+                                                               specid="${specValue.spec_id}"/>
+		              								</span>
+                                                <span>
+                                                <#if locale=="zh">
+                                                	${specValue.spec_value!}
+                                                <#elseif locale=="ru">
+                                                	${specValue.spec_value_ru!}
+                                                </#if>
+                                                </span>
+                                            </li>
+                                        </#list>
+                                        <li style="display:none">
+                                            <span>
+                                                <input class="chkAll" autocomplete="off" type="checkbox"
+                                                       specid="${spec.spec_id}"/>
+                                            </span>
+                                            <span><@uiLabel text="addGoods.allcheck"/></span><!--全选  -->
+                                        </li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <#if spec.spec_id==1000>
+                            <dl class="spec-bg color-picture-table">
+                                <dt><@uiLabel text="sellerAddGood.SetGuiGePicture"/></dt>
+                                <dd>
+                                    <table  class="color_picture_table" width="400" style="margin:10px">
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                    <div id="photoDiv"></div>
+                                </dd>
+                            </dl>
+                            </#if>
+                        </#list>
+                        </#if>
+                            <dl class="spec-bg spec-table" style="display:none;">
+                                <dt><@uiLabel text="sellerAddGood.JiaGePeiZhi"/></dt>
+                                <dd>
+                                    <table cellspacing="0" cellpadding="0" border="0" class="spec_table" width="98%">
+                                        <thead>
+                                        <tr>
+                                            <th class="w2"><@uiLabel text="sellerAddGood.goodsHuoHao"/><span class="red">*</span></th>
+                                            <#--<th class="w2">销售价<span class="red">*</span></th>-->
+                                            <th class="w3"><@uiLabel text="sellerAddGood.zhongliang"/><span class="red">*</span></th>
+                                            <#--<th class="w3">成本价</th>-->
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    </div>
+                    <h1>6、<@uiLabel text="sellerAddGood.goodsFaBuInfo"/></h1>
+                    <div class="addgoods">
+                        <dl>
+                            <dt>
+                                <span><@uiLabel text="sellerAddGood.GoodsValidity"/>：</span>
+                            </dt>
+                            <dd>
+                                <p>
+                                    <input type="radio" value="15"
+                                           name="storeGoods.vaild_day"
+                                           id="vaildDay_15">
+                                    <label for="vaildDay_15"><@uiLabel text="sellerAddGood.bangeyue"/></label>
+                                    <input type="radio" value="30"
+                                           name="storeGoods.vaild_day"
+                                           id="vaildDay_30">
+                                    <label for="vaildDay_30"><@uiLabel text="sellerAddGood.yigeyue"/></label>
+                                    <input type="radio" value="90" 
+                                           name="storeGoods.vaild_day"
+                                           id="vaildDay_90">
+                                    <label for="vaildDay_90"><@uiLabel text="sellerAddGood.sangeyue"/></label>
+                                     <input type="radio" value="180"
+                                           name="storeGoods.vaild_day"
+                                           id="vaildDay_180">
+                                    <label for="vaildDay_180"><@uiLabel text="sellerAddGood.liugeyue"/></label>
+                                    <input type="radio" value="365" checked="checked"
+                                           name="storeGoods.vaild_day"
+                                           id="vaildDay_365">
+                                    <label for="vaildDay_180">12个月</label>
+                                </p>
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <div class="addgoods">
+                        <dl style="display: none;">
+                            <dt><@uiLabel text="addGoods.money"/>：</dt><!--运费  -->
+                            <dd>
+                                <p style="float: left; clear: both; margin-top: 8px;">
+                                    <input type="radio" value="1" checked="checked"
+										   name="storeGoods.goods_transfee_charge"
+                                           id="whops_seller">
+                                    <label for="whops_seller"><@uiLabel text="addGoods.sellerchengdan"/>卖家承担运费</label><!--卖家承担运费  -->
+                                </p>
+
+                                <p style="float: left; clear: both; margin-top: 8px;">
+                                    <input type="radio" value="0"
+                                           name="storeGoods.goods_transfee_charge"
+										   id="whops_buyer">
+                                    <label for="whops_buyer"><@uiLabel text="addGoods.buyerchengdan"/>买家承担运费</label><!--买家承担运费  -->
+                                </p>
+                            </dd>
+                        </dl>
+						<#-- 暂不启用商品店铺分类 -->
+						<#-- <dl>
+                            <dt>本店分类：</dt>
+                            <dd>
+                                <p>
+                                    <select name="storeGoods.store_cat_id">
+									<#list storeGoodsCatList as cat>
+										<#if cat.store_cat_pid==0>
+                                            <option value="${cat.store_cat_id}">${cat.store_cat_name!''}</option>
+										</#if>
+										<#list storeGoodsCatList as childCat>
+											<#if childCat.store_cat_pid==cat.store_cat_id>
+                                                <option value="${childCat.store_cat_id}">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;${childCat.store_cat_name!''}</option>
+											</#if>
+										</#list>
+									</#list>
+                                    </select>
+                                </p>
+                                <p class="hint">
+                                    商品可以从属于店铺的多个分类之下,</br>店铺分类可以由 "商家中心 -> 商品管理 -> 分类管理" 中自定义
+                                </p>
+                            </dd>
+                        </dl>-->
+                        <dl><#--style="display: none;" --><#--market_enable为1时表示商品立刻上架，为零时表示下架，为-1时，表示草稿 ，为2时表示要审核-->
+                            <dt><@uiLabel text="sellerAddGood.fubushangpin"/>：</dt>
+                            <dd>
+                                <p class="mt5">
+                                    <label>
+                                        <input type="radio" name="storeGoods.market_enable" checked="checked" value="2"/><@uiLabel text="sellerAddGood.lijifabu"/>
+                                    </label>
+                                </p>
+
+                                <p class="mt5">
+                                    <label>
+                                        <input type="radio" name="storeGoods.market_enable" value="-1"/><@uiLabel text="sellerAddGood.baocuncaogao"/><#-- 暂不发布 -->
+                                    </label>
+                                </p>
+                            </dd>
+                        </dl>
+                    </div>
+        </div>
+                    <div class="clear">
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </div>
+                    <div class="ncu-form-style tc pb30">
+                        <input type="button" value="<@uiLabel text="sellerAddGood.fubushangpin"/>" id="saveBtn" class="submit go_save_selectcat"
+                               style="margin-top:20px;cursor:pointer;"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+</div>
+<script type="text/javascript">
+	var app_path="${ctx}";
+	$(function(){
+		loadLogisModel();
+		//清除照片按钮悬停更换
+		$(".del_addgoods").mouseover(function(){
+			$(this).addClass("del_addgoods_grey")
+		})
+		$(".del_addgoods").mouseleave(function(){
+			$(this).removeClass("del_addgoods_grey")
+		})
+		
+		
+		//$('#intro').ckeditor();
+		$("#whops_seller").click(function(){
+			$("#whops_buyer_box").hide();
+		});
+		$("#whops_buyer").click(function(){
+			$("#whops_buyer_box").show();
+		});
+		window.onload=function(){
+			<#list 1..8 as t>
+				bindFileEvent($("#goods${t}"));
+			</#list>
+			bindFileEvent($("#allFile"));
+		}
+		$("#saveBtn").click(function(){
+			var str = "[@/'\"#$%&^*]+";
+			var goodsname = $(".store_goodsname").val()
+			var reg = new RegExp(str);
+	/*		if(reg.test(goodsname))
+			 {
+			    alert("商品名称只能是数字、汉字、英文");
+			    return false;
+			 }
+	*/
+            // 拼接关键字字符串
+            var meta_keywords = "";
+            $("input[name='metaKeyword']").each(function( i , n){
+                if($(n).val()!=""){
+                    meta_keywords += $(n).val() + ","
+                }
+            });
+            
+            if($("input[name='storeGoods.wholesale_volume']").val()>0){
+            	if(!$("input[name='storeGoods.whprice']").val()||$("input[name='storeGoods.whprice']").val()<=0){
+            		alert("需填商品批发价，并且大于零！");
+            		return false;
+            	}
+            }
+            if($("input[name='storeGoods.whprice']").val()>0){
+            	if(!$("input[name='storeGoods.wholesale_volume']").val()||$("input[name='storeGoods.wholesale_volume']").val()<=0){
+            		alert("需填商品批发数，并且大于零！");
+            		return false;
+            	}
+            }
+            var lmtpfs=0,lmtpfj=0;
+            $("input[name='wholesale_volumes']").each(function( i , n){
+            	if($(n).val()>0){
+            		if(!$(n).parent().parent().find("input[name='whprices']").val()||$(n).parent().parent().find("input[name='whprices']").val()<=0){
+            			alert("需填商品规格批发价，并且大于零！");
+            			lmtpfj=1;
+                		return false;
+                		
+            		}
+            	}
+            });
+            if(lmtpfj>0){
+         	   return false;
+            }
+            $("input[name='whprices']").each(function( i , n){
+            	if($(n).val()>0){
+            		if(!$(n).parent().parent().find("input[name='wholesale_volumes']").val()||$(n).parent().parent().find("input[name='wholesale_volumes']").val()<=0){
+            			alert("需填商品规格批发数，并且大于零！");
+            			lmtpfs=1;
+                		return false;
+            		}
+            	}  
+            });
+           if(lmtpfs>0){
+        	   return false;
+           }
+            $("#meta_keywords").val(meta_keywords);
+            if($("#is_discount").val() == 1){
+    			var rmb_price = parseInt($("input[name='storeGoods.price']").val());
+            	var cost_price = parseInt($("input[name='storeGoods.cost_price']").val());
+            	if(rmb_price > cost_price){
+            		alert("<@uiLabel text='goods.rmbzhekoutishi' />");
+            		return false;
+            	}
+            	var ru_price = parseInt($("input[name='storeGoods.price_ru']").val());
+            	var cost_price_ru =parseInt($("input[name='storeGoods.cost_price_ru']").val()); 
+            	if(ru_price > cost_price_ru){
+            		alert("<@uiLabel text='goods.ruzhekoutishi' />");
+            		return false;
+            	}
+            }
+            var yufei1 = $("#freight").val();
+    		var yunfei2 = $("#freightru").val();
+    		if(yufei1<0 || yunfei2 <0){
+    			alert("<@uiLabel text='goods.freightnotnegative' />");
+         		return false;
+    		}
+            if(!$("#storeGoodsForm").checkall())
+				return false;
+           
+			$("#saveBtn").attr({"disabled":"disabled"});
+			var options = {
+					url : "${ctx}/api/b2b2c/goods!add.do?ajax=yes",
+					type : "POST",
+					dataType : "json",
+					success : function(result) {
+						if(result.result==0){
+							alert(result.message);
+						}else{
+							alert(result.message);
+							location.replace("goods_list.html?menu=store_goods&sort=");   
+							//location.href="store_goods_list.html?menu=store_goods";
+						}
+						$("#saveBtn").removeAttr("disabled");
+				 	},
+				 	error : function(e) {
+				 		alert('<@uiLabel text="goods.chuxiancuowuqingchongshi"/>');
+					}
+				};
+			$("#storeGoodsForm").ajaxSubmit(options);	
+		});
+		
+		$("input[name='clean']").click(function(){
+			var fs=$(this).attr("fs");
+			$("#img"+fs).attr("src","");
+			$("#fs_img"+fs).val("");
+			$("#fs_status"+fs).val("2");
+		});
+	});
+	function checkGoodsName(value){
+		var goodsName=$("input[name='storeGoods.name']");
+		if(goodsName.val().length<3||goodsName.val().length>150)
+			return "<@uiLabel text="sellerAddGood.productNameError"/>！";
+		else return true;
+	}
+ 	function checkPriceNum(value){
+		if(value<=0 && value!=""){
+			return "<@uiLabel text="sellerAddGood.productPriceError"/>！";
+		}else{
+			return true;
+		}
+	} 
+ 	$(function(){
+ 		$("#freightType").change(function(){
+ 	    	  if($('#freightType option:selected').val()!=0 && $('#freightType option:selected').val()!=1){
+ 	    	      $("#show").css('display','block');
+ 	    	  }else{
+ 	    		 $("#show").css('display','none');
+ 	    	  }	  
+ 	      });
+ 	   });
+ 	function checkNum(value){
+		if(value<=0 && value!=""){
+			return "<@uiLabel text="sellerAddGood.productNumError"/>！";
+		}else{
+			return true;
+		}
+	} 
+ 	function checkdelivery(value){
+ 		if(value==7){
+ 			return "请选择发货人";
+ 		}else{
+ 			return true;
+ 		}
+ 	}
+ 	function checkisbelong(value){
+ 		if(value==6){
+ 			return "请选择所属馆";
+ 		}else{
+ 			return true;
+ 		}
+ 	}
+ 	function checkbrandid(value){
+ 		if(value==0){
+ 			return "请选择商品品牌";
+ 		}else{
+ 			return true;
+ 		}
+ 	}
+ 	  function loadLogisModel(){
+    	  var store_id=$("#store_logis_id").val();
+    	
+    	  $.ajax({
+  			url: "${ctx}/api/shop/logis!loadLogisModel.do?store_id="+store_id,
+  			type : "GET",
+			async : true,
+			dataType : "json",
+  			success : function(result) {
+  				if(result.result==1){
+  					//alert("成功");
+  					//alert(result.data[0].text);
+  					var obj = $("#freightType");
+  					//遍历
+  					for(var i=0;i<(result.data).length;i++){
+  						//取出其中一条地址信息
+  						var logis = result.data[i];
+  						//添加到下拉列表
+  						obj.append("<option value='"+logis.is_name+"'>"+logis.model_name+"</option>");
+  					};
+  				}else{
+  					alert("失败");
+  				}
+  				
+  			} 
+  		});
+     }
+	function bindFileEvent(obj){
+		var status=$(obj).attr("status");
+		$(obj).uploadify({
+			'buttonText':status,		//显示文字
+			'fileObjName':'image',		//文件对象名称
+			'fileTypeDesc': '<@uiLabel text="addgoods.choose"/>',//允许上传的文件类型的描述，在弹出的文件选择框里会显示    //请选择
+			'fileTypeExts': '*.gif; *.jpg; *.png',//允许上传的文件类型，限制弹出文件选择框里能选择的文件 
+			'uploader' : '${ctx}/api/base/upload-image.do?subFolder=/store/${storeMember.store_id}/goods',
+			'swf'      : '${ctx}/themes/b2b2cv2/uploadify.swf',
+			'height':'30',				//高度
+			'width':'70',
+			'multi':true,				//是否支持多文件上传
+			'progressData':'percentage',//设置文件上传时显示的数据
+			'uploadLimit':5,
+			'onFallback':function(){				//falsh兼容
+				alert("<@uiLabel text='goods.noflash'/>!");
+			},							
+			'onUploadSuccess':function(file,data,response){
+				var img =jQuery.parseJSON(data);
+				if(status=="批量上传" || status=="Оптом закачивать"){
+					$("input[name='goods_fs']").each(function(){
+						if($(this).val()==""){
+							var fs= $(this).attr("fs");
+							//显示图片
+							$("#img"+fs).attr("src",img.img);
+							//设置参数
+							$("#fs_status"+fs).val("1");
+							$(this).attr("name","picnames");
+							$(this).val(img.img);
+							$("#fs_defimg"+fs).val(img.img);
+/* 							if(fs=="1"){
+								$("input[name='image_default']").val(img.img);
+							} */
+							return false;
+						}
+					});	
+				}else{
+					var fs= $(obj).attr("fs");
+					//显示图片
+					$("#img"+fs).attr("src",img.img);
+					//设置参数
+					$("#fs_img"+fs).attr("name","picnames");
+					$("#fs_img"+fs).val(img.img);
+					$("#fs_status"+fs).val("1");
+					$("#fs_defimg"+fs).val(img.img);
+/* 					if(fs=="1"){
+						$("input[name='image_default']").val(img.img);
+					} */
+				}
+			},
+			'onSelectError':function(file,errorCode,errorMsg){
+				if(errorCode==SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED){
+					this.queueData.errorMsg="<@uiLabel text="sellerAddGood.uploadDataLimitations1"/>";
+				}
+				if(errorCode==SWFUpload.QUEUE_ERROR.INVALID_FILETYPE){
+					this.queueData.errorMsg="<@uiLabel text="sellerAddGood.uploadDataLimitations2"/>";
+				}
+			}
+		});
+	}
+	
+	function bindFileEventForColor(obj) {
+		var status = $(obj).attr("fs");
+		$(obj).uploadify(
+		{
+			'buttonText' : '<@uiLabel text="sellerAddGood.ShangChuanTuPian"/>', //显示文字
+			'fileObjName' : 'image', //文件对象名称
+			'fileTypeDesc' : '<@uiLabel text="sellerAddGood.choose"/>',//允许上传的文件类型的描述，在弹出的文件选择框里会显示  //请选择
+			'fileTypeExts' : '*.gif; *.jpg; *.png',//允许上传的文件类型，限制弹出文件选择框里能选择的文件 
+			'uploader' : '${ctx}/api/base/upload-image.do?subFolder=store',
+			'swf' : '${ctx}/themes/b2b2cv2/uploadify.swf',
+			'height' : '30', //高度
+			'width' : '80',
+			'multi' : false, //是否支持多文件上传
+			'progressData' : 'percentage',//设置文件上传时显示的数据
+			'uploadLimit' : 8,
+			'onFallback' : function() { //falsh兼容
+				alert("<@uiLabel text='goods.noflash'/>!");
+			},
+			'onUploadSuccess' : function(file, data, response) {
+				var img = jQuery.parseJSON(data);
+				$("#fs_img"+status).val(img.img);
+				$("#s" + status).html("<img src='"+img.img+"'style='width:30px;height:30px'/>");
+			},
+			'onSelectError' : function(file, errorCode,
+					errorMsg) {
+				if (errorCode == SWFUpload.QUEUE_ERROR.INVALID_FILETYPE) {
+					this.queueData.errorMsg = "<@uiLabel text='sellerAddGood.uploadDataLimitations2'/>";
+				}
+			}
+		});
+	} 
+	 $("#freightType").change(function() {
+		if($("#freightType").val() == 0) {
+			$("#freight").remove();
+		/* 	$("#freightru").remove(); */
+			$("#sp1").remove();
+		/* 	$("#sp2").remove(); */
+			var html = "<div id=sp1><input type='text' class='text' id='freight' name='storeGoods.freight' dataType='float' isrequired='true' /><span ><@uiLabel text="sellerAddGood.Renminbi" /> </span></div> ";
+		
+			$("#freightType").parent().append(html);
+		/* 
+			var html2 = "<div id=sp2 style='display:none;'><input type='text' class='text' id='freightru' name='storeGoods.freightru' dataType='float' isrequired='true' value='0.1' /><span ><@uiLabel text="sellerAddGood.Ruble" /> </span> </div> ";
+		
+			$("#freightType").parent().append(html2); */
+		
+			
+		} else {
+			$("#freight").remove();
+			/* $("#freightru").remove(); */
+			$("#sp1").remove();
+			/* $("#sp2").remove(); */
+		}
+	}); 
+	$("#is_discount").change(function() {
+		if($("#is_discount").val() == 1) {
+			$("#rmbhtml").remove();
+			$("#ruhtml").remove();
+			var rmbhtml = "<dl id='rmbhtml'> <dt nc_type='no_spec'> <span style='color:red;'>*</span><@uiLabel text='goods.rmbzhekoujia' />：</dt> <dd nc_type='no_spec'> <p> <input type='text' class='text'  name='storeGoods.price' fun='checkPriceNum' dataType='float' isrequired='true' /> </p> </dd> </dl>";
+			var ruhtml = "<dl id='ruhtml'> <dd nc_type='no_spec'> <p> <input type='hidden' class='text'  name='storeGoods.price_ru' fun='checkPriceNum' dataType='float' value='0.0' /> </p> </dd> </dl>";
+			//var ruhtml = "<dl id='ruhtml'> <dt nc_type='no_spec'> <span style='color:red;'>*</span><@uiLabel text='goods.ruzhekoujia' />：</dt> <dd nc_type='no_spec'> <p> <input type='text' class='text'  name='storeGoods.price_ru' fun='checkPriceNum' dataType='float' isrequired='true' /> </p> </dd> </dl>";
+			$("#addgoodsprice").append(rmbhtml);
+			$("#addgoodsprice").append(ruhtml);
+			$("#rmbPrice").attr("name","storeGoods.cost_price");
+			$("#ruPrice").attr("name","storeGoods.cost_price_ru");
+			$("#price_ru").text("<@uiLabel text='goods.ruzhekoujia' />*");
+			$("#price_rmb").text("<@uiLabel text='goods.rmbzhekoujia' />*");
+		} else {
+			$("#rmbhtml").remove();
+			$("#ruhtml").remove();
+			$("#rmbPrice").attr("name","storeGoods.price");
+			$("#ruPrice").attr("name","storeGoods.price_ru");
+			$("#price_ru").text("<@uiLabel text='sellerAddGood.RublePrices' />*");
+			$("#price_rmb").text("<@uiLabel text="sellerAddGood.RenminbiPrices" />*");
+		}
+	});
+</script>	
+<#include '/common/seller_footer.html' />
+<script>
+KindEditor.ready(function(K) {
+    var editor1 = K.create('textarea[name="storeGoods.intro"]', {
+        cssPath : '../../editor/kindeditor-4.1.10/plugins/code/prettify.css',
+        uploadJson : '${ctx}/eop/kindeditorUploader.do',
+        fileManagerJson : '../../editor/kindeditor-4.1.10/jsp/file_manager_json.jsp',
+        allowFileManager : true,
+        afterCreate : function() {
+        	 this.sync();
+        },
+	    afterBlur:function(){
+	        this.sync();
+	    }    
+    });
+    prettyPrint();
+  
+});
+
+</script>

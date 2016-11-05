@@ -1,0 +1,122 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="buttonArea">
+		<a href="javascript:void(0)" class="easyui-linkbutton" onclick="newTab('添加商品','${ctx}/shop/admin/allActivityProduct!getActivityList.do?allActivity_id=${allActivity_id}')">添加商品</a>
+		<!-- <a href="javascript:void(0)" class="easyui-linkbutton" id="saveOrdernum" onclick="saveOrdernum()">保存排序</a> -->
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="goodsShowform">
+			<table class="easyui-datagrid"
+				data-options="url:'allActivityProduct!listJson.do?ajax=yes&allActivity_id=${allActivity_id}',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" width="width" id="goodsShowData">
+				<thead>
+					<tr>
+						<th data-options="field:'name',width:100" formatter="formatGoodsName">商品名称<!-- 商品名称 --></th>
+						<th data-options="field:'index',width:100">排序<!-- 排序 --></th>
+						<th data-options="field:'thumbnail',width:100" formatter="formatTeamImage">图片<!-- 图片 --></th>
+						<th data-options="field:'original_price',width:100">原始价格 <!-- 原始价格 --></th>
+						<th data-options="field:'activity_price',width:100">活动价格<!-- 活动价格 --></th>
+						<#--<th data-options="field:'count',width:100">数量</th>--><!-- 数量 -->
+						<th data-options="field:'delete',width:100,align:'center'" formatter="formatDelete">操作<!-- 操作 --></th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+		<div id="SMTPinfo" style="display: none;"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function formatGoodsName(value,row,index){
+	var val="<a href=\"../../goods-"+row.goods_id+".html\" target=\"_blank\">"+row.name+"</a><input type=\"hidden\" value=\""+row.goods_id+"\" name=\"goods_id\"/>";
+	return val;
+}
+function formatTeamImage(value,row,index){
+	var val="<img alt='' src='"+row.thumbnail+"'  height='60px;' width='75px;'>";
+	return val;	
+}
+function formatDelete(value,row,index){
+	var val="<a title='修改' href='javascript:void(0);' onclick='edit("+row.id+")'>修改</a> | <a title='删除' onclick='del("+row.id+")'>'删除</a>";
+	return val;
+}
+function del(id){
+	if(confirm("确定删除活动商品?")){
+	$.ajax({
+			url :"${ctx}/shop/admin/allActivityProduct!deleteProduct.do?ajax=yes&allActivity_product_id="+id,
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				$.Loading.success(result.message);
+				$('#goodsShowData').datagrid('reload');
+			},
+			error : function(e) {
+				$.Loading.error("出现错误，请重试");
+			}
+		});
+	} 
+}
+function edit(id){
+	 $("#SMTPinfo").show();
+	　　	$('#SMTPinfo').dialog({
+	　　		title: "修改活动商品",
+	　　		width: 750,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/allActivityProduct!edit.do?ajax=yes&allActivity_product_id='+id, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:"保存",
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var disabled=  $(this).hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					var editbtn = $(this);
+		　　				editTeamForm(editbtn);		
+		　　			}
+　				 }
+　			 },{
+	　　			 text:"还原",
+	　　			 handler:function(){
+	　　				 $('#editTeamProductForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	}); 
+}
+function editTeamForm(editbtn){
+	var formflag= $("#editTeamProductForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍后…");
+		editbtn.linkbutton("disable");
+		var activity_price = $("#activity_price").val();
+		var original_price = $("#original_price").val();
+		if(eval(activity_price)>=eval(original_price)){
+			$.Loading.error("活动价格必须小于原价格");
+			editbtn.linkbutton("enable");
+			return;
+		}
+		if(eval(activity_price)==0){
+			$.Loading.error("活动价格必须大于0");
+			editbtn.linkbutton("enable");
+			return;
+		}
+		var options = {
+				url : "${ctx}/shop/admin/allActivityProduct!saveEdit.do?ajax=yes",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					$.Loading.success(result.message);
+					$("#SMTPinfo").dialog('close');
+					$('#goodsShowData').datagrid('reload');
+					editbtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error("出现错误，请重试");	
+			 		editbtn.linkbutton("enable");
+				}
+		};
+		$('#editTeamProductForm').ajaxSubmit(options);
+	}
+}
+</script>
+<#include '/admin/footer.html' >

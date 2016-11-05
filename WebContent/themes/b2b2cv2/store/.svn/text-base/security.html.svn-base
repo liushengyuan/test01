@@ -1,0 +1,114 @@
+<#assign  title="修改密码" />
+<#include 'store_header.html' />
+<div class="store_center">
+<#include '/store/left_menu.html' />
+<div id="sotre_right_content" class="sotre_right_content">
+
+<div class="path">
+			<span style="color:#999;"><@uiLabel text="sellerAccount.Location"/>：</span><!--您的位置  -->
+			<span>></span>
+			<a href="#"><@uiLabel text="index.AccountCenter"/></a><span>></span><@uiLabel text="index.ChangePassword"/><!-- 帐号中心 --><!-- 修改密码 -->
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;"><@uiLabel text="index.ChangePassword"/></a><!-- 修改密码 -->
+					</li>
+				</ul>
+			</div>
+	
+	<!-- 修改密码提示 -->
+	<div class="password_explain">
+		<h2><@uiLabel text="sellerPassword.Tips"/></h2><!-- 温馨提示 -->
+		<ul>
+			<li>1、<@uiLabel text="sellerPassword.PasswordRules"/></li><!-- 密码只能由6--16个英文字母、数字或标点符号组成 -->
+			<li>2、<@uiLabel text="sellerPassword.PasswordRestrictions"/></li><!-- 为了您的账号安全，必须正确输入旧密码才能修改。 -->
+		</ul>
+	</div>
+	<div class="password_change">
+		<form class="validate" action="" method="post" id="register_form">
+			<dl>
+				<dt><@uiLabel text="sellerPassword.OldPassword"/>：</dt><!--旧的密码  -->
+				<dd><input type="password" name="oldpassword" isrequired="true" class="input_text"  fun="isPasswd" id="useroldpwd"/></dd>
+			</dl>
+			<dl>
+				<dt><@uiLabel text="sellerPassword.NewPassword"/>：</dt><!-- 新的密码 -->
+				<dd><input type="password" name="newpassword" id="password" isrequired="false" class="input_text" fun="isPasswd" /></dd>
+			</dl>
+			<dl>
+				<dt><@uiLabel text="sellerPassword.ConfirmNewPassword"/>：</dt><!--确认新密码  -->
+				<dd><input class="input_text" type="password" name="re_passwd" id="passwd_re"	isrequired="false" fun='checkpwd'/></dd>
+			</dl>
+			<dl class="table_bottom">
+				<dt>&nbsp;</dt>
+				<dd><input type="button" name="btnReg" value="<@uiLabel text="sellerPassword.ConfirmMondify"/>" class="submit to_save" /></dd><!--确定修改  -->
+			</dl>
+		</form>
+	</div>
+</div>	
+</div>
+<script>
+	$(function(){
+		$(".submit").click(function(){
+			if(!$("#register_form").checkall())
+				return false;
+			var useroldpwd = $("#useroldpwd").val();
+			var usernewpwd = $("#password").val();
+			var useraffirmpwd = $("#passwd_re").val();
+			$(".validate").ajaxSubmit({
+				url:"${ctx}/api/shop/member!changePassword.do?ajax=yes",
+				dataType : 'json',
+				success:function(result){
+					if(result.result==1){
+						alert("<@uiLabel text="sellerPassword.passwordMondifySuccess"/>");//修改成功，请谨记密码
+						//退回到首页，重新登录
+						$.ajax({
+							url:"../api/shop/member!logout.do?ajax=yes",
+							dataType:"json",
+							cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。
+							success:function(result){
+								if(result.result==1){
+									location.href="${ctx}/index.html";
+									
+								}else{
+									$.alert(result.message);
+								}	
+								$.Loading.hide();
+							},
+							error:function(){
+								$.Loading.hide();
+								$.alert("<@uiLabel text="sellerPassword.ProgrameError"/>:(");//出错了
+							}
+						});
+					}
+					else{
+						$.alert(result.message);
+					}
+				}
+			})
+
+
+		})
+	})
+</script>
+<script>
+function isPasswd(s){  
+	//var patrn=/^(\w){6,20}$/;
+	var patrn=/^[0-9A-Za-z.@\-\_\!\#\$\^\&\*\?\%\.\<\>\,]{6,16}$/;
+	if (!patrn.exec(s)) return "<@uiLabel text="sellerPassword.PasswordMalformed"/>"  //密码格式不正确
+	return true  
+}
+/*function checkpwd(){    
+	if( $("#passwd_re").val()==$("#password").val() ){
+		return true;
+	}
+	else{ 
+		return "密码不一致";
+	}
+}*/
+</script>
+
+
+</div>
+<#include '/common/seller_footer.html' />

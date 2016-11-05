@@ -1,0 +1,165 @@
+<#include '/store/store_header.html' />
+<!--调用"卖家配送商列表"标签-->          
+<#assign sellerExpressListTag= newTag("sellerExpressListTag") >    
+<#assign expressList=sellerExpressListTag() >	
+<div class="store_center">
+<#include '/store/left_menu.html' />
+<div id="sotre_right_content" class="sotre_right_content">
+<div class="path">
+			<span style="color:#999;"><@uiLabel text="sellerAccount.Location"/>：</span>
+			<span>></span>
+			<a href="express_list.html"><@uiLabel text="seller.ExpressManager"/></a><span>></span><@uiLabel text="sellerCenter.ProviderManager" />
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;"><@uiLabel text="sellerCenter.ProviderManager" /></a>
+					
+					</li>
+					<div class="address">
+		
+		<a href="javascript:;" class="add_address"><span><@uiLabel text="sellerCenter.AddProvider" /></span></a>
+	</div>
+				</ul>
+			</div>
+	
+	<#-- <div class="password_explain">
+		<h2>温馨提示</h2>
+		<ul>
+			<li>最多可以保存10个地址</li>
+		</ul>
+	</div -->
+	<div class="address_list">
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th class="a3" ><@uiLabel text="sellerCenter.ProviderName" /></th>
+					<th class="a2" ><@uiLabel text="sellerCenter.ExpectTime" /></th>
+					<th class="a1"><@uiLabel text="sellerCenter.Operation" /></th>
+				</tr>
+			</thead>
+			<tbody>
+				<#if expressList?size gt 0 >
+				<#list expressList as express>
+				<tr>
+					<td>
+						<@substring title="${express.express_name!''}" length="80" dot="..." />
+					</td>
+					<td>${express.express_deliver_time!''}</td>
+					<td >
+						<a href="javascript:;" rel="${express.express_id!''}" class="edit"></a>
+						<span class="aline"></span>
+						<a href="javascript:;" class="address_del" rel="${express.express_id!''}" ></a>
+					</td>					
+				</tr>
+				</#list>
+				<#else>
+				<tr>
+					<td colspan="9">
+						<@uiLabel text="sellerCenter.NoProviderManager" />，<a href="javascript:;" class="addressadd"><@uiLabel text="sellerCenter.AddOneAddress" /></a>
+					</td>
+				</tr>
+				</#if>
+			</tbody>	
+		</table>
+	</div>
+	<!--添加配送商地址。使用js load方法调用member/express_add.html页面  -->
+	<div class="express_add" style="overflow:hidden;">
+	</div>
+	<!-- 修改配送商地址 。使用js load方法调用member/express_edit.html页面 -->
+	<div class="express_edit" style="overflow:hidden;">
+	</div>
+	
+</div>
+
+</div>
+<script>
+	$(function(){
+		/*添加会员地址专用*/
+		$(".add_address,.addressadd").click(function(){
+			$(".express_add").load("express_add.html",function(){
+				$(".address_list").hide();
+				$(".express_edit").hide();
+				$(".grey_top").hide();
+				$(".express_add").show();
+			
+				$("#btnSubmit").click(function(){
+					$("#express_add").validate();
+					$("#deliver_time")
+					$("#express_add").ajaxSubmit({
+						url : "${ctx}/api/b2b2c/sellerExpress!add.do",
+						dataType : 'json',
+						success : function(data) {
+							alert(data.message)
+							if(data.result==1) {
+								location.href = "express_list.html"
+							}
+						},
+						error : function(e) {
+							alert("<@uiLabel text='goods.chuxiancuowuqingchongshi' />");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			});
+		});
+		/*修改地址专用*/
+		$(".edit").click(function(){
+			var editid = $(this).attr("rel");
+			$(".express_edit").load("express_edit.html?expressId="+editid,function(){
+				$(".address_list").hide();
+				$(".express_edit").show();
+				$(".grey_top").hide();
+				$(".express_add").hide();
+				
+				/*修改用户地址*/
+				$("#express_edit").click(function(){
+					$("#express_edit_form").ajaxSubmit({
+						url : "${ctx}/api/b2b2c/sellerExpress!edit.do",
+						dataType : 'json',
+						success : function(data) {
+							alert(data.message)
+							if(data.result==1)
+								location.href = "express_list.html"
+						},
+						error : function(e) {
+							alert("<@uiLabel text='goods.chuxiancuowuqingchongshi' />");
+						}
+					})
+				});
+				//地区联动选择-选择最后一级（区）时自动设置邮编
+				RegionsSelect.regionChange=function(regionid,name,zipcode){
+					$("#zipcode").val(zipcode);
+				};
+			})
+		})
+		/*删除地址*/
+		$(".address_del").click(function(){
+			if(confirm("<@uiLabel text='sellerCenter.IsDelete' />")){
+				var deleteid = $(this).attr("rel");
+				$.ajax({
+					url : "${ctx}/api/b2b2c/sellerExpress!delete.do?expressId="+deleteid,
+					dataType : 'json',
+					success : function(data) {
+						alert(data.message)
+						if(data.result==1)
+							location.href = "express_list.html"
+					},
+					error : function(e) {
+						alert("<@uiLabel text='goods.chuxiancuowuqingchongshi' />");
+					}
+				})  
+			}
+			else{
+				location.href="express_list.html";
+			}
+		})
+	});		
+</script>
+
+</div>
+<#include '/common/seller_footer.html' />

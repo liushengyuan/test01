@@ -1,0 +1,50 @@
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/footer.css"/>
+<div style="clear:both;" />
+<div class="footer">
+    <div class="content-bottom">
+        <div class="partners-main util-clearfix" style="text-align:center;">
+            <ul class="partners-list" style="clear:both; padding-left:420px;">
+                 <#--  <li class="p-logo-a"  ></li>-->
+                <li class="p-logo-b"></li>
+                <li class="p-visa-logo"></li>
+                <li class="p-mastercard-logo"></li>
+                <li class="p-chinabank-logo"></li>
+                 <li class="p-logo-f"></li>
+                
+            </ul>
+        </div>
+        <div class="website-intro-main" style="clear:both;">
+            <p>
+                <a href="${ctx}/help-34-72.html"><@uiLabel text="index.PortalOnSite" /></a>
+                <#if locale=="zh">
+                | <a href="${ctx}/help-36-79.html"><@uiLabel text="index.sellerkefu" /></a>
+                | <a href="${ctx}/help-35-62.html"><@uiLabel text="index.PortalSellerRuleCentre" /></a>
+                </#if>
+                 <#if locale=="ru">
+                | <@uiLabel text="index.sellerkefu" />
+                | <@uiLabel text="index.PortalSellerRuleCentre" />
+                </#if>
+                <#if locale=="ru">
+                | <a href="${ctx}/helpt-34-72.html"><@uiLabel text="index.zhaosh" /></a>
+                </#if>
+            </p>
+            <p><@uiLabel text="index.Portalbanquan" /></p>
+            <#if locale=="zh">
+                <p>京ICP证080127号&nbsp;&nbsp;&nbsp;&nbsp;京ICP备09070403号</p>
+            </#if>
+            <p>互联网食品经营许可证书编号：JY11102070019565</p>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+//seo统计俞广涛使用
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-68176332-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</html>

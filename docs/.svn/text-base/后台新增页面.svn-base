@@ -1,0 +1,40 @@
+2015年10月16日后台新增页面jfw
+订单 > 大宗交易 >
+大宗交易意向
+/shop/admin/largeOrder!list.do
+大宗交易订单
+/shop/admin/largeOrder!listOrder.do
+
+ 商品 > 商品管理 >
+商品规格审核
+/b2b2c/admin/storeGoods!auditStyle.do
+出口商品发布审核（市场对RUS）
+/b2b2c/admin/storeGoods!auditList.do
+进口商品发布审核（市场对CHN）
+/b2b2c/admin/storeGoods!auditChinaList.do
+
+/shop/admin/myeveryroute!route.do
+
+设置 > 配送和支付 > 运费模板
+/shop/admin/logi!list_freight.do
+设置 > 配送和支付 > 物流订单
+/shop/admin/logi!list_logiOrder.do
+
+统计 > 统计分析 > 流量统计
+/b2b2c/admin/allianceCount!userFlowCount.do
+商品》商品推荐管理》品牌推荐列表
+/shop/admin/team!showBrand.do
+促销 > 折扣活动管理 > 秒杀&打折活动
+/shop/admin/allActivity!list.do
+促销 > 折扣活动管理 > 秒杀活动详情
+/shop/admin/allActivity!showSkillDetail.do
+促销 > 折扣活动管理 > 打折活动详情
+/shop/admin/allActivity!showDiscountDetail.do
+促销 > 优惠券管理 > 优惠详情
+/shop/admin/bonus-type!bonusList.do
+会员 > 会员积分体系管理 > 注册送优惠券管理
+/shop/admin/bonus-type!showBonusList.do
+店铺初始单
+/b2b2c/admin/store!store_list1.do
+海关报文 >报关 >报关详细
+/shop/admin/orderinformation!showInformation.do

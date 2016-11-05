@@ -1,0 +1,77 @@
+<#assign  title="平台模板" />
+<#include '/store/store_header.html' />
+<!--创建"编辑平台模板列表"标签-->
+<#assign logisEditTag=newTag("logisEditTag")>     
+<#assign logisEdit=logisEditTag('{"model_name":"${model_name}","store_id":"${store_id!0}"}')>	
+<div class="store_center">
+<#include '/store/left_menu.html' />
+<div id="sotre_right_content" class="sotre_right_content">
+<div class="path">
+			<span style="color:#999;">您的位置：</span>
+			<span>></span>
+			<a href="#">物流管理</a><span>></span>运费模板管理
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;">运费模板管理 </a>
+					</li>
+					<div class="address">
+		
+		    <a href="logispricemodel.html" class="add_address"><span>返回</span></a>
+	</div>
+				</ul>
+			</div>
+	<div class="address_list">
+	    <form class="validate" id="goodsStoreForm">
+		 <table cellpadding="0" cellspacing="0" align="center" class="dd">
+		   <!-- <input type="hidden" name="store_id" value="${myStoreDetail.store_id!''}" -->
+			<thead>
+			    <tr><th colspan=4 style="text-align:left; padding-left:20%;" ><span style="margin-right:20px;">运费模版名称:</span><span><input  type="text" name="model_name" value="${model_name}"/></span></th></tr>
+				<tr>
+				    <th class="a1" style="width:300px;"><input type="checkbox" onclick="checkAll(this);"></th>
+					<th class="a1"  style="text-align:left">选择物流</th>
+					<th class="a2"  style="text-align:left">运费设置 </th>
+					<th class="a3"  style="text-align:left">货物到达时间</th>
+				</tr>
+			</thead>
+			<tbody >
+				<#if logisEdit?size gt 0 >
+				<#list logisEdit as lo>
+				<tr>
+				    <th style="width:300px;"><input type="checkbox" checked="checked" name="orderIndexs" id="tr_${lo.freight_id!''}" value="${lo.freight_id!''}"/></th>
+					 <th style="text-align:left">
+					 
+					    <#if lo.product_name?? && lo.product_name=="1">标准快递</#if>
+					 </th>
+					<th  style="text-align:left">
+					   <div><input type="radio"    id="radio_${lo.freight_id!''}"   value="0" name="logis_price_type_${lo.freight_id!''}" <#if lo.logis_price_type==0>checked=checked</#if>>标准运费</div> 
+					   <div><input type="radio"    id="radio_${lo.freight_id!''}"   value="1"  name="logis_price_type_${lo.freight_id!''}"  <#if lo.logis_price_type==1>checked=checked</#if>>卖家承担运费</div>
+					</th>
+					<th style="text-align:left;">${lo.validatedays!''}天</th>	
+				</tr>
+				</#list>
+			   </#if>
+			</tbody>
+			<!-- <tr>
+			       <th></th>	
+				  <td>
+					<div><input type="button"  class="yellow_btn" onclick="finish()" value="保存并返回"></div>
+				  </td>
+				   </tr>	 -->
+		</table>
+		<input type="hidden" name="model_name2" value="${model_name}"/>
+		</form>
+	<!-- </div>
+	添加会员地址。使用js load方法调用member/address_add.html页面 
+	<div class="address_add" style="overflow:hidden;">
+	</div>
+	修改会员地址 。使用js load方法调用member/address_lo.html页面
+	<div class="address_lo" style="overflow:hidden;"> -->
+	</div>
+	
+</div>
+
+</div>
+

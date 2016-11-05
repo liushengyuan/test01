@@ -1,0 +1,51 @@
+<html>
+<head>
+<title>${site.title!'' }</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="shortcut icon" href=" ../favicon.ico" />
+<link type="image/x-icon" href="${site.icofile!''}" rel="bookmark" />
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="${ctx}/adminthemes/new/js/jquery-form-2.33.js"></script>
+<script type="text/javascript" src="../adminthemes/new/js/login.js"></script>
+<link rel="stylesheet" type="text/css" href="../adminthemes/new/css/login.css" />
+</head>
+<body>
+<div class="bg-dot"></div>
+<div class="login-layout">
+    <div class="top">
+        <h2>平台管理中心</h2>
+    </div>
+    <div class="box">
+		<form>
+			<#if timeout?exists && timeout=='yes'>
+				<span class="info">您尚未登录或已超时，请重新登录。</span>
+			</#if>
+			<input type="hidden" id="referer" value="${referer!''}" />
+			<span>
+				<label>账号</label>
+				<input type="text" class="input-text" id="username" name="username" value="${username!''}"/>
+			</span>
+			<span>
+				<label>密码</label>
+				<input type="password" name="password" autocomplete="off" class="input-password" id="password" />
+			</span>
+			<span>
+				<label>验证码</label>
+				<input type="input" id="valid_code" name="valid_code" class="input-code"/>
+			</span>
+			<span class="tab-img">
+				<img id="code_img" class="code_img" />
+			</span>
+			<span class="tab-button">
+				<input type="button" name="login_btn" id="login_btn" value="登录" class="loginbtnfocus btn input-button" />
+			</span>
+		</form>
+	</div>
+</div>
+<script>
+$(function(){
+ Loginer.init();
+});
+</script>
+</body>
+</html>

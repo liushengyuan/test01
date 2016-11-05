@@ -1,0 +1,4 @@
+<config>
+	<item name="tmpdir" value="C:/syt/tmpdir"/>
+	<item name="luceneDir" value="C:/syt/luceneDir"/>
+</config>

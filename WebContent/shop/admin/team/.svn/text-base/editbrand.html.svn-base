@@ -1,0 +1,50 @@
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+
+<div class="main" style="background-color: white;">
+
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="editTeamForm" method="post" class="validate">
+			<table width="100%">
+				<tr>
+					<th>中文名称：</th>
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="name_zh" name="brandtag.name_zh" data-options="required:true" value="${brand.name_zh!''}"></input>
+					</td>
+					<th>俄文名称：</th>
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="name_ru" name="brandtag.name_ru" data-options="required:true" value="${brand.name_ru!''}"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>是否显示：</th>
+					<td><input class="easyui-validatebox input_text" type="radio"
+						style="width: 10px;" name="brandtag.is_show" value="1" <#if brand.is_show==1> checked </#if>/>
+						显示&nbsp;&nbsp; <input type="radio" name="brandtag.is_show" value="0" <#if brand.is_show==0> checked </#if>/>
+						隐藏</td>
+				</tr>
+				<tr>
+					<th>市场：</th>
+					<td>
+						<select class="easyui-validatebox" name="brandtag.market">
+            				<option value="1" <#if brand.market==1>selected="selected"</#if>>平台</option>
+            				<option value="3" <#if brand.market==3>selected="selected"</#if>>新西兰馆</option>
+            				<option value="4" <#if brand.market==4>selected="selected"</#if>>韩国馆</option>
+            				<option value="5" <#if brand.market==5>selected="selected"</#if>>德国馆</option>
+            				<option value="6" <#if brand.market==6>selected="selected"</#if>>龙江物产</option>
+            				<option value="7" <#if brand.market==7>selected="selected"</#if>>俄罗斯馆</option>
+            				<option value="8" <#if brand.market==8>selected="selected"</#if>>澳大利亚馆</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" name="brandtag.brand_id" id="update_team_id" value="${brand.brand_id}" class="easyui-validatebox" data-options="required:true">
+		</form>
+	</div>
+ 
+</div>
+
+<script language="javascript">

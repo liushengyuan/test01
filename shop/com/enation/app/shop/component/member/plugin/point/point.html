@@ -1,0 +1,136 @@
+<div>
+	<form id="editPointForm">
+		<div class="detail">
+			<table cellspacing="0" cellpadding="0" border="0" width="100%">
+				<tbody>
+					<tr>
+						<th>当前等级积分:</th>
+						<td id="curr">${member.point }</td>
+					</tr>
+					<tr>
+						<th>调整积分（增/减）:</th>
+						<td><input type="text" name="point" size="20"  id="point" class="input_text">输入负值即可减少积分；</td>
+					</tr>
+				</tbody>
+			</table>
+			<input type="hidden" value="${memberid }" name="memberId">
+		</div>
+	</form>
+</div>
+<div class="submitlist" align="center">
+	<table>
+		<tr>
+			<td><input name="button" type="button" value=" 确    定"
+				class="submitBtn button blueButton" id="editPointBtn" /></td>
+		</tr>
+	</table>
+</div>
+<div>
+	<form id="editMpForm">
+		<div class="detail">
+			<table cellspacing="0" cellpadding="0" border="0" width="100%">
+				<tbody>
+					<tr>
+						<th>当前消费积分:</th>
+						<td id="currMp">${member.mp }</td>
+					</tr>
+					<tr>
+						<th>调整积分（增/减）:</th>
+						<td><input type="text" name="mp" size="20"  id="mp" class="input_text">输入负值即可减少积分；</td>
+					</tr>
+				</tbody>
+			</table>
+			<input type="hidden" value="${memberid }" name="memberId">
+		</div>
+	</form>
+</div>
+<div class="submitlist" align="center">
+	<table>
+		<tr>
+			<td><input name="button" type="button" value=" 确    定"
+				class="submitBtn button blueButton" id="editMpBtn" /></td>
+		</tr>
+	</table>
+</div>
+<script>
+	//修改等级积分
+	$(function() {
+
+		$("#editPointBtn").click(function() {
+			if ($("#point").val() == "") {
+				alert("请输入调整等级积分");
+				return false;
+			}
+			
+			if(isNaN($("#point").val())){
+				alert("请输入数字");
+				return false;
+			}
+
+			$.Loading.show('正在更新数据，请稍侯...');
+			var that = this;
+			var options = {
+				url : "${ctx}/shop/admin/member!editSavePoint.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						var op = parseInt($("#curr").html());
+						op = op + parseInt($("#point").val());
+						$("#curr").html(op);
+						$("#point").val("");
+					} else {
+						alert(result.message);
+					}
+				},
+				error : function(e) {
+					$.Loading.hide();
+					alert("出现错误 ，请重试");
+				}
+			};
+			$('#editPointForm').ajaxSubmit(options); 
+
+		});
+	});
+	//修改消费积分
+	$(function() {
+
+		$("#editMpBtn").click(function() {
+			if ($("#mp").val() == "") {
+				alert("请输入调整消费积分");
+				return false;
+			}
+			
+			if(isNaN($("#mp").val())){
+				alert("请输入数字");
+				return false;
+			}
+
+			$.Loading.show('正在更新数据，请稍侯...');
+			var that = this;
+			var options = {
+				url : "${ctx}/shop/admin/member!editSaveMp.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$.Loading.success(result.message);
+						var op = parseInt($("#currMp").html());
+						op = op + parseInt($("#mp").val());
+						$("#currMp").html(op);
+						$("#mp").val("");
+					} else {
+						alert(result.message);
+					}
+				},
+				error : function(e) {
+					$.Loading.hide();
+					alert("出现错误 ，请重试");
+				}
+			};
+			$('#editMpForm').ajaxSubmit(options); 
+
+		});
+	});
+</script>

@@ -1,0 +1,78 @@
+<style>
+.input_text {
+	width: 150px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="editForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th width="100px;">等级名称</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="name"
+						value="${lv.name}" name="lv.name" data-options="required:true"></input>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>积分有效期(月)</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="validity"
+						value="${lv.validity}" name="lv.validity" data-options="required:true"></input>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>所需积分</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="point"
+						value="${lv.point}" name="lv.point" data-options="required:true"></input>
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<th>消费次数(卢布)</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="con_ru"
+						value="${lv.con_ru}" name="lv.con_ru" data-options="required:true"></input>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>消费次数(人民币)</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="con_zh"
+						value="${lv.con_zh}" name="lv.con_zh" data-options="required:true"></input>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>消费抵值比例</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="proportion"
+						value="${lv.proportion}" name="lv.proportion" data-options="required:true"></input>
+					</td>
+				</tr>
+					
+			 
+			<!-- 	<tr style="display: none">
+					<th>优惠百分比</th>
+					<td><input class="easyui-validatebox input_text" type="text" id="discount"
+						value="${lv.discount}" validType="maxnum[101]" name="lv.discount"
+						data-options="required:true"></input>
+					</td>
+					<td align="left"><div id="default_lvTip">如果输入80，表示该会员等级以销售价80%的价格购买。</div>
+					</td>
+				</tr> -->
+				
+				
+				
+				<tr>
+					<th>默认等级</th>
+					<td><input class="easyui-validatebox" type="radio"
+						name="lv.default_lv" value="0"<#if
+						lv.default_lv==0>checked</#if> />否&nbsp;&nbsp; <input
+						class="easyui-validatebox" type="radio" name="lv.default_lv"
+						value="1"<#if lv.default_lv==1>checked</#if> />是</td>
+				</tr>
+			</table>
+			<input type="hidden" name="lv.lv_id" value="${lv.lv_id}">
+		</form>
+	</div>
+</div>

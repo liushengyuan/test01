@@ -1,0 +1,51 @@
+<section class="dpxinxi">
+	<article class="store_goods_main_intro">
+				<div class="store_intro_top"></div>
+				<div class="store_intro">
+					<div class="content clearfix xgkd">
+						<dl class="store_shop_info  xgkd_dl" style="height:400px;">
+					<dd class="base"  style="height:40ss0px;">
+						<h2><@uiLabel text="home.StoreInfos" /></h2>
+						<p width=300><@uiLabel text="home.StoreName"
+							/>：${store.store_name}</p>
+
+						<!-- 店铺名称 &ndash;&gt;
+								<p>
+									<span class="fl">认证信息：</span>
+									<!-- 认证信息 -->
+						<#if store.name_auth==0> <img alt="身份未认证或认证失败" title="身份未认证或认证失败"
+							src="${ctx}/themes/b2b2cv2/images/cert_autonym_no.gif">
+						<#else> <img alt="身份已认证" title="身份已认证"
+							src="${ctx}/themes/b2b2cv2/images/cert_autonym.gif"> </#if>
+						<#if store.store_auth==0> <img alt="尚未认证或认证失败" title="尚未认证或认证失败"
+							src="${ctx}/themes/b2b2cv2/images/cert_material_no.gif">
+						<#else> <img alt="店铺已认证" title="店铺已认证"
+							src="${ctx}/themes/b2b2cv2/images/cert_material.gif">
+						</#if>
+						<p><@uiLabel text="home.SellersCredit" />：${store.store_credit!0}</p>
+						
+						<p><@uiLabel text="home.praise_rate"/>：${store.praise_rate!0}</p>
+						<p><@uiLabel text="home.store_servicecredit"/>：${store.store_servicecredit!0}</p>
+						<p><@uiLabel text="home.store_deliverycredit"/>：${store.store_deliverycredit!0}</p>
+						<p><@uiLabel text="home.store_collect"/>：${store.store_collect!0}</p>
+						<p><@uiLabel text="home.sales"/>：${store.sales!0}</p>
+						<#if store.store_rate?contains("0.0")>
+							<p><@uiLabel text="home.store_rate"/>：0 <@uiLabel text="home.explain"/></p>
+						<#else>
+							<p><@uiLabel text="home.store_rate"/>：${store.store_rate!0}<@uiLabel text="home.explain"/></p>
+						</#if>
+						<p><@uiLabel text="home.RegistrationTime" />：<@dateformat
+							time="${store.create_time}" pattern="yyyy-MM-dd"/></p>
+						<p><@uiLabel text="home.description"/>：${store.description!0}</p>
+					</dd>
+				</dl>
+					</div>
+<#--					<div class="store_phone">
+						<h2><@uiLabel text="index.PortalContact" /></h2>
+						<p><@uiLabel text="home.Location" />：${store.store_province}&nbsp;${store.store_city}&nbsp;${store.store_region}</p>
+						<p><@uiLabel text="home.DetailedAddress" />：${store.attr}</p>
+						<p><@uiLabel text="home.Telephone" />：${store.tel}</p>
+					</div>-->
+				</div>
+	</article>
+</section>

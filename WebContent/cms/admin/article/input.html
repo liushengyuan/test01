@@ -1,0 +1,125 @@
+<#include '/admin/header.html' >
+<script type="text/javascript"
+	src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript"
+	src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<div class="main">
+	<div class="shadowBoxWhite  whiteBox">
+		<form method="post" id="dataForm">
+			<#if isEdit > <input type="hidden" name="dataid" value="${dataid}" />
+			<input type="hidden" id="dataAction"
+				value="data!saveEdit.do?ajax=yes&modelid=${modelid}" /> <#else> <input
+				type="hidden" id="dataAction"
+				value="data!saveAdd.do?ajax=yes&modelid=${modelid!''}" /> </#if>
+			<input type="hidden" id="contentForImg" name="contentForImg" value="" />
+			<input type="hidden" id="descriptionForImg" name="descriptionForImg" value="" />
+			<table cellspacing="1" cellpadding="3" width="100%"
+				class="form-table">
+				<tr>
+					<th><label class="text">所属分类：</label>
+					</th>
+					<td><select name="catid">
+							<option value="${catid}" selected><#if cat??>${cat.name
+								}</#if></option> <#assign children=catList /> <#assign level=1 />
+							<#include 'select_children.html' />
+					</select></td>
+				</tr>
+				<tr>
+					<th><label class="text">权重：</label>
+					</th>
+					<td><input type="text" class="easyui-numberbox input_text"
+						data-options="required:true" name="sort" style="width: 50px"<#if
+						isEdit >value="${(article.sort?c)!0}"</#if> /> 权重越高则越靠前显示</td>
+				</tr>
+				<!-- 添加是否公开选项 -->
+				
+				<tr>
+					<th><lable class="text">是否发布:</lable></th>
+					<td>
+						<input type="radio" name="ifpublic" checked="checked" value="0"/>发布
+	&nbsp;&nbsp;&nbsp;<input type="radio" name="ifpublic" value="1" />未发布<br />
+					
+					</td>
+				</tr>
+				<#if fieldList ??> <#list fieldList as field >
+				<tr>
+					<th><label class="text">${field.china_name}：</label>
+					</th>
+					<td>${field.inputHtml}</td>
+				</tr>
+				</#list> </#if>
+
+				<tr>
+					<th><label class="text">页面标题：</label>
+					</th>
+					<td><input type="text" class="easyui-validatebox input_text"
+						data-options="required:true" name="page_title"
+						style="width: 250px" <#if isEdit
+						>value="${article.page_title!''}"</#if>/></td>
+				</tr>
+				<tr>
+					<th><label class="text">俄文标题：</label>
+					</th>
+					<td><input type="text" class="input_text" name="page_keywords"
+						style="width: 250px"<#if isEdit
+						>value="${article.page_keywords!''}"</#if> /></td>
+				</tr>
+				<tr>
+					<th><label class="text">俄文内容：</label>
+					</th>
+					<td><textarea id="page_description" name="page_description"
+							style="width: 250px; height: 100px"><#if isEdit  >${article.page_description!''}</#if></textarea>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<div class="buttonWrap">
+			<a href="javascript:;" id="datainput" class="easyui-linkbutton">保存</a>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	var app_path = "";
+	$(function() {
+		var instance = CKEDITOR.instances["page_description"];
+		if (instance) {
+			CKEDITOR.remove(instance);
+		}
+		$("#page_description").ckeditor();
+
+		$("#datainput").click(function() {
+			var dataurl = $("#dataAction").val();
+			$("#contentForImg").val($("#content").val());
+			$("#descriptionForImg").val($("#page_description").val());
+			//alert($("#contentForImg").val());
+			var formflag = $("#dataForm").form().form('validate');
+			if (formflag) {
+				$.Loading.show("正在保存,请稍后");
+				$("#datainput").linkbutton("disable");
+				var options = {
+					url : dataurl,
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {
+						if (result.result == 1) {
+							$.Loading.success(result.message);
+						}
+						if (result.result == 0) {
+							$.Loading.error(result.message);
+						}
+						$("#datainput").linkbutton("enable");
+					},
+					error : function(e) {
+						$.Loading.error("出现错误 ，请重试");
+						$("#datainput").linkbutton("enable");
+					}
+				};
+				$('#dataForm').ajaxSubmit(options);
+			} else {
+				$.Loading.hide();
+				$("#datainput").linkbutton("enable");
+			}
+		});
+	});
+</script>
+<#include '/admin/footer.html' >

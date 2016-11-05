@@ -1,0 +1,66 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+
+
+
+<div class="main">
+	<div class="shadowBoxWhite tableDiv">
+	<form id="wdallform" >
+			<table class="easyui-datagrid"  url="${ctx}/b2b2c/admin/store!allwd_listJson.do" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="goodsdata"
+				sortName="id" >
+				<thead>
+					<tr>
+						<th data-options="field:'serial_number',width:115,align:'center'" >流水号</th>
+						<th data-options="field:'create_date',width:115,align:'center'" formatter="formatName4" >创建时间</th>
+						<th data-options="field:'type',width:115,align:'center'" formatter="formatName5">类型</th>
+						<th data-options="field:'card',width:115,align:'center'">帐号</th>
+						<th data-options="field:'number',width:115,align:'center'">金额</th>
+						<th data-options="field:'capital_channel'">资金渠道</th>
+						<th data-options="field:'state',width:115,align:'center'" formatter="formatName3">状态</th>
+						<th data-options="field:'note',width:115,align:'center'" >备注</th>
+						<th data-options="field:'details',width:115,align:'center'">详情</th>
+					<!-- 	<th data-options="field:'account',align:'center',width:40">帐号金额</th> -->
+						<th data-options="field:'ok_date'" formatter="formatName4">审批时间</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+<script type="text/javascript">
+
+
+function formatName3(value,row,index){
+	if(value=="0")
+		return "待审核";
+	if(value=="1")
+		return "已放款"
+	if(value=="2")
+		return "不审批";
+	if(value=="3")
+		return "已取消";
+	if(value=="4")
+		return "已同意";
+}
+function formatName5(value,row,index){
+	
+	if(value=="1"){
+		return "提现";
+	}else{
+		return "其他";
+	}
+	
+	
+}
+function formatName4(value,row,index){
+	if(value==null){
+		return "";
+	}
+	else{
+		return getFormatDateByLong(value, "yyyy-MM-dd");
+	}
+}
+
+ 	
+</script>
+		
+		<#include '/admin/footer.html' >

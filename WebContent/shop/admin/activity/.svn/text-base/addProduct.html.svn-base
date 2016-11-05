@@ -1,0 +1,113 @@
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+<#-- 引入国际化模板函数 -->
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<div class="main" style="background-color: white;">
+
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="addProduct" method="post" class="validate">
+			<input type="hidden" name="goods_id" value="${goods_id}" />
+			<input type="hidden" name="allActivity_id" value="${allActivity_id}" />
+			<table width="100%">
+			   <#if activity.type==1>
+				<tr>
+					<th><span style="color:red;">*</span>原始价格</th><!-- 中文名称 -->
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="original_price" id="c1" maxlength="20" name="original_price" value="${original_price!''}" data-options="required:true"></input>
+					</td>
+				</tr>
+				<!-- <#if activity.type==0>
+				<tr>
+					<th><span style="color:red;">*</span>折扣率</th>中文名称
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="discountnumber" maxlength="20" name="discountnumber" value="${activity.discountnumber!''}" disabled="disabled" data-options="required:true"></input>
+					</td>
+				</tr>
+			  </#if> -->
+				<tr>
+					<th ><span style="color:red;">*</span><span id="dazhe">秒杀价格</span></th>
+					<td><input class="easyui-validatebox input_text" type="text" validType="price"
+						id="activity_price" maxlength="20" name="activity_price" data-options="required:true"></input>
+					</td>
+				</tr>
+				<#--<tr>
+					<th><span style="color:red;">*</span>参与活动的商品数量：(当前剩余数量：${count!''})</th>
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="count" name="count" maxlength="20" data-options="required:true"></input>
+					</td>
+				</tr>-->
+				<tr>
+					<th><span style="color:red;">*</span>索引值</th>
+					<td><input class="easyui-validatebox input_text" type="text" validType="number"
+						id="index" name="index" maxlength="5" data-options="required:true"></input>
+					</td>
+				</tr>
+				<#else>
+				<tr>
+					<th><span style="color:red;">*</span>原始价格</th><!-- 中文名称 -->
+					<td><input class="easyui-validatebox input_text" type="text"
+						id="original_price" id="c2" maxlength="20" name="original_price" value="${cost_price!''}" data-options="required:true"></input>
+					</td>
+				</tr>
+				<tr>
+					<th ><span style="color:red;">*</span><span id="dazhe">打折价格</span></th>
+					<td><input class="easyui-validatebox input_text" type="text" validType="price"
+						id="activity_price" id="c3" maxlength="20" name="activity_price" data-options="required:true" value="${original_price!''}"></input>
+					</td>
+				</tr>
+				<tr>
+					<th><span style="color:red;">*</span>索引值</th>
+					<td><input class="easyui-validatebox input_text" type="text" validType="number"
+						id="index" name="index" maxlength="5" data-options="required:true"></input>
+					</td>
+				</tr>
+				</#if>
+			</table>
+		</form>
+	</div>
+ <input type="hidden" value="${activity.discountnumber!''}" id="discount"/>
+ <input type="hidden" value="${activity.type!''}" id="type"/>
+</div>
+
+<script language="javascript">
+getImage=function getTeamImage(obj){
+	$("#show_team_picture").attr("src",obj);
+	$("#update_team_image").val(obj);
+}
+function setTeamImage(){
+	openImgDlg(getImage);
+}
+$(function(){
+	var type=$("#type").val();
+	if(type==0){
+		$("#c2").attr("disabled",true);
+		$("#c3").attr("disabled",true);
+	}else{
+		$("#c1").attr("disabled",true);
+	}
+});
+
+function changeTwoDecimal_f(x) {
+	        var f_x = parseFloat(x);
+	        if (isNaN(f_x)) {
+	            alert('参数为非数字，无法转换！');
+	            return false;
+	        }
+	        var f_x = Math.round(x * 100) / 100;
+	        var s_x = f_x.toString();
+	        var pos_decimal = s_x.indexOf('.');
+	        if (pos_decimal < 0) {
+	            pos_decimal = s_x.length;
+	            s_x += '.';
+	        }
+	        while (s_x.length <= pos_decimal + 2) {
+	            s_x += '0';
+	        }
+	        return s_x;
+	    }
+</script>
+	
+

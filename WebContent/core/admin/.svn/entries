@@ -1,0 +1,220 @@
+10
+
+dir
+1344
+svn://223.202.119.226:9999/tradeEaseIpt/WebContent/core/admin
+svn://223.202.119.226:9999
+
+
+
+2016-06-08T03:34:12.059353Z
+128
+zmm
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d43ea004-e395-4cb9-b7bd-d3e1b29e44b9
+
+access
+dir
+
+adv
+dir
+
+app
+dir
+
+ask
+dir
+
+auth
+dir
+
+cache
+dir
+
+component
+dir
+
+consume
+dir
+
+css
+dir
+
+data
+dir
+
+demo
+dir
+
+friendsLink
+dir
+
+guestbook
+dir
+
+help
+dir
+
+images
+dir
+
+index
+dir
+
+index.html
+file
+
+
+
+
+2016-10-14T01:37:53.733000Z
+8de0d433a5f12616985cf1138318cee9
+2016-05-25T07:12:56.140264Z
+2
+zmm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1627
+
+index.jsp
+file
+
+
+
+
+2016-10-14T01:37:51.866000Z
+35ec2d55f3630fda4d961d7094aa8749
+2016-05-25T07:12:56.140264Z
+2
+zmm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1813
+
+js
+dir
+
+menu
+dir
+
+multisite
+dir
+
+resource
+dir
+
+setting
+dir
+
+shortmsg
+dir
+
+site
+dir
+
+sitemenu
+dir
+
+sms
+file
+
+
+
+
+2016-10-14T01:37:53.518000Z
+0a062fde2899c14406f39a7200cd560f
+2016-05-25T07:12:56.140264Z
+2
+zmm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4051
+
+smtp
+dir
+
+theme
+dir
+
+update
+dir
+
+upload
+dir
+
+uri
+dir
+
+user
+dir
+

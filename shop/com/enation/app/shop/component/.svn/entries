@@ -1,0 +1,100 @@
+10
+
+dir
+1344
+svn://223.202.119.226:9999/tradeEaseIpt/shop/com/enation/app/shop/component
+svn://223.202.119.226:9999
+
+
+
+2016-09-30T03:44:56.455734Z
+1315
+lilei
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d43ea004-e395-4cb9-b7bd-d3e1b29e44b9
+
+b2b2c_bonus
+dir
+
+bonus
+dir
+
+count
+dir
+
+depot
+dir
+
+email
+dir
+
+gallery
+dir
+
+gift
+dir
+
+goodscore
+dir
+
+groupbuy
+dir
+
+largeorder
+dir
+
+member
+dir
+
+ordercore
+dir
+
+orderreturns
+dir
+
+payment
+dir
+
+point
+dir
+
+product
+dir
+
+promotion
+dir
+
+receipt
+dir
+
+search
+dir
+
+shopsetting
+dir
+
+shortmsg
+dir
+
+spec
+dir
+
+statistics
+dir
+
+visited
+dir
+

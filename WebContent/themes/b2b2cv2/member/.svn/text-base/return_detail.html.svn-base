@@ -1,0 +1,94 @@
+<#include 'member_header.html' />
+<!-- 退货申请标签 -->
+<#assign sellBackTag=newTag("sellBackTag")>
+<#assign sellBack=sellBackTag("{'id':${id} }")>
+<!-- 退货商品 标签 -->
+<#assign sellBackGoodsListTag=newTag("sellBackGoodsListTag")>
+<#assign sellBackGoodsList=sellBackGoodsListTag("{'id':${id},'sn':${sn} }")>
+<style>
+.order_detail .order_intro {width:100%;}
+</style>
+<div class="user_order">
+	<div class="order_detail">
+		<div class="order_intro">
+			<h1><@uiLabel text="index.PortalUserOrderInformation" /></h1>
+			<div class="detail_list">
+				<dl>
+					<dt><@uiLabel text="index.PortalUserOrderNumber" />：</dt>
+					<dd>${sellBack.ordersn}</dd>
+				</dl>
+				<dl class="online">
+					<dt><@uiLabel text="index.PortalUserApplicationPeriod" />：</dt>
+					<dd><@dateformat time="${sellBack.regtime?c}" pattern="yyyy-MM-dd HH:mm"/></dd>
+				</dl>
+				<dl>
+					<dt><@uiLabel text="index.PortalUserPayStatus" />：</dt>
+					<dd>
+						<#if sellBack.tradestatus  == 0><!--等待处理  -->
+							<span><@uiLabel text="index.PortalUserPending" /></span>
+						<#elseif sellBack.tradestatus  == 1><!--审核通过 -->
+							<span><@uiLabel text="index.PortalUserApprovalAdvisory" /></span>
+						<#elseif sellBack.tradestatus  == 2><!--已入库  -->
+							<span><@uiLabel text="index.PortalUserItInStorage" /></span>
+						<#elseif sellBack.tradestatus  == 3><!--已完成  -->
+							<span><@uiLabel text="index.PortalOrderCompleted" /></span>
+						<#elseif sellBack.tradestatus  == 4><!--已拒绝  -->
+							<span><@uiLabel text="index.PortalUserRejected" /></span>
+						<#elseif sellBack.tradestatus  == 5><!--部分入库  -->
+							<span><@uiLabel text="index.PortalUserPartStorage" /></span>
+						</#if>
+					</dd>
+				</dl>
+				<dl>
+					<dt><@uiLabel text="index.PortalUserReasonReturn" />：</dt>
+					<dd>${sellBack.remark!''}</dd>
+				</dl>
+				<#if sellBack.seller_remark??> 
+					<dl>
+						<dt><@uiLabel text="index.PortalUserCustomerReply" />：</dt>
+						<dd>${sellBack.seller_remark!''}</dd>
+					</dl>
+				</#if>
+			</div>
+		</div>
+	</div>
+	<div class="detail_goodslist">
+		<table>
+			<thead>
+				<tr>
+					<th><@uiLabel text="index.PortalUserPicture" /></th>
+					<th><@uiLabel text="index.PortalUserProductName" /></th>
+					<th><@uiLabel text="index.PortalUserProductsPrice" /></th>
+					<th><@uiLabel text="index.PortalUserQty" /></th>
+					<th><@uiLabel text="index.PortalUserReturnReturnsNumber" /></th>
+				</tr>
+			</thead>
+			<tbody>
+				<#list sellBackGoodsList as sellBackGoods>
+					<tr>
+						<td>
+							<a target="_blank" href="../goods-${sellBackGoods.goods_id}.html">
+								<span style="display: block; height: 50px;" class="cart-product-img">
+									<img height="50" src="${sellBackGoods.image!''}"  style="cursor: pointer;" />
+								</span>
+							</a>				
+						</td>
+						<td>
+							${sellBackGoods.name}
+						</td>
+						<td>
+							${sellBackGoods.price?string.currency}
+						</td>
+						<td>
+							${sellBackGoods.num }
+						</td>
+						<td>
+							${sellBackGoods.ship_num!0}
+						</td>
+					</tr>
+				</#list>
+			</tbody>
+		</table>
+	</div>
+</div>
+<#include '${ctx}/common/footer.html'/>

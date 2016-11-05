@@ -1,0 +1,145 @@
+<#if locale=="ru">
+     <#assign title="Изменить пароль" />
+<#elseif locale=="zh">
+     <#assign title="修改密码" />
+</#if>
+<#include 'member_header.html' />
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class="selected"><a href="security.html"><span><@uiLabel text="index.ChangePassword" /></span></a></li>
+		</ul>
+	</div>
+	<!-- 修改密码提示 -->
+	<div class="password_explain">
+		<h2><@uiLabel text="index.AddressTips" /></h2>
+		<ul>
+			<li>1、<@uiLabel text="index.SecurityTipsOne" /></li>
+			<li>2、<@uiLabel text="index.SecurityTipsTwo" /></li>
+		</ul>
+	</div>
+	<div class="password_change">
+		<form class="validate" action="" method="post" id="register_form">
+			<#if locale=="zh">
+			<dl style="font-size:12px; width：700px;">
+				<dt style="width:100px;padding-left:30px;"><@uiLabel text="index.OldPassword" />：</dt>
+				<dd>
+				<input type="password" name="oldpassword" isrequired="true" class="input_text"  fun="isPasswd" id="useroldpwd" style="float:left;margin-right:10px;"/>
+			<#elseif locale=="ru">
+			<dl style="font-size:12px; width：700px;">
+			<dt style="width:300px;padding-left:30px;"><@uiLabel text="index.OldPassword" />：</dt>
+				<dd style="float:right;width:500px;margin-right:150px;">
+				<input type="password" name="oldpassword" isrequired="true" class="input_text"  fun="isPasswd" id="useroldpwd" style="float:left;margin-right:180px;margin-left:17px; margin-top:-50px;"/>
+				</dd>
+			</#if>	
+			</dl>
+			<#if locale="zh">
+			<dl style="font-size:12px; width：700px;">
+				<dt style="width:100px;padding-left:30px;"><@uiLabel text="index.NewPassword" />：</dt>
+				<dd><input type="password" name="newpassword" id="password" isrequired="false" class="input_text" fun="isPasswd" style="float:left;margin-right:10px;"/></dd>
+			</dl>
+			<#elseif locale="ru">
+			<dl style="font-size:12px; width：700px;">
+				<dt style="width:300px;padding-left:30px;"><@uiLabel text="index.NewPassword" />：</dt>
+				<dd style="float:right;width:500px;margin-right:150px;">
+				<input type="password" name="newpassword" id="password" isrequired="false" class="input_text" fun="isPasswd" style="float:left;margin-right:180px;margin-left:17px; margin-top:-50px;"/></dd>
+			</dl>
+			</#if>
+			<#if locale="zh">
+			<dl style="font-size:12px; width：700px;">
+				<dt  style="width:100px;padding-left:30px;"><@uiLabel text="index.ConfirmNewPassword" />：</dt>
+				<dd><input class="input_text" type="password" name="re_passwd" id="passwd_re"	isrequired="true" fun='checkpwd' style="float:left;margin-right:10px;"/></dd>
+			</dl>
+			<#elseif locale="ru">
+			<dl style="font-size:12px; width：700px;">
+				<dt  style="width:300px;padding-left:30px;"><@uiLabel text="index.ConfirmNewPassword" />：</dt>
+				<dd style="float:right;width:500px;margin-right:150px;">
+				<input class="input_text" type="password" name="re_passwd" id="passwd_re" isrequired="true" fun='checkpwd' style="float:left;margin-right:180px;margin-left:17px;margin-top:-50px;"/></dd>
+			</dl>
+			</#if>
+			<dl class="table_bottom">
+			<#if locale="zh">
+				<dt>&nbsp;</dt>
+				<dd><input type="button" name="btnReg" style="margin-top:22px;" value="<@uiLabel text="index.OKModification" />" class="yellow_btn change_ok" /></dd>
+			<#elseif locale="ru">
+			<dt>&nbsp;</dt>
+				<dd><input type="button" name="btnReg" style="margin-left:180px;" value="<@uiLabel text="index.OKModification" />" class="yellow_btn change_ok" /></dd>
+			</#if>
+			</dl>
+		</form>
+	</div>
+</div>	
+
+<script>
+	$(function(){
+		$(".yellow_btn").click(function(){
+			if(!$("#register_form").checkall())
+				return false;
+			var s = $("#password").val();
+			if( isPasswd(s) ){
+				var useroldpwd = $("#useroldpwd").val();
+				var usernewpwd = $("#password").val();
+				var useraffirmpwd = $("#passwd_re").val();
+				$(".validate").ajaxSubmit({
+					url:"${ctx}/api/shop/member!changePassword.do?ajax=yes",
+					dataType : 'json',
+					success:function(result){
+						if(result.result==1){
+							alert("<@uiLabel text="index.BuyersCenterAlertI" />");
+							//退回到首页，重新登录
+							$.ajax({
+								url:"../api/shop/member!logout.do?ajax=yes",
+								dataType:"json",
+								cache: false,             //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。
+								success:function(result){
+									if(result.result==1){
+										location.href="${ctx}/index.html";
+										
+									}else{
+										$.alert(result.message);
+									}	
+									$.Loading.hide();
+								},
+								error:function(){
+									$.Loading.hide();
+									$.alert("<@uiLabel text="index.BuyersCenterAlertJ" />");
+								}
+							});
+						}
+						else{
+//							alert("<@uiLabel text="index.BuyersCenterAlertK" />");
+							alert(result.message);
+						}
+					}
+				})
+			}
+		})
+	})
+</script>
+<script>
+
+function isPasswd(s){  
+	//var patrn=/^(\w){6,20}$/;
+	var patrn=/^[0-9A-Za-z.@\-\_\!\#\$\^\&\*\?\%\.\<\>\,]{6,16}$/;
+	if (!patrn.exec(s)){
+		return "<@uiLabel text="index.BuyersCenterAlertL" />";
+		return false;
+	}
+	return true;  
+}
+/*
+function checkpwd(){    
+	if( $("#passwd_re").val()==$("#password").val() ){
+		return true;
+	}
+	else{ 
+		alert("<@uiLabel text="index.BuyersCenterAlertM" />");
+		return false;
+	}
+}*/
+</script>
+
+
+
+</div>
+<#include '../common/footer.html'/>

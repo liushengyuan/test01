@@ -1,0 +1,306 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="gridform" method="post">
+		<div class='buttonArea'>
+<!-- 			<span id="searchbtn">
+				<a href="javascript:void(0)" class="button"  onclick="append()">添加选中</a>
+			</span> -->
+			<span style="float: right;"> 
+				<span id="simpleSearch">
+				所属馆：
+					<select name="storeStatus" id="storeStatus" class="button">
+						<option value="">全部</option>
+						<option value="0">俄罗斯馆</option>
+						<option value="1">龙江物产</option>
+						<option value="2">澳大利亚馆</option>
+						<option value="3">新西兰馆</option>
+						<option value="4">韩国馆</option>
+						<option value="5">德国馆</option>
+						<option value="6">平台</option>
+					</select>
+					<select name="auditStatus" id="auditStatus" class="button">
+						<option value="">全部</option>
+						<option value="0">待审核</option>
+						<option value="1">通过</option>
+						<option value="2">不通过</option>
+						<option value="3">符合要求</option>
+						<option value="-1">草稿</option>
+					</select>
+					<input id="storeName" class="input_text" type="text" value="" size="20"
+					placeholder="请输入店铺名称" name="storeName">&nbsp;&nbsp;&nbsp;
+					<input id="searchKeyword" class="input_text" type="text" value="" size="30"
+					placeholder="请输入模糊关键字" name="searchKeyWord"> 
+					<a href="javascript:void(0)" class="easyui-linkbutton" 
+					data-options="plain:true" onclick="searchGoods()">搜索</a>
+				</span>
+			</span>
+		</div>
+		
+
+	<div class="clear height10"></div>
+		<div class="shadowBoxWhite tableDiv"> 
+			<table class="easyui-datagrid"   url="${ctx}/shop/admin/goods!listJson.do" 
+				data-options="pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="goodsdata"
+				sortName="goods_id" sortOrder="desc"
+				>
+				<thead>
+					<tr>
+						<!-- <th data-options="field:'goods_id',checkbox:true,width:100" ></th> -->
+						<th data-options="field:'sn',width:100,sortable:'true'" >商品编号</th>
+						<th data-options="field:'name',width:100">商品名称</th>
+						<th data-options="field:'store_name',width:100">店铺名称</th>
+						<th data-options="field:'cat_name',sortable:'true',width:100">分类</th>
+						<th data-options="field:'price',sortable:'true',width:100" formatter="formatMoney">销售价格</th>
+						<th data-options="field:'is_discount',sortable:'true',width:50" formatter="formatDiscount">折扣</th>
+						<th data-options="field:'audit_status',width:50" formatter="market_enable">状态</th>
+						<th data-options="field:'market_enable',width:100" formatter="market_enable1">卖家状态</th>
+						<th data-options="field:'store_market',sortable:'true',width:150" formatter="formatMarket">店铺投向市场</th>
+						<th data-options="field:'audit_discribe',sortable:'true',width:200" formatter="formateDiscribe">审核理由</th>
+						<th data-options="field:'create_time',sortable:'true',width:200" formatter="formatTime">上传时间</th>
+						<th  data-options="field:'is_belong',width:80" formatter="formatMarket1">所属馆</th>
+						<th data-options="field:'enable_store',width:100">可用库存</th>
+<!-- 						<th data-options="field:'market_enable',sortable:'true',width:50" formatter="market_enable">上架</th>
+						<th data-options="field:'brand_name',sortable:'true',width:200">品牌</th>
+						<th data-options="field:'last_modify',sortable:'true',width:200" formatter="formatTime">上架时间</th> -->
+						<th data-options="field:'delete',width:100" formatter="formatDelete">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="Goodinfo" style="display: none;"></div>
+</div>
+<#-- onclick='openProductInfo("+row.goods_id+")'-->
+<script type="text/javascript">
+
+function formatMarket(value,row,index){
+    var val ;
+    if(value=="RUS"){
+    	return val="俄罗斯";
+    }else if(value=="CHN"){
+    	return val="中国";
+    }else{
+    	return val="";
+    }
+	
+}
+function formatMarket1(value,row,index){	
+	if(value==6){
+		return "平台";
+	}else if(value==3){
+		return "新西兰馆";
+	}else if(value==4){
+		return "韩国馆";
+	}else if(value==5){
+		return "德国馆";
+	}else if(value==1){
+		return "龙江物产";
+	}else if(value==0){
+		return "俄罗斯馆";
+	}else if(value==2){
+		return "澳大利亚馆";
+	}
+}
+function market_enable(value,row,index){
+	var val;
+	if(value==1){val="通过";}else if(value==0 && row.market_enable==2){val="待审核";}else if(value==0 && row.market_enable==-1){val="草稿";}else if(row.market_enable==4 && value==4){val="审核未通过已删除";}else if(row.market_enable==5 && value==5){val="商品已下架删除";}else if(value==2){val="不通过";}else if(value==3){val="符合要求";}else{val=""}
+	return val;
+}
+function market_enable1(value,row,index){
+	var val1;
+	if(row.market_enable==5 || row.market_enable==4){val1="已删除";}
+	else{val1="未删除";}
+	return val1;
+}
+function formatDiscount(value,row,index){
+	var val;
+	if(value==1){val="是";}else{val="否"}
+	return val;
+}
+function formatMoney(value,row,index){
+	var val="￥"+value;
+	return val;
+}
+function formatDelete(value,row,index){
+	var val="<a title='审核' href='javascript:void(0);' onclick='edit("+row.goods_id+")'>审核</a>&nbsp;&nbsp;||&nbsp;&nbsp;<a title='查看详情' target='_blank' href='${ctx}/goods-"+row.goods_id+".html' >查看详情</a>";
+	if(row.market_enable==-1 && row.audit_status==0){
+		return "";
+	}else{
+		return val;
+	}
+
+}
+function formateDiscribe(value,row,index){
+	if(row.market_enable==-1 && row.audit_status==0 || row.audit_status==0){
+		return "";
+	}else{		
+            return "<span title='" + value + "'>" + value + "</span>";  
+	}
+	
+}
+
+
+
+
+function formatTime(value,row,index){
+	return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+}
+
+$(function(){
+	if("${optype}"=="stock"){
+		$("#searchbtn").hide();
+	};
+	$(".searchAdvanced").hide();
+	//高级查询按钮
+/*     $("#aAdvanced").click(function () {
+        if ($("#Advanced").val() == "0") {
+            $("#Advanced").val(1);
+            $("#simpleSearch").hide();
+            $("#aAdvanced").addClass("searchAdvancedS");
+        } else {
+            $("#Advanced").val(0);
+            $("#simpleSearch").show();
+            $("#aAdvanced").removeClass("searchAdvancedS");
+        }
+        $(".searchAdvanced").slideToggle("slow");
+    }); */
+})		
+
+//搜索
+function searchGoods(){
+	
+	var searchtype = 0;
+	var keyword = $("#searchKeyword").val();
+	var auditStatus = $("#auditStatus").val();
+	var storeStatus = $("#storeStatus").val();
+	//var name = $("#name").val();
+	//var sn = $("#sn").val();
+	//var catid = $("#catid").combo('getValue');
+	var storeName=$("#storeName").val();
+	$('#goodsdata').datagrid('load', {
+		 stype:searchtype,
+		 keyword:keyword,
+		 storeName:storeName,
+		 auditStatus:auditStatus,
+		 storeStatus:storeStatus,
+		 //name:name,
+		 //sn:sn,
+		 //catid:catid,
+		 page:1
+    }); 
+}
+//审核
+function edit(goodsId){
+	 $("#Goodinfo").show();
+	　　	$('#Goodinfo').dialog({
+	　　		title: '商品审核',			
+	　　		width: 750,
+	　　		closed: false,
+	　　		cache: false,
+	　　		href: '${ctx}/shop/admin/goods!auditStyleGoods.do?goodsId='+goodsId, 	 
+	　　		modal: true,
+	　　		buttons: [{					
+	　　			 text:'保存',
+	　　			 iconCls:'icon-ok',
+	　　			 handler:function(){
+	　　				 var disabled=  $(this).hasClass("l-btn-disabled");
+	　　				 if(!disabled){
+	　　					var editbtn = $(this);
+		　　				editTeamForm(editbtn);		
+		　　			}
+　				 }
+　			 },{
+	　　			 text:'还原',
+	　　			 handler:function(){
+	　　				 $('#goodsInfoForm')[0].reset() ;
+	　　			 }
+	　　		}]
+	　　	}); 
+}
+function editTeamForm(editbtn){
+	var formflag= $("#goodsInfoForm").form().form('validate');
+	if(formflag){
+		$.Loading.show("正在保存请稍候...");
+		editbtn.linkbutton("disable");
+		var options = {
+				url : "${ctx}/shop/admin/goods!saveAuditStyleGoods.do?ajax=yes",
+				type : "POST",
+				dataType : "json",
+				success : function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+						$("#Goodinfo").dialog('close');
+						$('#goodsdata').datagrid('reload');
+					}else{
+						$.Loading.error(result.message);
+					}
+					editbtn.linkbutton("enable");
+			 	},
+			 	error : function(e) {
+			 		$.Loading.error("出现错误 ，请重试");	
+			 		editbtn.linkbutton("enable");
+				}
+		};
+		$('#goodsInfoForm').ajaxSubmit(options);
+	}
+}
+/* function append(){
+	var rows = $('#goodsdata').datagrid("getSelections"); 
+	if(rows.length<1){
+		$.Loading.error("请选择要添加商品");
+		return;
+	}
+	$.Loading.show("正在添加商品...");
+	var options = {
+			url : "goodsShow!batchAddForTeam.do?ajax=yes",
+			type : "POST",
+			dataType : 'json',
+			success : function(result) {
+				if(result.result==1){
+					$.Loading.success(result.message);
+					location.reload();     
+				}
+				if(result.result==0){
+					$.Loading.success(result.message);
+				}
+			},
+			error : function(e) {
+				$.Loading.error("出现错误 ，请重试");
+			}
+		};
+		$('#gridform').ajaxSubmit(options);	
+} */
+function openProductInfo(goodsId){
+	$("#Goodinfo").show();
+　　	$('#Goodinfo').dialog({
+　　		title: '商品详情',
+　　		width: 900,
+　　		closed: false,
+　　		cache: false,
+　　		href: '${ctx}/shop/admin/goods!getProductInfo.do?goodsId='+goodsId,
+　　		modal: true,
+　　		buttons: [{
+　　			 text:'关闭',
+　　			 iconCls:'icon-ok',
+　　			 handler:function(){
+　　				$("#Goodinfo").dialog('close');
+　　			}
+			 }]
+　　	});
+}
+function formatCellTooltip(value){  
+    return "<span title='" + value + "'>" + value + "</span>";  
+}  
+</script>
+
+<#include '/admin/footer.html' >
+
+

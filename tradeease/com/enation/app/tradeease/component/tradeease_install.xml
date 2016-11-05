@@ -1,0 +1,804 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dbsolution>
+	<!-- 买赠活动管理 -->
+	<action>
+		<command>create</command>
+		<table>es_gift</table>
+		<field type="add"><name>id</name><type>int</type><size>8</size><option>11</option></field>
+		<field type="add"><name>name</name><type>varchar</type><size>100</size><option>00</option></field>
+		<field type="add"><name>start_time</name><type>long</type><size>20</size><option>00</option></field>
+		<field type="add"><name>end_time</name><type>long</type><size>20</size><option>00</option></field>
+		<field type="add"><name>rule</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>es_member_comment</table>
+		<field  type="add"><name>check_description</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action>
+	<!-- 新增优惠券类型表内字段 -->
+	<action>
+		<command>alter</command>
+		<table>es_bonus_type</table>
+		<field type="add"><name>type_name_ru</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>type_money_ru</name><type>decimal</type><size>10,2</size><option>00</option><default>0</default></field>
+		<field type="add"><name>min_goods_amount_ru</name><type>decimal</type><size>10,2</size><option>00</option><default>0</default></field>
+	</action>
+	<!-- 新增会员优惠券表内字段 -->
+	<action>
+		<command>alter</command>
+		<table>es_member_bonus</table>
+		<field type="add"><name>type_name_ru</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action>
+	<!-- 短信实体 -->
+	<action>
+		<command>create</command>
+		<table>es_smsmobile</table>
+		<field type="add"><name>id</name><type>int</type><size>11</size><option>11</option></field>
+		<field type="add"><name>v_servicecode</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>v_mobile</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>v_content</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>v_smstype</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>v_status</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>sendtime</name><type>Long</type><size>20</size><option>00</option></field>
+	</action>
+	<!-- 推荐项图片关联地址 -->
+	<!-- <action>
+		<command>alter</command>
+		<table>es_team</table>
+		<field type="add"><name>pic_url</name><type>varchar</type><size>200</size></field>
+	</action> -->
+	<!-- 新增会员证件类型 -->
+	<!-- <action>
+		<command>alter</command>
+		<table>es_member</table>
+		<field type="add"><name>member_prove_type</name><type>int</type><size>10</size><option>00</option><default>1</default></field>
+	</action> -->
+	<!-- 新增字段，退货原因 -->
+	<!-- <action>
+		<command>alter</command>
+		<table>es_sellback_list</table>
+		<field type="add"><name>refund_reason</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action> -->
+	<!-- <action>
+		<command>create</command>
+		<table>es_withdrawal</table>
+		<field type="add"><name>id</name><type>int</type><size>11</size><option>11</option></field>
+		<field type="add"><name>serial_number</name><type>int</type><size>20</size><option>00</option></field>
+		<field type="add"><name>create_date</name><type>long</type><size>20</size><option>00</option></field>
+		<field type="add"><name>type</name><type>int</type><size>20</size><option>00</option></field>
+		<field type="add"><name>number</name><type>decimal</type><size>20,2</size><option>00</option></field>
+		<field type="add"><name>capital_channel</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>state</name><type>int</type><size>20</size><option>00</option></field>
+		<field type="add"><name>note</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>details</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>member_id</name><type>int</type><size>20</size><option>00</option></field>
+		<field type="add"><name>store_id</name><type>int</type><size>20</size><option>00</option></field>
+		<field type="add"><name>ok_date</name><type>long</type><size>20</size><option>00</option></field>
+		<field type="add"><name>real_date</name><type>long</type><size>20</size><option>00</option></field>
+		<field type="add"><name>operator_id</name><type>int</type><size>20</size><option>00</option></field>
+	</action> -->
+
+	<!-- <action>
+		<command>alter</command>
+		<table>withdrawal</table>
+		<field type="add"><name>card</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>es_member_address</table>
+		<field type="add"><name>type</name><type>int</type><size>20</size><option>00</option></field>
+	</action>
+
+	<action>
+		<command>alter</command>
+		<table>store</table>
+		<field type="add"><name>store_location</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action> -->
+	<!-- 卖家银行卡信息表 -->
+	<!-- <action>
+		<command>create</command>
+		<table>es_seller_card</table>
+		<field><name>id</name><type>int</type><size>8</size><option>11</option></field>
+		<field><name>login_name</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>store_id</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>store_name</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>bank_name</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>card_holder</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>card_num</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>is_enable</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>status</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>check_description</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>check_time</name><type>long</type><size>20</size><option>00</option></field>
+	</action> -->
+	<!-- <action>
+		<command>alter</command>
+		<table>es_goods</table>
+		<field type="add"><name>wholesale_volume</name><type>int</type><size>8</size><option>00</option></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>es_product</table>
+		<field type="add"><name>wholesale_volume</name><type>int</type><size>8</size><option>00</option></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>es_goods_spec</table>
+		<field type="add"><name>spec_img</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>tags</table>
+		<field type="add"><name>name_ru</name><type>varchar</type><size>255</size></field>
+	</action> -->
+	
+ 	<!-- <action>
+		<command>alter</command>
+		<table>goods</table>
+		<field type="add"><name>name_ru</name><type>varchar</type><size>200</size></field>
+		<field type="add"><name>name_en</name><type>varchar</type><size>200</size></field>
+		<field type="add"><name>expire_time</name><type>long</type><size>20</size></field>
+		<field type="add"><name>vaild_day</name><type>int</type><size>6</size></field>
+		<field type="add"><name>depth</name><type>varchar</type><size>8</size></field>
+		<field type="add"><name>width</name><type>varchar</type><size>8</size></field>
+		<field type="add"><name>height</name><type>varchar</type><size>8</size></field>
+		<field type="add"><name>price_ru</name><type>decimal</type><size>20,2</size></field>
+		<field type="add"><name>price_en</name><type>decimal</type><size>20,2</size></field>
+	</action> -->
+	<!-- <action>
+		<command>alter</command>
+		<table>goods</table>
+		<field type="add"><name>whprice</name><type>decimal</type><size>20,2</size></field>
+		<field type="add"><name>whprice_en</name><type>decimal</type><size>20,2</size></field>
+		<field type="add"><name>whprice_ru</name><type>decimal</type><size>20,2</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>product</table>
+		<field type="add"><name>name_ru</name><type>varchar</type><size>255</size></field>
+		<field type="add"><name>name_en</name><type>varchar</type><size>255</size></field>
+		<field type="add"><name>price_ru</name><type>decimal</type><size>20,2</size></field>
+		<field type="add"><name>price_en</name><type>decimal</type><size>20,2</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>product</table>
+		<field type="add"><name>whprice</name><type>decimal</type><size>20,2</size></field>
+		<field type="add"><name>whprice_ru</name><type>decimal</type><size>20,2</size></field>
+		<field type="add"><name>whprice_en</name><type>decimal</type><size>20,2</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>goods_cat</table>
+		<field type="add"><name>name_ru</name><type>varchar</type><size>200</size></field>
+		<field type="add"><name>name_en</name><type>varchar</type><size>200</size></field>
+	</action> -->
+	<!-- 商品类型和规格关联表 -->
+	<!-- <action>
+		<command>create</command>
+		<table>es_goods_type_spec</table>
+		<field><name>id</name><type>int</type><size>8</size><option>11</option></field>
+		<field><name>cat_id</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>spec_id</name><type>int</type><size>8</size><option>00</option></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>goods_type</table>
+		<field type="add"><name>name_ru</name><type>varchar</type><size>100</size></field>
+		<field type="add"><name>name_en</name><type>varchar</type><size>100</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>cart</table>
+		<field type="add"><name>currency</name><type>varchar</type><size>3</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>order</table>
+		<field type="add"><name>currency</name><type>varchar</type><size>3</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>order_items</table>
+		<field type="add"><name>currency</name><type>varchar</type><size>3</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>member</table>
+		<field type="add"><name>id_number</name><type>varchar</type><size>20</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>store</table>
+		<field type="add"><name>company_name</name><type>varchar</type><size>200</size></field>
+		<field type="add"><name>enterprise_legal</name><type>varchar</type><size>200</size></field>
+		<field type="add"><name>registration_number</name><type>varchar</type><size>200</size></field>
+		<field type="add"><name>company_create_time</name><type>long</type><size>20</size></field>
+		<field type="add"><name>company_size</name><type>int</type><size>8</size></field>
+		<field type="add"><name>main_products</name><type>varchar</type><size>255</size></field>
+		<field type="add"><name>email</name><type>varchar</type><size>200</size></field>
+		<field type="add"><name>fax_number</name><type>varchar</type><size>200</size></field>
+		<field type="add"><name>company_url</name><type>varchar</type><size>200</size></field>
+		<field type="add"><name>company_description</name><type>varchar</type><size>255</size></field>
+	</action> 
+	<action>
+		<command>create</command>
+		<table>es_store_Feature</table>
+		<field><name>id</name><type>int</type><size>8</size><option>11</option></field>
+		<field><name>name</name><type>varchar</type><size>200</size><option>00</option></field>
+		<field><name>store_id</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>feature_type</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>feature_index</name><type>int</type><size>8</size><option>00</option></field>
+	</action>
+	<action>
+		<command>create</command>
+		<table>es_team</table>
+		<field><name>team_id</name><type>int</type><size>8</size><option>11</option></field>
+		<field><name>name_zh</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>name_en</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>name_ru</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>description</name><type>text</type><size>0</size><option>00</option></field>
+		<field><name>is_show</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>team_image</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>line_color</name><type>varchar</type><size>40</size><option>00</option></field>
+		<field><name>team_index</name><type>int</type><size>8</size><option>00</option></field>
+	</action> -->
+	<!-- 推荐项图片关联地址 -->
+	<!-- <action>
+		<command>alter</command>
+		<table>es_team</table>
+		<field type="add"><name>pic_url</name><type>varchar</type><size>200</size></field>
+	</action>
+	<action>
+		<command>create</command>
+		<table>es_team_product</table>
+		<field><name>id</name><type>int</type><size>8</size><option>11</option></field>
+		<field><name>team_id</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>product_id</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>product_image</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>product_index</name><type>int</type><size>8</size><option>00</option></field>
+	</action> -->
+	<!-- 审核缘由，审核时间 -->
+ 	<!-- <action>
+		<command>alter</command>
+		<table>store</table>
+		<field type="add"><name>check_description</name><type>varchar</type><size>255</size></field>
+		<field type="add"><name>check_time</name><type>long</type><size>20</size></field>
+	</action> -->
+	<!-- 添加账户（卖家的平台账户和卖家的保证金账户） -->
+ 	<!-- <action>
+		<command>alter</command>
+		<table>store</table>
+		<field type="add"><name>account</name><type>decimal</type><size>20,2</size><option>00</option> </field>
+		<field type="add"><name>credit_account</name><type>decimal</type><size>20,2</size><option>00</option> </field>
+		<field type="add"><name>credit_account_status</name><type>int</type><size>11</size><option>00</option></field>
+	</action> -->
+	<!-- 添加父类店铺字段 -->
+	<!-- <action>
+		<command>alter</command>
+		<table>store</table>
+		<field type="add"><name>parent_store</name><type>int</type><size>11</size><option>00</option></field>
+	</action> -->
+	<!-- 添加一些店铺认证信息字段 -->
+	<!-- <action>
+		<command>alter</command>
+		<table>store</table>
+		<field type="add"><name>prove_name</name><type>varchar</type><size>80</size><option>00</option> </field>
+		<field type="add"><name>prove_type</name><type>int</type><size>11</size><option>00</option> </field>
+		<field type="add"><name>prove_mobile</name><type>varchar</type><size>40</size><option>00</option></field>
+		<field type="add"><name>bank_address</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>prove_img</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>reverse_id_img</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>bcard_img</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action> -->
+	<!--  给店铺添加紧急联系人和备用联系人极其联系手机 -->
+	<!-- <action>
+		<command>alter</command>
+		<table>store</table>
+		<field type="add"><name>prove_name2</name><type>varchar</type><size>80</size><option>00</option> </field>
+		<field type="add"><name>prove_mobile2</name><type>varchar</type><size>40</size><option>00</option></field>
+		<field type="add"><name>prove_name3</name><type>varchar</type><size>80</size><option>00</option> </field>
+		<field type="add"><name>prove_mobile3</name><type>varchar</type><size>40</size><option>00</option></field>
+	</action> -->
+	<!-- 添加商户账户流水明细 -->
+	<!-- <action>
+		<command>create</command>
+		<table>es_account_detail</table>
+		<field><name>rec_id</name><type>int</type><size>8</size><option>11</option></field>
+		<field><name>unique_id</name><type>varchar</type><size>40</size><option>00</option></field>
+		<field><name>member_id</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>member_name</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>store_id</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>store_name</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>type</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>amount_type</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>account_type</name><type>int</type><size>8</size><option>00</option></field>
+ 		<field><name>income_amount</name><type>decimal</type><size>20,2</size><option>00</option> </field>
+		<field><name>outlay_amount</name><type>decimal</type><size>20,2</size><option>00</option> </field>
+		<field><name>balance</name><type>decimal</type><size>20,2</size><option>00</option> </field>
+		<field><name>credit_balance</name><type>decimal</type><size>20,2</size><option>00</option> </field>
+ 		<field><name>status</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>tx_number</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>note</name><type>varchar</type><size>255</size><option>00</option></field>
+ 		<field><name>create_time</name><type>long</type><size>20</size><option>00</option></field>
+		<field><name>last_time</name><type>long</type><size>20</size><option>00</option></field> 
+		<field><name>oper_id</name><type>int</type><size>8</size><option>00</option></field>
+		<field><name>oper_name</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action>  
+ 	<action>
+		<command>create</command>
+		<table>es_message_center</table>
+		<field type="add"><name>message_id</name><type>int</type><size>11</size><option>11</option></field>
+		<field type="add"><name>from_member_id</name><type>int</type><size>11</size><option>00</option></field>
+		<field type="add"><name>goods_id</name><type>int</type><size>11</size><option>00</option></field>
+		<field type="add"><name>order_id</name><type>int</type><size>11</size><option>00</option></field>
+		<field type="add"><name>message_title</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>message_type</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>message_text</name><type>memo</type><size>715827882</size><option>00</option></field>
+		<field type="add"><name>describe_text</name><type>memo</type><size>715827882</size><option>00</option></field>
+		<field type="add"><name>send_date</name><type>long</type><size>8</size><option>00</option><default>100000</default> </field>
+	</action>
+	<action>
+		<command>create</command>
+		<table>es_message_flag</table>
+		<field type="add"><name>message_flag_id</name><type>int</type><size>11</size><option>11</option></field>
+		<field type="add"><name>message_id</name><type>int</type><size>20</size><option>00</option></field>
+		<field type="add"><name>message_state</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>accept_member_id</name><type>int</type><size>20</size><option>00</option></field>
+		<field type="add"><name>store_id</name><type>int</type><size>20</size><option>00</option></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>goods</table>
+		<field type="add"><name>audit_status</name><type>int</type><size>6</size></field>
+		<field type="add"><name>audit_discribe</name><type>varchar</type><size>255</size></field>
+	</action> -->
+	<!-- 仓库信息表 -->
+	<!-- <action>
+		<command>create</command>
+		<table>warehouse</table>
+		<field><name>warehouse_id</name><type>int</type><size>11</size><option>11</option></field>
+		<field><name>warehouse_name</name><type>varchar</type><size>80</size><option>00</option></field>
+		<field><name>ShipperStateOrProvince</name><type>varchar</type><size>80</size><option>00</option></field>
+		<field><name>ShipperCity</name><type>varchar</type><size>80</size><option>00</option></field>
+		<field><name>ShipperAddress</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>ShipperTelephone</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>ShipperPostCode</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action> -->
+
+	<!-- 物流信息表 -->
+	<!-- <action>
+		<command>create</command>
+		<table>logisticsinformation</table>
+		<field><name>logistics_id</name><type>int</type><size>11</size><option>11</option></field>
+		<field><name>order_id</name><type>varchar</type><size>80</size><option>00</option></field>
+		<field><name>warehouse_id</name><type>varchar</type><size>80</size><option>00</option></field>
+		<field><name>referenceNumber</name><type>varchar</type><size>80</size><option>00</option></field>
+		<field><name>trackingNumber</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field><name>createtime</name><type>datetime</type><size>20</size><option>00</option></field>
+		<field><name>cofirmtime</name><type>datetime</type><size>20</size><option>00</option></field>
+		<field><name>amount</name><type>decimal</type><size>20,2</size><option>00</option> </field>
+		<field><name>status</name><type>varchar</type><size>10</size><option>00</option></field>
+		<field><name>weight</name><type>varchar</type><size>10</size><option>00</option></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>member</table>
+		<field type="add"><name>fax</name><type>varchar</type><size>20</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>adv</table>
+		<field type="add"><name>aname_ru</name><type>varchar</type><size>200</size></field>
+	</action> -->
+	<!-- <action>
+		<command>alter</command>
+		<table>specification</table>
+		<field type="add"><name>spec_name_ru</name><type>varchar</type><size>255</size></field>
+		<field type="add"><name>spec_memo_ru</name><type>varchar</type><size>255</size></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>spec_values</table>
+		<field type="add"><name>spec_value_ru</name><type>varchar</type><size>255</size></field>
+	</action>
+	<action>
+		<command>create</command>
+		<table>es_trade</table>
+		<field type="add"><name>trade_id</name><type>int</type><size>11</size><option>11</option></field>
+		<field type="add"><name>order_id</name><type>int</type><size>11</size><option>00</option></field>
+		<field type="add"><name>unique_id</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>order_sn</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>member_id</name><type>int</type><size>11</size><option>00</option></field>
+		<field type="add"><name>store_name</name><type>varchar</type><size>255</size><option>00</option></field>
+		<field type="add"><name>status</name><type>int</type><size>11</size><option>00</option></field>
+		<field type="add"><name>type</name><type>int</type><size>11</size><option>00</option></field>
+		<field type="add"><name>txNo</name><type>int</type><size>11</size><option>00</option></field>
+		<field type="add"><name>order_amount_ru</name><type>decimal</type><size>20,2</size><option>00</option> </field>
+		<field type="add"><name>exchange_rate</name><type>decimal</type><size>10,6</size><option>00</option> </field>
+		<field type="add"><name>brokerage</name><type>decimal</type><size>20,2</size><option>00</option></field>
+		<field type="add"><name>actual_account</name><type>decimal</type><size>20,2</size><option>00</option> </field>
+		<field type="add"><name>balance</name><type>decimal</type><size>20,2</size><option>00</option> </field>
+		<field type="add"><name>bill_id</name><type>int</type><size>11</size><option>00</option></field>
+		<field type="add"><name>oper_id</name><type>int</type><size>11</size><option>00</option></field>
+		<field type="add"><name>business_time</name><type>long</type><size>11</size><option>00</option><default>100000</default> </field>
+		<field type="add"><name>record_time</name><type>long</type><size>11</size><option>00</option><default>100000</default> </field>
+		<field type="add"><name>occur_time</name><type>long</type><size>11</size><option>00</option><default>100000</default> </field>
+		<field type="add"><name>remark</name><type>varchar</type><size>255</size><option>00</option></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>order</table>
+		<field type="add"><name>loan_status</name><type>int</type><size>1</size><option>00</option><default>0</default></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>order</table>
+		<field type="add"><name>exchange_rate</name><type>decimal</type><size>20,8</size><option>00</option><default>0.1117</default></field>
+	</action>
+	<action>
+		<command>alter</command>
+		<table>order</table>
+		<field type="add"><name>price_zh</name><type>decimal</type><size>20,2</size><option>00</option><default>0.00</default></field>
+	</action> -->
+	<!-- 青云商城二级页面的5个推荐的分类 -->
+	<!-- <action>
+		<command>insert</command>
+		<table>es_tags</table>
+		<fields>tag_id,tag_name,name_ru,rel_count</fields>
+		<values>5,'青云商城分类1（后台通过标签可修改）','qingyushangchengfenlei1（后台通过标签可修改）',0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_tags</table>
+		<fields>tag_id,tag_name,name_ru,rel_count</fields>
+		<values>6,'青云商城分类2（后台通过标签可修改）','qingyushangchengfenlei2（后台通过标签可修改）',0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_tags</table>
+		<fields>tag_id,tag_name,name_ru,rel_count</fields>
+		<values>7,'青云商城分类3（后台通过标签可修改）','qingyushangchengfenlei3（后台通过标签可修改）',0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_tags</table>
+		<fields>tag_id,tag_name,name_ru,rel_count</fields>
+		<values>8,'青云商城分类4（后台通过标签可修改）','qingyushangchengfenlei4（后台通过标签可修改）',0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_tags</table>
+		<fields>tag_id,tag_name,name_ru,rel_count</fields>
+		<values>9,'青云商城分类5（后台通过标签可修改）','qingyushangchengfenlei5（后台通过标签可修改）',0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>es_adcolumn</table>
+		<fields>acid,cname,width,height,atype,disabled</fields>
+		<values>3,'青云商城大图轮播广告','950px','370px',0,'false'</values>
+	</action> -->
+	<!-- 为首页添加青云商城类目 -->
+	<!-- <action>
+		<command>insert</command>
+		<table>es_tags</table>
+		<fields>tag_id,tag_name,rel_count</fields>
+		<values>4,'青云商城',0</values>
+	</action> -->
+	<!-- 仓库的种子数据 -->
+	<!-- <action>
+		<command>insert</command>
+		<table>warehouse</table>
+		<fields>warehouse_id,warehouse_name,ShipperStateOrProvince,ShipperCity,ShipperAddress,ShipperPostCode</fields>
+		<values>1,'哈尔滨','黑龙江','哈尔滨','哈尔滨平房开发区天池路7号','150000'</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>warehouse</table>
+		<fields>warehouse_id,warehouse_name,ShipperStateOrProvince,ShipperCity,ShipperAddress,ShipperPostCode</fields>
+		<values>2,'绥芬河','黑龙江','绥芬河','黑龙江绥芬河 数码港后院','157300'</values>
+	</action>
+		<action>
+		<command>insert</command>
+		<table>warehouse</table>
+		<fields>warehouse_id,warehouse_name,ShipperStateOrProvince,ShipperCity,ShipperAddress,ShipperPostCode</fields>
+		<values>3,'深圳市','广东省','深圳市','龙岗区布吉镇坂田河背村美成工业园3栋03号','518100'</values>
+	</action>
+		<action>
+		<command>insert</command>
+		<table>warehouse</table>
+		<fields>warehouse_id,warehouse_name,ShipperStateOrProvince,ShipperCity,ShipperAddress,ShipperPostCode</fields>
+		<values>4,'广州市','广东省','广州市','白云区太和镇白云货运市场2期A4-14（北太路与105国道交界口）','510540'</values>
+	</action>
+		<action>
+		<command>insert</command>
+		<table>warehouse</table>
+		<fields>warehouse_id,warehouse_name,ShipperStateOrProvince,ShipperCity,ShipperAddress,ShipperPostCode</fields>
+		<values>5,'上海市','上海','上海市','青浦区华志路1685号中通速递海外事业部','201700'</values>
+	</action>
+		<action>
+		<command>insert</command>
+		<table>warehouse</table>
+		<fields>warehouse_id,warehouse_name,ShipperStateOrProvince,ShipperCity,ShipperAddress,ShipperPostCode</fields>
+		<values>6,'义乌市','浙江省','义乌市','春晗三区75幢门店','322099'</values>
+	</action>
+		<action>
+		<command>insert</command>
+		<table>warehouse</table>
+		<fields>warehouse_id,warehouse_name,ShipperStateOrProvince,ShipperCity,ShipperAddress,ShipperPostCode</fields>
+		<values>7,'北京市','北京','北京市','朝阳区东四环十八里店小武基村1811库房','100000'</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_cat</table>
+		<fields>cat_id,name,parent_id,cat_path,cat_order,model_id,if_audit,url,detail_url,descript,tositemap</fields>
+		<values>1, '热门关键字', 0, '0|1|', 1, 1, 0, 'newslist-1-1.html', '', null, 0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_cat</table>
+		<fields>cat_id,name,parent_id,cat_path,cat_order,model_id,if_audit,url,detail_url,descript,tositemap</fields>
+		<values>2, '帮助中心', 0, '0|2|', 2, 2, 0, 'newslist-2-1.html', '', null, 0</values>
+	
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_cat</table>
+		<fields>cat_id,name,parent_id,cat_path,cat_order,model_id,if_audit,url,detail_url,descript,tositemap</fields>
+		<values>33, '新手上路（南）', 2, '0|2|33|', 454, 2, 0, 'newslist-33-1.html', '', '<p>\n	分类描述</p>\n', 0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_cat</table>
+		<fields>cat_id,name,parent_id,cat_path,cat_order,model_id,if_audit,url,detail_url,descript,tositemap</fields>
+		<values>34, '关于我们（南）', 2, '0|2|34|', 100, 2, 0, 'newslist-34-1.html', '', '<p>\n	分类描述</p>\n', 0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_cat</table>
+		<fields>cat_id,name,parent_id,cat_path,cat_order,model_id,if_audit,url,detail_url,descript,tositemap</fields>
+		<values>35, '卖家规则（南）', 2, '0|2|35|', 123, 2, 0, 'newslist-35-1.html', '', '<p>\n	分类描述</p>\n', 0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_field</table>
+		<fields>field_id,china_name,english_name,data_type,data_size,show_form,show_value,add_time,model_id,save_value,is_validate,taxis,dict_id,is_show</fields>
+		<values>1, '关键字', 'keyword', 0, null, 'input', null, 1330318246806, 1, '', 1, 1, 0, 1</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_field</table>
+		<fields>field_id,china_name,english_name,data_type,data_size,show_form,show_value,add_time,model_id,save_value,is_validate,taxis,dict_id,is_show</fields>
+		<values>2, 'url', 'url', 0, null, 'input', null, 1330318278216, 1, '', 1, 2, 0, 1</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_field</table>
+		<fields>field_id,china_name,english_name,data_type,data_size,show_form,show_value,add_time,model_id,save_value,is_validate,taxis,dict_id,is_show</fields>
+		<values>3, '标题', 'title', 0, null, 'input', null, 1330402514437, 2, '', 1, 1, 0, 1</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_field</table>
+		<fields>field_id,china_name,english_name,data_type,data_size,show_form,show_value,add_time,model_id,save_value,is_validate,taxis,dict_id,is_show</fields>
+		<values>4, '图片', 'image', 0, null, 'image', null, 1330402560750, 2, '', 0, 2, 0, 0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_field</table>
+		<fields>field_id,china_name,english_name,data_type,data_size,show_form,show_value,add_time,model_id,save_value,is_validate,taxis,dict_id,is_show</fields>
+		<values>5, '内容', 'content', 0, null, 'richedit', null, 1330403222956, 2, '', 0, 3, 0, 0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_field</table>
+		<fields>field_id,china_name,english_name,data_type,data_size,show_form,show_value,add_time,model_id,save_value,is_validate,taxis,dict_id,is_show</fields>
+		<values>6, 'name', 'name', 0, null, 'input', null, 1330318278216, 3, '', 1, 2, 0, 1</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_field</table>
+		<fields>field_id,china_name,english_name,data_type,data_size,show_form,show_value,add_time,model_id,save_value,is_validate,taxis,dict_id,is_show</fields>
+		<values>7, 'context', 'context', 0, null, 'input', null, 1330318278216, 3, '', 1, 2, 0, 1</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_model</table>
+		<fields>model_id,china_name,english_name,add_time,project_name,brief,if_audit</fields>
+		<values>1, '热门关键字', 'hot_keyword', 1330317978678, null, '', 0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>data_model</table>
+        <fields>model_id,china_name,english_name,add_time,project_name,brief,if_audit</fields>
+		<values>2, '帮助中心', 'helpcenter', 1330402484834, null, '', 0</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>7, 500, 1337815832, 1433492370, 0, 0, 0, 0, 2, 0, 0, '关于我们', '', '', 100000, null, '关于我们', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>42, 30, 1435632929, 1435646770, 0, 0, 0, 0, 29, 0, 0, '关于我们aaa', 'us', '<p>\n	关于我们</p>\n', 100000, null, '关于我们1231', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>43, 45, 1435647351, 1435647351, 0, 0,0,0, 30, 0, 0, ' Как начать пользоваться Trade Ease? Как искать на сайте Trade Ease? Как купить товар Как оплатить О доставке Основные права и запреты для продавца Возврат Гарантированный возврат TradeEase Свяжитесь с нами', '', '', 100000, null, 'Гид для новичков', ''</values>
+	</action>
+		<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>44, 3, 1435648035, 1435648035, 0, 0, 0, 0, 30, 0, 0, '买家注册协议', '买家注册协议', '', 100000, null, '买家注册协议', ''</values>
+	</action>
+		<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>45, 22, 1435648210, 1435648210, 0, 0, 0, 0, 30, 0, 0, 'Регистрационное соглашение', 'Регистрационное соглашение', '', 100000, null, 'Регистрационное соглашение', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>46, 45, 1435653040, 1435653040, 0,  0, 0, 0, 33, 0, 0, 'Как начать пользоваться Trade Ease?', 'Как начать пользоваться Trade Ease?', '', 100000, null, 'Как начать пользоваться Trade Ease?', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>47, 22, 1435653163, 1435653163, 0,  0, 0, 0, 33, 0, 0, 'Как искать на сайте Trade Ease?', 'Как искать на сайте Trade Ease?', '', 100000, null, 'Как искать на сайте Trade Ease?', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>48, 78, 1435653416, 1435660127, 0,  0, 0, 0, 33, 0, 0, 'Как купить товар', 'Как купить товар', '', 100000, null, 'Как купить товар', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>49, 44, 1435653484, 1435653484, 0,  0, 0, 0, 33, 0, 0, 'Как оплатить', 'Как оплатить', '', 100000, null, 'Как оплатить', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>50, 34, 1435653549, 1435653549, 0, 0, 0, 0, 33, 0, 0, 'О доставке', 'О доставке', '', 100000, null, 'О доставке', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>51, 77, 1435653610, 1435653610, 0, 0,0,0, 33, 0, 0, 'Основные права и запреты для продавца', 'Основные права и запреты для продавца', '', 100000, null, 'Основные права и запреты для продавца', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>52, 70, 1435653772, 1435653772, 0, 0,0,0, 33, 0, 0, 'Возврат', 'Возврат', '', 100000, null, 'Возврат', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>53, 22, 1435653850, 1435653886, 0, 0,0,0, 33, 0, 0, 'Гарантированный возврат TradeEase', 'Гарантированный возврат TradeEase', '', 100000, null, 'Гарантированный возврат TradeEase', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>54, 11, 1435653934, 1435653934, 0, 0,0,0, 33, 0, 0, 'Свяжитесь с нами', 'Свяжитесь с нами', '', 100000, null, 'Свяжитесь с нами', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>55, 34, 1435654284, 1435654284, 0, 0,0,0, 34, 0, 0, 'O treade ease', 'O treade ease', '', 100000, null, 'O treade ease', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>56, 12, 1435655292, 1435655292, 0, 0,0,0, 35, 0, 0, '龙贸通简介', '龙贸通简介', '', 100000, null, '龙贸通简介', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>57, 13, 1435655396, 1435655396, 0, 0,0,0, 35, 0, 0, '联系客服', '联系客服', '', 100000, null, '联系客服', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>58, 56, 1435655450, 1435655450, 0, 0, 0, 0, 35, 0, 0, '卖家注册规则', '卖家注册规则', '', 100000, null, '卖家注册规则', ''</values>
+	</action>
+	
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>59, 1, 1435655515, 1435655515, 0, 0,0,0, 35, 0, 0, '卖家注册流程', '卖家注册流程', '', 100000, null, '卖家注册流程', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>60, 3, 1435655567, 1435655567, 0, 0,0,0, 35, 0, 0, '卖家账户信息修改规则', '卖家账户信息修改规则', '', 100000, null, '卖家账户信息修改规则', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>61, 33, 1435655627, 1435655627, 0, 0,0,0, 35, 0, 0, '卖家账户管理规则', '卖家账户管理规则', '', 100000, null, '卖家账户管理规则', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>62, 56, 1435655686, 1435655686, 0, 0,0,0, 35, 0, 0, '产品发布基本规则', '产品发布基本规则', '', 100000, null, '产品发布基本规则', ''</values>
+	</action>
+	
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>63, 7, 1435655736, 1435655736, 0, 0,0,0, 35, 0, 0, '纠纷处理基本规则', '纠纷处理基本规则', '', 100000, null, '纠纷处理基本规则', ''</values>
+	</action>
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>64, 88, 1435655783, 1435655783, 0, 0,0,0, 35, 0, 0, '交易管理基本规则', '交易管理基本规则', '', 100000, null, '交易管理基本规则', ''</values>
+	</action>
+	
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>65, 66, 1435655834, 1435655834, 0, 0,0,0, 35, 0, 0, '卖家保证金规则', '卖家保证金规则', '', 100000, null, '卖家保证金规则', ''</values>
+	</action>
+	
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>66, 70, 1435655918, 1435655918, 0, 0,0,0, 35, 0, 0, '平台佣金规则', '平台佣金规则', '', 100000, null, '平台佣金规则', ''</values>
+	</action>
+	
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>67, 50, 1435655974, 1435655974, 0, 0,0,0, 35, 0, 0, '平台年费规则', '平台年费规则', '', 100000, null, '平台年费规则', ''</values>
+	</action>
+	
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>68, 44, 1435656043, 1435656043, 0, 0,0,0, 35, 0, 0, '商品上传流程', '商品上传流程', '', 100000, null, '商品上传流程', ''</values>
+	</action>
+	
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>69, 45, 1435657226, 1435657226, 0, 0,0,0, 33, 0, 0, 'Гид для новичков', 'Гид для новичков', '', 100000, null, 'Гид для новичков', ''</values>
+	</action>
+	
+	<action>
+		<command>insert</command>
+		<table>helpcenter</table>
+		<fields>id,sort,add_time,lastmodified,hit,able_time,state,user_id,cat_id,is_commend,sys_lock,page_title,page_keywords,page_description,site_code,siteidlist,title,image</fields>
+		<values>70, 555, 1435657291, 1435657291, 0, 0,0,0, 33, 0, 0, 'Регистрационное соглашение', 'Регистрационное соглашение', '', 100000, null, 'Регистрационное соглашение', ''</values>
+	</action> --> 
+
+</dbsolution>

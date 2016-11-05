@@ -1,0 +1,248 @@
+<#-- 创建会员评论标签 -->
+<#assign memberIsCommentTag= newTag("memberIsCommentTag")>
+<#assign isComment = memberIsCommentTag("{'goods_id':${goods.goods_id}}") >	
+<style>
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+ 
+.fileUpload input.upload {  position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+    cursor: pointer;
+    opacity: 0;
+    filter: <span style="width: auto; height: auto; float: none;" id="3_nwp"><a style="text-decoration: none;" mpid="3" target="_blank" href="http://cpro.baidu.com/cpro/ui/uijs.php?adclass=0&app_id=0&c=news&cf=1001&ch=0&di=128&fv=18&is_app=0&jk=8a7c1d08a10faa95&k=alpha&k0=alpha&kdi0=0&luki=3&n=10&p=baidu&q=06011078_cpr&rb=0&rs=1&seller_id=1&sid=95aa0fa181d7c8a&ssp2=1&stid=0&t=tpclicked3_hc&td=1922429&tu=u1922429&u=http%3A%2F%2Fwww%2Eadmin10000%2Ecom%2Fdocument%2F5405%2Ehtml&urlid=0" id="3_nwl"><span style="color:#0000ff;font-size:14px;width:auto;height:auto;float:none;">alpha</span></a></span>(opacity=0);
+}
+</style>
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2cv2/css/uploadify.css" />
+<script type="text/javascript"
+	src="${ctx}/themes/b2b2cv2/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript"
+	src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"></script>
+<div id="discuss_form_wrapper">
+
+<script charset="utf-8" src="../../editor/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+	<h1><@uiLabel text="goods.BabyAssessment" /></h1>
+	<form action="#" method="post" id="discussForm">
+		<div class="discuss_issue">
+			<div  style="width: 300px;" class="discuss_score">
+				<h6 style="width: 220px;height: 50;margin-top: 10px;"><@uiLabel text="goods.GoodsDynamicRating" /></h6>
+				<div>
+					<h2>
+						<b><@uiLabel text="goods.MatchDescription" />：</b> 
+						<span class="grade" style="margin:4px 0px 0px 0px;"> 
+							<span><a href="javascript:;" class="selected" status="store_desccredit" >1</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_desccredit" >2</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_desccredit" >3</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_desccredit" >4</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_desccredit" >5</a></span> 
+							<input type="hidden" name="store_desccredit" id="store_desccredit" value="5">
+						</span> 
+						<span class="value_wrapper">
+ 							<!--<span style="font-weight: bold; font-size: 14px; color: #a90000;" name="gradevalue" status="store_desccredit">5</span><@uiLabel text="goods.Point" /> -->
+							<span style="font-weight: bold; font-size: 14px; color: #a90000;" name="gradevalue" status="store_desccredit">5</span><@uiLabel text="goods.Point" />
+						</span>
+					</h2>
+					<h2>
+						<b><@uiLabel text="goods.ServiceAttitude" />：</b> 
+						<span class="grade" style="margin:4px 0px 0px 0px;"> 
+							<span><a href="javascript:;" class="selected" status="store_servicecredit">1</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_servicecredit">2</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_servicecredit">3</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_servicecredit">4</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_servicecredit">5</a></span> 
+							<input type="hidden" name="store_servicecredit" id="store_servicecredit" value="5">
+						</span> 
+						<span class="value_wrapper">
+							<span style="font-weight: bold; font-size: 14px; color: #a90000;" name="gradevalue" status="store_servicecredit">5</span><@uiLabel text="goods.Point" />
+						</span>
+					</h2>
+					
+					<h2>
+						<b><@uiLabel text="goods.DeliverySpeed" />：</b> 
+						<span class="grade" style="margin:4px 0px 0px 0px;"> 
+							<span><a href="javascript:;" class="selected" status="store_deliverycredit">1</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_deliverycredit">2</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_deliverycredit">3</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_deliverycredit">4</a></span> 
+							<span><a href="javascript:;" class="selected" status="store_deliverycredit">5</a></span> 
+							<input type="hidden" name="store_deliverycredit" id="store_deliverycredit" value="5">
+						</span> 
+						<span class="value_wrapper">
+							<span style="font-weight: bold; font-size: 14px; color: #a90000;" name="gradevalue" status="store_deliverycredit">5</span><@uiLabel text="goods.Point" />
+						</span>
+					</h2>
+					</div>
+				</div>
+				<div class="discuss_form">
+				<h2>
+					<b><@uiLabel text="goods.Score" />：</b>
+					<label><input type="radio" name="grade" value="3" checked="checked"/><i class="score_fine"></i></label>		
+					<label><input type="radio" name="grade" value="2"/><i class="score_middle"></i></label>
+					<label><input type="radio" name="grade" value="1"/><i class="score_no"></i></label>
+				</h2>
+				<textarea name="content" id="discuss_content" ><@uiLabel text="goods.YourCommentHere" /></textarea>
+				<div id="image"></div>
+				<!-- <div id="dinji" style="display: none"><span style="color: red">晒图：</span><span id="logo_imgText" ></span></div> -->
+				<input type="file" id="logo_img" status="logo_img" /><div style="position: relative;left:125px;top:-26px;font-size: 18px;font-weight: bold;"><span id="zhabg">0</span><span>/5</span></div><div class="applyPro"  style="color:red;font-size: 14px;display: none;">(支持格式jpg,jpeg,png,gif，请保证图片清晰且文件大小不超过400KB,最多上传5张图片)</div>
+				<input type="hidden" name="goods_id" value="${goods.goods_id}" />
+				<input type="hidden" name="img" id="logo_imgImg"/>
+				<input type="hidden" name="commenttype" value="1" />
+				<input type="hidden" name="store_id" value="${goods.store_id}" />
+				</div>
+				<div class="discuss_ok"> 
+					<input class="regis_ent" style="margin-right:45px;"  type="button" value="<@uiLabel text='goods.PostComment' />" id="discussBtn"/>	
+				</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+window.onload = function() {
+	bindFileEvent($("#logo_img"));
+}
+$(function(){	
+	$("#discuss_content").focus(function(){
+		if(this.value=="<@uiLabel text='goods.YourCommentHere' />"){
+			this.value="";	
+		}
+	}).blur(function(){
+		if( $.trim(this.value)==""){
+			this.value="<@uiLabel text='goods.YourCommentHere' />";
+		}
+	});
+	
+	$("#discussBtn").click(function(){
+		<#if !isComment.isLogin >
+			alert("<@uiLabel text='goods.PleaseLoginFirst' />");
+		   location.href="login.html?forward=goods-${goods.goods_id}.html"		
+		<#else>
+			<#if !isComment.isBuy>
+				 alert("<@uiLabel text='goods.PurchaseThisProduct' />");
+				return; 
+			<#else>
+				<#if isComment.isCommented>
+					alert("<@uiLabel text='goods.SorryYou' />");
+					return;
+				<#else>
+					var cval = $('#discuss_content').val();
+					if(cval == '' ||cval=='<@uiLabel text='goods.YourCommentHere' />' ){
+						alert("<@uiLabel text='goods.YourCommentHere' />！");
+						return;
+					}
+					else if(cval.length>1000){
+						alert("<@uiLabel text='goods.PleaseEnterOne' />");
+						return;
+					}
+					CommentForm.formSubmit($(this),$("#discussForm"));
+				</#if>
+			</#if>
+		</#if>
+	});
+});
+function bindFileEvent(obj) {
+	var status = $(obj).attr("status");
+	$(obj).uploadify(
+					{
+						'buttonText' : '晒图', //显示文字
+						'fileObjName' : 'image', //文件对象名称
+						'fileTypeDesc' : '请选择',//允许上传的文件类型的描述，在弹出的文件选择框里会显示 
+						'fileTypeExts' : '*.gif; *.jpg; *.png',//允许上传的文件类型，限制弹出文件选择框里能选择的文件 
+						'uploader' : '${ctx}/api/base/upload-image.do?subFolder=comment',
+						'swf' : '${ctx}/themes/b2b2cv2/uploadify.swf',
+						'height' : '30', //高度
+						'width' : '80',
+						'multi' : false, //是否支持多文件上传
+						'progressData' : 'percentage',//设置文件上传时显示的数据
+						'uploadLimit' : 100,
+						'onFallback' : function() { //falsh兼容
+							alert("麻烦了，不兼容falsh!");
+						},
+						'onUploadSuccess' : function(file, data, response) {
+							var img = jQuery.parseJSON(data);
+							var count=$("#image>div>img").length;
+							if(count>=5){
+								alert("只能上传5张图片");
+								return false;
+							}
+							$("#zhabg").html(count+1);
+							count=getRandom(1000)*count;
+						    $("#logo_imgImg").val(img.fsimg+","+$("#logo_imgImg").val());
+							var urlimg=img.img;
+							$("#image").append("<div style='float:left; margin-right:10px;'><img fs=${'"+count+"'}   src='"+img.img+"' style='width:40px;height:40px;background: rgba(0,0,0,.01);border: 1px solid #D1939E;'></img><a fs=${'"+count+"'} id='removeAll${'"+count+"'}' im={'"+img.fsimg+"'} onclick='cleanAll(this)' style=' width:40px; height:20px; text-align:center; line-height:20px; background:#fff;border: 1px solid #D1939E; background:#D1939E; color:#fff;cursor: pointer; display:block;'>删除</a></div>");
+						},
+						'onSelectError' : function(file, errorCode,
+								errorMsg) {
+							if (errorCode == SWFUpload.QUEUE_ERROR.INVALID_FILETYPE) {
+								this.queueData.errorMsg = "请上传正确的格式";
+							}
+						}
+					});
+}
+</script>
+<script type="text/javascript">
+/* function move(obj){
+	var self =$(obj);
+	var fs=self.attr("fs");
+	$("#removeAll"+fs).show();
+}
+function out(obj){
+	var self =$(obj);
+	var fs=self.attr("fs");
+	$("#removeAll"+fs).hide();
+} */
+function cleanAll(obj){
+	var self =$(obj);
+	var fs=self.attr("fs");
+	var itemsCountValue = [];
+	$("#image>div>img[fs='"+fs+"']").remove();
+	$("#image>div>a[fs='"+fs+"']").remove();
+	$("#zhabg").html($("#zhabg").html()-1);
+	var arr=$("#logo_imgImg").val().split(",");
+	var im=self.attr("im");
+	var picturefile=im.substring(25,im.length-2);
+	 $.ajax({
+			url: "/api/b2b2c/storeCommentApi!cleanpicturePath.do?ajax=yes&picturefile="+picturefile,
+			type : "POST",
+			async : false,
+			dataType : "json",
+			success : function(result) {
+				if(result!=null){
+					if(result.result==1){
+						alert(result.message);
+						if(arr.length>0){
+							im=im.substring(2,im.length-2);
+							for ( var int = 0; int < arr.length; int++) {
+								if(arr[int]!=$.trim(im)){
+									if(arr[int]!=""){
+										/* alert(arr[int]); */
+										itemsCountValue.push(arr[int]);
+									}
+								}
+							}
+							if(itemsCountValue.length>0){
+								var str="";
+								for ( var int = 0; int < itemsCountValue.length; int++) {
+									str+=itemsCountValue[int]+","
+								}
+								$("#logo_imgImg").val(str);
+							}else{
+								$("#logo_imgImg").val("");
+							}
+						}
+					}else{
+						alert(result.message);
+					}
+				}
+			}
+		});
+}
+function getRandom(n){
+    return Math.floor(Math.random()*n+1)
+    }
+</script>

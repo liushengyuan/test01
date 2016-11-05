@@ -1,0 +1,79 @@
+<#assign dataformat="com.enation.framework.directive.DateformateDirective"?new()/>
+<style>
+.input_text{
+	width: 200px;
+}
+</style>
+<div class="easyui-panel" style="border-style: none;">
+	<div style="padding: 10px 0 10px 20px">
+		<form method="post" class="validate" id="bonusTypeForm">
+			<table>
+				<tr>
+					<th><label class="text">规则名称：</label></th>
+					<td><input class="easyui-validatebox input_text"
+						data-options="required:true,validType:['string','length[0,20]']" type="text"
+						name="registerSendPoint.name" maxlength="60" 
+						isrequired="true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">活动开始日期：</label></th>
+					<td><input type="text" name="sendTimeStart" style="height: 28px;"  id="sendTimeStart"  value="<@dataformat time="now" pattern="yyyy-MM-dd" />"
+						value="" class="easyui-datebox" data-options="required:true" /> 
+						<em class="tip">只有当前时间介于起始日期和截止日期之间时，此规则才生效</em>
+					</td>
+				</tr>
+				<tr>
+					<th><label class="text">活动结束日期：</label></th>
+					<td><input type="text" name="sendTimeEnd" style="height: 28px;" id="sendTimeEnd"  value="<@dataformat time="nextmonth" pattern="yyyy-MM-dd" />"
+						class="easyui-datebox" data-options="required:true" /></td>
+				</tr>
+				<tr>
+					<th><label class="text">赠送会员等级积分：</label></th>
+					<td><input class="easyui-numberbox input_text"
+						data-options="required:true" type="text"
+						name="registerSendPoint.point" dataType="int" isrequired="true" />
+					</td>
+				</tr>
+				<tr>
+					<th><label class="text">赠送会员消费积分：</label></th>
+					<td><input class="easyui-numberbox input_text"
+						data-options="required:true" type="text"
+						name="registerSendPoint.mp" dataType="int" isrequired="true" />
+					</td>
+				</tr>
+				<tr>
+					<th><label class="text">是否启用该规则：</label></th>
+					<td>
+						<input type="radio" name="registerSendPoint.status" value="1"checked="true" />启用&nbsp;&nbsp;&nbsp;&nbsp; 
+						<input type="radio" name="registerSendPoint.status" value="0" />停用&nbsp;&nbsp;&nbsp;&nbsp;
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+/*	$(function() {
+		
+		//类型切换
+		$("input[type=radio]").click(
+				function() {
+					var value = this.value;
+					if (value == 1 || value == 2) {
+						$("input[name=sendTimeStart],input[name=sendTimeEnd]")
+								.attr("disabled", false);
+					} else {
+						$("input[name=sendTimeStart],input[name=sendTimeEnd]")
+								.attr("disabled", true);
+					}
+
+					if (value == 2) {
+						$("#min_tr").show();
+					} else {
+						$("#min_tr").hide();
+					}
+				});
+
+	});*/
+</script>

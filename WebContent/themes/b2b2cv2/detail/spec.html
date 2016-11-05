@@ -1,0 +1,66 @@
+<!-- 商品规格 -->
+<!-- 创建商品规格标签 -->
+<#assign goodsSpecTag = newTag("goodsSpecTag") >
+<!-- 调用商品规格标签 -->
+<#assign goodsSpec = goodsSpecTag()!'' >
+<input type="hidden" name="productid" id="productid"  />
+<input type="hidden" value="1" name="havespec" />
+<#if goodsSpec.have_spec??>
+<#if goodsSpec.have_spec ==1 >
+<!-- 规格列表 -->
+<dl class="spec-tip"></dl>
+<#list goodsSpec.specList as spec>	
+	<dl class="spec-item">
+        <#if locale=="zh">                                                    
+		<dt><span><em>${spec.spec_name}</em>：</span></dt>
+		<#elseif locale=="ru">
+		<dt><span><em>${spec.spec_name_ru}</em>：</span></dt>
+		</#if>
+		<dd>
+			<ul>
+				<#list spec.valueList as val  >
+					<li class="sp-txt">
+						<#if spec.spec_id==1000>
+						<a name="goods_spec" specid="${spec.spec_id}" specimage="${val.spec_image!''}" specvid="${val.spec_value_id}"  href="javascript:;"  <#if locale=="zh"> title="${val.spec_value}" <#else> title="${val.spec_value_ru}" </#if>>
+							<#if val.spec_image??>
+							<img src="${val.spec_image!''}" style="width:30px;height:30px">
+							</#if>
+ 							<#if locale=="zh">
+							<span><nobr><#if !val.spec_image??>${val.spec_value!}</#if></nobr></span><i>&nbsp;</i><#--${val.spec_value} -->
+							<#elseif locale=="ru">
+							<span><nobr></nobr><#if !val.spec_image??>${val.spec_value_ru!}</#if></span><i>&nbsp;</i><#--${val.spec_value_ru} -->
+							</#if> 
+						</a>
+						<#else>
+						<a name="goods_spec" specid="${spec.spec_id}" specimage="${val.spec_image!''}" specvid="${val.spec_value_id}"  href="javascript:;"  <#if locale=="zh"> title="${val.spec_value}" <#else> title="${val.spec_value_ru}" </#if>>
+							<#-- <img src="${val.spec_image!''}" style="width:30px;height:30px"> -->
+							<#if locale=="zh">
+							<span><nobr>${val.spec_value}</nobr></span><i>&nbsp;</i>
+							<#elseif locale=="ru">
+							<span><nobr>${val.spec_value_ru}</nobr></span><i>&nbsp;</i>
+							</#if>
+						</a>
+						</#if>
+					</li>
+				</#list>
+			</ul>
+		</dd>
+	</dl>		
+</#list>
+</#if>
+</#if>
+<script type="text/javascript">
+
+var Products=
+	[
+	<#list goodsSpec.productList as product>	
+	  {'product_id':${product.product_id},'goods_id':${product.goods_id},'sn':'${product.sn!""}','store':${product.store!0},
+		'price':${product.price},'whprice':${product.whprice!0.00},'whprice_ru':${product.whprice_ru!0.00},'enable_store':${product.enable_store!0},'price_ru':${product.price_ru!0.00},
+	   'specs':${product.specsvIdJson},'wholesale_volume':${product.wholesale_volume!0}
+	  }
+	  <#if product_has_next >,</#if>
+	</#list>
+	];
+ 
+
+</script>	

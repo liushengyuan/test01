@@ -1,0 +1,50 @@
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel">
+		<form id="editForm" method="post" class="validate">
+			<table width="100%">
+				<tr>
+					<th>上传广告文件：</th>
+					<td colspan="3"><input class="easyui-validatebox" type="file"
+						name="pic"></input>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td><img alt="" src="${imgPath!''}" height="120px" width="150px;">
+					</td>
+				</tr>
+				<tr>
+					<th>广告CSS：</th>
+					<td>
+						<textarea name="adIndex.outer_css" rows="10" cols="35">${adIndex.outer_css!''}</textarea>
+					</td>
+				</tr>
+				<tr>
+					<th>关闭按钮CSS：</th>
+					<td>
+						<textarea name="adIndex.close_css" rows="10" cols="35">${adIndex.close_css!''}</textarea>
+					</td>
+				</tr>
+				<tr>
+					<th>跳转按钮CSS：</th>
+					<td>
+						<textarea name="adIndex.jump_css" rows="10" cols="35">${adIndex.jump_css!''}</textarea>
+					</td>
+				</tr>
+				<tr>
+					<th>是否开启：</th>
+					<td><input type="radio" name="adIndex.adindex_disable" value="1"<#if
+						adIndex.adindex_disable == 1 >checked</#if> /> 开启&nbsp;&nbsp; <input type="radio"
+						name="adIndex.adindex_disable" value="0"<#if
+						adIndex.adindex_disable == 0 >checked</#if> /> 关闭</td>
+				</tr>
+			</table>
+			<input type="hidden" name="adIndex.adindex_id" value="${adIndex.adindex_id!0}">
+		</form>
+	</div>
+</div>

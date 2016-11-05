@@ -1,0 +1,561 @@
+<#include '/common/header.html' />
+<!-- 获取活动和活动商品参数 -->
+<#assign activityListTag= newTag("activityListTag")>
+<#assign showGoodTag= newTag("showGoodTag")>
+<#assign showGoodsToTwoTag= newTag("showGoodsToTwoTag")>
+<!--创建"商品基本信息"标签-->
+<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+<link type="text/css" rel="stylesheet" href="${ctx}/themes/b2b2cv2/newSkill20160701/css/newskill.css" />
+<link type="text/css" rel="stylesheet" href="${ctx}/themes/b2b2cv2/newSkill20160701/css/seckill.css" />
+<div class="seckill_main">
+	<!--banner-->
+	<div class="seckill_banner"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/banner2.png" /></div>
+	<!--标题-->
+	<div class="seckill_title" id="dazhe1">
+	    <#assign activityMapSpike= activityListTag("'id':'1'")!''>
+	      <#if activityMapSpike.activityList??>
+    	   <#list activityMapSpike.activityList as b>
+    	      <#if b_index==0>
+    	          <p id="activityTime${b_index}" style="height: 20px;margin-bottom:10px;font-size: 17px;">
+		      	<span id="d${b_index}" class="seckil-time"></span><strong>天</strong>
+		      	<span id="h${b_index}" class="seckil-time"></span><strong>时</strong>
+		      	<span id="m${b_index}" class="seckil-time"></span><strong>分</strong>
+		      	<span id="s${b_index}" class="seckil-time"></span><strong>秒</strong>
+		      </p>
+		       <h5 id="activityText${b_index}" style="line-height:22px;height: 20px;font-size: 17px;color:#fff;margin-top: -18px;margin-left:-210px; ">即将开始：&nbsp;</h5>
+    	      <#elseif b_index==1>
+    	      <p id="activityTime${b_index}" style="height: 20px;margin-bottom:10px;font-size: 17px;position:relative; margin-top:566px; z-index:9;">
+		      	<span id="d${b_index}" class="seckil-time"></span><strong>天</strong>
+		      	<span id="h${b_index}" class="seckil-time"></span><strong>时</strong>
+		      	<span id="m${b_index}" class="seckil-time"></span><strong>分</strong>
+		      	<span id="s${b_index}" class="seckil-time"></span><strong>秒</strong>
+		      </p>
+		       <h5 id="activityText${b_index}" style="line-height:22px;height: 20px;font-size: 17px;color:#fff;margin-top: -18px;margin-left:-210px; ">即将开始：&nbsp;</h5>
+    	      <#elseif b_index==2>
+    	        <p id="activityTime${b_index}" style="height: 20px;margin-bottom:10px;font-size: 17px;position:relative; margin-top:1304px; z-index:9;">
+		      	<span id="d${b_index}" class="seckil-time"></span><strong>天</strong>
+		      	<span id="h${b_index}" class="seckil-time"></span><strong>时</strong>
+		      	<span id="m${b_index}" class="seckil-time"></span><strong>分</strong>
+		      	<span id="s${b_index}" class="seckil-time"></span><strong>秒</strong>
+		      </p>
+		       <h5 id="activityText${b_index}" style="line-height:22px;height: 20px;font-size: 17px;color:#fff;margin-top: -18px;margin-left:-210px; ">即将开始：&nbsp;</h5>
+    	      </#if>
+    	       <!-- 倒计时 距离本期结束 -->
+		      
+		      <script type="text/javascript">
+			 	 <#assign groupBuyActSurplusTag=newTag("groupBuyActSurplusTag")>
+			  	 <#assign time=groupBuyActSurplusTag("{'end_time':${b.start_time!''} }")>
+			  	 <#assign end_time=groupBuyActSurplusTag("{'end_time':${b.end_time!''} }")>
+		      //倒计时
+		      	  var start${b_index}=${time.cha};
+		      	  var end${b_index} = ${end_time.cha};
+		      	  var startToEnd_time${b_index} = end${b_index}-start${b_index};
+		      	  var startOrEnd${b_index};
+			      var tms${b_index} = [];
+			      var day${b_index} = [];
+			      var hour${b_index} = [];
+			      var minute${b_index} = [];
+			      var second${b_index} = [];
+			      function takeCount${b_index}() {
+			          for (var i = 0, j = tms${b_index}.length; i < j; i++) {
+			              tms${b_index}[i] -= 1;
+			              //计算天、时、分、秒、
+			              var days${b_index} = Math.floor(tms${b_index}[i] / (1 * 60 * 60 * 24));
+			              var hours${b_index} = Math.floor(tms${b_index}[i] / (1 * 60 * 60)) % 24;
+			              var minutes${b_index} = Math.floor(tms${b_index}[i] / (1 * 60)) % 60;
+			              var seconds${b_index} = Math.floor(tms${b_index}[i] / 1) % 60;
+			              if (days${b_index} < 0) days${b_index} = 0;
+			              if (hours${b_index} < 0) hours${b_index} = 0;
+			              if (minutes${b_index} < 0) minutes${b_index} = 0;
+			              if (seconds${b_index} < 0) seconds${b_index} = 0;
+			              //将天、时、分、秒插入到html中
+			              if(startOrEnd${b_index}==1){
+			            	  $("#activityText${b_index}").html("距结束:&nbsp;");
+			              }
+			              if(days${b_index}==0&&hours${b_index}==0&minutes${b_index}==0&seconds${b_index}==0){
+			            	  if(startOrEnd${b_index}==0){
+			            		  tms${b_index}[i]=startToEnd_time${b_index};
+			            		  startOrEnd${b_index}=1;
+			            	  }else if(startOrEnd${b_index}==1){
+			            	  	  $("#activityTime${b_index}").html("");
+			            	      $("#activityText${b_index}").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;活动已结束&nbsp;");
+			            	  }
+			              }
+			                $("#d${b_index}").html(days${b_index});
+			                $("#h${b_index}").html(hours${b_index});
+			                $("#m${b_index}").html(minutes${b_index});
+			                $("#s${b_index}").html(seconds${b_index});
+			          }
+			          setTimeout("takeCount${b_index}()", 1000);
+			      }
+			  	  var tm${b_index} = ${time.cha};
+			  	  if(tm${b_index}<=0){
+			  		  tms${b_index}[tms${b_index}.length] = "${end_time.cha!}";
+			  		  startOrEnd${b_index}=1;
+			  	  }else{
+		              tms${b_index}[tms${b_index}.length] = "${time.cha!}";
+		              startOrEnd${b_index}=0;
+			  	  }
+	             day[${b_index}] = "d${b_index}";
+	             hour[${b_index}] = "h${b_index}";
+	             minute[${b_index}] = "m${b_index}";
+	             second[${b_index}] = "s${b_index}";
+	         </script> 
+	         <script>
+             takeCount${b_index}();
+	         </script>
+	    	</#list>
+		</#if>     
+	</div>
+	<!--内容-->
+	   <#assign activityMapSpike= activityListTag("'id':'1'")!''>
+	      <#if activityMapSpike.activityList??>
+    	   <#list activityMapSpike.activityList as b>
+    	       <#if b_index==0>
+    	           <#if b.start_time  gt b.nowtime>
+    	                   <#assign showGoodsToTwo= showGoodsToTwoTag("{'id':${b.id}}")>
+    	                       <#if showGoodsToTwo?size gt 0>
+    	                         <#list showGoodsToTwo as good>
+	    	                           <#if good_index==0>
+	    	                              <#assign product = goodsBaseDataTag("{'goodsid':"+good+"}")>
+	    	                                 <#if product??>
+	    	                                    <#if product.enable_store==0>
+	    	                                    <div class="seckill_content">
+										           <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_1.png" /></a>
+									             </div>
+	    	                                    <#else>
+		    	                                    <div class="seckill_content">
+										           <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/1.png" /></a>
+									                 </div>
+	    	                                    </#if>
+	    	                                 <#else>
+		    	                                 <div class="seckill_content">
+										           <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/1.png" /></a>
+									            </div>
+	    	                                 </#if>    
+					                   </#if>
+					                </#list>
+					           <#else>
+					               <div class="seckill_content">
+							           <a href="#"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/1.png" /></a>
+						            </div>
+					           </#if> 
+	       			    <#elseif b.start_time lt b.nowtime  && b.nowtime lt b.end_time>
+	       			         <#assign showGoodsToTwo= showGoodsToTwoTag("{'id':${b.id}}")>
+    	                       <#if showGoodsToTwo?size gt 0>
+    	                         <#list showGoodsToTwo as good>
+	    	                           <#if good_index==0>
+				       			          <#assign product = goodsBaseDataTag("{'goodsid':"+good+"}")>
+	    	                                 <#if product??>
+	    	                                    <#if product.enable_store==0>
+	    	                                    <div class="seckill_content">
+										           <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_1.png" /></a>
+									             </div>
+	    	                                    <#else>
+		    	                                    <div class="seckill_content">
+										           <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/1.png" /></a>
+									                 </div>
+	    	                                    </#if>
+	    	                                 <#else>
+		    	                                 <div class="seckill_content">
+										           <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/1.png" /></a>
+									            </div>
+	    	                                 </#if>    
+					                   </#if>
+					                </#list>
+					           <#else>
+					               <div class="seckill_content">
+							           <a href="#"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/1.png" /></a>
+						            </div>
+					           </#if> 
+	       			    <#elseif  b.end_time lt b.nowtime>
+	       			      <div class="seckill_content">
+					           <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_1.png" /></a>
+				             </div>
+       			       </#if>  
+    	       </#if>
+    	   </#list>
+    	  </#if>     
+	<!--标题-->
+	<div class="seckill_title" id="dazhe2">
+		 
+	</div>
+	  <#assign activityMapSpike= activityListTag("'id':'1'")!''>
+	      <#if activityMapSpike.activityList??>
+    	   <#list activityMapSpike.activityList as b>
+    	       <#if b_index==1>
+    	             <#if b.start_time  gt b.nowtime>
+    	                    <#assign showGood= showGoodTag("{'id':${b.id}}")>
+    	                       <#if showGood?size gt 0>
+    	                         <#list showGood as good>
+	    	                           <#if good_index==0>
+	    	                                <#assign product = goodsBaseDataTag("{'goodsid':"+good+"}")>
+	    	                                 <#if product??>
+		    	                                    <#if product.enable_store==0>
+		    	                                     <div class="seckill_content">
+												           <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_2.png" /></a>
+											             </div>
+											               <div class="seckill_content conten_paddint">
+												       <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/31.png" />
+											            </div>
+		    	                                    <#else>
+			    	                                   <div class="seckill_content">
+												                 <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/2.png" /></a>
+											               </div>
+											                <div class="seckill_content conten_paddint">
+												       <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/31.png" />
+											            </div>
+		    	                                    </#if>
+	    	                                 <#else>
+			    	                               <div class="seckill_content">
+												                 <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/2.png" /></a>
+											               </div>
+											                <div class="seckill_content conten_paddint">
+												       <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/31.png" />
+											            </div>
+	    	                                 </#if>    
+					                     </#if>
+							            <#if good_index==1>
+							                  <#assign product = goodsBaseDataTag("{'goodsid':"+good+"}")>
+	    	                                 <#if product??>
+		    	                                    <#if product.enable_store==0>
+		    	                                      <div class="seckill_content conten_paddint">
+													         <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_3.png" /></a>
+												          </div>
+												          <div class="seckill_content conten_paddint">
+													      <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/32.png" />
+												          </div>
+		    	                                    <#else>
+								    	                    <div class="seckill_content conten_paddint">
+													            <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/3.png" /></a>
+												            </div>
+												             <div class="seckill_content conten_paddint">
+													         <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/32.png" />
+												           </div>
+		    	                                    </#if>
+	    	                                 <#else>
+						    	                      <div class="seckill_content conten_paddint">
+											            <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/3.png" /></a>
+										            </div>
+										             <div class="seckill_content conten_paddint">
+											         <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/32.png" />
+										           </div>
+	    	                                 </#if>    
+							            </#if>
+					                </#list>
+					           <#else>
+					               <div class="seckill_content">
+								    <a href="#"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/2.png" /></a>
+							       </div>
+					               <div class="seckill_content conten_paddint">
+							       <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/31.png" />
+						            </div>
+						            <div class="seckill_content conten_paddint">
+							            <a href="#"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/3.png" /></a>
+						            </div>
+						            <div class="seckill_content conten_paddint">
+							         <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/32.png" />
+						           </div>
+					           </#if> 
+	       		 	    <#elseif b.start_time lt b.nowtime  && b.nowtime lt b.end_time>
+	       			         <#assign showGood= showGoodTag("{'id':${b.id}}")>
+    	                       <#if showGood?size gt 0>
+    	                         <#list showGood as good>
+	    	                           <#if good_index==0>
+	    	                                <#assign product = goodsBaseDataTag("{'goodsid':"+good+"}")>
+	    	                                 <#if product??>
+		    	                                    <#if product.enable_store==0>
+		    	                                     <div class="seckill_content">
+												           <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_2.png" /></a>
+											             </div>
+											               <div class="seckill_content conten_paddint">
+												       <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/31.png" />
+											            </div>
+		    	                                    <#else>
+			    	                                   <div class="seckill_content">
+												                 <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/2.png" /></a>
+											               </div>
+											                <div class="seckill_content conten_paddint">
+												       <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/31.png" />
+											            </div>
+		    	                                    </#if>
+	    	                                 <#else>
+			    	                               <div class="seckill_content">
+												                 <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/2.png" /></a>
+											               </div>
+											                <div class="seckill_content conten_paddint">
+												       <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/31.png" />
+											            </div>
+	    	                                 </#if>    
+					                     </#if>
+							            <#if good_index==1>
+							                  <#assign product = goodsBaseDataTag("{'goodsid':"+good+"}")>
+	    	                                 <#if product??>
+		    	                                    <#if product.enable_store==0>
+		    	                                      <div class="seckill_content conten_paddint">
+													         <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_3.png" /></a>
+												          </div>
+												          <div class="seckill_content conten_paddint">
+													      <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/32.png" />
+												          </div>
+		    	                                    <#else>
+								    	                    <div class="seckill_content conten_paddint">
+													            <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/3.png" /></a>
+												            </div>
+												             <div class="seckill_content conten_paddint">
+													         <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/32.png" />
+												           </div>
+		    	                                    </#if>
+	    	                                 <#else>
+						    	                      <div class="seckill_content conten_paddint">
+											            <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/3.png" /></a>
+										            </div>
+										             <div class="seckill_content conten_paddint">
+											         <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/32.png" />
+										           </div>
+	    	                                 </#if>    
+							            </#if>
+					                </#list>
+					           <#else>
+					               <div class="seckill_content">
+								    <a href="#"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/2.png" /></a>
+							       </div>
+					               <div class="seckill_content conten_paddint">
+							       <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/31.png" />
+						            </div>
+						            <div class="seckill_content conten_paddint">
+							            <a href="#"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/3.png" /></a>
+						            </div>
+						            <div class="seckill_content conten_paddint">
+							         <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/32.png" />
+						           </div>
+					           </#if> 
+	       			    <#elseif  b.end_time lt b.nowtime>
+		       			      <div class="seckill_content">
+						           <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_2.png" /></a>
+					             </div>
+					               <div class="seckill_content conten_paddint">
+						       <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/31.png" />
+					            </div>
+					             <div class="seckill_content conten_paddint">
+						         <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_3.png" /></a>
+					          </div>
+					          <div class="seckill_content conten_paddint">
+						      <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/32.png" />
+					          </div>
+       			       </#if>  
+    	       </#if>
+	     </#list>
+	   </#if>
+	<!--标题-->
+	<div class="seckill_title" id="dazhe3">
+	</div>
+	<#assign activityMapSpike= activityListTag("'id':'1'")!''>
+	      <#if activityMapSpike.activityList??>
+    	   <#list activityMapSpike.activityList as b>
+    	       <#if b_index==2>
+    	          <#if b.start_time  gt b.nowtime>
+    	                  <#assign showGood= showGoodTag("{'id':${b.id}}")>
+    	                       <#if showGood?size gt 0>
+    	                         <#list showGood as good>
+	    	                           <#if good_index==0>
+	    	                                <#assign product = goodsBaseDataTag("{'goodsid':"+good+"}")>
+	    	                                 <#if product??>
+		    	                                    <#if product.enable_store==0>
+		    	                                      <div class="seckill_content">
+												           <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_4.png" /></a>
+											             </div>
+											             <div class="seckill_content conten_paddint">
+									                        <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/51.png" />
+								                         </div>
+		    	                                    <#else>
+			    	                                   <div class="seckill_content">
+												           <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/4.png" /></a>
+											            </div>
+											            <div class="seckill_content conten_paddint">
+									                        <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/51.png" />
+								                         </div>
+		    	                                    </#if>
+	    	                                 <#else>
+			    	                                <div class="seckill_content">
+											           <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/4.png" /></a>
+										            </div>
+										            <div class="seckill_content conten_paddint">
+								                        <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/51.png" />
+							                         </div>
+	    	                                 </#if>   
+					                   </#if>
+							            <#if good_index==1>
+							                <#assign product = goodsBaseDataTag("{'goodsid':"+good+"}")>
+	    	                                 <#if product??>
+		    	                                    <#if product.enable_store==0>
+		    	                                       <div class="seckill_content conten_paddint">
+													         <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_5.png" /></a>
+												          </div>
+		    	                                    <#else>
+			    	                                    <div class="seckill_content conten_paddint">
+												            <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/5.png" /></a>
+											            </div>
+		    	                                    </#if>
+	    	                                 <#else>
+			    	                                 <div class="seckill_content conten_paddint">
+											            <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/5.png" /></a>
+										            </div>
+	    	                                 </#if>   
+							            </#if>
+					                </#list>
+					           <#else>
+							         <div class="seckill_content">
+							           <a href="#"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/4.png" /></a>
+						            </div>
+						            <div class="seckill_content conten_paddint">
+				                        <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/51.png" />
+			                         </div>
+			                         <div class="seckill_content conten_paddint">
+							            <a href="#"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/5.png" /></a>
+						            </div>
+					           </#if> 
+	       			    <#elseif b.start_time lt b.nowtime  && b.nowtime lt b.end_time>
+	       			         <#assign showGood= showGoodTag("{'id':${b.id}}")>
+    	                       <#if showGood?size gt 0>
+    	                         <#list showGood as good>
+	    	                           <#if good_index==0>
+	    	                                <#assign product = goodsBaseDataTag("{'goodsid':"+good+"}")>
+	    	                                 <#if product??>
+		    	                                    <#if product.enable_store==0>
+		    	                                      <div class="seckill_content">
+												           <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_4.png" /></a>
+											             </div>
+											             <div class="seckill_content conten_paddint">
+									                        <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/51.png" />
+								                         </div>
+		    	                                    <#else>
+			    	                                   <div class="seckill_content">
+												           <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/4.png" /></a>
+											            </div>
+											            <div class="seckill_content conten_paddint">
+									                        <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/51.png" />
+								                         </div>
+		    	                                    </#if>
+	    	                                 <#else>
+			    	                                <div class="seckill_content">
+											           <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/4.png" /></a>
+										            </div>
+										            <div class="seckill_content conten_paddint">
+								                        <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/51.png" />
+							                         </div>
+	    	                                 </#if>   
+					                   </#if>
+							            <#if good_index==1>
+							                <#assign product = goodsBaseDataTag("{'goodsid':"+good+"}")>
+	    	                                 <#if product??>
+		    	                                    <#if product.enable_store==0>
+		    	                                       <div class="seckill_content conten_paddint">
+													         <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_5.png" /></a>
+												          </div>
+		    	                                    <#else>
+			    	                                    <div class="seckill_content conten_paddint">
+												            <a  href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/5.png" /></a>
+											            </div>
+		    	                                    </#if>
+	    	                                 <#else>
+			    	                                 <div class="seckill_content conten_paddint">
+											            <a href="${ctx}/goods-${good}.html" target="_blank"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/5.png" /></a>
+										            </div>
+	    	                                 </#if>   
+							            </#if>
+					                </#list>
+					           <#else>
+							         <div class="seckill_content">
+							           <a href="#"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/4.png" /></a>
+						            </div>
+						            <div class="seckill_content conten_paddint">
+				                        <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/51.png" />
+			                         </div>
+			                         <div class="seckill_content conten_paddint">
+							            <a href="#"><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/5.png" /></a>
+						            </div>
+					           </#if> 
+	       			    <#elseif  b.end_time lt b.nowtime>
+	       			      <div class="seckill_content">
+					           <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_4.png" /></a>
+				             </div>
+				             <div class="seckill_content conten_paddint">
+		                        <img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/51.png" />
+	                         </div>
+	                         <div class="seckill_content conten_paddint">
+					         <a ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/no_5.png" /></a>
+				          </div>
+       			       </#if>  
+				     </#if>
+			      </#list>
+		       </#if> 
+	<div style="clear:both;"></div>
+</div>
+<!--标题-->
+	<div class="seckill_title" id="dazhe4">
+		 活动规则
+	</div>
+<div class="seckill_content" ><img src="${ctx}/themes/b2b2cv2/newSkill20160701/images/6.png"  /></div>
+                 <div class="menufloat" id="menufloat">
+                    <div style="margin-top:150px; width:140px; padding-left:12px;">
+                    	<!-- <a href="#dazhe1" class="an_title" >Женская одежда</a>	 -->
+			       		<!-- <a href="#dazhe1" class="an_1" >ХИТ продаж</a>
+			       		<a href="#dazhe2" class="an_2" >Скидка 80%</a> -->
+			        	<a href="#dazhe1" class="an_3" >10:00开抢</a>
+			            <a href="#dazhe2" class="an_3" >17:00开抢</a>
+			            <a href="#dazhe3" class="an_3" >20:00开抢</a>
+			        	<a href="#dazhe4" class="an_2" >活动规则</a>
+			        </div>
+                </div>
+<script type="text/javascript">
+//四色五入方法
+function changeTwoDecimal_f(x) {
+    var f_x = parseFloat(x);
+    var f_x = Math.round(x * 100) / 100;
+    var s_x = f_x.toString();
+    var pos_decimal = s_x.indexOf('.');
+    if (pos_decimal < 0) {
+        pos_decimal = s_x.length;
+        s_x += '.';
+    }
+    while (s_x.length <= pos_decimal + 2) {
+        s_x += '0';
+    }
+    return s_x;
+}
+function float_nav(dom){
+	var right_nav=$(dom);
+	var nav_height=right_nav.height();
+	function right_nav_position(bool){
+		var window_height=$(window).height();
+		var nav_top=(window_height-nav_height)/2;
+		if(bool){
+			right_nav.stop(true,false).animate({top:nav_top+$(window).scrollTop()},400);
+		}else{
+			right_nav.stop(true,false).animate({top:nav_top},300);
+		}	
+		right_nav.show();
+	}
+	
+	if(!+'\v1' && !window.XMLHttpRequest ){
+		$(window).bind('scroll resize',function(){
+			if($(window).scrollTop()>300){
+				right_nav_position(true);			
+			}else{
+				right_nav.hide();	
+			}
+		})
+	}else{
+		$(window).bind('scroll resize',function(){
+			if($(window).scrollTop()>300){
+				right_nav_position();
+			}else{
+				right_nav.hide();
+			}
+		})
+	}	
+}
+float_nav('#menufloat');
+</script>
+<#include '/common/footer.html'/>

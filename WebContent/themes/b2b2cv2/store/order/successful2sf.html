@@ -1,0 +1,94 @@
+<#include '/store/store_header.html' /> 
+<#assign selectSellerAddressTag= newTag("selectSellerAddressSFTag") >    
+<#assign  addressList= selectSellerAddressTag() >
+<script type="text/javascript">
+	$(function(){
+		$("#down").click(function(){
+			re = /^1\d{10}$/;
+			var province = $.trim($("#province").val());
+			var city = $.trim($("#city").val());
+			var region=$.trim($("#region").val());
+			var area=$.trim($("#area").val());
+			var j_name=$.trim($("#j_name").val());
+			var j_mobile=$.trim($("#j_mobile").val());
+			if(province.length==0){
+				alert("请输入所在寄件所在省");
+				return false;
+			}
+			if(city.length==0){
+				alert("请输入所在寄件所在市");
+				return false;
+			}
+			if(region.length==0){
+				alert("请输入所在寄件所在区");
+				return false;
+			}
+			if(area.length==0){
+				alert("请输入所在寄件所在详细地址");
+				return false;
+			}
+			if(j_name.length==0){
+				alert("请输入寄件人姓名");
+				return false;
+			}
+			if (!re.test(j_mobile)) {
+		        alert("请输入正确的手机");
+		        return false;
+		    }
+			//alert("${ctx}/b2b2c/admin/storeOrder!exportOrder.do?keyword="+keyword+"&start_time="+start_time+"&end_time="+end_time+"&status="+status+"&store_name="+store_name);
+			var exportHref = "${ctx}/api/shop/goodsStatics!sfpdf.do?ship_no=${ship_no}&orderid=${order_id}&province="
+					+province+"&city="+city+"&region="+region+"&area="+area+"&j_name="+j_name+"&j_mobile="+j_mobile+"&express_type=3";
+			$("#down").attr("href",exportHref);
+		 });
+	})
+	function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null)
+			return unescape(r[2]);
+		return null;
+	}
+</script>
+
+<body>
+	<div class="logi_main">
+		<!--标题-->
+		<div class="logi_title">
+			<!--  <h2><@uiLabel text="successfulTwo.applicationsuccessful" /></h2>--><!--申请成功  -->
+			<ul class="ul_bj3">
+				<!-- <li><@uiLabel text="successfulTwo.selectlogisticssolution" /></li><!--选择物流方案  -->
+				<!-- <li><@uiLabel text="successfulTwo.goodsinfowrite" /></li><!--货物信息填写  -->
+				<!--  <li class="li_colo"><@uiLabel text="successfulTwo.applicationsuccessful" /></li>--><!--申请成功  -->
+			</ul>
+		</div>
+		<div class="fl"></div>
+		<!--内容-->
+		
+		<div class="logi_content">
+			<div class="logi_cess">
+				<div class="cess_a">
+					<br />
+					&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<@uiLabel text="successfulTwo.applicationsuccessful" /><br /><!--申请成功  -->
+					&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<@uiLabel text="successfulTwo.congradulationssuccess" /><br /><!--恭喜！顺丰发货申请成功！  --> 
+					&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<@uiLabel text="successfulTwo.logisticsnumber" />：${ship_no!''}  <!--物流编号：  -->
+				</div>
+						寄件所在省<input type="text" id="province" value="${addressList.province!''}">
+						寄件所在市<input type="text" id="city" value="${addressList.city!''}">
+						寄件所在区<input type="text" id="region" value="${addressList.region!''}">
+						寄件所在详细地址<input type="text" id="area" value="${addressList.addr!''}">
+						<br>
+						寄件人姓名<input type="text" id="j_name" value="${addressList.name!''}">
+						寄件人手机<input type="text" id="j_mobile" value="${addressList.mobile!''}">
+				<div class="cess_a">&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<a href='/api/shop/goodsStatics!sfpdf.do?ship_no=${ship_no}&orderid=${order_id}&express_type=3' id="down">（<@uiLabel text="successfulTwo.onclickonload" />）</a></div><!--点击下载进口面单  -->
+				<div class="cess_b">
+					<h2>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<@uiLabel text="successfulTwo.feedbackcontent" /></h2><!--请您尽快将货物发往指定仓库，收到货物后，顺丰将反馈您最终的国际物流运费。  -->
+					<p>
+						<font color="red">&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<@uiLabel text="successfulTwo.canclesendstorage" /></font><!--运费将从您的平台账户余额中扣除，如果您需要取消发货，请尽快联系顺丰。  -->
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="fl"></div>
+	</div>
+</body>
+<#include '/common/footer.html'/>

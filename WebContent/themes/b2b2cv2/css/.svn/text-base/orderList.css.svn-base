@@ -1,0 +1,1139 @@
+/* 由 F12 开发人员工具生成。这可能不是原始源文件的准确表示形式。*/
+.icon-serviceguarantee {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-truthdescribe {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-rapiddelivery {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-localreturn {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-goldvip {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-silvervip {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-coppervip {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-remark {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-unread-message {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-read-message {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-unreadreply-message {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-readreply-message {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-serviceguarantee {
+	width: 16px; height: 16px;
+}
+.icon-truthdescribe {
+	width: 16px; height: 16px;
+}
+.icon-rapiddelivery {
+	width: 16px; height: 16px;
+}
+.icon-localreturn {
+	width: 16px; height: 16px;
+}
+.icon-serviceguarantee {
+	background-position: -60px 0px;
+}
+.icon-truthdescribe {
+	
+}
+.icon-rapiddelivery {
+	background-position: -20px 0px;
+}
+.icon-localreturn {
+	background-position: -40px 0px;
+}
+.icon-goldvip {
+	width: 16px; height: 16px;
+}
+.icon-silvervip {
+	width: 16px; height: 16px;
+}
+.icon-coppervip {
+	width: 16px; height: 16px;
+}
+.icon-goldvip {
+	background-position: 0px -80px;
+}
+.icon-silvervip {
+	background-position: -20px -80px;
+}
+.icon-coppervip {
+	background-position: -40px -80px;
+}
+.icon-remark {
+	background-position: -60px -60px; width: 13px; height: 13px;
+}
+.icon-unread-message {
+	width: 18px; height: 16px;
+}
+.icon-read-message {
+	width: 18px; height: 16px;
+}
+.icon-unreadreply-message {
+	width: 18px; height: 16px;
+}
+.icon-readreply-message {
+	width: 18px; height: 16px;
+}
+.icon-unreadreply-message {
+	background-position: -80px 0px;
+}
+.icon-readreply-message {
+	background-position: -80px -20px;
+}
+.icon-unread-message {
+	background-position: -80px -40px;
+}
+.icon-read-message {
+	background-position: -80px -60px;
+}
+.icon-highlight-warning {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-bighighlight-warning {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-big-warning {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-warning {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-highlight-information {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-bighighlight-information {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-big-information {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-information {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-highlight-error {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-bighighlight-error {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-big-error {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-error {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-bighighlight-correct {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-bigcorrect {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-highlight-correct {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-correct {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-bighighlight-wrong {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-big-wrong {
+	background: url("http://css.dhresource.com/seller/common/image/iconbg.png") no-repeat; overflow: hidden; vertical-align: middle; display: inline-block;
+}
+.icon-bighighlight-warning {
+	width: 35px; height: 35px;
+}
+.icon-big-warning {
+	width: 35px; height: 35px;
+}
+.icon-bighighlight-information {
+	width: 35px; height: 35px;
+}
+.icon-big-information {
+	width: 35px; height: 35px;
+}
+.icon-bighighlight-error {
+	width: 35px; height: 35px;
+}
+.icon-highlight-error {
+	width: 35px; height: 35px;
+}
+.icon-bighighlight-correct {
+	width: 35px; height: 35px;
+}
+.icon-bigcorrect {
+	width: 35px; height: 35px;
+}
+.icon-bighighlight-wrong {
+	width: 35px; height: 35px;
+}
+.icon-big-wrong {
+	width: 35px; height: 35px;
+}
+.icon-highlight-warning {
+	width: 16px; height: 16px;
+}
+.icon-warning {
+	width: 16px; height: 16px;
+}
+.icon-highlight-information {
+	width: 16px; height: 16px;
+}
+.icon-information {
+	width: 16px; height: 16px;
+}
+.icon-highlight-error {
+	width: 16px; height: 16px;
+}
+.icon-error {
+	width: 16px; height: 16px;
+}
+.icon-highlight-correct {
+	width: 16px; height: 16px;
+}
+.icon-correct {
+	width: 16px; height: 16px;
+}
+.icon-bighighlight-warning {
+	background-position: -169px -39px;
+}
+.icon-big-warning {
+	background-position: -169px 0px;
+}
+.icon-bighighlight-information {
+	background-position: -204px -39px;
+}
+.icon-big-information {
+	background-position: -204px 0px;
+}
+.icon-bighighlight-error {
+	background-position: -204px -39px;
+}
+.icon-big-error {
+	background-position: -204px 0px;
+}
+.icon-bighighlight-correct {
+	background-position: -100px 0px;
+}
+.icon-bigcorrect {
+	background-position: -100px -40px;
+}
+.icon-bighighlight-wrong {
+	background-position: -135px -39px;
+}
+.icon-big-warning {
+	background-position: -135px 0px;
+}
+.icon-highlight-warning {
+	background-position: -40px -20px;
+}
+.icon-warning {
+	background-position: -40px -40px;
+}
+.icon-highlight-information {
+	background-position: -60px -40px;
+}
+.icon-information {
+	background-position: -60px -20px;
+}
+.icon-highlight-error {
+	background-position: -20px -20px;
+}
+.icon-error {
+	background-position: -20px -40px;
+}
+.icon-highlight-correct {
+	background-position: 0px -20px;
+}
+.icon-correct {
+	background-position: 0px -40px;
+}
+div.datepicker {
+	left: 0px; top: 0px; width: 196px; height: 147px; font-family: Arial,Helvetica,sans-serif; font-size: 12px; display: none; position: absolute; z-index: 100; cursor: default;
+}
+.datepickerContainer {
+	position: absolute;
+}
+.datepickerBorderT {
+	display: none;
+}
+.datepickerBorderB {
+	display: none;
+}
+.datepickerBorderL {
+	display: none;
+}
+.datepickerBorderR {
+	display: none;
+}
+.datepickerBorderTL {
+	display: none;
+}
+.datepickerBorderTR {
+	display: none;
+}
+.datepickerBorderBL {
+	display: none;
+}
+.datepickerBorderBR {
+	display: none;
+}
+.datepickerHidden {
+	display: none;
+}
+div.datepicker table {
+	border-collapse: collapse;
+}
+div.datepicker a {
+	outline: 0px; color: black; text-decoration: none; cursor: default;
+}
+div.datepicker table td {
+	margin: 0px; padding: 0px; text-align: center;
+}
+div.datepicker th {
+	padding: 0px; text-align: center; color: rgb(102, 102, 102); font-weight: normal;
+}
+div.datepicker tbody a {
+	display: block;
+}
+.datepickerYears a {
+	width: 39px; height: 36px; text-align: center; line-height: 36px;
+}
+.datepickerMonths a {
+	width: 39px; height: 36px; text-align: center; line-height: 36px;
+}
+.datepickerMonths td:first-child a {
+	width: 38px;
+}
+.datepickerMonths td:last-child a {
+	width: 38px;
+}
+.datepickerYears td:first-child a {
+	width: 38px;
+}
+.datepickerYears td:last-child a {
+	width: 38px;
+}
+td.datepickerNotInMonth a {
+	color: rgb(102, 102, 102);
+}
+tbody.datepickerDays td.datepickerSelected {
+	background: rgb(19, 106, 159);
+}
+tbody.datepickerDays td.datepickerSelected.datepickerNotInMonth {
+	background: rgb(23, 56, 77);
+}
+tbody.datepickerYears td.datepickerSelected {
+	background: rgb(23, 56, 77);
+}
+tbody.datepickerMonths td.datepickerSelected {
+	background: rgb(23, 56, 77);
+}
+div.datepicker td.datepickerSelected a {
+	color: white;
+}
+div.datepicker a:hover {
+	color: rgb(136, 197, 235);
+}
+div.datepicker a:hover {
+	color: rgb(136, 197, 235);
+}
+div.datepicker td.datepickerNotInMonth a:hover {
+	color: rgb(153, 153, 153);
+}
+.datepickerSpace div {
+	width: 20px;
+}
+.datepickerBlock {
+	vertical-align: top;
+}
+a.datepickerGoNext {
+	height: 20px; text-align: center; line-height: 20px; float: left;
+}
+a.datepickerGoPrev {
+	height: 20px; text-align: center; line-height: 20px; float: left;
+}
+a.datepickerMonth {
+	height: 20px; text-align: center; line-height: 20px; float: left;
+}
+div.datepicker th a.datepickerGoNext {
+	width: 20px; color: rgb(102, 102, 102); display: none;
+}
+div.datepicker th a.datepickerGoPrev {
+	width: 20px; color: rgb(102, 102, 102); display: none;
+}
+div.datepicker th a.datepickerMonth {
+	width: 114px; display: block;
+}
+div.datepicker .datepickerFirstView th a.datepickerGoPrev {
+	display: block;
+}
+div.datepicker .datepickerLastView th a.datepickerGoNext {
+	display: block;
+}
+div.datepicker th a.datepickerMonth {
+	margin-left: 20px;
+}
+div.datepicker .datepickerFirstView th a.datepickerMonth {
+	margin-left: 0px;
+}
+table.datepickerViewDays tbody.datepickerMonths {
+	display: none;
+}
+table.datepickerViewDays tbody.datepickerYears {
+	display: none;
+}
+table.datepickerViewMonths tbody.datepickerDays {
+	display: none;
+}
+table.datepickerViewMonths tbody.datepickerYears {
+	display: none;
+}
+table.datepickerViewMonths tr.datepickerDoW {
+	display: none;
+}
+table.datepickerViewYears tbody.datepickerDays {
+	display: none;
+}
+table.datepickerViewYears tbody.datepickerMonths {
+	display: none;
+}
+table.datepickerViewYears tr.datepickerDoW {
+	display: none;
+}
+td.datepickerDisabled a {
+	color: rgb(85, 85, 85);
+}
+td.datepickerNotInMonth.datepickerDisabled a {
+	color: rgb(85, 85, 85);
+}
+td.datepickerDisabled a:hover {
+	color: rgb(51, 51, 51);
+}
+div.datepicker tbody.datepickerDays td.datepickerSpecial a {
+	background: rgb(119, 0, 0); color: white;
+}
+tbody.datepickerDays td.datepickerSelected.datepickerNotInMonth {
+	background-color: transparent;
+}
+div.datepicker td.datepickerNotInMonth a span {
+	display: none;
+}
+div.datepicker td.datepickerNotInMonth a:hover span {
+	display: none;
+}
+div.datepicker tbody.datepickerDays td.datepickerNotInMonth:hover {
+	background-color: transparent;
+}
+.datepicker {
+	padding: 10px; border: 1px solid rgb(187, 187, 187); background-color: rgb(255, 255, 255);
+}
+.datepickerSpace div {
+	width: 2px;
+}
+div.datepicker th a.datepickerMonth {
+	color: rgb(0, 142, 214); font-weight: normal;
+}
+div.datepicker th {
+	color: rgb(68, 68, 68); font-weight: bold;
+}
+div.datepicker table thead tr.datepickerDoW th {
+	background: rgb(238, 238, 238); padding: 3px 0px; border: 1px solid rgb(238, 238, 238);
+}
+div.datepicker table thead tr.datepickerCheck th {
+	padding-bottom: 5px;
+}
+div.datepicker a {
+	color: black;
+}
+div.datepicker a:hover {
+	color: black;
+}
+div.datepicker table.datepickerViewDays {
+	background-color: white;
+}
+div.datepicker table.datepickerViewMonths {
+	background-color: white;
+}
+div.datepicker table.datepickerViewYears {
+	background-color: white;
+}
+div.datepicker table tbody.datepickerDays td {
+	border: 1px solid rgb(229, 229, 229); width: 25px; height: 22px;
+}
+div.datepicker table tbody.datepickerDays td a {
+	padding: 0px; width: 25px; height: 22px; line-height: 22px; display: block;
+}
+tbody.datepickerDays td.datepickerSelected {
+	background-color: rgb(0, 119, 204);
+}
+tbody.datepickerDays td.datepickerSelected a {
+	background-color: rgb(0, 119, 204);
+}
+div.datepicker td.datepickerDisabled a {
+	color: rgb(221, 221, 221);
+}
+div.datepicker tbody.datepickerDays td a:hover {
+	background-color: rgb(255, 204, 51);
+}
+div.datepicker td.datepickerToday a {
+	font-weight: bold;
+}
+.datepickerYears a {
+	width: 42px;
+}
+.datepickerMonths a {
+	width: 42px;
+}
+.datepickerMonths td:first-child a {
+	width: 39px;
+}
+.datepickerYears td:first-child a {
+	width: 39px;
+}
+div.datepicker th a.datepickerMonth {
+	width: 121px;
+}
+div.datepicker th a.datepickerGoPrev {
+	cursor: pointer;
+}
+div.datepicker th a.datepickerGoNext {
+	cursor: pointer;
+}
+div.datepicker th a.datepickerGoPrev {
+	background: url("http://www.dhresource.com/dhs/mos/image/public/goPrev.png") no-repeat; width: 10px; height: 20px; display: block;
+}
+div.datepicker th a.datepickerGoNext {
+	background: url("http://www.dhresource.com/dhs/mos/image/public/goNext.png") no-repeat right 0px; width: 10px; height: 20px; display: block;
+}
+.datepickerMonth {
+	width: 160px; float: left;
+}
+.detepickerColor1 {
+	color: rgb(255, 172, 0);
+}
+div.datepicker table td.datepickerSpace div {
+	width: 5px;
+}
+.calendar-plugin {
+	background: url("http://www.dhresource.com/dhs/mos/image/public/calendaricon.png") no-repeat 89px 3px rgb(255, 255, 255); padding: 3px 5px; border: 1px solid rgb(187, 187, 187); width: 100px; height: 16px; cursor: pointer;
+}
+.dialog-module {
+	padding: 10px; position: relative; zoom: 1; _background: #ccc;
+}
+.dialog-content {
+	background: rgb(255, 255, 255); border: 1px solid rgb(175, 175, 175); position: relative; z-index: 2;
+}
+.dialog-title {
+	background: rgb(237, 237, 237); padding: 5px 10px; width: inherit; height: 16px; color: rgb(0, 0, 0); line-height: 16px; overflow: hidden; border-top-color: rgb(243, 243, 243); border-bottom-color: rgb(221, 221, 221); border-top-width: 1px; border-bottom-width: 1px; border-top-style: solid; border-bottom-style: solid;
+}
+.dialog-bottom {
+	background: rgb(237, 237, 237); height: 5px; overflow: hidden; border-top-color: rgb(221, 221, 221); border-top-width: 1px; border-top-style: solid;
+}
+.dialog-skin {
+	background: rgb(0, 0, 0); left: 0px; top: 0px; width: 100%; height: 100%; filter: alpha(opacity=20); position: absolute; opacity: 0.2; _display: none;
+}
+.dialog-close {
+	background: url("http://image.dhgate.com/dhs/mos/image/public/pop-close.png") no-repeat; top: 18px; width: 13px; height: 13px; right: 18px; overflow: hidden; position: absolute; z-index: 9;
+}
+.dialog-close:hover {
+	background-position: 0px -13px;
+}
+.col-main-warp table {
+	width: 100%; text-align: center;
+}
+#right .order-detail tr td {
+	padding: 0px; vertical-align: top;
+}
+#right .order-detail .col1 {
+	padding: 20px 0px 20px 15px; text-align: left;
+}
+#right .order-detail .col2 {
+	padding: 20px 0px;
+}
+#right .order-detail .multi-col {
+	padding: 20px 0px;
+}
+#right .order-detail .col3 {
+	padding: 10px 0px 20px;
+}
+#right .order-detail .col4 {
+	padding: 20px 20px 20px 0px; text-align: right;
+}
+#right .order-detail .yellowbutton2 span {
+	color: rgb(178, 87, 6);
+}
+#right .order-detail .yellowbutton2:hover span {
+	color: rgb(118, 56, 0);
+}
+.color666 {
+	color: rgb(102, 102, 102);
+}
+.color999 {
+	color: rgb(153, 153, 153);
+}
+.colorf50 {
+	color: rgb(255, 85, 0);
+}
+.colorf00 {
+	color: red;
+}
+.mr10 {
+	margin-right: 10px;
+}
+.page-topic .return-link {
+	top: 10px; right: 10px; position: absolute;
+}
+.order-type-list {
+	padding: 0px 0px 10px 100px; position: relative; zoom: 1;
+}
+.order-type .first-line {
+	margin-bottom: 5px; border-bottom-color: rgb(222, 230, 236); border-bottom-width: 1px; border-bottom-style: dashed;
+}
+.order-type-list strong {
+	left: 0px; top: 5px; width: 100px; text-align: right; position: absolute;
+}
+.order-type-list a {
+	margin: 2px 0px 0px; padding: 3px 10px; display: inline-block; white-space: nowrap;
+}
+.order-type-list a b {
+	color: rgb(255, 85, 0);
+}
+.order-type-list a em {
+	color: rgb(153, 153, 153); font-style:normal;
+}
+.order-type-list .current {
+	background: rgb(255, 85, 0); color: rgb(255, 255, 255); text-decoration: none;
+}
+.order-type-list .current b {
+	color: rgb(255, 255, 255);
+}
+.order-type-list .current em {
+	color: rgb(255, 255, 255);
+}
+.search-warp {
+	background: rgb(247, 247, 247); padding: 10px 120px 10px 10px; margin-top: 10px; border-bottom-color: rgb(230, 229, 229); border-bottom-width: 2px; border-bottom-style: solid; position: relative; zoom: 1;
+}
+.search-condition {
+	border-right-color: rgb(224, 224, 224); border-right-width: 1px; border-right-style: solid;
+}
+.search-condition li {
+	margin: 5px 10px 5px 0px; height: 25px; float: left; white-space: nowrap; _overflow: hidden;
+}
+.search-condition li span {
+	width: 65px; text-align: right; display: inline-block;
+}
+.search-condition li .input1 {
+	padding: 3px 5px; border: 1px solid rgb(171, 173, 179); width: 130px; height: 16px;
+}
+.search-condition li select {
+	padding: 2px; border: 1px solid rgb(171, 173, 179); width: 142px;
+}
+.search-condition .good-services label {
+	margin-right: 20px;
+}
+.search-operate {
+	padding: 10px; top: 0px; width: 100px; text-align: center; right: 0px; position: absolute;
+}
+.search-operate .greybutton2 {
+	margin: 5px 0px 10px;
+}
+.search-operate .greybutton2 span {
+	width: 80px;
+}
+.search-operate .search-link {
+	display: block;
+}
+.filters-warp {
+	padding: 0px 10px 10px;
+}
+.filters-warp .fleft {
+	float: left;
+}
+.filters-warp .fright {
+	float: right;
+}
+.order-list-title {
+	background: url("http://css.dhresource.com/seller/common/image/titlebg.png") repeat-x rgb(238, 238, 238); margin-bottom: 10px; border-top-color: rgb(230, 230, 230); border-bottom-color: rgb(204, 204, 204); border-top-width: 1px; border-bottom-width: 1px; border-top-style: solid; border-bottom-style: solid;
+}
+.order-list-title th {
+	padding: 5px 0px; height: 18px; line-height: 18px; font-weight: normal;
+}
+.order-list-title .col1 {
+	width: 40%;
+}
+.order-list-title .col2 {
+	width: 13%;
+}
+.order-list-title .col3 {
+	width: 13%;
+}
+.order-list-title .col4 {
+	width: 19%;
+}
+.order-list-title .col5 {
+	padding: 0px 10px; width: 100px;
+}
+.sixcols .order-list-title .col1 {
+	width: 35%;
+}
+.sixcols .order-list-title .col2 {
+	width: 10%;
+}
+.sixcols .order-list-title .col3 {
+	width: 12%;
+}
+.sixcols .order-list-title .multi-col {
+	width: 80px;
+}
+.order-info {
+	margin-bottom: 10px;
+}
+.ongoing-order {
+	border: 1px solid rgb(208, 223, 235);
+}
+.finished-order {
+	border: 1px solid rgb(230, 230, 230);
+}
+.dispute-order {
+	border: 1px solid rgb(246, 209, 132);
+}
+.order-topline {
+	padding: 6px 10px; position: relative; zoom: 1;
+}
+.ongoing-order .order-topline {
+	background: rgb(245, 251, 255); border-bottom-color: rgb(208, 223, 235); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.finished-order .order-topline {
+	background: rgb(241, 241, 241); border-bottom-color: rgb(230, 230, 230); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.dispute-order .order-topline {
+	background: rgb(255, 249, 225); border-bottom-color: rgb(246, 209, 132); border-bottom-width: 1px; border-bottom-style: solid;
+}
+.order-topline .contact-buyer {
+	top: 5px; right: 20px; position: absolute;
+}
+.order-topline .contact-buyer i {
+	margin-right: 3px;
+}
+.order-topline .col {
+	margin-right: 20px;
+}
+.order-topline .col img {
+	margin: -2px 0px 0px 5px; vertical-align: middle;
+}
+.order-topline .icon-serviceguarantee {
+	margin-right: 5px;
+}
+.order-topline .buyer-name {
+	margin-right: 5px;
+}
+.order-detail .col1 {
+	width: 53%; border-right-color: rgb(255, 255, 255); border-right-width: 1px; border-right-style: solid;
+}
+.ongoing-order .order-detail .multiple {
+	border-right-color: rgb(208, 223, 235); border-right-width: 1px; border-right-style: solid;
+}
+.finished-order .order-detail .multiple {
+	border-right-color: rgb(230, 230, 230); border-right-width: 1px; border-right-style: solid;
+}
+.dispute-order .order-detail .multiple {
+	border-right-color: rgb(246, 209, 132); border-right-width: 1px; border-right-style: solid;
+}
+.order-detail .col2 {
+	width: 13%;
+}
+.order-detail .col3 {
+	width: 19%;
+}
+.order-detail .col4 {
+	width: 100px;
+}
+.order-detail .multi-col {
+	width: 80px;
+}
+.sixcols .order-detail .col1 {
+	width: 45%;
+}
+.sixcols .order-detail .col2 {
+	width: 12%;
+}
+.order-detail .col4 .btn-list {
+	height: 25px; margin-bottom: 5px;
+}
+.order-detail .col4 .yellowbutton2 span {
+	width: 80px; text-align: center; white-space: nowrap;
+}
+.product-info .product-image {
+	float: left;
+}
+.product-info .property {
+	float: left;
+}
+.product-info .piece {
+	float: left;
+}
+.order-detail .col4 .yellowbutton2 {
+	margin-right: -10px; _margin-right: 0;
+}
+.prolayout {
+	border: 0px currentColor; width: 70px; height: 70px;
+}
+.prolayout a {
+	width: 70px; height: 70px;
+}
+.prolayout span {
+	width: 70px; height: 70px;
+}
+.prolayout a img {
+	max-height: 70px; max-width: 70px;
+}
+.prolayout span img {
+	max-height: 70px; max-width: 70px;
+}
+.product-info {
+	margin-top: -20px;
+}
+.product-info .product-item {
+	margin-top: 20px; position: relative; zoom: 1;
+}
+.product-info .prolayout {
+	margin-right: 15px;
+}
+.product-info .property {
+	width: 55%; color: rgb(153, 153, 153);
+}
+.product-info .property li {
+	width: 220px; overflow: hidden; display: block; white-space: nowrap; word-break: keep-all; text-overflow: ellipsis;
+}
+.sixcols .product-info .property li {
+	width: 190px;
+}
+.product-info .property i {
+	margin-right: 3px;
+}
+.bubble-layer-grey {
+	background: rgb(255, 255, 255); border: 1px solid rgb(184, 184, 184); box-shadow: 1px 1px 1px #ddd;
+}
+.buyer-messagecon {
+	width: 212px; position: absolute;
+}
+.failreason {
+	width: 212px; position: absolute;
+}
+.buyer-messagecon h3 {
+	padding: 10px 5px 9px 8px;
+}
+.failreason h3 {
+	padding: 10px 5px 9px 8px;
+}
+.buyer-messagecon .icon-bubble-arrowup {
+	background: url("http://css.dhresource.com/seller/transaction/order/20140428/image/narrow.png") no-repeat; width: 11px; height: 6px; overflow: hidden; display: inline-block;
+}
+.failreason .icon-bubble-arrowup {
+	background: url("http://css.dhresource.com/seller/transaction/order/20140428/image/narrow.png") no-repeat; width: 11px; height: 6px; overflow: hidden; display: inline-block;
+}
+.buyer-messagecon i {
+	left: 20px; top: -6px; position: absolute;
+}
+.failreason i {
+	left: 20px; top: -6px; position: absolute;
+}
+.buyer-messagecon p {
+	padding: 0px 20px 8px 8px; line-height: 17px;
+}
+.failreason p {
+	padding: 0px 20px 8px 8px; line-height: 17px;
+}
+.buyer-messagecon .dialog-close {
+	top: 5px; right: 5px; cursor: pointer;
+}
+.failreason .dialog-close {
+	top: 5px; right: 5px; cursor: pointer;
+}
+.buyer-messagecon .dialog-close:hover {
+	
+}
+.failreason .dialog-close:hover {
+	
+}
+.product-info .piece {
+	top: 0px; width: 25%; text-align: center; right: 0px; position: absolute;
+}
+.sixcols .product-info .piece {
+	width: 22%;
+}
+.product-info .control-product {
+	margin-top: 15px; display: inline-block;
+}
+.order-detail .col3 li {
+	padding: 0px 10px; line-height: 16px; margin-top: 10px;
+}
+.order-detail .col3 strong {
+	color: rgb(51, 51, 51);
+}
+.order-detail .col4 .icon-remark {
+	margin: -1px 5px 0px 0px;
+}
+.operate-module {
+	text-align: center; margin-top: 20px;
+}
+.send-dunning-letters {
+	padding: 20px; width: 360px;
+}
+.payment-deadline .choose-reason {
+	margin-top: 10px;
+}
+.payment-deadline .choose-reason li {
+	padding: 10px 20px; float: left;
+}
+.payment-deadline .choose-reason li input {
+	margin: -2px 5px 0px 0px; vertical-align: middle;
+}
+.payment-extension {
+	padding: 20px; width: 360px;
+}
+.payment-extension li {
+	margin-bottom: 10px;
+}
+.request-payment {
+	padding: 40px 40px 20px; width: 360px;
+}
+.request-payment p {
+	line-height: 24px; padding-bottom: 20px;
+}
+.request-success {
+	text-align: center;
+}
+.request-success strong {
+	margin: 20px 0px;
+}
+.add-remark {
+	padding: 10px 10px 20px; width: 390px;
+}
+.add-remark textarea {
+	padding: 5px; width: 380px; height: 80px;
+}
+.add-remark p {
+	text-align: right;
+}
+.delay-delivery-agreement {
+	padding: 1px 1px 20px; width: 530px;
+}
+.delay-delivery-remind {
+	background: rgb(255, 255, 229); padding: 10px; border: 1px solid rgb(252, 203, 124);
+}
+.delay-delivery-agreement ul {
+	margin-top: 20px;
+}
+.delay-delivery-agreement li {
+	padding-left: 150px; margin-bottom: 10px; position: relative; zoom: 1;
+}
+.delay-delivery-agreement .leftcol {
+	left: 0px; top: 0px; width: 145px; text-align: right; position: absolute;
+}
+.delay-delivery-agreement .input1 {
+	padding: 3px 5px; width: 40px;
+}
+.delay-delivery-agreement .select1 {
+	padding: 3px;
+}
+.delay-delivery-agreement .delay-delivery-tips {
+	padding: 10px;
+}
+.shiptype-choose {
+	padding: 20px 10px 20px 15px; width: 455px;
+}
+.shiptype-choose dt {
+	font-weight: 700; margin-bottom: 20px;
+}
+.shiptype-choose li {
+	padding-left: 100px; margin-bottom: 20px; position: relative; zoom: 1;
+}
+.shiptype-choose .leftcol {
+	left: 0px; top: 0px; width: 95px; text-align: right; position: absolute;
+}
+.shiptype-choose .epacket-ship {
+	width: 155px; float: left;
+}
+.shiptype-choose .storehouse-ship {
+	width: 155px; float: left;
+}
+.shiptype-choose .awb {
+	width: 155px; float: left;
+}
+.shiptype-choose .awb {
+	width: 110px;
+}
+.shiptype-choose .epacket-ship .bubble-layer-grey {
+	left: -15px; margin-top: 11px; display: inline-block; position: relative;
+}
+.shiptype-choose .storehouse-ship .bubble-layer-grey {
+	left: -15px; margin-top: 11px; display: inline-block; position: relative;
+}
+.shiptype-choose .epacket-ship .bubble-layer-grey {
+	padding: 10px 9px;
+}
+.shiptype-choose .storehouse-ship .bubble-layer-grey {
+	padding: 10px 9px;
+}
+.shiptype-choose .storehouse-ship label {
+	padding-left: 17px;
+}
+.shiptype-choose .storehouse-ship .bubble-layer-grey {
+	left: -4px;
+}
+.j-ePacket label {
+	color: rgb(149, 149, 149); padding-left: 5px;
+}
+.shiptype-choose .epacket-ship .bubble-layer-grey i {
+	background: url("http://css.dhresource.com/seller/transaction/order/20140428/image/narrow.png") no-repeat; left: 18px; top: -6px; width: 11px; height: 6px; overflow: hidden; position: absolute; _left: 23px;
+}
+.shiptype-choose .storehouse-ship .bubble-layer-grey i {
+	background: url("http://css.dhresource.com/seller/transaction/order/20140428/image/narrow.png") no-repeat; left: 18px; top: -6px; width: 11px; height: 6px; overflow: hidden; position: absolute; _left: 23px;
+}
+.shiptype-choose ul {
+	padding: 10px 0px 0px;
+}
+.specific-reason textarea {
+	width: 300px; height: 80px; resize: none;
+}
+.shiptype-choose .storehouse-ship {
+	width: 190px;
+}
+.ware-tips {
+	color: red; padding-top: 5px; display: inline-block;
+}
+.myleadone {
+	background: url("http://css.dhresource.com/seller/transaction/order/20140428/image/lead1bg.png") no-repeat; width: 764px; height: 653px;
+}
+.myleadone ul {
+	padding: 265px 0px 0px 335px;
+}
+.myleadone li {
+	color: rgb(4, 1, 0); line-height: 35px; font-family: "微软雅黑"; font-size: 18px;
+}
+.myleadone-btn {
+	padding: 25px 0px 0px 352px;
+}
+.myleadone-btn a {
+	background: rgb(252, 130, 56); padding: 0px 20px; border: 1px solid rgb(244, 118, 42); height: 28px; text-align: center; color: rgb(255, 255, 255); line-height: 28px; font-size: 14px; text-decoration: none; margin-right: 10px; display: inline-block;
+}
+.myleadone-btn a:hover {
+	background: rgb(255, 85, 0); text-decoration: none;
+}
+.myleadtwo {
+	background: url("http://css.dhresource.com/seller/transaction/order/20140428/image/lead2bg.png") no-repeat; width: 797px; height: 539px;
+}
+.myleadtwo-content {
+	padding: 300px 137px 0px 367px; color: rgb(51, 51, 51); line-height: 30px; font-family: "微软雅黑"; font-size: 16px;
+}
+.myleadtwo .myleadone-btn {
+	padding-left: 420px;
+}
+.myleadthree {
+	background: url("http://css.dhresource.com/seller/transaction/order/20140428/image/lead3bg.png") no-repeat; width: 799px; height: 531px;
+}
+.myleadthree-content {
+	padding: 289px 345px 0px 164px; color: rgb(4, 1, 0); line-height: 30px; font-family: "微软雅黑"; font-size: 16px;
+}
+.myleadthree .myleadone-btn {
+	padding-left: 165px;
+}
+.myleadfour {
+	background: url("http://css.dhresource.com/seller/transaction/order/20140428/image/lead4bg.png") no-repeat; width: 801px; height: 640px;
+}
+.myleadfour-content {
+	padding: 140px 230px 0px 183px; color: rgb(4, 1, 0); line-height: 30px; font-family: "微软雅黑"; font-size: 16px;
+}
+.myleadfour .myleadone-btn {
+	padding: 20px 0px 0px 275px;
+}
+#J_layyer {
+	left: 0px; top: 0px; position: absolute; z-index: 10001;
+}
+#J_layyerIframe {
+	left: 0px; top: 0px; width: 100%; height: 100%; display: none; filter: alpha(opacity=50); position: fixed !important; z-index: 10000; opacity: 0.5; background-color: rgb(0, 0, 0); -moz-opacity: .5;
+}
+#J_guidelayyerMaskIframe {
+	left: 0px; top: 0px; width: 100%; height: 100%; display: none; filter: alpha(opacity=50); position: fixed !important; z-index: 10000; opacity: 0.5; background-color: rgb(0, 0, 0); -moz-opacity: .5;
+}
+.guide-close {
+	background: rgb(255, 255, 255); top: 85px; width: 62px; height: 64px; right: 12px; filter: alpha(opacity=0); position: absolute; opacity: 0;
+}
+.newPage-research {
+	padding: 20px 35px; width: 400px;
+}
+.newPage-improvements {
+	padding-top: 24px;
+}
+.newPage-improvements textarea {
+	border: 1px solid rgb(171, 173, 179); width: 397px; height: 98px;
+}
+.newPage-improvementscon p {
+	width: 400px; text-align: right;
+}
+.newPage-improvements h3 {
+	padding-bottom: 10px;
+}
+.newPage-problem h3 {
+	padding-bottom: 5px;
+}
+.newPage-problem li {
+	height: 30px; color: rgb(51, 51, 51); line-height: 30px;
+}
+.newPage-problem li input {
+	margin-right: 10px;
+}
+.failreason {
+	width: 280px;
+}
+.failreason .icon-bubble-arrowup {
+	left: 235px;
+}
+.failreason dl {
+	padding: 0px 20px 8px 8px;
+}
+.failreason dt {
+	width: 60px; float: left;
+}
+.failreason dd {
+	margin-left: 60px;
+}
+.search-condition {
+	width: 657px; overflow: hidden;
+}
+.loading-layer {
+	padding: 50px; text-align: center; color: rgb(51, 51, 51); font-size: 14px;
+}
+.loading-layer span {
+	background: url("http://www.dhresource.com/dhs/fob/img/search/loading.gif") no-repeat 0px 0px; width: 32px; height: 32px; margin-right: 5px; vertical-align: middle; display: inline-block;
+}
+.hurry {
+	padding-top: 5px;
+}
+.hurry span {
+	background: url("http://css.dhresource.com/seller/transaction/order/20140428/image/quick.png") no-repeat; width: 16px; height: 16px; display: inline-block;
+}
+a {
+    color: #428BCA;
+    text-decoration: none;
+}

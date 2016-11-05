@@ -1,0 +1,197 @@
+<#include 'common/header.html' />
+<link rel="stylesheet" href="${ctx}/themes/b2b2cv2/css/member.css" type="text/css" />
+<link type="text/css" rel="stylesheet" href="${ctx}/themes/b2b2cv2/css/youhui.css" />
+
+<link rel="stylesheet" href="${ctx}/themes/b2b2cv2/css/style.css" type="text/css" />
+<script src="${ctx}/themes/b2b2cv2/js/dat.gui.min.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/prefixfree.min.js"></script> 
+<script src="${ctx}/themes/b2b2cv2/fireworks/index.js"></script> 
+<div class="main">
+<#-- 创建会员邮箱验证标签 -->
+<#assign memberEmailCheckTag= newTag("memberEmailCheckTag") >
+<#-- 调用会员邮箱验证信息 -->
+<#assign emailCheck= memberEmailCheckTag() >
+<#-- 创建获取会员信息标签 -->
+<#assign memberEmailByIdTag= newTag("memberEmailByIdTag") >
+<#-- 调用获取会员信息标签信息 -->
+<#assign member= memberEmailByIdTag() >
+<#assign getMemberBonusTag = newTag("getMemberBonusTag")>
+<!-- 调用会员优惠券列表标签 -->
+<#assign bonusresult = getMemberBonusTag("'member_id':${member.member_id!''} ")>
+<#assign bonuslist = bonusresult.bonusList>
+<#assign totalCount = bonusresult.totalCount>
+
+<div id="register_wrapper" >
+    
+   <input type="hidden" id="emailresult" value="${emailCheck.result!''}"> 
+	<h1 style="font-size:22px; padding-bottom:20px;margin-bottom: 16px; color:#d93600;"><@uiLabel text="RegisterSendEmail.ValidationResults"/></h1>
+	<div <#if emailCheck.result==1> class="success" <#else> class="error" </#if>>
+		${emailCheck.message!''}<br/><#if bonuslist?size gt 0 >恭喜您成功获取${totalCount}张优惠券！</#if>
+	</div>
+	<#if bonuslist?size gt 0 >
+	<table >
+  	      <h1 align="center" style="font-size: 17px;color:red;font-weight: bold;background-color:white"></h1>
+			<tr align="left">
+			<#if bonuslist?size gt 0 >
+	           <#list bonuslist as mb>
+				
+					<div style="margin-top:30px; margin-left:50px; float:left;">
+	<div class="coupon-items">
+	         <#if mb.type_money gt 0 && mb.type_money lt 50>
+	             <div class="coupon-item coupon-item-j">
+	         <#elseif mb.type_money  gte 50 && mb.type_money lt 200>
+	             <div class="coupon-item coupon-item-d">
+	         </#if>
+	        <div class="c-type">
+	            <div class="c-price" >
+	                <strong>￥${mb.type_money!''}</strong>
+	            </div>
+	            <div class="c-limit">
+	                【消费满&nbsp;${mb.min_goods_amount!''}元&nbsp;可用】
+	            </div>
+	            <div class="c-time"><@dateformat time="${mb.active_start_time?c}" pattern="yyyy-MM-dd"/>--<@dateformat time="${mb.active_end_time?c}" pattern="yyyy-MM-dd"/></div>
+	            <div class="c-type-top"></div>
+	            <div class="c-type-bottom"></div>
+	        </div>
+
+	        <div class="c-msg">
+	            <div class="c-range">
+	                <div class="range-item">
+	                    <span class="label" >券&nbsp;&nbsp;编&nbsp;&nbsp;号：</span>
+	                    <span class="txt"  style="text-align: left;">${mb.recognition!''}</span>
+	                </div>
+
+	                <div class="range-item">
+	                <span class="label">品类限制：</span>
+	                <span title="仅可购买指定商品" class="txt" style="text-align: left;">仅可购买指定商品</span>
+	                </div>
+
+	                <div class="range-item">
+	                <span class="label">平台限制：</span>
+	                <span title="全平台" class="txt" style="text-align: left;">全平台</span>
+	                </div>
+
+	                <div class="range-item">
+	                    <span class="label">&nbsp;&nbsp;</span>
+	                    <span class="txt">&nbsp;&nbsp;</span>
+	                </div>
+	            </div>
+	            <div class="op-btns" >
+	                <#if mb.order_sn?? && mb.order_id??>
+	                     <#if mb.type_money gt 0 && mb.type_money lt 50>
+						 <a  style="margin-top: 70px;" target="_blank" class="btn" href="javascript:void(0)"><span class="txt" style="text-align: center;font-size: 19px;line-height: 20px;display: inline-block;margin-top: 4px;">已使用</span><b></b></a>
+				          <#elseif mb.type_money  gte 50 && mb.type_money lt 200>
+						 <a  style="margin-top: 70px;" target="_blank" class="btn" class="btn" href="javascript:void(0)"><span class="txt" style="text-align: center;font-size: 19px;line-height: 20px;display: inline-block;margin-top: 4px;">已使用</span><b></b></a>
+				          </#if>
+					<#else>
+					      <#if mb.type_money gt 0 && mb.type_money lt 50>
+					              <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 70px;" target="_blank" class="btn" href="javascript:void(0)"><span class="txt" style="text-align: center;font-size: 19px;line-height: 20px;display: inline-block;margin-top: 4px;" >免费</span><b></b></a>
+				          <#elseif mb.type_money  gte 50 && mb.type_money lt 200>
+					              <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 70px;" target="_blank" class="btn" href="javascript:void(0)"><span class="txt" style="text-align: center;font-size: 19px;line-height: 20px;display: inline-block;margin-top: 4px;" >免费</span><b></b></a>
+				          </#if>
+				    </#if>
+	            </div>
+	        </div>
+	        <div onclick="conformDo(this,'5757010603','32378877','078ADA5','z5');" class="c-del"></div>
+		        <#if mb.data==1>
+		           <div class="overdue-site"></div>
+		        </#if>     
+		    </div>
+	     
+				</div>
+				</div>
+				</div>
+				
+			
+		  </#list>
+	    </#if>
+	    <div style="clear:both;"></div>
+			</tr>
+		</table>
+	</#if>
+	<!-- <div>
+		同时您成功获取了平台赠送给您的三张优惠券！请在我的龙贸通交易管理中查看“我的优惠券”！
+	</div> -->
+	<ul>
+		<li>
+		<form  method="post" class="validate" id="login_form">
+		    <input type="hidden" name="username" value="${member.uname!''}"> 
+		    <input type="hidden" name="password" value="${member.password!''}"> 
+			<!-- <span><a href="#" class="registeremail111"><@uiLabel text="RegisterSendEmail.ReturnsHome"/></a></span> -->
+			
+			<!-- <input type="button" class="yellow_btn" id="btnSubmit"/> -->
+		
+		<input type="button"  class="registerindex" style="font-size: 16px;line-height:40px; background-color:#99E499;color:#fff;width:130px;margin-left:0px; border:none;"  id="btn"  
+					value="返回网站首页">
+		<#if bonuslist?size gt 0 >			
+			<input type="button"  class="registeremail" style="font-size: 16px;line-height:40px; background-color:#F9A101;color:#fff;width:130px;margin-left:100px; border:none;"  id="btn"  
+					value="查看优惠券">
+		</#if>  			
+		</form>	
+			<#-- <span><a href="javascript:void(0)" class="zhuce_cg2">去会员中心</a></span> -->
+		</li>
+	</ul>
+</div>
+<#if bonuslist?size gt 0 >
+  <div id="gui" ></div>		
+  <div id="canvas-container"></div>
+</#if>  
+</div>
+<input type="hidden" value="${member.member_id!''}" id="member"/>
+<#include 'common/footer.html' />
+<script type='text/javascript'>
+var member_id=$("#member").val();
+py('event','register' ,member_id).track('Qas.lEs.WUXWQ50zcfXOQRU1UHJZD_');
+</script>
+<script type="text/javascript">
+$(function(){
+	 $(".registeremail").click(function(){
+		 var emailresult=$("#emailresult").val();
+		 if(emailresult==1){
+			 var options = {
+						url : "/api/shop/member!loginForEmail.do",
+						type : "POST",
+						dataType : 'json',
+						success : function(data) {
+							if(data.result==1){
+								location.href ="/member/bonus.html";
+							}
+							else{
+								alert(data.message);
+							}
+						},
+						error : function(e) {
+							alert("出现错误，请重试!");
+						}
+				};
+			$('#login_form').ajaxSubmit(options);
+		 }
+    });
+	 
+	 $(".registerindex").click(function(){
+		 var emailresult=$("#emailresult").val();
+		 if(emailresult==1){
+			 var options = {
+						url : "/api/shop/member!loginForEmail.do",
+						type : "POST",
+						dataType : 'json',
+						success : function(data) {
+							if(data.result==1){
+								location.href ="/index.html";
+							}
+							else{
+								alert(data.message);
+							}
+						},
+						error : function(e) {
+							alert("出现错误，请重试!");
+						}
+				};
+			$('#login_form').ajaxSubmit(options);
+		 }
+    });
+})
+</script>
+<script>
+var fworks = new Fireworks();
+</script>

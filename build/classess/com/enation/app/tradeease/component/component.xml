@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="tradeease组件"  version="1.0" javashop_version="3.0.0" author="javashop">
+	<plugins>
+<!-- 		<plugin name="放款任务" id="loanTradePlugin"> -->
+<!-- 			<bundle id="jobExecutePluginsBundle"></bundle> -->
+<!-- 		</plugin> -->
+		<plugin name="到期商品下架" id="timeOutGoodsPlugin">
+			<bundle id="jobExecutePluginsBundle"></bundle>
+		</plugin>
+		<plugin name="给商品详情图片添加水印" id="goodsWatermarkCreatePlugin">
+			<bundle id="goodsPluginBundle"></bundle>
+		</plugin>
+	</plugins>
+</component>

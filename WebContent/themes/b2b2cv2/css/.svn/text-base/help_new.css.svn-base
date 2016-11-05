@@ -1,0 +1,543 @@
+@charset "utf-8";
+/* CSS Document */
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+    font-size: 12px;
+    font-family: "Microsoft YaHei", "微软雅黑", "宋体";
+}
+
+.fl {
+    clear: both;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+}
+
+a {
+    color: #666;
+    text-decoration: none;
+}
+
+ul, ol {
+    list-style: none outside none;
+}
+
+/* 头部 */
+.top-warp {
+    background: url("../images/top_bg.jpg") repeat-x scroll center bottom rgba(0, 0, 0, 0);
+    height: 41px;
+}
+
+.top-Info, .head-Warp, .navigation, #content, #footer-2014 {
+    margin: 0 auto;
+    width: 1200px;
+}
+
+.top-Info {
+    height: 35px;
+    position: relative;
+    z-index: 99;
+}
+
+.top-left {
+    left: 0;
+    line-height: 34px;
+    position: absolute;
+    top: 0;
+}
+
+.t-JoinFree, .t-SignIn {
+    color: #f70;
+}
+
+.no-email, .yes-email {
+    padding-left: 17px;
+}
+
+.no-email {
+    background: url("../images/head-foot2.png") no-repeat scroll 0 3px rgba(0, 0, 0, 0);
+}
+
+.yes-email {
+    background: url("../images/head-foot2.png") no-repeat scroll 0 -22px rgba(0, 0, 0, 0);
+    color: #f70;
+}
+
+.top-right {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.top-right li {
+    border-top: 1px solid #fff;
+    float: left;
+    line-height: 34px;
+}
+
+.t-Divider {
+    background: none repeat scroll 0 0 #c8c8c8;
+    height: 12px;
+    margin: 12px 15px 0;
+    width: 1px;
+}
+
+.t-help a, .t-Mobile a {
+    display: block;
+}
+
+.t-Mobile a i {
+    background: url("../images/head-foot2.png") no-repeat scroll 0 -108px rgba(0, 0, 0, 0);
+    float: left;
+    height: 11px;
+    margin: 13px 5px 0 0;
+    width: 9px;
+}
+
+.t-message a i {
+    background: url("../images/head-foot2.png") no-repeat scroll 0 -170px rgba(0, 0, 0, 0);
+    float: left;
+    height: 14px;
+    margin: 11px 5px 0 0;
+    width: 18px;
+}
+
+.head-Warp {
+    height: 85px;
+    position: relative;
+    z-index: 10;
+}
+
+.head-logo {
+    background: url("../images/logo-help.jpg") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    height: 46px;
+    left: 0;
+    position: absolute;
+    top: 20px;
+    width: 392px;
+}
+
+.head-logo a {
+    display: block;
+    height: 46px;
+}
+
+.head-SearchBox {
+    background-color: #fff8e3;
+    height: 40px;
+    padding: 2px;
+    position: absolute;
+    right: 0;
+    top: 21px;
+    width: 460px;
+}
+
+.head-Search-inner {
+    background: none repeat scroll 0 0 #fff;
+    border: 1px solid #b50029;
+    border-radius: 1px;
+    height: 38px;
+}
+
+.head-Search-keywords {
+    height: 38px;
+    padding-left: 10px;
+}
+
+.head-Search-keywords input {
+    border: 0 none #fff;
+    color: #ccc;
+    font-size: 12px;
+    height: 18px;
+    outline: 0 none;
+    overflow: hidden;
+    padding: 10px 0;
+    width: 286px;
+}
+
+.head-cate-content {
+    background: url("../images/head-foot2.png") no-repeat scroll 71px -38px;
+    border: 1px solid #fff;
+    cursor: pointer;
+    height: 28px;
+    padding: 4px 0;
+    position: absolute;
+    right: 58px;
+    top: 3px;
+    width: 90px;
+}
+
+.head-cate-content .cate-text {
+    border-left: 1px solid #e8e8e8;
+    color: #666;
+    display: inline-block;
+    line-height: 28px;
+    margin-left: -1px;
+    padding-left: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.head-cate-content .cate-list {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #fff;
+    border-color: -moz-use-text-color #e8e8e8 #e8e8e8;
+    border-image: none;
+    border-right: 1px solid #e8e8e8;
+    border-style: none solid solid;
+    border-width: 0 1px 1px;
+    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.1);
+    left: -1px;
+    position: absolute;
+    top: 37px;
+    width: 91px;
+}
+
+.head-cate-content .cate-list ul {
+    padding: 4px 0 8px;
+}
+
+.head-cate-content .cate-list li {
+    line-height: 25px;
+    padding-left: 15px;
+}
+
+.head-search-text {
+    background: url("../images/head-foot2.png") no-repeat scroll 18px -1500px #b50029;
+    border: 0 none;
+    cursor: pointer;
+    height: 38px;
+    position: absolute;
+    right: 3px;
+    top: 3px;
+    width: 55px;
+}
+
+.nav-Warp {
+    border-top: 1px solid #b50029;
+    height: 10px;
+    min-width: 990px;
+}
+
+/* 当前位置 */
+.snav {
+    color: #444;
+    height: 30px;
+    line-height: 32px;
+    margin: 0 auto;
+    overflow: hidden;
+    width: 1200px;
+}
+
+.snav a {
+    color: #000;
+}
+
+/* 中间内容 */
+h1, h2, h3, h4, h5, h6 {
+    font-size: 100%;
+    font-weight: normal;
+}
+
+#content {
+    height: 100%;
+    overflow: hidden;
+    padding-bottom: 10px;
+}
+
+#left {
+    float: left;
+    width:250px;
+}
+
+#left dl {
+    height: 100%;
+    width: 248px;
+    border-right: 1px solid #ffdfa0;
+    border-left: 1px solid #ffdfa0;
+    border-bottom: 1px solid #ffdfa0;
+}
+
+#left dt {
+    background: url("../images/helpcenterbg2.png") no-repeat scroll 0 -70px;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    padding: 5px 10px;
+    width: 246px;
+}
+
+#left dt span {
+    /*background: url("/portal/images/helpcenterbg2.png") no-repeat scroll right -336px;*/
+    color: #dc7534;
+    cursor: pointer;
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+#left dt span.open {
+    /*background-position: right -354px;*/
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+#left dd{margin:0;}
+
+#left ul {
+    padding-bottom: 6px;
+}
+
+#left li, #left .change-li {
+    color: #000;
+    margin-left:0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    padding-left: 15px;
+    width: 233px;
+}
+
+#left .a-contact {
+    background: url("../images/helpcenterbg2.png") no-repeat scroll 0 -159px rgba(0, 0, 0, 0);
+    border: 1px solid #e98c54;
+    display: block;
+    height: 32px;
+    margin-top: 10px;
+    overflow: hidden;
+    width: 148px;
+}
+
+#right {
+    float: right;
+    width: 925px;
+}
+
+.helpcontent-titie, .flowchart-title, .home-bzzx-title, .home-list-title {
+    font-family: "宋体";
+    font-size: 14px;
+    font-weight: 700;
+    height: 28px;
+    line-height: 28px;
+    padding-left: 20px;
+    vertical-align: middle;
+}
+
+.flowchart-title {
+    background: url("../images/helpcenterbg2.png") no-repeat scroll 0 0;
+    border: 1px solid #fadc8c;
+    color: #f77a3d;
+    width: 808px;
+}
+
+.flowchart-pic {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color #fadc8c #fadc8c;
+    border-image: none;
+    border-right: 1px solid #fadc8c;
+    border-style: none solid solid;
+    border-width: medium 1px 1px;
+    height: 87px;
+    margin-bottom: 10px;
+    width: 828px;
+}
+
+.home-content {
+    width: 830px;
+}
+
+.home-bzzx {
+    float: left;
+    width: 630px;
+}
+
+.home-bzzx-title {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: url("../images/helpcenterbg2.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border-color: #fadc8c #fadc8c -moz-use-text-color;
+    border-image: none;
+    border-style: solid solid none;
+    border-width: 1px 1px medium;
+    width: 608px;
+}
+
+.home-bzzx-content {
+    border: 1px solid #fadc8c;
+    padding: 10px 0 10px 20px;
+    width: 608px;
+}
+
+.bzzx-con-list {
+    color: #444;
+    overflow: hidden;
+    padding-bottom: 10px;
+    width: 608px;
+}
+
+.bzzx-con-list dl {
+    line-height: 22px;
+}
+
+.bzzx-con-list .bcl-left {
+    float: left;
+    margin-bottom: 10px;
+    margin-right: 20px;
+    min-height: 70px;
+    overflow: hidden;
+    width: 264px;
+}
+
+.bzzx-con-list dt {
+    color: #057bd2;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.bzzx-con-list dl dd {
+    margin-left: -10px;
+}
+
+.bzzx-con-list dl dd a {
+    border-left: 1px solid #ccc;
+    display: inline-block;
+    height: 14px;
+    line-height: 14px;
+    margin-left: -1px;
+    margin-right: 10px;
+    margin-top: 10px;
+    outline: medium none;
+    overflow: hidden;
+    padding-left: 10px;
+}
+
+.home-bzzx-list {
+    float: right;
+    width: 188px;
+}
+
+.home-list-title {
+    background: url("../images/helpcenterbg2.png") no-repeat scroll 0 -131px rgba(0, 0, 0, 0);
+    width: 166px;
+    border: 1px solid #fadc8c;
+}
+
+.home-list-list {
+    border: 1px solid #dcdcdc;
+    margin-bottom: 10px;
+    padding: 2px 0 10px 20px;
+    width: 166px;
+}
+
+.home-list-list li {
+    background: url("../images/helpcenterbg2.png") no-repeat scroll -827px -160px rgba(0, 0, 0, 0);
+    padding: 7px 0 0 10px;
+}
+
+
+/* 二级页面 */
+.list-title {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: url("../images/helpcenterbg2.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border-color: #fadc8c #fadc8c -moz-use-text-color;
+    border-image: none;
+    border-style: solid solid none;
+    border-width: 1px 1px medium;
+    font-size: 14px;
+    font-weight: 700;
+    height: 28px;
+    line-height: 28px;
+    padding-left: 20px;
+    vertical-align: middle;
+    width: 923px;
+    border: 1px solid #fadc8c;
+    border-bottom: none;
+}
+.list-title h1{line-height:28px; margin:0;}
+
+.list-content {
+    border: 1px solid #fadc8c;
+    padding: 2px 0 10px 20px;
+    width: 808px;
+}
+
+.list-content li {
+    background: url("../images/helpcenterbg2.png") no-repeat scroll -827px -160px rgba(0, 0, 0, 0);
+    padding: 7px 0 0 10px;
+}
+
+.page {
+    padding: 25px 10px 10px 0;
+    text-align: right;
+}
+
+.page a {
+    padding: 3px 5px;
+}
+
+.page b {
+    background: none repeat scroll 0 0 #ff7003;
+    color: #fff;
+    padding: 3px 5px;
+}
+
+/* 三级页面 */
+.content-nr {
+    border: 1px solid #fadc8c;
+    overflow: hidden;
+    padding: 27px 5px 40px 20px;
+    position: relative;
+    width: 923px;
+    color: #666;
+    min-height:400px;
+    line-height:2;
+}
+.content-nr li{line-height:2;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

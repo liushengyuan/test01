@@ -1,0 +1,69 @@
+
+.content-bottom {
+    background: #EDEDED none repeat scroll 0% 0%;
+    /*padding-top:25px;*/
+    /* border-top:1px solid #dfdfdf; */
+    min-width:1200px;
+    *min-width:1200px;
+    min-width:1200px\0;
+}
+.content-bottom .partners-main {
+    width: 1200px;
+    margin: 0px auto;
+    padding: 10px 0px;
+    /* border-top: 1px dotted #CCC; */
+    border-bottom: 1px dotted #CCC;
+}
+.content-bottom .partners-main .partners-list li {
+    float: left;
+    width: 80px;
+    height: 40px;
+    text-indent: -999em;
+    overflow: hidden;
+    margin: 0 8px 0 0;
+    list-style: none;
+    background: url(../images/home-index-sprite3.png) no-repeat -550px -600px
+}
+
+.content-bottom .partners-main .partners-list li.p-logo-a{
+    background-position: -550px -905px;
+    width: 80px;
+}
+.content-bottom .partners-main .partners-list li.p-logo-b{
+    background-position: -750px -805px;
+    width: 80px;
+}
+.content-bottom .partners-main .partners-list li.p-visa-logo {
+    background-position: -550px -838px;
+    width: 50px
+}
+.content-bottom .partners-main .partners-list li.p-mastercard-logo {
+    background-position: -550px -791px;
+    width: 50px
+}
+.content-bottom .partners-main .partners-list li.p-chinabank-logo {
+    background-position: -550px -740px;
+    width: 80px
+}
+.content-bottom .partners-main .partners-list li.p-logo-f{
+    background-position: -985px -643px;
+    width: 80px;
+}
+
+.content-bottom .website-intro-main {
+    padding: 10px 0 0 0;
+    margin: 0px auto;
+    width: 1200px;
+    border-bottom: 1px dotted #CCC;
+}
+.content-bottom .website-intro-main p {
+    margin: 0px 0px 0.8em;
+    color: #666;
+    text-align: center;
+}
+
+.content-bottom .website-intro-main p a {
+    margin-bottom: 0px;
+    color: #666;
+    padding: 0px 5px;
+}

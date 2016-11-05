@@ -1,0 +1,157 @@
+<#if locale=="zh">
+	<#assign title="卖家登录" />
+ <#elseif locale=="ru">
+ 	<#assign title="продавец посадку" />
+ </#if>
+<#include '/common/header.html' />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/loginAndRegiste.css" />
+<#if locale=="zh">
+ <script  src="${ctx}/themes/b2b2cv2/js/jquery.validate.js"  ></script>
+ <#elseif locale=="ru">
+ <script  src="${ctx}/themes/b2b2cv2/js/jquery.validatet.js"  ></script>
+ </#if>
+<!--登录界面-->
+<div class="main">
+	<!--左侧登录界面-->
+	<div id="top">
+        <div class="header2">
+            <div class="logo2"><a href="${ctx}/index.html"></a><span><@uiLabel text="Register.SellerRegister" /></span></div>
+        </div>
+	</div>
+    <div id="content" class="clearfix" style="min-height: 480px;">
+        <div class="maincontent">
+            <div class="outerbox">
+                <form method="post" class="validate" id="login_form">
+                    <input type="hidden" name="action" value="login"/>
+                    <div class="lefttitle"><@uiLabel text="Register.Email" />:</div>
+                    <div class="rtcon">
+                        <input type="text" value="" tabindex="1" maxlength="128" name="username" id="username" class="txtinput" isrequired="true">
+                    </div>
+                    <div class="lefttitle"><@uiLabel text="Register.Password" />:</div>
+                    <div class="rtcon">
+                        <input type="password" value="" tabindex="2" maxlength="30" name="password" id="password" class="txtinput" isrequired="true">
+                    </div>
+                    <div class="lefttitle"><@uiLabel text="Register.VerificationCode" />:</div>
+                    <div class="rtcon m_account">
+                        <input type="text" value="" tabindex="3" maxlength="30" name="validcode" id="validcode" class="txtinput txtinput2">
+                        <a href="javascript:reloadCaptcha('captchaImage')">
+                            <img id="captchaImage" class="rtcon_img code_img" src="${ctx}/validcode.do?vtype=memberlogin">
+                        </a>
+                        <div class="m_forget">
+                            <a href="javascript:;"><@uiLabel text="Register.NOSeeClearly" />？</a>
+                        </div>
+                    </div>
+                    <div class="rtcon pwdbox">
+                        <label>
+                            <input type="checkbox" checked="" value="1"class="checkinput" name="remember" id="remember">
+                            <@uiLabel text="login.Remember" /></label>
+                    </div>
+                    <div class="rtcon sgbox">
+                        <span class="btnout">
+                            <input type="button" onclick="" tabindex="4" name="smt_signin" value="<@uiLabel text="Register.login" />" class="sgbtn regis_ent">
+                        </span>
+                        <p><a href="/findpasswordByEmail.html"><@uiLabel text="Register.ForgotPassword" />?</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="minorcontent">
+            <div class="" style="width:230px;">
+                <div class="module1">
+                    <div class="signin">
+                        <p><@uiLabel text="login.NoRegistered" />?</p>
+                        <p>
+                            <a href="register.html?forward=${forward!''}" class="n-grey-button"><@uiLabel text="login.Registered" /></a>
+                        </p>
+                    </div>
+                </div>
+                <div class="module2">
+                    <h2><@uiLabel text="index.PortalSellerRuleCentre" /></h2>
+                    <div class="service-pledge">
+                        <ul>
+                            <li><@uiLabel text="login.ClickView" /><a href="${ctx}/help-35-58.html" target="_blank"><@uiLabel text="Register.SellerRule" /></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--登录界面结束-->
+	<input type="hidden" id="forward" value="${forward!''}"/>
+<script>
+$(function(){
+	$(".m_forget a").click(function(){
+		$(".m_account img").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+	$(".code_img").click(function(){
+		$(this).attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+	});
+	var options = {
+		url : "${ctx}/api/shop/member!login.do?ajax=yes",
+		dataType : 'json',
+		success : function(data) {
+			if(data.result==1){
+				var forward=$("#forward").val();
+				if(forward==""){
+					location.href ="${ctx}/store/business_center.html?menu=store_index";
+				}
+				else if(forward=="checkout.html"){
+					location.href ="../cart.html";
+				}
+				else{
+					location.href=forward;
+				}
+			}
+			else{
+				alert(data.message);
+				$("#captchaImage").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+				$.Loading.hide();
+			}
+		},
+		error : function(e) {
+			alert("出现错误 ，请重试");
+		}
+	};
+	
+	$(".regis_ent").click(function(){
+			var name = "admin@qq.com";//管理员账号。不需要验证码
+			if (!$("#login_form").checkall()) {
+				$("#captchaImage").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+				return false;
+			}
+			if($("#username").val()!=name){
+				if($("#validcode").val()==""){
+					alert("<@uiLabel text='login.yanzhengma'/>");
+					$("#captchaImage").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+					return false;
+				}
+			}
+			$.Loading.show("<@uiLabel text='login.logining'/>");
+			$('#login_form').ajaxSubmit(options);	
+	});
+	
+	
+	
+	$(document).keyup(function(event) {
+			var name = "admin@qq.com";//管理员账号。不需要验证码
+			if (event.keyCode == 13) {
+				if (!$("#login_form").checkall()) {
+					$("#captchaImage").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+					return false;
+				}
+				if($("#username").val()!=name){
+					if($("#validcode").val()==""){
+						$("#captchaImage").attr("src","${ctx}/validcode.do?vtype=memberlogin&r="+new Date().getTime());
+						alert("<@uiLabel text='login.yanzhengma'/>");
+						return false;
+					}
+				}
+				
+				$.Loading.show("<@uiLabel text='login.logining'/>");
+				$('#login_form').ajaxSubmit(options);
+			}
+		});
+	});
+</script>
+<#include '/common/seller_footer.html' />

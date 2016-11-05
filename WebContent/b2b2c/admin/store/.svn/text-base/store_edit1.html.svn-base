@@ -1,0 +1,89 @@
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.input_text {
+	width: 200px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<div style="padding: 10px 0 10px 20px">
+			<form id="editForm" method="post" class="validate">
+				<table>
+
+					<tr>
+						<td style="padding-left: 30px;">是否获取初始单：</td>
+						<td>
+							<select name="store_initiallist">
+								<option value="1" <#if store.store_initiallist==1>selected</#if>>未获取</option>
+								<option value="2" <#if store.store_initiallist==2>selected</#if>>已获取</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-left: 30px;">地区：</td>
+						<td>
+							<select name="account_area">
+								<option value="0" <#if store.account_area==0>selected</#if>>请选择</option>
+								<option value="1" <#if store.account_area==1>selected</#if>>绥芬河</option>
+								<option value="2" <#if store.account_area==2>selected</#if>>北京</option>
+								<option value="3" <#if store.account_area==3>selected</#if>>华南</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-left: 30px;">客户经理：</td>
+						<td>
+							<input class="input_text easyui-validatebox" type="text"
+							name="account_manager" value="${store.account_manager!''}" ></input>
+						</td>
+					</tr>
+					<tr>
+						<td>店铺佣金比例：</td>
+						<td>
+							<input class="easyui-validatebox input_text"  value="${commissionStr!'0.00'}" type="text" name="commission"/>
+						</td>
+						<td colspan="2"><div id="default_lvTip">如果输入10.平台佣金为订单价格的百分之10</div></td>
+ 					</tr>
+					<tr>
+						<td style="padding-left: 30px;">浮动保证金比例：</td>
+						<td>
+							<input class="input_text easyui-validatebox" type="text"
+							name="init_commission1" value="${store.init_commission1!''}" ></input>
+						</td>
+						<td style="margin-left: 10px;">如果输入10.平台佣金为订单价格的百分之10</td>
+					</tr>
+					<tr>
+						<td style="padding-left: 30px;">店铺修改人：</td>
+						<td>
+							<textarea class="input_text easyui-validatebox"  readonly="readonly"
+							 value="${store.modify_persion!''}" >${store.modify_persion!''}</textarea>
+							 <input type="hidden" name="modify_persion" value="${store.modify_persion!''}"/>
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-left: 30px;">初始单图片：</td>
+						<td>
+							<a href="${store.init_pic!''}" target="_blank"><img id="init_pic" src="${store.init_pic!''}" style="width:300px;height:200px"></a>
+							<input type="hidden" id="init_pic_url" name="init_pic" value="${store.init_pic!'' }" >
+							<input type="button" id="uploadBtn" value="上传" />
+						</td>
+						
+					</tr>
+				</table>
+				<input type="hidden" name="storeId" value="${store.store_id!''}">
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	function getPath(path){
+		$("#init_pic").attr("src",path);
+		$("#init_pic_url").val(path);
+	}
+	$(function(){
+		$("#uploadBtn").click(function(){
+			openImgDlg(getPath)
+		});
+	})
+</script>

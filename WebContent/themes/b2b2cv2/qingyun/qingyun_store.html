@@ -1,0 +1,698 @@
+<#include '${ctx}/common/header.html' /> 
+<#include '${ctx}/common/reception_header_qingyun.html'/> 
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<link rel="stylesheet" type="text/css"
+	href="${ctx}/themes/b2b2cv2/css/home.css" />
+<script src="${ctx}/themes/b2b2cv2/js/home_index.js"></script>
+<!-- 项目维护 时期弹出框-->
+<style type="text/css">
+#alertMsg {
+	display: none;
+	width: 400px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	box-shadow: 1px 1px 10px black;
+	padding: 10px;
+	font-size: 15px;
+	position: absolute;
+	text-align: center;
+	background: #fff;
+	z-index: 100000;
+}
+
+#alertMsg_info {
+	padding: 2px 15px;
+	line-height: 1.6em;
+	text-align: center;
+}
+
+#alertMsg_btn1, #alertMsg_btn2 {
+	display: inline-block;
+	background: no-repeat left top;
+	padding-left: 3px;
+	color: #000000;
+	font-size: 15px;
+	text-decoration: none;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+#alertMsg_btn1 cite, #alertMsg_btn2 cite {
+	line-height: 24px;
+	display: inline-block;
+	padding: 0 13px 0 10px;
+	background: no-repeat right top;
+	font-style: normal;
+}
+</style>
+
+<!-- 项目维护 -->
+<!-- 获取商品列表标签 -->
+<#assign goodsListTag = newTag("goodsListTag")>
+<!--创建"商品基本信息"标签-->
+<#-- <#assign goodsBaseDataTag = newTag("goodsBaseDataTag")> -->
+<div class="clear"></div>
+<#assign advListTag= newTag("advListTag")>
+<!-- 调用广告信息,传递参数acid:1 -->
+<#if locale=="zh">
+	<#assign adv = advListTag("'acid':'3'")!'' >
+	<!-- 获取广告列表 -->
+	<#assign advList = adv.advList />
+ <#elseif locale=="ru">
+	<#assign adv = advListTag("'acid':'6'")!'' >
+	<!-- 获取广告列表 -->
+	<#assign advList = adv.advList />
+ </#if>
+
+<!-- 商品标签信息标签 -->
+<#assign tagInfoTag = newTag("tagInfoTag")>
+
+
+<div id="body">
+	<div class="grid grid-c2-e6">
+
+		<div class="col-main">
+			<div class="main-wrap" style="margin-right: 0;">
+				<!--导航/banner-->
+				<div class="top-container" id="top-container">
+					<!--TMS:1299341-->
+					<div class="categories-main">
+						<#list goodsCat.cat_tree as cat>
+						<div class="categories-list-box">
+							<dl data-role="first-menu" class="cl-item cl-item-electronics">
+								<dt class="cate-name">
+									<a href="#"> <!--  ${cat.name} --> <#if locale=="zh">
+										${cat.name} <#elseif locale=="ru"> ${cat.name_ru!''} </#if>
+									</a>
+								</dt>
+								<dd data-role="first-menu-main" class="sub-cate">
+
+									<div class="sub-cate-main">
+										<#if cat.hasChildren> <#assign children2=cat.children />
+										<#list children2 as cat2>
+										<dl data-role="two-menu" class="sub-cate-items">
+											<dt>
+												<a
+													href="${ctx}/goods_list.html?cat=${cat.cat_id}_${cat2.cat_id}&storeType=1">
+													<!--  ${cat.name } --> <#if locale=="zh"> ${cat2.name}
+													<#elseif locale=="ru"> ${cat2.name_ru!''} </#if>
+												</a>
+											</dt>
+
+											<#if cat2.hasChildren > <#assign children3=cat2.children />
+											<#list children3 as cat3>
+											<dd>
+												<a
+													href="${ctx}/goods_list.html?cat=${cat.cat_id}_${cat2.cat_id}_${cat3.cat_id}&storeType=1">
+													<!-- ${cat3.name} --> <#if locale=="zh"> ${cat3.name}
+													<#elseif locale=="ru"> ${cat3.name_ru!''} </#if>
+												</a>
+											</dd>
+											</#list> </#if>
+										</dl>
+										</#list> </#if>
+									</div>
+								</dd>
+							</dl>
+
+						</div>
+						</#list>
+
+					</div>
+					<div class="activity-show-main">
+						<div id="key-visual-wrap" class="sub-visual-expand">
+							<div id="key-visual" data-role="key" class="ui-switchable" style="width:950px;">
+								<div class="play" id="play" style="width:950px;">
+									<a href="javascript:void" id="next"></a> <a
+										href="javascript:void" id="prev"></a>
+									<ol></ol>
+									<!--ManagerMain pageSetting-->
+									<ul>
+										<#list advList as adv>
+										<li style="width:950px;"><a href="${ctx}${adv.url!''}"> <@image
+												src="${adv.atturl}" style="width:950px;" /></a></li> </#list>
+									</ul>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="mod brand-showcase ui-switchable" id="brandShowCase"
+					style="display: none;">
+					<div class="tabbed-pane-panel ui-switchable-content">
+						<div class="brand-main-box ui-switchable-panel"></div>
+					</div>
+				</div>
+				<!--青云商城  分类一 -->
+                <div class="mod bestselling-area" id="weekly-bestsellings">
+                    <div class="mod-hd">
+                    	<#if locale=="zh">
+							<#assign productTag=tagInfoTag("'tagid':'21'")!>
+						 <#elseif locale=="ru">
+							<#assign productTag=tagInfoTag("'tagid':'14'")!>
+						 </#if>
+                        <h3><em>
+                        <#if productTag??>
+                        <#if locale=="zh">
+                        	${(productTag.tag_name)!}
+                        <#elseif locale=="ru">
+                        	${productTag.name_ru!''}
+                        </#if>
+                        </#if>
+                        </em></h3>
+                    </div>
+                    <div class="mod-box">
+                        <div class="ui-slidebox util-clearfix" data-widget-cid="widget-39">
+                            <div class="ui-slidebox-wrap">
+                                <div class="ui-slidebox-container">
+                                    <div class="ui-slidebox-slider" data-role="slider" style="margin-left: 0px; width:auto;"><#--width:auto; -->
+                                        <ul id="sellingGoodsRoll">
+                                        
+                                        <#if locale=="zh">
+											<#assign goodsList=goodsListTag("'tagid':'21','goodsnum':'18'")!>
+										 <#elseif locale=="ru">
+											<#assign goodsList=goodsListTag("'tagid':'14','goodsnum':'18'")!>
+										 </#if>
+                                        <#if goodsList??>
+                                        <#list goodsList as goods>
+                                            <li style="width: 180px; visibility: visible;">
+                                                <div class="wb-item"><#-- ${ctx}/goods-${goods.goods_id}.html-->
+                                                    <a class="item-hover wb-link"
+                                                       href="${ctx}/home.html?show_c=1&store_id=${goods.store_id}" title="<#if locale=="zh">${goods.name}<#elseif locale=="ru">${goods.name_ru!""}</#if>">
+                                                        <div class="wb-info">
+                                                            <div class="wb-meta">
+                                                                <span class="wb-index">${goods_index+1}</span>
+                                                            </div>
+                                                            <div class="nnnn-img">
+                                                                <@image src="${goods.thumbnail!''}" />
+                                                            </div>
+                                                            <div class="wb-title"><@uiLabel text="goods.StoreName" />：${goods.store_name!}
+<#--                                 							<#if locale=="zh">
+                                								${goods.name!''}
+                                							<#elseif locale=="ru">
+                                								${goods.name_ru!""}
+                                							</#if> -->
+                                                            </div>
+<#--                                                             <div class="cost">
+                                                                <b class="notranslate">
+                                                                <#if locale=="zh">
+                                 									￥${goods.price!''}
+                                 								<#elseif locale=="ru">
+                                 									${goods.price_ru!''}р.
+                                 								</#if>
+                                                                </b>
+                                                            </div> -->
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </li>
+                                        </#list>
+                                        </#if>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <#--     青云商城  分类二
+                <div class="mod bestselling-area" id="weekly-bestsellings">
+                    <div class="mod-hd">
+                        <#assign productTag=tagInfoTag("'tagid':'6'")!>
+                        <h3><em>
+                        <#if productTag??>
+                        <#if locale=="zh">
+                        	${productTag.tag_name!''}
+                        <#elseif locale=="ru">
+                        	${productTag.name_ru!''}
+                        </#if>
+                        </#if>
+                        </em></h3>
+                    </div>
+                    <div class="mod-box">
+                        <div class="ui-slidebox util-clearfix" data-widget-cid="widget-39">
+                            <div class="ui-slidebox-wrap">
+                                <div class="ui-slidebox-container">
+                                    <div class="ui-slidebox-slider" data-role="slider" style="margin-left: 0px; width:auto;">
+                                        <ul id="sellingGoodsRoll">
+                                        <#assign goodsList=goodsListTag("'tagid':'6','goodsnum':'6'")!>
+                                        <#if goodsList??>
+                                        <#list goodsList as goods>
+                                            <li style="width: 180px; visibility: visible;">
+                                                <div class="wb-item">
+                                                    <a class="item-hover wb-link"
+                                                       href="${ctx}/home.html?show_c=1&store_id=${goods.store_id}" title="<#if locale=="zh">${goods.name}<#elseif locale=="ru">${goods.name_ru!""}</#if>">
+                                                        <div class="wb-info">
+                                                            <div class="wb-meta">
+                                                                <span class="wb-index">${goods_index+1}</span>
+                                                            </div>
+                                                            <div class="nnnn-img">
+                                                                <@image src="${goods.thumbnail!''}" />
+                                                            </div>
+                                                            <div class="wb-title">
+                                                            <@uiLabel text="goods.StoreName" />：${goods.store_name!}
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </li>
+                                        </#list>
+                                        </#if>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                青云商城  分类三
+                <div class="mod bestselling-area" id="weekly-bestsellings">
+                    <div class="mod-hd">
+                       <#assign productTag=tagInfoTag("'tagid':'7'")!>
+                        <h3><em>
+                        <#if productTag??>
+                        <#if locale=="zh">
+                        	${productTag.tag_name!''}
+                        <#elseif locale=="ru">
+                        	${productTag.name_ru!''}
+                        </#if>
+                        </#if>
+                        </em></h3>
+                    </div>
+                    <div class="mod-box">
+                        <div class="ui-slidebox util-clearfix" data-widget-cid="widget-39">
+                            <div class="ui-slidebox-wrap">
+                                <div class="ui-slidebox-container">
+                                    <div class="ui-slidebox-slider" data-role="slider" style="margin-left: 0px; width:auto;">
+                                        <ul id="sellingGoodsRoll">
+                                        <#assign goodsList=goodsListTag("'tagid':'7','goodsnum':'6'")!>
+                                        <#if goodsList??>
+                                        <#list goodsList as goods>
+                                            <li style="width: 180px; visibility: visible;">
+                                                <div class="wb-item">
+                                                    <a class="item-hover wb-link"
+                                                       href="${ctx}/home.html?show_c=1&store_id=${goods.store_id}" title="<#if locale=="zh">${goods.name}<#elseif locale=="ru">${goods.name_ru!""}</#if>">
+                                                        <div class="wb-info">
+                                                            <div class="wb-meta">
+                                                                <span class="wb-index">${goods_index+1}</span>
+                                                            </div>
+                                                            <div class="nnnn-img">
+                                                                <@image src="${goods.thumbnail!''}" />
+                                                            </div>
+                                                            <div class="wb-title">
+																<@uiLabel text="goods.StoreName" />：${goods.store_name!}
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </li>
+                                        </#list>
+                                        </#if>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                青云商城  分类四
+                <div class="mod bestselling-area" id="weekly-bestsellings">
+                    <div class="mod-hd">
+                       <#assign productTag=tagInfoTag("'tagid':'8'")!>
+                        <h3><em>
+                        <#if productTag??>
+                        <#if locale=="zh">
+                        	${productTag.tag_name!''}
+                        <#elseif locale=="ru">
+                        	${productTag.name_ru!''}
+                        </#if>
+                        </#if>
+                        </em></h3>
+                    </div>
+                    <div class="mod-box">
+                        <div class="ui-slidebox util-clearfix" data-widget-cid="widget-39">
+                            <div class="ui-slidebox-wrap">
+                                <div class="ui-slidebox-container">
+                                    <div class="ui-slidebox-slider" data-role="slider" style="margin-left: 0px; width:auto;">
+                                        <ul id="sellingGoodsRoll">
+                                        <#assign goodsList=goodsListTag("'tagid':'8','goodsnum':'6'")!>
+                                        <#if goodsList??>
+                                        <#list goodsList as goods>
+                                            <li style="width: 180px; visibility: visible;">
+                                                <div class="wb-item">
+                                                    <a class="item-hover wb-link"
+                                                       href="${ctx}/home.html?show_c=1&store_id=${goods.store_id}" title="<#if locale=="zh">${goods.name}<#elseif locale=="ru">${goods.name_ru!""}</#if>">
+                                                        <div class="wb-info">
+                                                            <div class="wb-meta">
+                                                                <span class="wb-index">${goods_index+1}</span>
+                                                            </div>
+                                                            <div class="nnnn-img">
+                                                                <@image src="${goods.thumbnail!''}" />
+                                                            </div>
+                                                            <div class="wb-title">
+                                                            <@uiLabel text="goods.StoreName" />：${goods.store_name!}
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </li>
+                                        </#list>
+                                        </#if>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                青云商城  分类五
+                <div class="mod bestselling-area" id="weekly-bestsellings">
+                    <div class="mod-hd">
+                      <#assign productTag=tagInfoTag("'tagid':'9'")!>
+                        <h3><em>
+                        <#if productTag??>
+                        <#if locale=="zh">
+                        	${productTag.tag_name!''}
+                        <#elseif locale=="ru">
+                        	${productTag.name_ru!''}
+                        </#if>
+                        </#if>
+                        </em></h3>
+                    </div>
+                    <div class="mod-box">
+                        <div class="ui-slidebox util-clearfix" data-widget-cid="widget-39">
+                            <div class="ui-slidebox-wrap">
+                                <div class="ui-slidebox-container">
+                                    <div class="ui-slidebox-slider" data-role="slider" style="margin-left: 0px; width:auto;">
+                                        <ul id="sellingGoodsRoll">
+                                        <#assign goodsList=goodsListTag("'tagid':'9','goodsnum':'6'")!>
+                                        <#if goodsList??>
+                                        <#list goodsList as goods>
+                                            <li style="width: 180px; visibility: visible;">
+                                                <div class="wb-item">
+                                                    <a class="item-hover wb-link"
+                                                       href="${ctx}/home.html?show_c=1&store_id=${goods.store_id}" title="<#if locale=="zh">${goods.name}<#elseif locale=="ru">${goods.name_ru!""}</#if>">
+                                                        <div class="wb-info">
+                                                            <div class="wb-meta">
+                                                                <span class="wb-index">${goods_index+1}</span>
+                                                            </div>
+                                                            <div class="nnnn-img">
+                                                                <@image src="${goods.thumbnail!''}" />
+                                                            </div>
+                                                            <div class="wb-title">
+                                                            <@uiLabel text="goods.StoreName" />：${goods.store_name!}
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </li>
+                                        </#list>
+                                        </#if>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+				<!--推荐卖家-->
+<#-- 				<div class="tuijian">
+					<div class="mod-hd">
+						<h3>
+							<a href=""><font class="OUTFOX_JTR_TRANS_NODE">推荐卖家</font></a>
+						</h3>
+					</div>
+					<div class="bestSelling clearfix">
+						<ul class="clearfix">
+							<li><a href="">
+									<div class="bs-pro-img">
+										<img width="170" height="170" src="images/b1.jpg">
+									</div>
+									<p class="bs-pro-name">卖家：兽力车关联词顺治</p>
+									<p class="bs-pro-piece">主营：叹赏历次叹赏顺治大客车</p>
+							</a></li>
+							<li><a href="">
+									<div class="bs-pro-img">
+										<img width="170" height="170" src="images/b2.jpg">
+									</div>
+									<p class="bs-pro-name">卖家：兽力车关联词顺治</p>
+									<p class="bs-pro-piece">主营：叹赏历次叹赏顺治大客车</p>
+							</a></li>
+							<li><a href="">
+									<div class="bs-pro-img">
+										<img width="170" height="170" src="images/b33.jpg">
+									</div>
+									<p class="bs-pro-name">卖家：兽力车关联词顺治</p>
+									<p class="bs-pro-piece">主营：叹赏历次叹赏顺治大客车</p>
+							</a></li>
+							<li><a href="">
+									<div class="bs-pro-img">
+										<img width="170" height="170" src="images/b4.jpg">
+									</div>
+									<p class="bs-pro-name">卖家：兽力车关联词顺治</p>
+									<p class="bs-pro-piece">主营：叹赏历次叹赏顺治大客车</p>
+							</a></li>
+							<li><a href="">
+									<div class="bs-pro-img">
+										<img width="170" height="170" src="images/b5.jpg">
+									</div>
+									<p class="bs-pro-name">卖家：兽力车关联词顺治</p>
+									<p class="bs-pro-piece">主营：叹赏历次叹赏顺治大客车</p>
+							</a></li>
+							<li><a href="">
+									<div class="bs-pro-img">
+										<img width="170" height="170" src="images/b5.jpg">
+									</div>
+									<p class="bs-pro-name">卖家：兽力车关联词顺治</p>
+									<p class="bs-pro-piece">主营：叹赏历次叹赏顺治大客车</p>
+							</a></li>
+						</ul>
+					</div>
+				</div> -->
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="public-Information clearfix js-old-information">
+	<dl class="dl1">
+		<dt></dt>
+		<dd style="line-height: 11px;">
+			<strong><@uiLabel text="index.PortalAboutUS" /></strong>
+			<p style="padding-top: 10px; line-height: 1.5;"><@uiLabel
+				text="home.somed" /></p>
+			<br> <a href="${ctx}/help-34-72.html"><@uiLabel text="home.somec"
+				/> &gt;&gt;</a>
+		</dd>
+	</dl>
+	<dl class="dl2">
+		<dt class="dt_1"></dt>
+		<dd style="line-height: 11px;">
+			<strong><@uiLabel text="home.somea" /></strong>
+			<p style="padding-top: 10px; line-height: 1.5;"><@uiLabel
+				text="home.somee" /></p>
+			<br> <a href="${ctx}/helpc-34-72.html"><@uiLabel text="home.somec"
+				/> &gt;&gt;</a>
+		</dd>
+	</dl>
+	<dl class="dl3">
+		<dt class="dt_2"></dt>
+		<dd style="line-height: 11px;">
+			<strong><@uiLabel text="home.someb" /></strong>
+			<p style="padding-top: 10px; line-height: 1.5;"><@uiLabel
+				text="home.somef" /></p>
+			<br> <a href="${ctx}/helpc-34-72.html"><@uiLabel text="home.somec"
+				/> &gt;&gt;</a>
+		</dd>
+	</dl>
+</div>
+<script language="javascript">
+	(function(category) {
+		category.fn.hoverDelay = function() {
+			return this.each(function() {
+				$(this).mouseenter(
+						function() {
+							$(this).addClass("cl-item-unfold").siblings()
+									.removeClass("cl-item-unfold");
+						}).mouseleave(function() {
+					$(this).removeClass("cl-item-unfold");
+				})
+			})
+		}
+	})(jQuery);
+	(function(industry) {
+		industry.fn.tabHoverDelay = function() {
+			return this.each(function(i) {
+				var tabs = $(".tabbed-pane-panel").find(".industry-main");
+				$(this).click(
+						function() {
+							$(this).addClass("on-click").siblings()
+									.removeClass("on-click");
+							$(tabs[i]).css({
+								"z-index" : "6",
+								"opacity" : "1"
+							}).siblings().css({
+								"z-index" : "1",
+								"opacity" : "0"
+							});
+						})
+			})
+		}
+	})(jQuery);
+	(function(switchable) {
+		switchable.fn.switchHoverDelay = function() {
+			return this.each(function(i) {
+				var switchables = $(".tabbed-pane-panel")
+						.find(".industry-main");
+				$(this).mouseenter(
+						function() {
+							$(".ui-switchable-prev-btn").css({
+								"display" : "inline"
+							});
+							$(".ui-switchable-next-btn").css({
+								"display" : "inline"
+							});
+							$(this).addClass("on-click").siblings()
+									.removeClass("on-click");
+							$(switchables[i]).css({
+								"z-index" : "6",
+								"opacity" : "1"
+							}).siblings().css({
+								"z-index" : "1",
+								"opacity" : "0"
+							});
+						}).mouseleave(function() {
+					$(".ui-switchable-prev-btn").css({
+						"display" : "none"
+					});
+					$(".ui-switchable-next-btn").css({
+						"display" : "none"
+					});
+				})
+			})
+		}
+	})(jQuery);
+
+	$(function() {
+		var page = 1;
+		var i = 5; //每版放5个图片
+		//向后 按钮
+		$("a.ui-switchable-prev-btn").click(function() { //绑定click事件
+			var content = $("ul .key-visual-content");
+			var v_width = "510px";
+			var divLeft = $("ul .key-visual-content").css("left");
+			$("ul .key-visual-content").css({
+				"left" : "-1020px"
+			});
+		});
+		//往前 按钮
+		$("a.ui-switchable-next-btn").click(function() {
+		});
+	});
+</script>
+<script type="text/javascript">
+	$(function() {
+		var oDiv = $("#play"); //外部盒子
+		var count = $("#play ul li").length; //内部图片数量
+		var countwidth = $("#play ul li").width(); //图片边框宽度
+		var oUl = $("#play ul").css("width", count * countwidth); //ul li总宽度
+		var now = 0;
+		var next = $("#next");
+		var prev = $("#prev");
+		//点击按钮数量
+		for (var i = 0; i < count; i++) {
+			$("#play ol").append("<li>" + Number(i + 1) + "</li>");
+			$("#play ol li:first").addClass("active");
+		}
+		//左右点击图片获取
+		var nI = $("#play ul li:nth-child(2)").find("img").attr("src");
+		$(".nextImg img").attr("src", nI);
+		var pI = $("#play ul li:last-child").find("img").attr("src");
+		$(".prevImg img").attr("src", pI);
+		//按钮点击事件
+		var aBtn = $("#play ol li");
+		aBtn.each(function(index) {
+			$(this).click(function() {
+				clearInterval(timer);
+				tab(index);
+				nextImg();
+				prevImg();
+				timer = setInterval(autoRun, auto);
+			});
+		});
+		//图片循环事件
+		function tab(index) {
+			now = index;
+			aBtn.removeClass("active");
+			aBtn.eq(index).addClass("active");
+			oUl.stop(true, false).animate({
+				"left" : -950 * now
+			}, 400);
+		}
+
+		//下一张按钮图片切换
+		function nextImg() {
+			var d = $("#play ul li").find("img").eq(now + 1).attr("src");
+			var nI = $("#play ul li:nth-child(1)").find("img").attr("src");
+			$(".nextImg").find("img").attr("src", d);
+			if (now == count - 1) {
+				$(".nextImg").find("img").attr("src", nI);
+			}
+		}
+
+		//上一张图片按钮切换
+		function prevImg() {
+			var f = $("#play ul li").find("img").eq(now - 1).attr("src");
+			$(".prevImg").find("img").attr("src", f);
+		}
+
+		//下一张点击事件
+		next.click(function() {
+			clearInterval(timer);
+			now++;
+			if (now == count) {
+				now = 0;
+			}
+			tab(now);
+			nextImg();
+			prevImg();
+			timer = setInterval(autoRun, 5000);
+		});
+		//上一张点击事件
+		prev.click(function() {
+			clearInterval(timer);
+			now--;
+			if (now == -1) {
+				now = count - 1;
+			}
+			tab(now);
+			nextImg();
+			prevImg();
+			timer = setInterval(autoRun, 5000);
+		});
+		//自动轮播定义
+		function autoRun() {
+			now++;
+			if (now == count) {
+				now = 0;
+			}
+			tab(now);
+			nextImg();
+			prevImg();
+		}
+		;
+
+		var timer = setInterval(autoRun, 5000);
+	});
+</script>
+<script>
+	$(function() {
+		$(".categories-list-box dl").hoverDelay();
+		$("#tabbedIndustryMenus li").tabHoverDelay();
+		$("#key-visual li").switchHoverDelay();
+	});
+</script>
+
+<!-----footer------>
+<#include '${ctx}/common/footer.html'/>

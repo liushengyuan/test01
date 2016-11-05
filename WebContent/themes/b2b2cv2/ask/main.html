@@ -1,0 +1,332 @@
+<#-- 引入国际化模板函数 -->
+<#assign uiLabel = "com.enation.framework.directive.I18nDirectiveModel"?new()>
+<#assign chatTag = newTag("chatTag")>
+<#assign chatList = chatTag()>
+<#assign chatUserIdTag = newTag("chatUserIdTag")>
+<#assign member = chatUserIdTag()>
+<#assign chatStoreTag = newTag("chatStoreTag")>
+<#assign store = chatStoreTag()>
+<#assign recentTag = newTag("recentTag")>
+<#assign memberList = recentTag()>
+<#assign msgNewTag = newTag("msgNewTag")>
+<#assign new_Chat = msgNewTag()!''>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.js"></script>
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/swfobject.js"></script>  
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/web_socket.js"></script>  
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.WebSocket.js"></script>
+<script type="text/javascript">
+var WEB_SOCKET_SWF_LOCATION = "${ctx}/themes/b2b2cv2/media/WebSocketMain.swf";
+var logo = "";
+var content = "";
+var toName = ${store.member_id}  //发给谁ID
+var self = ${member.member_id}  //登录用户ID
+var ws = null;
+var msgContent = null;
+var checkMsgContent = null;
+var oldMsg = null;
+var language = "";
+$(function ()  
+{  
+    window.onbeforeunload = onbeforeunload_handler;   
+    window.onunload = onunload_handler;   
+    function onbeforeunload_handler(){   
+        return;
+    }  
+    function onunload_handler()  
+    {  
+        //alert(1);  
+        ws = null;  
+    }  
+});  
+var url = "serverSocket?message_to="+toName+"&message_me="+self;  
+var ws = new $.websocket({  
+    protocol : "serverSocket?message_to="+toName+"&message_me="+self,  
+    domain : "111.160.124.30",
+    port : "5545",
+    onOpen:function(event){
+    	$.ajaxSetup ({ cache: false });
+    },    
+    onError:function(event){
+    },    
+    onMessage:function(result){
+        receiveMessage(result);  
+    },  
+    onClose:function(event){
+        ws = null;  
+    }  
+});  
+function send(){  
+	 var goodsid;
+	 goodsid = "#@@@#"+${goods[0].goods_id};
+	 var Msg_from = $("#from").val();
+	 var Msg_to = $("#to").val();
+     var fromName = self;
+     msgContent = ($("#writeMsg").val()).length;
+     oldMsg = $("#writeMsg").val();
+	 content = Msg_from+self+$("#writeMsg").val(); //发送内容
+     if(oldMsg==""){return;}  
+  	 ws.send(fromName + "`,:" + toName + "`,:" + content+goodsid); 
+     $('#writeMsg').val("").focus();
+}  
+  
+function receiveMessage(result){  
+    showMessage(result);  
+}  
+
+function showMessage(innerHTML){  
+	var myDate = new Date();
+	var year = myDate.getFullYear();   //获取系统的年；
+	var month = myDate.getMonth()+1;   //获取系统月份，由于月份是从0开始计算，所以要加1
+	var day = myDate.getDate(); // 获取系统日，
+	var hours = myDate.getHours(); //获取系统时，
+	var minutes = myDate.getMinutes(); //分
+	var seconds = myDate.getSeconds(); //秒
+	if(seconds<10){
+		seconds="0"+seconds;
+	}
+	if(hours<10){
+		hours="0"+hours;
+	}
+	if(minutes<10){
+		minutes="0"+minutes;
+	}
+	if(month<10){
+		month="0"+month;
+	}
+	var time = year+"-"+month +"-"+day+ " "+hours+":"+minutes+":"+seconds;
+	var sender = "";
+	var showMsg = "";
+	var member_length = self+"";
+	var dis =innerHTML.split("*@%&$");
+	sender = dis[0];
+	if(dis.length==2){
+		showMsg = dis[1];
+	}else{
+		showMsg = innerHTML.substring(sender.toString().length);
+	}
+	var notLine = "";
+	for(var i=0;i<self.toString().length;i++){
+		notLine+="n";
+	}
+	var notLine2=notLine+"n";
+	if(innerHTML==notLine2){
+		sender=notLine2;
+	}
+	//去掉分割标识
+	var htmls =innerHTML.split("*@%&$");
+	if(htmls.length==2){
+		innerHTML=htmls[0]+htmls[1];
+	}else{
+		innerHTML=htmls[0];
+	}
+	if(sender==self){
+		var temp = $('#message').html();
+		if(innerHTML.length>(oldMsg.length+member_length.length)){
+			temp += '<label style="clear:both;display:block; min-height:20px;padding-top:20px; height:auto; text-align:right;">${member.name!''}&nbsp;'+time+'<br/><div style="float:right;text-align:left;margin-top:10px;">'+oldMsg+innerHTML.substring(oldMsg.length+member_length.length)+'</div></label>';
+		}else{
+			temp += '<label style="clear:both;display:block; min-height:20px;padding-top:20px; height:auto; text-align:right;">${member.name!''}&nbsp;'+time+'<br/><div style="float:right;text-align:left;margin-top:10px;">'+oldMsg+'</div></label>';
+		}
+		$('#message').html(temp);
+		$('#message').scrollTop(500000);
+		var temp = $('#history').html();
+		if(innerHTML.length>(oldMsg.length+member_length.length)){
+			temp += '<label style="clear:both;display:block; min-height:20px; height:auto; text-align:right;">${member.name!''}&nbsp;'+time+'<p style="word-wrap:break-word;text-align:right;">'+oldMsg+innerHTML.substring(oldMsg.length+member_length.length)+'</p></label>';
+		}else{//消息记录内容
+			temp += '<br/><div style="clear:both;float:right;text-align:right;margin-top:20px;">${member.name!''}&nbsp;'+time+'<br/><div style="float:right;text-align:left;margin-top:10px;">'+oldMsg+'</div>';
+		}
+		$('#history').html(temp);
+		$('#history').scrollTop(500000);
+		people(self,toName);
+	}else if(sender==toName){
+		var temp = $('#message').html();
+		temp += '<label style="clear:both;display:block; min-height:20px; height:auto; text-align:left;">${store.name!''}&nbsp;'+time+'<p style="word-wrap:break-word;text-align:left;">'+showMsg+'</p></label>';
+		$('#message').html(temp);
+		$('#message').scrollTop(500000);
+		var temp = $('#history').html();
+		temp += '<label style="clear:both;display:block; min-height:20px; height:auto; text-align:left;">${store.name!''}&nbsp;'+time+'<p style="word-wrap:break-word;text-align:left;">'+showMsg+'</p></label>';
+		$('#history').html(temp);
+		$('#history').scrollTop(500000);
+		people(self,toName);
+	}else if(sender==notLine){
+		    ws = new $.websocket({  
+		    protocol : "serverSocket?message_to="+toName+"&message_me="+self,  
+		    domain : "111.160.124.30",
+		    port : "5545",
+		    onOpen:function(event){
+				var goodsid;
+				goodsid = "#@@@#"+${goods[0].goods_id};
+				var Msg_from = $("#from").val();
+				var Msg_to = $("#to").val();
+			    var fromName = self;
+			    if(oldMsg==""){return;}  
+			  	ws.send(fromName + "`,:" + toName + "`,:" + content+goodsid+"n"); 
+			    $('#writeMsg').val("").focus();
+		    	$.ajaxSetup ({ cache: false });
+		    },    
+		    onError:function(event){  
+		    },    
+		    onMessage:function(result){
+		        receiveMessage(result);  
+		    },  
+		    onClose:function(event){
+		        ws = null;  
+		    }  
+		}); 
+	}else if(sender==notLine2){
+		var temp = $('#message').html();
+		temp += '<label style="clear:both;display:block; min-height:20px; height:auto; text-align:right;">${member.name!''}&nbsp;'+time+'<p style="word-wrap:break-word;text-align:right;">'+oldMsg+'</p></label>';
+		$('#message').html(temp);
+		$('#message').scrollTop(500000);
+		var temp = $('#history').html();
+		temp += '<label style="clear:both;display:block; min-height:20px; height:auto; text-align:right;">${member.name!''}&nbsp;'+time+'<p style="word-wrap:break-word;text-align:right;">'+oldMsg+'</p></label>';
+		$('#history').html(temp);
+		$('#history').scrollTop(500000);
+		people(self,toName);
+		people(toName,self);
+	}else{
+		updateState(sender,self);
+		var people_name = $('#'+sender).text();
+		if(people_name.length!=0){
+			if(people_name.length<=3 || people_name.substring(0,3)!="(新)"){
+				document.getElementById(sender).innerHTML="(新)"+people_name;
+			}
+		}else{
+			peopleNew(self,sender);
+		}
+	}
+}
+function people(sender,sendee){
+	$.ajaxSetup ({ cache: false });
+	$.ajax({
+		url:"${ctx}/api/b2b2c/recent!people.do?ajax=yes&member_id="+sender+"&store_id="+sendee,
+		dataType : 'json',
+		success:function(data){
+			if(data.id==2){
+				if(sendee!=self){
+					var newMsg = "${ctx}/ask/chat.html?storeId="+sendee;
+					var temps = $('#recent').html();
+					temps += '<a id="'+sendee+'" onclick="readNewMsg('+sendee+')"href="'+newMsg+'" style="text-decoration: none;"><div class="friends" style="width:296px; border:1px solid; height:50px; text-align: center; line-height: 50px;">'+data.message+'</div></a>';
+					$('#recent').html(temps);
+				}
+			}
+		}
+	})
+}
+function peopleNotLine(sender,sendee){
+	$.ajax({
+		url:"${ctx}/api/b2b2c/recent!people.do?ajax=yes&member_id="+sender+"&store_id="+sendee,
+		dataType : 'json'
+	})
+}
+function updateState(sender,sendee){
+	$.ajax({
+		url:"${ctx}/api/b2b2c/chat!updateStateNotRead.do?ajax=yes&member_id="+sender+"&store_id="+sendee,
+		dataType : 'json'
+	})
+}
+function peopleNew(sender,sendee){
+	$.ajax({
+		url:"${ctx}/api/b2b2c/recent!people.do?ajax=yes&member_id="+sender+"&store_id="+sendee,
+		dataType : 'json',
+		success:function(data){
+			if(data.id==2){
+				var href_a = "${ctx}/ask/chat.html?storeId="+sendee;
+				var peopleNew = $('#recent').html();
+				peopleNew += '<a id="'+sendee+'" onclick="readNewMsg('+sendee+')" href="'+href_a+'" style="text-decoration: none;"><div class="friends" style="width:296px; border:1px solid; height:50px; text-align: center; line-height: 50px;">(新)'+data.message+'</div></a>';
+				$('#recent').html(peopleNew);
+			}
+		}
+	})
+}
+function readNewMsg(store_id){
+	$.ajax({
+		url:"${ctx}/api/b2b2c/chat!updateChatState.do?ajax=yes&store_id="+store_id,
+		dataType : 'json'
+	})
+}
+function historyMsg(){
+	$('#message').hide();
+	$('#history').show();
+}
+function outMessage(e){
+	if(event.keyCode==13){
+		msgout.click();
+		e.returnValue = false; 
+		return false;
+	}
+}
+</script>
+<body>
+<div class="Msg">
+	<div id="message" class="message" style="width:598px;">
+		<#list chatList as chat>
+			<#if chat.sender==member.member_id>
+				<#if chat.translation_front==chat.translation_back>
+					<label style="clear:both;display:block; text-align:right; min-height: 20px; height: auto;padding-top:10px;">
+						${member.name!''}&nbsp;${chat.sendtime}<br/><div style="float:right;text-align:left;margin-top:10px;">${chat.message_begin}</div>
+					</label>
+				<#else>
+					<label style="clear:both;display:block; text-align:right; min-height: 20px; height: auto;">
+						${member.name!''}&nbsp;${chat.sendtime}<p style="word-wrap:break-word;text-align:left;">${chat.message_begin}</p><br/>${chat.message_end!"翻译后的语句为空，翻译接口连接超时导致"}
+					</label>
+				</#if>
+			<#elseif chat.sender==store.member_id>
+				<#if chat.translation_front==chat.translation_back>
+					<label style="clear:both;display:block; text-align:left; min-height: 20px; height: auto;">
+						${store.name!''}&nbsp;${chat.sendtime}<p style="word-wrap:break-word;text-align:left;">${chat.message_begin}</p>
+					</label>
+				<#else>
+					<label style="clear:both;display:block; text-align:left; min-height: 20px; height: auto;">
+						${store.name!''}&nbsp;${chat.sendtime}<p style="word-wrap:break-word;text-align:left;">${chat.message_begin}</p>${chat.message_end!"翻译后的语句为空，翻译接口连接超时导致"}
+					</label>
+				</#if>
+			</#if>
+		</#list>
+	</div>
+	<div id="history" class="message" style="display:none;">
+		<#list chatAllList as chat>
+			<#if chat.sender==member.member_id>
+				<#if chat.translation_front==chat.translation_back>
+					<label style="clear:both;display:block; text-align:right; min-height: 20px; height: auto;">
+						${member.name!''}&nbsp;${chat.sendtime}<p style="word-wrap:break-word;text-align:right;">${chat.message_begin}</p>
+					</label>
+				<#else>
+					<label style="clear:both;display:block; text-align:right; min-height: 20px; height: auto;">
+						${member.name!''}&nbsp;${chat.sendtime}<p style="word-wrap:break-word;text-align:right;">${chat.message_begin}</p><br/>${chat.message_end!"翻译后的语句为空，翻译接口连接超时导致"}
+					</label>
+				</#if>
+			<#elseif chat.sender==store.member_id>
+				<#if chat.translation_front==chat.translation_back>
+					<label style="clear:both;display:block; text-align:left; min-height: 20px; height: auto;">
+						${store.name!''}&nbsp;${chat.sendtime}<p style="word-wrap:break-word;text-align:left;">${chat.message_begin}</p>
+					</label>
+				<#else>
+					<label style="clear:both;display:block; text-align:left; min-height: 20px; height: auto;">
+						${store.name!''}&nbsp;${chat.sendtime}<p style="word-wrap:break-word;text-align:left;">${chat.message_begin}</p><br/>${chat.message_end!"翻译后的语句为空，翻译接口连接超时导致"}
+					</label>
+				</#if>
+			</#if>
+		</#list>
+	</div>
+	<div style="width:100%; height:40px; float:left; background-color:#EEE;">
+		<form aciton="" method="post" class="validate">
+		    <select id="from" name="from" style="height:35px; margin-top:2.5px; width:70px;float:left; background-color: #999999; margin-left:10px;color:#FFF;border-radius:5px; font-size: 16px;">
+				<option value="1"><@uiLabel text="tongxun.china" /></option>
+			</select>
+		</form>
+		<a class="xxjl" style="display:block;float: right; color:#000;
+    font-weight: bold;    text-decoration: none;
+    margin-right: 2%;" href="javascript:void" onclick="historyMsg()"><@uiLabel text="tongxun.xiaoxi" /></a>
+	</div>
+		<textarea id="writeMsg" style="width:100%;z-index:1; height:130px;" onkeydown='outMessage(event);'></textarea>
+	</div>
+	<div style="position:relative;left:500px; top:-50px;width:100px;">
+		<input id="msgout" type="button" onclick="send()" style="width:75px; height:30px;background-image:url('${ctx}/themes/b2b2cv2/images/send.png');border:none;border-radius:5px;" />
+	</div>
+</body>	
+<style>
+.xxjl:hover{color:#ccc;}
+.message{border: 2px #ccc solid;
+    border-right: none;}
+</style>
+

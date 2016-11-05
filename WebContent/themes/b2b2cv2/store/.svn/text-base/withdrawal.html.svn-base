@@ -1,0 +1,67 @@
+<#include '/store/store_header.html' /> 
+ <#assign myStoreDetailTag =newTag("myStoreDetailTag")> 
+<#assign store = myStoreDetailTag()> 
+
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color: #999;"><@uiLabel text="sellerAccount.Location"/>：</span> <span>></span> <a href="#"><@uiLabel text="withdrawal.tixianguanli"/></a><span>></span><@uiLabel text="withdrawal.zhanghuchaxun"/><!--提现帐户管理  --><!--帐户查询  -->
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active"><a href="javascript:;"><@uiLabel text="withdrawal.zhanghuchaxun"/></a></li><!--帐户查询  -->
+				</ul>
+			</div>
+			<div >
+				<form id="seller_info" >
+					<table border="1px" cellspacing="0px">
+
+						<tr>
+							<th ><@uiLabel text="sellerAccount.AccountBalance"/></th><!-- 平台账户余额 -->
+							<th ><@uiLabel text="sellerAccount.MarginBalance"/></th><!-- 保证金余额 -->
+							<th ><@uiLabel text="sellerAccount.AccountStatus"/></th><!-- 状态 -->
+							<th ><@uiLabel text="sellerAccount.AccountOperation"/></th><!-- 操作-->
+						</tr>
+						<tr>
+							<td >${store.account!''}</td>
+							<td>${store.credit_account!''}</td> 
+							<#if store.credit_account_status==1>
+							<td ><@uiLabel text="sellerAccount.canwithdrawcash"/></td><!-- 可以提现-->
+							<td><a	href="${ctx}/store/withdrawal_edit.html" style=" padding: 6px; background-color: #5bb75b;"/><@uiLabel text="sellerAccount.withdrawcash"/></td><!-- 提现-->
+							 <#else>
+							<td ><@uiLabel text="sellerAccount.cantwithdrawcash"/></td><!-- 不可提现-->
+							<td></td>
+							</#if> 
+							<#--
+							<td >${store.credit_account_status}</td>
+							<td ><a href="${ctx}/store/withdrawal_edit.html" style=" padding: 6px; background-color: rgb(43, 163, 18);" >提现</a></td> -->
+						</tr>
+
+
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<style type="text/css"> 
+  td, th {
+text-align: center;
+width: 90px;
+ border-bottom: 1px solid #100F0F ;
+}
+
+table
+  {
+ margin-top: 20px;
+ 
+ border-collapse: collapse
+ 
+  }
+ 
+</style>
+<script type="text/javascript">
+	
+</script>

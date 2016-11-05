@@ -1,0 +1,202 @@
+<#-- 引入国际化模板函数 --> <#assign uiLabel =
+"com.enation.framework.directive.I18nDirectiveModel"?new()> <#assign
+regionSelect =
+"com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<div class="form_wrap">
+	<form id="add_addressForm" class="validate">
+		<input type="hidden" id="goodsid" name="goodsid" value="" />
+		<table class="dizhi-table" id="add">
+			<tr>
+				<th><em style="color: red;">*</em><@uiLabel text="index.PortalUserProductName" />：</th>
+				<td>
+					<#if locale=="zh">
+  						<input type="text" style="width: 280px;" id="goodsName" name="goods_name" value="" class="dizhi-input" autocomplete="off" isrequired="true" readonly="readonly">
+					<#elseif locale=="ru">
+					  	<input type="text" style="width: 280px;" id="goodsName_ru"  name="goods_name" value="" class="dizhi-input" autocomplete="off" isrequired="true" readonly="readonly">	
+					</#if>
+				</td>
+			</tr>
+			<tr>
+				<th><em style="color: red;">*</em><@uiLabel text="index.PortalUserProductsPrice" />：</th>
+				<td>
+					<#if locale=="zh">
+						<input type="text" style="width: 280px;" id="goodsPrice" name="largeOrder.price" class="dizhi-input" autocomplete="off" isrequired="true" readonly="readonly">
+					<#elseif locale=="ru">
+						<input type="text" style="width: 280px;" id="goodsPrice_ru" name="largeOrder.price" class="dizhi-input" autocomplete="off" isrequired="true" readonly="readonly">
+					</#if>
+				</td>
+			</tr>
+			<tr>
+				<th><em style="color: red;">*</em><@uiLabel text="index.PortalUserQty" />：</th>
+				<td>
+					<input type="text" fun="checkNum" style="width: 280px;" id="goods_num" name="goods_num" class="dizhi-input" autocomplete="off" >
+				</td>
+			</tr>
+			<tr>
+				<th><@uiLabel text="goods.xiaoxishuoming" />：</th>
+				<td>
+					<input type="text" style="width: 280px;" name="order_text" class="dizhi-input" autocomplete="off" >
+				</td>
+			</tr>
+			<tr>
+				<th><em style="color: red;">*</em><@uiLabel text="Register.E-mail" />：</th>
+				<td>
+					<input type="text" style="width: 280px;" id="email" name="largeOrder.email" class="dizhi-input" autocomplete="off" isrequired="true">
+				</td>
+			</tr>
+			<tr>
+				<th><em style="color: red;">*</em><@uiLabel text="index.AddressPhone" />：</th>
+				<td>
+					<input type="text" style="width: 280px;" id="phoneOfOrder" name="largeOrder.phone" class="dizhi-input" autocomplete="off" isrequired="true">
+				</td>
+			</tr>
+			<tr>
+				<th><em style="color: red;">*</em><@uiLabel text="goods.maijiaxingming" />：</th>
+				<td>
+					<input type="text" style="width: 280px;" id="buyer_name" name="largeOrder.buyer_name" class="dizhi-input" autocomplete="off" isrequired="true">
+				</td>
+			</tr>
+			<tr>
+				<th><@uiLabel text="apply.Company" />：</th>
+				<td>
+					<input type="text" style="width: 280px;" name="largeOrder.company" class="dizhi-input" autocomplete="off" >
+				</td>
+			</tr>
+			<tr class="shouhuodizhi-an">
+				<th></th>
+				<td><input type="button" class="yellow_btn" id="btnSubmit" style="padding: 5px 10px;"
+					value="<@uiLabel text='sellerAddGood.queding23' />"></td>
+			</tr>
+		</table>
+	</form>
+</div>
+<script>
+	$(function() {
+		var goods_name = $("#goods_name").val();
+		var goods_name_ru = $("#goods_name_ru").val();
+		var goods_price_2 = '￥'+$("#goods_price_2").val();
+		var goods_price_ru = $("#goods_price_ru").val()+'p.';
+		var goods_id = $("input[name='goodsid']").val();
+		$("#goodsName").attr("value",goods_name);
+		$("#goodsName_ru").attr("value",goods_name_ru);
+		$("#goodsPrice").attr("value",goods_price_2);
+		$("#goodsPrice_ru").attr("value",goods_price_ru);
+		$("#goodsid").attr("value",goods_id);
+		//alert(goods_id);
+		/*alert(goods_name);
+		alert(goods_name_ru);
+		alert(goods_price_2);
+		alert(goods_price_ru);*/
+		$("#btnSubmit").click(function() {
+			//alert("aaa");
+			var goods_num = $("#goods_num").val();
+			var email = $("#email").val();
+			var phone = $("#phoneOfOrder").val();
+			var buyer_name = $("#buyer_name").val();
+			
+			if(isNaN(goods_num) || goods_num==""){
+				alert("<@uiLabel text='goods.qingshuruzhengqueshuliang' />");
+				return false;
+			}
+			if(goods_num<=0 && goods_num!=""){
+				alert("<@uiLabel text='goods.shuliangbunengxiaoyu' />");
+				return false;
+			}
+			if($.trim(email)==''){
+				alert("<@uiLabel text='goods.emailkong' />");
+				return false;
+			}
+			var reg = /^([a-zA-Z0-9]+[-_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+			if(!reg.test(email)){
+				alert("<@uiLabel text='goods.emailgeshi' />");
+				return false;
+			}
+			<#if locale=="zh">
+				re = /^1\d{10}$/;
+				if (!re.test(phone)) {
+			        alert("请输入正确的手机");
+			        return false;
+			    }
+	   		<#elseif locale=="ru">
+			    if(isNaN(phone)){
+					alert("<@uiLabel text='goods.zhengquededianhua' />");
+					return false;
+				}
+				if($.trim(phone)==''){
+					alert("<@uiLabel text='goods.dianhuabunengkong' />");
+					return false;
+				}
+	  		</#if>
+			if($.trim(buyer_name)==''){
+				alert("<@uiLabel text='goods.maijiaxingmingkong' />");
+				return false;
+			}
+			/*var result = $("#add_addressForm").checkall();
+			if (!result)
+				return; */
+			//var membername = $(".member_name_title").val();
+			/*var m=0;
+			var t=0;
+			var m1=$("#mobile1").val();
+			var m2=$("#mobile2").val();
+			var m3=$("#mobile3").val();
+			var m4=$("#mobile4").val();
+			if(m1!="" && m2!="" && m3!="" && m4!=""){
+				m=1;
+				if(!isNaN(m1) && !isNaN(m2) && !isNaN(m3) && !isNaN(m4)){
+					m=2
+				}else{
+					m=3
+
+				}	
+			}
+			if(m!=2){
+				alert("<@uiLabel text='index.shoujishu' />");
+				return false;
+			}
+			var t1=$("#tel1").val();
+			var t2=$("#tel2").val();
+			
+			if(t1!="" || t2!=""){
+				t=1
+				if(!isNaN(t1) && !isNaN(t2)){
+					t=2;
+				}else{
+					t=3
+				}
+			}
+			if(t!=0 && t!=2){
+				alert("<@uiLabel text='member.TelphoneError' />");
+				return false;
+			}
+			var  zip =$("#zipcode").val();
+			if(isNaN(zip)||zip.length!=6){
+				alert("邮箱格式有误");
+				return false;
+			}*/
+			var options = {
+				url : "${ctx}/api/store/storeOrder!addLargeOrder.do",
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					alert("您的交易单已提交，稍后会有相关人员与您联系，请耐心等待，谢谢！");
+					parent.location.reload();
+				},
+				error : function(e) {
+					alert('<@uiLabel text="goods.chuxiancuowuqingchongshi"/>');
+				}
+			};
+			$("#add_addressForm").ajaxSubmit(options);
+		})
+	})
+	
+	function checkNum(value){
+		if(value<=0 && value!=""){
+			return "请输入正确的商品数量！";
+		}else{
+			return true;
+		}
+	}
+</script>
+
+

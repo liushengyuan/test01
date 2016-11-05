@@ -1,0 +1,427 @@
+/* 分类  */
+.top-container .fenlei_div{
+	background:#bb2d3a;
+}
+.cl-item .cate-name .feilei_tit{
+    color: #fff;
+    font-size: 16px;
+}
+.cl-item .cate-name .feilei_tit .icon-mei {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 90% auto;
+    display: inline-block;
+    height: 24px;
+    margin-right: 10px;
+    vertical-align: middle;
+    width: 24px;
+}
+.cl-item .cate-name .feilei_tit .icon-mei img{
+	width:100%;
+}
+.cl-item .cate-name p {
+    color: #f8dcde;
+    height:25px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size:12px;
+}
+.cl-item .cate-name p a {
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    line-height: 18px;
+}
+.cl-item .cate-name .fenlei_a{
+	background:none; height:78px; border:none; padding-top:10px; border:1px solid #bb2d3a; border-bottom:1px solid #cf2f3e;
+}
+/* .cl-item .cate-name .fenlei_a:hover{
+	background:#aa1e2b; border-right:none;
+} */
+.top-container .fenlei_div .cl-item{
+	background:#bb2d3a;
+}
+.top-container .fenlei_div .cl-item:hover{
+	background:#aa1e2b; border-right:none;
+}
+.cl-item .cate-name a.fenlei_a::before{}
+
+
+
+
+
+
+
+
+
+/* 广告图 */
+.play ul li.banner_newli{
+	width:720px;
+}
+.play ul li.banner_newli img{
+	width:720px;
+}
+.guanggao_img{
+	float:left; width:210px;
+}
+
+/* 今日推荐  */
+.tuijian_div{
+	border:1px solid #ccc; margin-top:20px;
+}
+.tuijian_div h3{
+	background:#f8f6f6; height:38px; text-align:center; line-height:35px;
+}
+.tuijian_list{
+	padding:10px; text-align:center;
+}
+.tuijian_list p{
+	border-bottom:1px solid #ccc;
+}
+.tuijian_list p img{width:175px; height:153px;}
+
+/* 品牌   */
+.grid-c2-e6 .fllist_div{
+	margin-right:0;
+}
+.brand_div{
+	background:#f8f8f8; padding:20px;
+}
+.brand_title{
+	/* text-align:center; */ height:30px; font-size:18px; color:#AAAAAA; font-weight:bold;
+}
+.brand_title a{
+	font-size:12px; font-weight:100; float:right; color:#00a2ff;
+}
+.brand_logo_list{
+	background:#fff; height:190px;
+}
+.brand_logo_list ul{}
+.brand_logo_list ul li{
+	float:left; width:130px; padding-top:20px; padding-left:13px;
+}
+.brand_logo_list ul li .brand_img_a{
+	width:90px; height:45px; margin:0 auto;
+}
+.brand_logo_list ul li .brand_img_a img{
+	width:100%; height:100%;
+}
+.brand_logo_list ul li .brand_text_a{
+	background:#ededed; margin-top:10px; color:#666; text-align:center; height:20px; line-height:20px;
+}
+
+/* 国家馆   */
+.country_div{padding-top:30px; height:350px;}
+.country_title{
+	font-size:18px; color:#4aaee9; font-weight:bold; border-bottom:2px solid #4aaee9; height:30px;text-align:center;
+}
+.country_title a{
+	font-size:12px; float:right; font-weight:100; color:#00a2ff;
+}
+.country_list{
+	
+}
+.country_list a{
+	float:left; display:block; width:20%; height:288px;
+}
+.country_list a img{
+	width:100%; height:100%;
+}
+
+/* 分类列表   */
+.classifi_div{padding-bottom:30px;}
+.classifi_title{
+	font-size:20px; height:40px; line-height:40px; color:#ed1957; font-weight:bold; text-align:center;
+}
+.border_b1{
+	border-bottom:2px solid #ed1957;
+}
+.border_b2{
+	border-bottom:2px solid #5cbd16; color:#5cbd16;
+}
+.border_b3{
+	border-bottom:2px solid #f24e4d;color:#f24e4d;
+}
+.border_b4{
+	border-bottom:2px solid #7d47d9;color:#7d47d9;
+}
+.border_b5{
+	border-bottom:2px solid #5194fd; color:#5194fd;
+}
+.zebra-hk-cat-panel-pc {
+    background: #f5f5f5 none repeat scroll 0 0;
+    margin-top: 0;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap {
+    background: #ed1957 none repeat scroll 0 0;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel {
+    background: #fff none repeat scroll 0 0;
+    overflow: hidden;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .link-panel {
+    float: left;
+    padding: 15px 0 0 20px;
+    width: 98px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .link-panel .title {
+    color: #333;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 100%;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .link-panel .link {
+    font-size: 12px;
+    line-height: 100%;
+    margin-top: 20px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .link-panel .link a {
+    color: #000;
+    text-decoration: none;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .link-panel .link.strong a {
+    color: #ed1957;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .album-panel {
+    float: left;
+    height: 474px;
+    position: relative;
+    width: 310px;
+}
+.img-ks-lazyload {
+    animation: 350ms linear 0ms normal both 1 running ks-fadeIn;
+    opacity: 1;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .album-panel .album-img {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel {
+    border-right: 1px solid #e8e8e8;
+    float: left;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .row {
+    border-top:none;
+    overflow: hidden;
+    width:889px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .row.first {
+    border-top: 0 none;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item.big {
+    height: 236px;
+    padding-left: 20px;
+    width: 377px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item.big .item-img {
+    float: right;
+    height: 212px;
+    margin: 12px;
+    width: 212px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item .item-title {
+    color: #4c4c4c;
+    font-size: 12px;
+    line-height: 14px;
+    overflow: hidden;
+    padding: 0 24px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item.big .item-title {
+    border-bottom: 1px solid #101010;
+    color: #101010;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 26px;
+    margin-top: 84px;
+    max-width: 141px;
+    padding: 0;
+    text-align: left;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item.big .price {
+    text-align: left;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item .price .item-act-price {
+    color: #f14f4f;
+    font-size: 18px;
+    vertical-align: middle;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item.big .price .item-act-price {
+    font-size: 21px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item .price .item-act-price span {
+    font-size: 14px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item .price .item-tag-price {
+    color: #a6a6a6;
+    font-size: 13px;
+    margin-left: 3px;
+    text-decoration: line-through;
+    vertical-align: middle;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item.big .price .item-tag-price {
+    font-size: 15px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item .price .item-tag-price span {
+    font-size: 12px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item {
+    border-left: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+    float: left;
+    height: 236px;
+    position: relative;
+    text-decoration: none;
+    transform: translateZ(0px);
+    width: 221px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item .item-img {
+    display: block;
+    height: 160px;
+    margin: 16px auto 8px;
+    transition: transform 0.2s linear 0s;
+    width: 160px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item .item-title {
+    color: #4c4c4c;
+    font-size: 12px;
+    line-height: 14px;
+    overflow: hidden;
+    padding: 0 24px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .item-panel .item .price {
+    font-family: Avenir,Arial,"Microsoft YaHei",Helvetica,sans-serif,"宋体";
+    text-align: center;
+}
+
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .brand-panel {
+    overflow: hidden;
+    padding: 0 8px 0 5px;
+    position: relative;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .brand-panel .title {
+    border-bottom: 1px solid #e8e8e8;
+    color: #737373;
+    font-size: 18px;
+    line-height: 28px;
+    padding: 13px 0 0;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .brand-panel .title .strong {
+    font-size: 22px;
+    vertical-align: middle;
+}
+#J_7391270447 .zebra-hk-cat-panel-pc .tm-hk-wrap .brand-panel .title .strong {
+    border-bottom: 1px solid #ed1957;
+    color: #ed1957;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .brand-panel .brands {
+    overflow: hidden;
+    position: relative;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .brand-panel .brands .brand {
+    float: left;
+    margin: 10px 0 0 3px;
+    text-decoration: none;
+    width: 130px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .brand-panel .brands .brand .brand-img-ctn {
+    height: 65px;
+    position: relative;
+    width: 130px;
+    text-align:center;
+    margin-top:5px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .brand-panel .brands .brand .brand-img-ctn img{
+	width:95px; height:45px; margin-top:10px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .brand-panel .brands .brand .brand-img-ctn .brand-img {
+    height: 45px;
+    left: 50%;
+    margin-left: -45px;
+    margin-top: -22px;
+    position: absolute;
+    top: 50%;
+    width: 90px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .brand-panel .brands .brand .brand-title {
+    background: #ededed none repeat scroll 0 0;
+    color: #868686;
+    font-size: 12px;
+    height: 22px;
+    line-height: 22px;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .album-panel .album-detail {
+    bottom: 0;
+    color: #fff;
+    font-weight: 700;
+    height: 98px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .album-panel .album-detail {
+    background: rgba(237, 25, 87, 0.95) none repeat scroll 0 0;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .album-panel .album-detail_b {
+    background:#5cbd16;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .album-panel .album-detail_c {
+    background:#f24e4d;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .album-panel .album-detail_d {
+    background:#7d47d9;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .album-panel .album-detail_e {
+    background:#5194fd;
+}
+
+
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .album-panel .album-detail .title {
+    font-size: 20px;
+    margin-top: 26px;
+}
+.zebra-hk-cat-panel-pc .tm-hk-wrap .panel .album-panel .album-detail .more {
+    border-bottom: 2px solid #fff;
+    border-top: 2px solid #fff;
+    display: inline-block;
+    font-size: 12px;
+    line-height: 20px;
+    width: 104px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

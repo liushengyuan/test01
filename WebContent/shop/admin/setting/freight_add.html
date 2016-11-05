@@ -1,0 +1,45 @@
+<#assign dataformat="com.enation.framework.directive.DateformateDirective"?new()/>
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+		<form id="addFreightForm" method="post" class="validate" >
+			<table>
+				<tr>
+					<td align="right">物流商:</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="logis_name" id="logis_name" maxlength="60" data-options="required:true" dataType="string" isrequired="true"/>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">物流产品:</td>
+					<td><select name="product_name" id="product_name">
+					      <option value="1">标准快递</option>
+					    </select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">时效:</td>
+					<td><input class="easyui-numberbox input_text" type="text" name="validatedays" id="validatedays" maxlength="60" data-options="required:true" dataType="string" isrequired="true"  style="width:40px;">天
+					</td>
+				</tr>
+				<tr>
+					<td align="right">重量限制:</td>
+					<td><input style="width: 50px;" class="easyui-numberbox input_text" type="text" name="min_weight" id="min_weight" maxlength="60" data-options="required:true"  isrequired="true"  min="0" precision="2"/><span>&le;重量&lt;</span><input class="easyui-numberbox input_text" type="text" name="max_weight" id="max_weight" maxlength="60" data-options="required:true" dataType="double" isrequired="true"  min="0" precision="2" style="width: 50px;"/>kg</td>
+				</tr>
+				<tr>
+					<td align="right" style="position: relative;top:-15px;">价格规则:</td>
+					<td><div><span>人民币:首价(元)&nbsp;</span><input style="width: 50px;"  min="0" precision="2" class="easyui-numberbox input_text" type="text" name="start_price" id="start_price" maxlength="60" data-options="required:true" dataType="int" isrequired="true"/><span>首重(kg)&nbsp;</span><input class="easyui-numberbox input_text" type="text"  min="0" precision="2" name="start_price_kg" id="start_price_kg" maxlength="60" data-options="required:true" dataType="int" isrequired="true" style="width: 50px;"/></div><div><span>超出重量元/kg&nbsp;</span><input style="width: 50px;" class="easyui-numberbox input_text" type="text" name="every_price_kg" id="every_price_kg" maxlength="60"  min="0" precision="2" data-options="required:true" dataType="int" isrequired="true"/>
+					    <span>附加费(元)</span><input style="width: 50px;"  min="0" precision="2" class="easyui-numberbox input_text" type="text" name="extra_price" id="extra_price" maxlength="60" data-options="required:true" dataType="int" isrequired="true"/></div>
+					   <!--  <div><span>卢&nbsp;&nbsp;&nbsp;布:首价(卢)&nbsp;</span><input style="width: 50px;" class="easyui-numberbox input_text" type="text" name="start_price_ru" id="start_price_ru" maxlength="60" data-options="required:true" dataType="int" isrequired="true"/><span>首重(kg)&nbsp;</span><input class="easyui-numberbox input_text" type="text" name="start_price_kg_ru" id="start_price_kg_ru" maxlength="60" data-options="required:true" dataType="int" isrequired="true" style="width: 50px;"/></div><div><span>超出重量卢/kg&nbsp;</span><input style="width: 50px;" class="easyui-numberbox input_text" type="text" name="every_price_kg_ru" id="every_price_kg_ru" maxlength="60" data-options="required:true" dataType="int" isrequired="true"/>
+					    <span>附加费(卢)</span><input style="width: 50px;" class="easyui-numberbox input_text" type="text" name="extra_price_ru" id="extra_price_ru" maxlength="60" data-options="required:true" dataType="int" isrequired="true"/></div> -->
+					</td>
+				</tr>
+				<tr>
+					<td align="right" style="position: relative;top:-35px;">尺寸要求:</td>
+					<td><div><input style="width: 50px;" class="easyui-numberbox input_text" type="text" name="min_long" id="min_long" maxlength="60" data-options="required:true" dataType="int" isrequired="true" min="0" precision="2"/><span>&le;长&lt;</span><input class="easyui-numberbox input_text" type="text" name="max_long" id="max_long" maxlength="60" data-options="required:true" dataType="int" min="0" precision="2" isrequired="true" style="width: 50px;"/>cm</div>
+					    <div><input style="width: 50px;" class="easyui-numberbox input_text" type="text" name="min_width" id="min_width" maxlength="60" data-options="required:true" dataType="int" isrequired="true" min="0" precision="2"/><span>&le;宽&lt;</span><input class="easyui-numberbox input_text" type="text" name="max_width" id="max_width" maxlength="60" data-options="required:true" dataType="int" min="0" precision="2" isrequired="true" style="width: 50px;"/>cm</div>
+					    <div><input style="width: 50px;" class="easyui-numberbox input_text" type="text" name="min_high" id="min_high" maxlength="60" data-options="required:true" dataType="int" isrequired="true" min="0" precision="2"/><span>&le;高&lt;</span><input class="easyui-numberbox input_text" type="text" name="max_high" id="max_high" maxlength="60" data-options="required:true" dataType="int" min="0" precision="2" isrequired="true" style="width: 50px;"/>cm</div>
+				     </td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

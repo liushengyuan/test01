@@ -1,0 +1,239 @@
+*{
+	padding:0;
+	margin:0 auto;
+  font:12px/150% Arial,Verdana,"宋体"
+ }
+ul {
+  list-style: none; }
+
+a {
+  text-decoration: none; }
+img{border:none;}
+
+.youhui_main{
+  padding-top:20px; border:1px solid #e7e7e7; border-top:none;
+  min-height:679px; padding-left:20px;
+}
+.coupon-item {
+    display: block;
+    position: relative;
+    width: 264px;
+}
+.coupon-items .coupon-item {
+    float: left;
+    margin: 0 20px 20px 0;
+    width: 244px;
+}
+.coupon-item .c-type {
+    color: #fff;
+    height: 105px;
+    overflow: hidden;
+    padding: 50px 0 0;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    padding-bottom:20px;
+}
+.coupon-item-d .c-type {
+    background-color: #74d2d4;
+}
+.coupon-item .c-price {
+    font-family: Arial;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 36px;
+    margin: 0 0 5px;
+    padding-left: 80px;
+    text-align: left;
+}
+.coupon-item .c-price strong{
+    font-family: Arial;
+    font-size: 36px;
+    font-weight: 400;
+}
+.coupon-item .c-limit {
+    margin: 0 0 8px;
+}
+.coupon-item-d .c-type .c-time {
+    color: #31aaad;
+}
+.coupon-item .c-type .c-type-top {
+    background: rgba(0, 0, 0, 0) url("../images/coupon20150805.png") no-repeat scroll 0 -271px;
+    height: 15px;
+    left: 50%;
+    margin-left: -23px;
+    position: absolute;
+    top: 0;
+    width: 46px;
+}
+.coupon-item .c-type .c-type-icon {
+    background: rgba(0, 0, 0, 0) url("../images/coupon20150805.png") repeat scroll 0 -189px;
+    height: 31px;
+    left: 40px;
+    position: absolute;
+    top: 49px;
+    width: 31px;
+}
+.coupon-item-d .c-type .c-type-icon {
+    background-position: -41px -189px;
+}
+.coupon-item .c-type .c-type-bottom {
+    background: rgba(0, 0, 0, 0) url("../images/coupon20150805.png") no-repeat scroll -3px -296px;
+    bottom: 0;
+    height: 5px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}
+.coupon-item-d .c-type .c-type-bottom {
+    background-position: -3px -311px;
+}
+
+.coupon-item .c-del {
+    background: rgba(0, 0, 0, 0) url("../images/coupon20150803.png") repeat scroll -252px -496px;
+    cursor: pointer;
+    display: none;
+    height: 50px;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: all 600ms cubic-bezier(0.23, 1, 0.32, 1) 0s;
+    width: 49px;
+}
+.coupon-item-hover {
+    z-index: 2;
+}
+.coupon-item-hover .c-del {
+    display: block;
+}
+.coupon-item .c-msg {
+    background: #faf9f9 none repeat scroll 0 0;
+    height: 217px;
+    padding: 15px 0 0;
+}
+.coupon-item .c-msg {
+    overflow: visible;
+}
+.coupon-item .range-item {
+    display: block;
+    margin: 0 0 10px;
+    clear:both;
+
+}
+.coupon-item .range-item .label {
+    display: inline;
+    float: left;
+    text-align: right;
+    width: 72px;
+}
+.coupon-item .range-item .txt {
+    color: #999;
+    float: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 130px;
+}
+.coupon-item .op-btns {
+    margin-top: 20px;
+    text-align: center;
+}
+.coupon-item .op-btns .btn {
+    border: 1px solid #f99898;
+    border-radius: 15px;
+    color: #f99898;
+    display: inline-block;
+    height: 31px;
+    line-height: 31px;
+    overflow: hidden;
+    position: relative;
+    vertical-align: middle;
+    width: 119px;
+}
+.coupon-item-d .op-btns .btn {
+    border: 1px solid #74d2d4;
+    border-radius: 15px;
+    color: #74d2d4;
+    /* display: block; */
+    height: 31px;
+    line-height: 31px;
+    vertical-align: middle;
+    width: 119px;
+}
+.coupon-item-d .op-btns .btn {
+    color: #74d2d4;
+    line-height: 31px;
+}
+.coupon-item .op-btns .btn b {
+    background: #f99898 none repeat scroll 0 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transition: all 0.3s ease 0s;
+    width: 0;
+}
+.coupon-item-d .op-btns .btn b {
+    background: #74d2d4 none repeat scroll 0 0;
+}
+.po-btns .btu:hover b{width:100%;}
+
+.coupon-item-j .c-type {
+    background-color: #fa9899;
+}
+.coupon-item .overdue-site, .coupon-item .overdued-site {
+    background: rgba(0, 0, 0, 0) url("../images/coupon20150805.png") repeat scroll -99px 0;
+    display: block;
+    height: 66px;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 65px;
+}
+
+
+.coupon-item-e .c-type {
+    background-color: #bbb;
+}
+.coupon-item-e .c-type .c-type-bottom {
+    background-position: -3px -341px;
+}
+.coupon-item-e .op-btns .btn {
+    border: 1px solid #bbb;
+    border-radius: 15px;
+    color: #bbb;
+    /* display: block; */
+    height: 31px;
+    line-height: 31px;
+    vertical-align: middle;
+    width: 119px;
+}
+.coupon-item-e .op-btns .btn {
+    color: #bbb;
+    line-height: 31px;
+}
+.coupon-item-e .op-btns .btn {
+    color: #bbb;
+    line-height: 31px;
+}
+.coupon-item-e .op-btns .btn b {
+    background: #bbb none repeat scroll 0 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

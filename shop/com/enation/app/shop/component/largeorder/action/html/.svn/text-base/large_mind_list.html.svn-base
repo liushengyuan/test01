@@ -1,0 +1,310 @@
+<#include '/admin/header.html' >  <#assign
+dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.input_text{
+	width: 95%;
+}
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="orderform">
+		<div class='buttonArea' style="height: auto">
+		<span style="float: right;"> 
+		 	<span id="simpleSearch">
+		 		<span>店铺名称</span>
+				<input type="text" value="" id="store_name" class="input_text" style="width: 100px"/>&nbsp;&nbsp;&nbsp;
+		 		<span>请求时间</span>
+				<input class="easyui-datebox" style="width: 90px;height: 28px;"
+				id="start_time" data-options="buttons:buttons" /> <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
+				<input class="easyui-datebox" style="width: 90px;height: 28px;" id="end_time"
+				data-options="buttons:e_buttons" />&nbsp;&nbsp;&nbsp;
+		 		<span>意向状态</span>
+		 		<select id="status" class="inputSelect valid">
+					<option value="">---所有---</option> 
+					<option value="0">未处理</option>
+					<option value="1">已处理</option>
+				</select> &nbsp;&nbsp;
+			 	<input id="searchKeyword" class="input_text" type="text" value="" size="30" style="width: 300px" placeholder="请输入意向编号、买家" name="searchKeyWord">
+				<a href="javascript:void(0)" class="easyui-linkbutton" id="search" data-options="plain:true" onclick="searchOrder()">搜索</a>
+			</span> 
+		</span>
+		<input id="Advanced" name="Advanced" type="hidden" value="0" />
+		</div>
+
+		<div class="clear height10"></div>
+
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/shop/admin/largeOrder!listMindJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" width="width" id="orderdata" sortName="mind_id" sortOrder="desc">
+				<thead>
+					<tr>
+						<th data-options="field:'goods_id',checkbox:true,width:100"></th>
+						<th data-options="field:'mind_id',width:50">编号</th>
+						<th data-options="field:'status',width:75" formatter="forStruts">状态</th>
+						<th data-options="field:'store_name',width:100" >店铺</th>
+						<th data-options="field:'goods_name',width:100" formatter="formatName">商品</th>
+						<th data-options="field:'price',width:100" >单价</th>
+						<th data-options="field:'goods_num',width:50" >数量</th>
+						<th data-options="field:'order_text',width:100" >详细说明</th>
+						<th data-options="field:'buyer_name',width:100" >买家姓名</th>
+						<th data-options="field:'company',width:100" >公司名称</th>
+						<th data-options="field:'email',width:100" >邮箱</th>
+						<th data-options="field:'phone',width:100" >电话</th>
+						<th data-options="field:'request_time',width:100" formatter="formatDate">请求时间</th>
+						<th data-options="field:'handle_time',width:100" formatter="formatDate2">处理时间</th>
+						<th data-options="field:'handle_person',width:75" >处理人</th>
+						<th data-options="field:'handle_result',width:75" >处理结果</th>
+						<th data-options="field:'action',width:80" formatter="formatOperation">操作</th>
+						<!--  <th data-options="field:'create_time',width:100,sortable:true" formatter="formatDate">下单日期</th>
+						<th data-options="field:'sale_cmpl_time',width:100,sortable:true" formatter="formatDate">发货日期</th>		
+						<th data-options="field:'need_pay_money',width:100,sortable:true" formatter="forMoney">订单总额</th>
+						<th data-options="field:'ship_name',width:100">收货人</th>
+						<th data-options="field:'currency',width:100">收货人</th> -->
+						<!-- <th data-options="field:'status',width:100,sortable:true" formatter="forStruts">订单状态</th>
+						<th data-options="field:'pay_status',width:100,sortable:true" formatter="forpay">付款状态</th>
+						<th data-options="field:'ship_status',width:100,sortable:true" formatter="forship">发货状态</th>
+						<th data-options="field:'shipping_type',width:100,sortable:true">配送方式</th>
+						<th data-options="field:'payment_name',width:100,sortable:true" formatter="payWay">支付方式</th>
+						<th data-options="field:'action',width:100" formatter="formatAction">操作</th>-->
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="divdia" style="display: none;"></div>
+</div>
+<script type="text/javascript">
+
+	function forStruts(value, row, index) {
+		var val;
+		if(value==0){
+			val = "未处理";
+		}
+		if(value==1){
+			val = "已处理";
+		}
+		return val;
+	}
+	function formatName(value,row,index){
+		var val="<a href=\"../../goods-"+row.goods_id+".html\"target=\"_blank\">"+row.goods_name+"</a>";
+		return val;
+	}
+	function formatOperation(value, row, index) {
+		var val = "";
+		val += "<a class='edit' title='处理' href='javascript:void(0);' onclick='append("
+				+ row.mind_id + ")'></a>" 
+		return val;
+	}
+	function append(id) {
+		var map = {}; // Map map = new HashMap();
+		if (!id) {
+			map["href"] = "bonus-type!add.do";
+			map["formId"] = "#bonusTypeForm";
+			map["url"] = "bonus-type!saveAdd.do?ajax=yes";
+			map["title"] = "添加红包类型";
+			map["loadshow"] = "正在添加......";
+		} else {
+			map["href"] = "${ctx}/shop/admin/largeOrder!edit.do?mind_id=" + id;
+			map["formId"] = "#editBonusTypeForm";
+			map["url"] = "${ctx}/shop/admin/largeOrder!saveEdit.do?ajax=yes";
+			map["title"] = "处理大宗交易意向";
+			map["loadshow"] = "正在修改......";
+		}
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#orderdata";
+
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			title : map["title"],
+			width : 750,
+			height : 650,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					submitForm(map);
+				}
+			} ]
+		});
+	}
+	function submitForm(map) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show(map["loadshow"]);
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+				},
+				error : function(e) {
+					alert("出现错误 ，请重试");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+	function payWay(value, row, index) {
+		var val = value;
+		if(row.status==0){
+			var val = "";
+		}
+		return val;
+	}
+	function forsn(value,row,index){
+		//var val="<a href='#' onclick=\"newTab('查看订单详细','${ctx}/b2b2c/admin/storeOrder!orderDetail.do?orderId="+row.order_id+"&sn="+row.sn+"&logi_no="+row.logi_no+"&uname="+row.uname+"&ship="+row.ship_name+"&status="+row.status+"')\">"+row.sn+"</a>"
+		var val="<a href='#' onclick=\"newTab('查看订单详细"+(row.sn).substring(0,6)+"','${ctx}/shop/admin/order!detail.do?orderId="+row.order_id+"&sn="+row.sn+"&logi_no="+row.logi_no+"&uname="+row.uname+"&ship="+row.ship_name+"&status="+row.status+"')\">"+row.sn+"</a>"
+		return val;
+	}
+	function forMoney(value, row, index) {
+		if(row.currency=="RUB"){
+			var val = value+"р.";
+		}else if(row.currency=="CNY"){
+			var val = "￥" + value;
+		}
+		return val;
+	}
+	function formatDate(value,row,index){
+		if(value==null||value==0){
+			return "";
+		}
+		else{
+			return getFormatDateByLong(value, "yyyy-MM-dd");
+		}
+		
+	}
+	function formatDate2(value,row,index){
+		if(value==null||value==0){
+			return "未处理";
+		}
+		else{
+			return getFormatDateByLong(value, "yyyy-MM-dd");
+		}
+		
+	}
+
+	
+	
+	var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+	buttons.splice(1, 0, {
+	text: '清空',
+	handler: function(target){
+		 $('#start_time').datebox('setValue',"");
+	}
+	});
+	
+	var e_buttons = $.extend([], $.fn.datebox.defaults.buttons);
+	e_buttons.splice(1, 0, {
+	text: '清空',
+	handler: function(target){
+		 $('#end_time').datebox('setValue',"");
+	}
+	});
+    
+    
+function formatAction(value,row,index){
+	//var val="<a class='edit' title='查看' href='#' onclick=\"newTab('查看订单详细','${ctx}/b2b2c/admin/storeOrder!orderDetail.do?orderId="+row.order_id+"&sn="+row.sn+"&logi_no="+row.logi_no+"&uname="+row.uname+"&ship="+row.ship_name+"&status="+row.status+"')\"></a>";
+	var val="<a class='edit' title='查看' href='#' onclick=\"newTab('查看订单详细"+(row.sn).substring(0,6)+"','${ctx}/shop/admin/order!detail.do?orderId="+row.order_id+"&sn="+row.sn+"&logi_no="+row.logi_no+"&uname="+row.uname+"&ship="+row.ship_name+"&status="+row.status+"')\"></a>";
+	return val;
+		
+}
+	
+	$(function(){
+		$(".searchAdvanced").hide();
+		//高级查询按钮
+	    $("#aAdvanced").click(function () {
+	        if ($("#Advanced").val() == "0") {
+	            $("#Advanced").val(1);
+	            $("#simpleSearch").hide();
+	            //$("#aAdvanced").text("简单搜索")
+	            $("#aAdvanced").addClass("searchAdvancedS");
+	        } else {
+	            $("#Advanced").val(0);
+	            $("#simpleSearch").show();
+	            //$("#aAdvanced").text("高级搜索");
+	            $("#aAdvanced").removeClass("searchAdvancedS");
+	        }
+	        $(".searchAdvanced").slideToggle("slow");
+	    });
+	})
+	
+	function searchOrder(){
+	//var searchtype = $("#Advanced").val();
+	var keyword = $.trim($("#searchKeyword").val());	
+	var start_time = $('#start_time').datebox('getValue');
+	var end_time = $('#end_time').datebox('getValue');  
+	var status = $("#status").val();
+	var store_name=$("#store_name").val();
+	
+	var sn = $("#sn").val();
+	var ship_name = $("#ship_name").val();
+	var paystatus =	$("#paystatus").val();
+	var	shipstatus = $("#shipstatus").val();
+	var	shipping_type = $("#shipping_type").val();
+	var	payment_id = $("#payment_id").val();
+	
+	
+	$("#orderdata").datagrid('load', {
+		
+		 keyword:keyword,		 
+		 start_time:start_time,
+		 end_time:end_time,
+		 status:status,
+		 store_name:store_name,
+		 page:1
+    });
+}
+
+	function formatTime(value,row,index){
+		var val = getFormatDateByLong(value, "yyyy-MM-dd");
+		return val;
+	}
+// 	设置订单的汇率
+	 function setExchange_rate() {
+	        var exchange_rate = $("#exchange_rate").val();
+	        var order_sn = $("#order_sn").val();
+	        if(exchange_rate == null||exchange_rate==""){
+	        	alert("请输入汇率!");
+	        	return;
+	        }
+	        jQuery.ajax({
+	            url: "/api/b2b2c/trade!setExchange_rate.do?ajax=yes",
+	            type: 'POST',
+	            data: {exchange_rate: exchange_rate,order_sn:order_sn},
+	            error: function (result) {
+	            	alert("汇率设置失败!");
+	            },
+	            success: function (result) {
+	            	alert("汇率设置成功!");
+// 	                window.location.reload();
+	            }
+	        });
+	        $("#exchange_rate").val("");
+	        $("#order_sn").val("");
+	    }
+	
+</script>
+
+<#include '/admin/footer.html' >
+
+

@@ -1,0 +1,233 @@
+<#include '/store/store_header.html' />
+<!--创建“订单详细”标签-->
+<#--<#assign orderDetailTag = newTag("storeOrderDetailTag")>-->
+<!--调用“订单详细”标签，并传递参数-->
+<#--<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>-->
+<!--创建"仓库"标签-->
+<#assign warehouseTag = newTag("warehouseTag")> <#assign list
+=warehouseTag()> <#assign
+dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<link type="text/css" rel="stylesheet"
+	href="${ctx}/themes/b2b2cv2/css/logistics.css" />
+<script src="${ctx}/themes/b2b2cv2/js/express.js"></script>
+<script>
+	function acount(obj) {
+		var reg = /^(([1-9][0-9]{0,2}((\.[0-9]{1,3})?))|0\.[0-9]{0,2}[1-9]|(0\.(([0-9][1-9])|([1-9][0-9]))[0-9]{0,1}))$/;
+		weight = document.getElementById("weight").value;
+		var length = document.getElementById("length").value;
+		var size = document.getElementById("size").value;
+		var hight = document.getElementById("hight").value;
+		var productCode = document.getElementById("productCode").value;
+		if (!reg.test(weight)) {
+			document.getElementById("weight").focus();
+			alert("请正确填入重量");
+			return false;
+		}
+		if (!reg.test(length)) {
+			alert("请正确填入长度");//请正确填入长度
+			return false;
+		}
+		if (!reg.test(size)) {
+			alert("请正确填入宽度");//请正确填入宽度
+			return false;
+		}
+		 if (weight >= 100) {
+				document.getElementById("weight").focus();
+				alert("<@uiLabel text='storeExpressNumberTwo.weightebigquals' />");//重量不可大于等于20KG
+				return false;
+			} 
+			reg = /^(([1-9][0-9]{0,2}((\.[0-9])?))|0\.[0-9])$/;
+			if (!reg.test(length) || length > 150) {
+				alert("<@uiLabel text='storeExpressNumberTwo.longlength' />");//长度输入有误，请输入小于150cm长度,小数后保留一位
+				return false;
+			}
+			if (!reg.test(size) || size > 150) {
+				alert("<@uiLabel text='storeExpressNumberTwo.widthlength' />");//宽度输入有误，请输入小于150cm宽度,小数后保留一位
+				return false;
+			}
+			if (!reg.test(hight) || hight > 150) {
+				alert("<@uiLabel text='storeExpressNumberTwo.highlength' />");//高度输入有误，请输入小于150cm高度,小数后保留一位
+				return false;
+			}
+/* 		var actionUrl = "";
+		if(productCode=="A3" || productCode=="A2" || productCode=="A5"){
+			actionUrl = "${ctx}/api/b2b2c/express!chargeCalculate.do?weight="
+				+ weight + "&length=" + length + "&size=" + size
+				+ "&hight=" + hight+ "&productCode=" + productCode;
+		}else if(productCode=="AE" || productCode=="AF" || productCode=="AC"){
+			actionUrl = "${ctx}/api/b2b2c/express2!chargeCalculate.do?weight="
+				+ weight + "&length=" + length + "&size=" + size
+				+ "&hight=" + hight+ "&productCode=" + productCode;
+		}
+		var options = {
+			url : actionUrl,
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				if(result.result == 0){
+					alert(result.message);
+				}else{
+					totalAmount = result.amount;
+					document.getElementById("totalWeight").innerHTML = weight;
+					for ( var i = 1; i <= ${list.storeOrder.totalCount}; i++) {
+						document.getElementById("limit" + i).innerHTML = result.limit + "天";
+						document.getElementById("fee" + i).innerHTML = "￥" + totalAmount;
+					}
+					document.getElementById("acountFee").style.display = "none";
+					document.getElementById("result").style.display = "";
+					document.getElementById("logisticsInformation").style.display = "";
+					document.getElementById("toNext").style.display = "";
+				}
+			},
+			error : function(e) {
+				alert(e.statusText);
+				alert("出现错误请重试");
+			}
+		};
+           
+		$('#tagform').ajaxSubmit(options);
+		 */
+		    document.getElementById("totalWeight").innerHTML = weight;
+			document.getElementById("acountFee").style.display = "none";
+			document.getElementById("result").style.display ='block';
+		$.ajax({
+			url: "${ctx}/api/shop/freight!sfprice.do?weight="+weight,
+			type : "POST",
+			async : false,
+			dataType : "json",
+			success : function(result) {
+				if(result!=null){
+					if(result.result==1){
+						document.getElementById("sfprice").innerHTML = "￥" + result.price;
+						document.getElementById("logisticsInformationSF").style.display = 'block';
+					}else{
+						alert("顺丰计算运费失败");
+					}
+				}
+			}
+		});
+	}
+</script>
+<body>
+	<div class="logi_main">
+		<!--标题-->
+		<div class="logi_title">
+			<h2>物流方案查询</h2>
+			<ul>
+				<li class="li_colo">选择物流方案</li>
+				<li>货物信息填写</li>
+				<li>申请成功</li>
+			</ul>
+		</div>
+		<div class="fl"></div>
+		<!--内容-->
+		<div class="logi_content">
+			<div class="logi_ctext">
+				<p>
+					<span>温馨提示：</span>1.仓库发货流程：在线申请仓库发货→自行发货至仓库→仓库发货！
+				</p>
+				<p>2.请您自行发货至最近的仓库，仓库收到货物后，会及时将信息返回给系统，您可以通过查询订单状态了解最新物流信息。</p>
+				<!-- <p>3.重量范围：1g起重，每个单件包裹限重在物流重量范围以内。</p> -->
+				<p>
+					<!-- <font color="red">注意：因包裹到仓库后涉及贴标签，包装不合要求的可能会换包装，故请不要发寄几乎为2KG重的包裹，以免超重</font> -->
+					<font color="red">注意：请根据商品重量范围选择相应的物流</font>
+				</p>
+			</div>
+			<div class="logi_ctable">
+				<form id="tagform">
+					<ul>
+						<#--<li>订 单 号 ：<font id="orderNo">${ordersn}</font></li>
+						<li>下单时间：<font id="time"><@dateformat
+								time="${orderDetail.create_time!''}" pattern="yyyy-MM-dd
+								HH:mm"/></font></li>-->
+						<li>物流方式：顺丰</li>
+						<li>收货国家：中国</li>
+						<li class="li_clar" id="result" style="display: none;">包裹重量：<font
+							id="totalWeight"></font>KG <a href="#" onclick="editFee()">修改</a>
+							<span>如果您多次发货，请进行多次“在线发货申请”</span>
+						</li>
+						<li class="li_clar" id="acountFee">包裹重量：重<input name=""
+							type="text" id="weight" class="input_logi" maxlength="5" />KG 长<input
+							name="" type="text" id="length" class="input_logi" maxlength="5" />CM
+							宽<input name="" type="text" id="size" class="input_logi"
+							maxlength="5" />CM 高<input name="" type="text" id="hight"
+							class="input_logi" maxlength="5" />CM <a href="#"
+							onclick="reset()">重置</a>
+							顺丰产品：
+							<select id="productCode" name="">
+								<option value="1">标准快递</option><!--标准快递 -->
+							    <!--<option value="2">顺丰特惠</option>顺丰特惠 -->
+							    <!-- <option value="3">电商特惠</option> --> <!--电商特惠-->
+							   	<!-- <option value="7">电商速配</option> 电商速配 
+							    <option value="28">电商专配</option> 电商专配  -->
+					      	</select>
+					      	<!-- 顺丰产品：俄罗斯小包（顺丰挂号） -->
+							<input name="" type="button" value="计算运费"
+							class="button_long" onclick="javascript:acount(this);" />
+						</li>
+					</ul>
+				</form>
+				<!-- <div class="fl"></div> -->
+			</div>
+			<!-- <div class="table_div" id="logisticsInformation"
+				style="display: none;">
+				
+				<table width="100%" border="0" id="logisticsTable" cellspacing="0"
+					class="table2" cellpadding="0"> -->
+					
+					<!-- <#list list.storeOrder.result as order>
+					<tr id="tr_warehose">
+						<td width="100" height="35" align="center" valign="middle"><input
+							name="chose" type="radio" id="chose${order.warehouse_id}" value="${order.warehouse_id}" /></td>
+						<td width="17%" height="35" align="center" valign="middle">俄速通</td>
+						<td width="17%" id="limit${order.warehouse_id}" height="35"
+							align="center" valign="middle"></td>
+						<td width="17%" id="warehousename" height="35" align="center"
+							valign="middle">${order.warehouse_name}</td>
+						<td width="17%" height="35" align="center" valign="middle">标准运费</td>
+						<td height="35" align="center" valign="middle"
+							style="padding-right: 15px;" id="fee${order.warehouse_id}"></td>
+					</tr>
+					</#list> -->
+			<!-- 	</table>
+			</div> -->
+			<div class="table_div" id="logisticsInformationSF"
+				style="display:none;/* position:relative; */top:30px;width:1390px;">
+				
+				<table width="100%" border="0" id="logisticsTableSF" cellspacing="0"
+					class="table2" cellpadding="0">
+					<tr class="tr_1">
+						<!--  <td width="100" align="center" valign="middle">操作</td>-->
+						<td width="17%" align="center" valign="middle">物流名称</td>
+						<td width="17%" align="center" valign="middle">运输时效</td>
+						<td width="17%" align="center" valign="middle">交货仓库</td>
+						<td width="17%" align="center" valign="middle">运费折扣</td>
+						<td align="center" valign="middle" style="padding-right: 15px;">预算运费</td>
+					</tr>
+					<tr id="tr_warehose">
+						<!-- <td width="100" height="35" align="center" valign="middle"><input
+							name="chose" type="radio" id="" value="" /></td>-->
+						<td width="17%" height="35" align="center" valign="middle">顺丰快递</td>
+						<td width="17%" id="" height="35"
+							align="center" valign="middle">25天</td>
+						<td width="17%" id="warehousename" height="35" align="center"
+							valign="middle">全国</td>
+						<td width="17%" height="35" align="center" valign="middle">标准运费</td>
+						<td height="35" align="center" valign="middle"
+							style="padding-right: 15px;" id="sfprice">￥100</td>
+					</tr>
+				</table>
+			</div>
+			
+			<!-- <div class="fl"></div> -->
+			<!--  
+			<div class="an" id="toNext" style="display: none;">
+				<input name="" type="button" class="button_long but1"
+					onclick="next()" value="下一步，填写发货信息" />
+			</div>-->
+			<!-- <div class="fl"></div> -->
+		<!-- </div>
+		<div class="fl"></div> -->
+	</div>
+</body>
+<#include '/common/footer.html'/>

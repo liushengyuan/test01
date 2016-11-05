@@ -1,0 +1,48 @@
+<div class="easyui-panel" style="border-style:none;" >
+	<div style="padding: 10px 0 10px 60px">
+	<!--  
+		<form id="editLogiForm" method="post" class="validate" >
+			<table>
+				<tr>
+					<td align="right">时间:</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="name" id="name" maxlength="60" value=""/>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">地点:</td>
+					<td><input class="easyui-validatebox input_text" type="text" name="ename" id="ename" maxlength="60"  value=""/>
+					</td>
+				</tr>
+				<tr>
+				    <th><label class="text">描述: </label></th>
+                   <td>
+	               <input class="easyui-validatebox input_text" type="text" name="type" id="type" maxlength="60"  value=""/>
+		           </td>
+				</tr>
+			</table>
+		</form>
+	-->
+					<#if listRouteEST?exists &&listRouteEST?size gt 0>
+						<#list listRouteEST as routeru >
+							<div><span>时间：</span>${routeru.occur_date!''}</div><!-- 轨迹发生时间 -->
+							<div><span>地点：</span>${routeru.occur_address!'暂无'}</div><!-- 轨迹发生地点 -->		
+							<div><span>描述：</span>${routeru.track_content!'暂无'}</div><!-- 轨迹状态描述补充 -->
+							<br>
+						</#list>
+					<#else>
+						<#if listRouteSF?exists &&listRouteSF?size gt 0>
+							<#list listRouteSF as route >
+								<div><span>时间：</span>${route.accept_time!''}</div>
+								<div><span>地点：</span>${route.accept_address!'暂无'}</div>	
+								<div><span>描述：</span>${route.remark!'暂无'}</div>
+								<br>
+							</#list>
+						<#else>
+							暂无物流信息
+						</#if>
+					</#if> 
+	</div>
+</div>
+<script language="javascript">
+
+</script>

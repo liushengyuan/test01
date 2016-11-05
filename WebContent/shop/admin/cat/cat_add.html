@@ -1,0 +1,100 @@
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="addForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th>分类中文名称</th>
+					<td><input class="input_text easyui-validatebox" type="text"
+						id="name" name="cat.name" data-options="required:true"></input>
+					</td>
+
+				</tr>
+				<tr>
+					<th>分类俄文名称</th>
+					<td><input class="input_text easyui-validatebox" type="text"
+						id="name" name="cat.name_ru" data-options="required:true"></input>
+					</td>
+
+				</tr>
+				<tr>
+					<th>字体颜色：</th>
+					<td>
+						<select class="easyui-validatebox" name="cat.font_color">
+							<option value="#333">默认色</option>
+            				<option value="0098ff" >蓝色</option>
+            				<option value="ff0000" >红色</option>
+            				<option value="00c3c4">浅蓝色</option>
+            				<option value="000080">海军蓝</option>
+            				<option value="f384a2">粉红色</option>
+            				<option value="bb9752">褐色</option>
+            				<option value="fc5e00">橘红色</option>
+            				<option value="ffc100">黄色</option>
+            				<option value="666" >黑灰色</option>
+            				<option value="7fa400">浅绿色</option>
+            				<option value="9728b7">紫色</option>
+            				<option value="00a635">青色</option>
+            				<option value="40E0D0">绿宝石</option>
+            				<option value="FF00FF">洋红</option>
+            				<option value="6A5ACD">蓝灰色</option>
+            				<option value="00FF00">酸橙色</option>
+						</select>
+					</td>
+					
+				</tr>
+				<tr>
+					<th>分类图片</th>
+					<td><input class="easyui-validatebox" type="file" id="image"
+						name="image"></input>
+					</td>
+				</tr>
+				<tr>
+					<th>是否为顶级分类</th>
+					<td><input type="radio" name="cattype" class="cattype"
+						value="0" checked="checked">否 &nbsp;&nbsp;&nbsp;&nbsp; <input
+						type="radio" name="cattype" class="cattype" value="1">是</td>
+				</tr>
+				<tr class="addtr">
+					<th>上级分类</th>
+					<td><input class="easyui-combotree combo" name="cat.parent_id" value="0"
+						data-options="url:'cat!addlistJson.do',method:'get',required:false,height:28"
+						style="width: 300px;">
+					</td>
+				</tr>
+				<#-- 
+				<tr>
+					<th>商品类型</th>
+					<td><input class="easyui-combotree combo" name="cat.type_id"
+						data-options="url:'cat!typelistjson.do',method:'get',required:false,height:28"
+						style="width: 300px;">
+					</td>
+				</tr>
+				-->
+				<tr>
+					<th>排序</th>
+					<td><input class="input_text" type="text" id="order"
+						name="cat.cat_order" data-options="required:true" value="0"></input>
+					</td>
+				</tr>
+				<#-- <tr>
+					<th>列表中显示</th>
+					<td style="padding: 2px 0 0 0"><input type="radio"
+						name="cat.list_show" value="1" checked="checked" />是&nbsp; <input
+						type="radio" name="cat.list_show" value="0" />否</td>
+				</tr> -->
+				<input type="hidden" name="cat.list_show" value="1">
+			</table>
+		</form>
+	</div>
+</div>
+<script>
+	$(function() {
+		$(".cattype").click(function() {
+			if ($(this).val() == 1) {
+				$(".addtr").hide();
+			}
+			if ($(this).val() == 0) {
+				$(".addtr").show();
+			}
+		})
+	});
+</script>

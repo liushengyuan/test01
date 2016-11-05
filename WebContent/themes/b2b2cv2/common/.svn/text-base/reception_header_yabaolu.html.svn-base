@@ -1,0 +1,351 @@
+<!--  头部-->
+
+<!-- 获取商品分类信息 -->
+
+<#assign goodsCatTag= newTag("goodsCatTag")>
+<#assign goodsCat = goodsCatTag()!'' >
+
+<!--   获取CMS数据搜索标签，-->
+<#assign dataSearchTag=newTag("dataSearchTag") />
+
+<div class="header">
+<div class="header_outside" style="width:1200px;margin:0px auto;">
+	<header class="wrapper">
+		<!--  LOGO-->
+		<#if locale=="zh">
+		   <div class="site_logo" id="index_logo" style="width:250px;">
+			<!-- <a href="${ctx}/"><@image src="${logo}" class="pngFix" style="width:150px;height:40px;" /></a>-->
+			<a href="${ctx}/"><image src="${ctx}/statics/images/logo-1x.png" class="pngFix" style="width:150px;height:40px;" /></a>
+			<span style="line-height:40px;font-size:18px; display:inline-block;text-align:center; position:relative;top:-13px;left:5px;color:#f60"><@uiLabel text="apply.YaBaoLuShop" /></span>
+		</div>
+		<#elseif locale=="ru">
+		   <div class="site_logo" id="index_logo" style="width:330px;">
+			<!-- <a href="${ctx}/"><@image src="${logo}" class="pngFix" style="width:150px;height:40px;" /></a>-->
+			<a href="${ctx}/"><image src="${ctx}/statics/images/logo-1x.png" class="pngFix" style="width:150px;height:40px;" /></a>
+			<span style="line-height:40px;font-size:18px; display:inline-block;text-align:center; position:relative;top:-13px;left:5px;color:#f60"><@uiLabel text="apply.YaBaoLuShop" /></span>
+		</div>
+		</#if>
+        <div class="header-right">
+            <div class="nav-cart">
+                <a href="${ctx}/cart.html"><img src="${ctx}/themes/b2b2cv2/images/1.2.png" ><span class="text"><@uiLabel text="index.PortalShoppingCart" /></span></a>
+                <span id="nav-cart-num" class="cart-number"></span>
+            </div>
+            <div class="nav-user-account">
+            </div>
+        </div>
+		<!--  搜索-->
+		<div class="head_search" id="search">
+			<div class="searchbar-form">
+			<!--  商品和店铺-->
+			<ul class="tab" style="display: none;">
+				<li<#if search??> <#if search=="goods"> class="current" </#if>
+					<#else> class="current" </#if> act="search" title="按照商品查询"
+					search="goods"><@uiLabel text="index.PortalUserCarProduct" /></li>
+				<li<#if search??> <#if search=="store"> class="current" </#if>
+					</#if> act="shop_search" title="按照店铺查询" search="store"><@uiLabel text="index.PortalUserCarStore" /></li>
+			</ul>
+            <div class="search_form_operate">
+                <div class="search-category">
+                    <div class="search-cate-title" id="header-search">
+                        <span id="categoryShow" class="search-category-value"><@uiLabel text="index.PortalAllCategories" /></span>
+                        <input type="hidden" name="SEARCH_CATEGORY_ID" id="SEARCH_CATEGORY_ID" value="0">
+                        <ul id="search-sort-list" class="search-sort-list" style="display: none;">
+                            <li value="0"><@uiLabel text="index.PortalAllCategories" /></li>
+						<#list goodsCat.cat_tree as cat>
+                            <li value="${cat.cat_id}">
+	                            <#if locale=="zh">
+								   	${cat.name}
+									<#elseif locale=="ru">
+								    ${cat.name_ru!''}
+								</#if>
+							</li>
+						</#list>
+                        </ul>
+                    </div>
+                </div>
+                <input type="button" id="inquiry" value="" class="search-button" />
+            </div>
+			
+			</div>
+			
+			<div class="search_form">
+				<input name="namekeyword" id="namekeyword" type="text" class="input_text"
+                        value="<#if search??&& keyword??>${keyword}</#if>" placeholder="<@uiLabel text="index.PortalSearchKey" />" maxlength="60"/>			 
+				 <div class="search_suggest" id="gov_search_suggest">
+	                <ul>
+	                </ul>
+	            </div>
+			 </div>
+			
+			<!--  搜索关键字-->
+			</div>
+	</header>
+</div>
+</div>
+<script type="text/javascript">
+	var goodsSearchTxt = '';
+	var storeSearchTxt = '请输入店铺关键字';
+	$(function() {
+	//	$('.my_cartlist').perfectScrollbar();
+		CartBar.init();
+
+        $("#header-search").hover(function(){
+            $("#search-sort-list").show();
+        },function(){
+            $("#search-sort-list").hide();
+        });
+        //搜索选项选择
+        $("#search-sort-list li").click(function(){
+            $('#SEARCH_CATEGORY_ID').val($(this).attr("value"));
+            $("#categoryShow").text($(this).text());
+            $(this).addClass("current").siblings().removeClass("current");
+            $(this).parent().hide();
+        });
+
+		$("#inquiry").click(function() {
+			var cat_id = $("#SEARCH_CATEGORY_ID").val();
+            if(cat_id == "0"){
+                cat_id = "";
+            }
+			var search = $("#search li[class='current']").attr("search");
+            location.href = ctx
+                    + "/goods_list.html?keyword="
+                    + $.trim($("#namekeyword").val()) + "&search="
+                    + search + "&cat=" + cat_id+ "&storeType=2";
+/*			if ($("#namekeyword").val() == goodsSearchTxt && search == "goods") {
+				alert(goodsSearchTxt);
+			} else if ($("#namekeyword").val() == storeSearchTxt && search == "store") {
+				alert(storeSearchTxt);
+			} else if (!$("#namekeyword").val() == "" && search == "goods") {
+				location.href = ctx
+						+ "/goods_list.html?keyword="
+						+ $("#namekeyword").val() + "&search="
+						+ search + "&cat=" + cat_id;
+			} else if (!$("#namekeyword").val() == ""
+					&& search == "store") {
+				location.href = ctx
+						+ "/store_list.html?keyword="
+						+ $("#namekeyword").val() + "&search="
+						+ search + "&cat=" + cat_id;
+			}*/
+		});
+		
+		
+		$(document).keyup(function(event){
+			  if(event.keyCode ==13){
+                  var cat_id = $("#SEARCH_CATEGORY_ID").val();
+                  if(cat_id == "0"){
+                      cat_id = "";
+                  }
+			  var search = $("#search li[class='current']").attr("search");
+			if ($("#namekeyword").val() == goodsSearchTxt && search == "goods") {
+				//alert(goodsSearchTxt);
+			} else if ($("#namekeyword").val() == storeSearchTxt && search == "store") {
+				//alert(storeSearchTxt);
+			} else if (!$("#namekeyword").val() == "" && search == "goods") {
+				location.href = ctx
+						+ "/goods_list.html?keyword="
+						+ $("#namekeyword").val() + "&search="
+						+ search + "&cat=" + cat_id+ "&storeType=2";
+			} else if (!$("#namekeyword").val() == ""
+					&& search == "store") {
+				location.href = ctx
+						+ "/store_list.html?keyword="
+						+ $("#namekeyword").val() + "&search="
+						+ search + "&cat=" + cat_id+ "&storeType=2";
+			}
+			  
+			  
+			  }
+			});
+		
+		$("#namekeyword").blur(function() {
+			if ($("#namekeyword").val() == "") {
+				var search = $("#search li[class='current']").attr("search");
+				if (search == "goods")
+					$("#namekeyword").val(goodsSearchTxt);
+				else if (search == "store")
+					$("#namekeyword").val(storeSearchTxt);
+			}
+		});
+		$("#namekeyword").focus(function() {
+			var search = $("#search li[class='current']")
+					.attr("search");
+			var searchTxt = "";
+			if (search == "goods"
+					&& $("#namekeyword").val() == goodsSearchTxt) {
+				$("#namekeyword").val("");
+			} else if (search == "store"
+					&& $("#namekeyword").val() == storeSearchTxt) {
+				$("#namekeyword").val("");
+			}
+		});
+		$("#search .tab li").click(function() {
+			var search = $(this).attr("search");
+			if (search == "goods") {
+				$("#namekeyword").val(goodsSearchTxt);
+				$("#search li[search='goods']").addClass("current");
+				$("#search li[search='store']").removeClass("current");
+			} else {
+				$("#namekeyword").val(storeSearchTxt);
+				$("#search li[search='store']").addClass("current");
+				$("#search li[search='goods']").removeClass("current");
+			}
+		});
+		<#assign luceneCheckTag = newTag("luceneCheckTag") /> 
+		<#assign lucene =luceneCheckTag() />
+		<#if lucene=='ON' >
+			var url_ = "${ctx}/api/shop/goods-words.do";
+			 $("#namekeyword").bigAutocomplete({url:url_, callback:function(data){
+				 location.href="${ctx}/goods_list.html?keyword="+data.title;
+		    }}); 
+		</#if>
+	});
+	
+	
+	//实现搜索输入框的输入提示js类
+	function oSearchSuggest(searchFuc){
+		var input = $('#namekeyword');
+		var suggestWrap = $('#gov_search_suggest');
+		var key = "";
+		var init = function(){
+			input.bind('keyup',sendKeyWord);
+			input.bind('blur',function(){setTimeout(hideSuggest,100);})
+		}
+		var hideSuggest = function(){
+			suggestWrap.hide();
+		}
+		
+		//发送请求，根据关键字到后台查询
+		var sendKeyWord = function(event){
+			
+			//键盘选择下拉项
+			if(suggestWrap.css('display')=='block'&&event.keyCode == 38||event.keyCode == 40){
+				var current = suggestWrap.find('li.hover');
+				if(event.keyCode == 38){
+					if(current.length>0){
+						var prevLi = current.removeClass('hover').prev();
+						if(prevLi.length>0){
+							prevLi.addClass('hover');
+							input.val(prevLi.html());
+						}
+					}else{
+						var last = suggestWrap.find('li:last');
+						last.addClass('hover');
+						input.val(last.html());
+					}
+					
+				}else if(event.keyCode == 40){
+					if(current.length>0){
+						var nextLi = current.removeClass('hover').next();
+						if(nextLi.length>0){
+							nextLi.addClass('hover');
+							input.val(nextLi.html());
+						}
+					}else{
+						var first = suggestWrap.find('li:first');
+						first.addClass('hover');
+						input.val(first.html());
+					}
+				}
+				
+			//输入字符
+			}else{ 
+				var valText = $.trim(input.val());
+				if(valText ==''||valText==key){
+					return;
+				}
+				searchFuc(valText);
+				key = valText;
+			}			
+			
+		}
+		//请求返回后，执行数据展示
+		this.dataDisplay = function(data){
+			if(data.length<=0){
+	            suggestWrap.hide();
+				return;
+			}
+			
+			//往搜索框下拉建议显示栏中添加条目并显示
+			var li;
+			var tmpFrag = document.createDocumentFragment();
+			suggestWrap.find('ul').html('');
+			for(var i=0; i<data.length; i++){
+				li = document.createElement('LI');
+				li.innerHTML = data[i];
+				tmpFrag.appendChild(li);
+			}
+			suggestWrap.find('ul').append(tmpFrag);
+			suggestWrap.show();
+			
+			//为下拉选项绑定鼠标事件
+			suggestWrap.find('li').hover(function(){
+					suggestWrap.find('li').removeClass('hover');
+					$(this).addClass('hover');
+					input.val(this.innerHTML);
+				},function(){
+					$(this).removeClass('hover');
+			}).bind('click',function(){
+				input.val(this.innerHTML);
+				suggestWrap.hide();
+			});
+		}
+		init();
+	};
+
+	//实例化输入提示的JS,参数为进行查询操作时要调用的函数名
+	var searchSuggest =  new oSearchSuggest(sendKeyWordToBack);
+
+	//这是一个模似函数，实现向后台发送ajax查询请求，并返回一个查询结果数据，传递给前台的JS,再由前台JS来展示数据。本函数由程序员进行修改实现查询的请求
+	//参数为一个字符串，是搜索输入框中当前的内容
+	function sendKeyWordToBack(keyword){
+		   var obj = {
+				    "keyword" : keyword
+				 };
+				 $.ajax({
+						   type: "GET",
+						   url: "${ctx}/api/shop/goods!searcherContent.do",
+						   async:false,
+						   data: obj,
+						   dataType: "json",
+						   success: function(data){
+							 //var json = eval("("+data+")");
+							 console.info(data);
+							 if (data.result == 1) {
+								//alert("成功")
+								//console.info(result);
+								//alert(data.message);
+								 var key=(data.message).split(",");
+								 var aData = [];
+								 for(var i=0;i<key.length;i++){
+										//以下为根据输入返回搜索结果的模拟效果代码,实际数据由后台返回
+									if(key[i]!=""){
+										  aData.push(key[i]);
+									}
+								 }
+								//将返回的数据传递给实现搜索输入框的输入提示js类
+								 searchSuggest.dataDisplay(aData);
+							} else {
+								alert("失败");
+							}
+							 
+						   }
+			 });	  
+				 
+				 /* 					//以下为根据输入返回搜索结果的模拟效果代码,实际数据由后台返回
+					var aData = [];
+					aData.push(keyword+'返回数据1');
+					aData.push(keyword+'返回数据2');
+					aData.push(keyword+'不是有的人天生吃素的');
+					aData.push(keyword+'不是有的人天生吃素的');
+					aData.push(keyword+'2012是真的');
+					aData.push(keyword+'2012是假的');
+					//将返回的数据传递给实现搜索输入框的输入提示js类
+					searchSuggest.dataDisplay(aData);*/
+		
+	}
+</script>
+
+
+

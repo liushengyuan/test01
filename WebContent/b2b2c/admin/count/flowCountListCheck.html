@@ -1,0 +1,47 @@
+<#include '/admin/header.html' >
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<style>
+.input_text{
+	width: 95%;
+}
+</style>
+<div id="loading"></div>
+<div class="main">
+	<form id="bonusform">
+		<div class='buttonArea' >
+			<span style="float: right;"> 
+		 		<span id="simpleSearch">
+		 		<!-- <a href="javascript:void(0)" class="easyui-linkbutton" onclick="append()">添加用户行为</a>
+		 		<input type="hidden" id="count_id" value="${flowCount.count_id!''}"> -->
+				</span>
+			</span>
+		</div>
+		<div class="shadowBoxWhite tableDiv">
+			<table class="easyui-datagrid"
+				data-options="url:'allianceCount!flowCountCheckList.do?flow_id=${flowCount.flow_id!''}',pageList: [10,15,20,30],pageSize:${pageSize},fitColumns:'true'"
+				pagination="true" id="advertisedata" >
+				<thead>
+					<tr>
+						<th data-options="field:'count_id',checkbox:true,width:100" ></th>
+						<th data-options="field:'come_time',width:60" sortable="true" align="center" formatter="formatDate">进入时间</th>
+						<th data-options="field:'address',width:100" align="center">页面地址</th>
+						<th data-options="field:'action',width:60" align="center">用户行为</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</form>
+	<div id="divdia" style="display: none;"></div>
+</div>
+
+<script type="text/javascript">
+	function formatDate(value,row,index){
+		if(value==null||value==0){
+			return "";
+		}
+		else{
+			return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+		}
+	}
+</script>
+<#include '/admin/footer.html' >

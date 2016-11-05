@@ -1,0 +1,229 @@
+<#include '/store/store_header.html' />
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("storeOrderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+<!--创建"仓库"标签-->
+<#assign warehouseTag = newTag("warehouseTag")> <#assign list
+=warehouseTag()> <#assign
+dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<link type="text/css" rel="stylesheet"
+	href="${ctx}/themes/b2b2cv2/css/logistics.css" />
+<script src="${ctx}/themes/b2b2cv2/js/express.js"></script>
+<script>
+	function acount(obj){
+		var reg = /^(([1-9][0-9]{0,2}((\.[0-9]{1,3})?))|0\.[0-9]{0,2}[1-9]|(0\.(([0-9][1-9])|([1-9][0-9]))[0-9]{0,1}))$/;
+		weight = document.getElementById("weight").value;
+		var length = document.getElementById("length").value;
+		var size = document.getElementById("size").value;
+		var hight = document.getElementById("hight").value;
+		var productCode = document.getElementById("productCode").value;
+		if (!reg.test(weight)) {
+			document.getElementById("weight").focus();
+			alert("<@uiLabel text='storeExpress.writeweight' />");//请正确填入重量
+			return false;
+		}
+		if (!reg.test(length)) {
+			alert("<@uiLabel text='storeExpress.writelength' />");//请正确填入长度
+			return false;
+		}
+		if (!reg.test(size)) {
+			alert("<@uiLabel text='storeExpress.writewidth' />");//请正确填入宽度
+			return false;
+		}
+		if (!reg.test(hight)) {
+			alert("<@uiLabel text='storeExpress.writeheight' />");//请正确填入高度
+			return false;
+		}
+		if(productCode=="A3"){//重量不可大于等于2KG
+			if(weight >= 2){
+				alert("<@uiLabel text='storeExpress.weightebigquals' />");
+				return false;
+			}
+		}else if(productCode=="A2"){//重量不可大于等于2KG
+			if(weight >= 2){
+				alert("<@uiLabel text='storeExpress.weightebigquals' />");
+				return false;
+			}
+		}else if(productCode=="A5"){//重量不可大于等于20KG （陆运大包）
+			if(weight >= 20){
+				alert("<@uiLabel text='storeExpress.weightbigqualsone' />");
+				return false;
+			}
+		}else if(productCode=="AE"){//重量不可大于等于3KG
+			if(weight >= 3){
+				alert("<@uiLabel text='storeExpress.weightbigqualstwo' />");
+				return false;
+			}
+		}else if(productCode=="AF"){//重量不可大于等于20KG或者小于3KG
+			if(weight<3 || weight>=20){
+				alert("<@uiLabel text='storeExpress.weightbigqualsthree' />");
+				return false;
+			}
+		}else if(productCode=="AC"){//重量不可大于等于100KG或者小于20KG
+			if(weight<20 || weight>=100){
+				alert("<@uiLabel text='storeExpress.weightbigqualsfour' />");
+				return false;
+			}
+		}
+		/*  if (weight >= 20) {
+			document.getElementById("weight").focus();
+			alert("重量不可大于等于20KG");
+			return false;
+		} 
+		reg = /^(([1-9][0-9]{0,2}((\.[0-9])?))|0\.[0-9])$/;
+		if (!reg.test(length) || length > 150) {
+			alert("长度输入有误，请输入小于150cm长度,小数后保留一位");
+			return false;
+		}
+		if (!reg.test(size) || size > 150) {
+			alert("宽度输入有误，请输入小于150cm宽度,小数后保留一位");
+			return false;
+		}
+		if (!reg.test(hight) || hight > 150) {
+			alert("高度输入有误，请输入小于150cm高度,小数后保留一位");
+			return false;
+		} */
+		var actionUrl = "";
+		if(productCode=="A3" || productCode=="A2" || productCode=="A5"){
+			actionUrl = "${ctx}/api/b2b2c/express!chargeCalculate.do?weight="
+				+ weight + "&length=" + length + "&size=" + size
+				+ "&hight=" + hight+ "&productCode=" + productCode;
+		}else if(productCode=="AE" || productCode=="AF" || productCode=="AC"){
+			actionUrl = "${ctx}/api/b2b2c/express2!chargeCalculate.do?weight="
+				+ weight + "&length=" + length + "&size=" + size
+				+ "&hight=" + hight+ "&productCode=" + productCode;
+		}
+			
+		var options = {
+			url : actionUrl,
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				if(result.result == 0){
+					alert(result.message);
+				}else{
+					totalAmount = result.amount;
+					document.getElementById("totalWeight").innerHTML = weight;
+					for ( var i = 1; i <= ${list.storeOrder.totalCount}; i++) {
+						document.getElementById("limit" + i).innerHTML = result.limit + "<@uiLabel text='storeExpress.showday' />";//天
+						document.getElementById("fee" + i).innerHTML = "￥" + totalAmount;
+					}
+					document.getElementById("acountFee").style.display = "none";
+					document.getElementById("result").style.display = "";
+					document.getElementById("logisticsInformation").style.display = "";
+					document.getElementById("toNext").style.display = "";
+				}
+			},
+			error : function(e) {
+				alert(e.statusText);
+				alert("<@uiLabel text='storeExpress.error' />");//出现错误请重试
+			}
+		};
+
+		$('#tagform').ajaxSubmit(options);
+	}
+</script>
+<body>
+		<div class="logi_main">
+		<!--标题-->
+		<div class="logi_title">
+			<h2><@uiLabel text="storeExpress.selectlogisticssolution" /></h2><!--选择物流方案  -->
+			<ul>
+				<li class="li_colo"><@uiLabel text="storeExpress.selectlogisticssolution" /></li><!--选择物流方案  -->
+				<li><@uiLabel text="storeExpress.goodsinfowrite" /></li><!--货物信息填写  -->
+				<li><@uiLabel text="storeExpress.applicationsuccessful" /></li><!--申请成功  -->
+			</ul>
+		</div>
+		<div class="fl"></div>
+		<!--内容-->
+		<div class="logi_content">
+			<div class="logi_ctext">
+				<p>      <!--温馨提示：  -->          <!--1.仓库发货流程：在线申请仓库发货→自行发货至仓库→仓库发货！  -->
+					<span><@uiLabel text="storeExpress.warmthwarning" />：</span>1.<@uiLabel text="storeExpress.delivergoods" />：<@uiLabel text="storeExpress.deliverapplication" />→<@uiLabel text="storeExpress.deliverreceivestore" />→<@uiLabel text="storeExpress.deliverstorereceive" />！
+				</p>
+				<p>2.<@uiLabel text="storeExpress.recentgoods" /></p><!--2.请您自行发货至最近的仓库，仓库收到货物后，会及时叫信息返回给系统，情可以通过查询订单状态了解最新物流信息。  -->
+				<p>3.<@uiLabel text="storeExpress.weightranges" /></p><!--3.重量范围：1g起重，每个单件包裹限重在2kg以内（不含）  -->
+				<p>
+					<font color="red"><@uiLabel text="storeExpress.Attentiongoods" /></font><!--注意：因包裹到仓库后涉及贴标签，包装不合要求的可能会换包装，故请不要发寄几乎为2KG重的包裹，以免超重  -->
+				</p>
+			</div>
+			<div class="logi_ctable">
+				<form id="tagform">
+					<ul>
+						<li><@uiLabel text="storeExpress.ordernumber" /> ：<font id="orderNo">${ordersn}</font></li><!--订 单 号 ：  -->
+						<li><@uiLabel text="storeExpress.ordertime" />：<font id="time"><@dateformat   <!--下单时间：  -->
+								time="${orderDetail.create_time!''}" pattern="yyyy-MM-dd
+								HH:mm"/></font></li>
+						<li><@uiLabel text="storeExpress.logisticsmethod" />：<@uiLabel text="storeExpress.esutong" /></li><!--物流方式：俄速通  -->
+						<li><@uiLabel text="storeExpress.receivecountry" />：RU</li><!--收货国家：RU  -->
+						<li class="li_clar" id="result" style="display: none;"><@uiLabel text="storeExpress.packageweight" />：<font    
+							id="totalWeight"><!--包裹重量： --></font>KG <a href="#" onclick="editFee()"><@uiLabel text="storeExpress.update" /></a><!--修改  -->
+							<span><@uiLabel text="storeExpress.receivetimes" />“<@uiLabel text='storeExpress.onlineapplication' />”</span><!--如果您多次发货，请进行多次“在线发货申请”  -->
+						</li>                            
+						<li class="li_clar" id="acountFee"><@uiLabel text="storeExpress.packageweight" />：<@uiLabel text="storeExpress.weight" /><!--包裹重量：重  --><input name=""
+							type="text" id="weight" class="input_logi" maxlength="5" />KG <@uiLabel text="storeExpress.long" /><!--长  --><input
+							name="" type="text" id="length" class="input_logi" maxlength="5" />CM
+							<@uiLabel text="storeExpress.width" /><!--宽  --><input name="" type="text" id="size" class="input_logi"
+							maxlength="5" />CM <@uiLabel text="storeExpress.high" /><!--高  --><input name="" type="text" id="hight"
+							class="input_logi" maxlength="5" />CM <a href="#"
+							onclick="reset()"><@uiLabel text="storeExpress.reset" /><!--重置  --></a>
+							<select id="productCode" name="">
+							<option value="A3"><@uiLabel text="storeExpress.airplanePackage" /></option><!--俄速通航空小包  -->
+							<option value="A2"><@uiLabel text="storeExpress.landsmallparcel" /></option><!--俄速通陆运小包 3C专线小包 -->
+							<option value="A5"><@uiLabel text="storeExpress.landbigparcel" /></option> <!--俄速通陆运大包  商业大包-->
+							<option value="AE">俄通收<@uiLabel text="storeExpress.ecnomicsmallparcel" /></option> <!--俄通收经济小包  -->
+							<option value="AF"><@uiLabel text="storeExpress.rubigparcel" /></option> <!--俄通收大包  -->
+							<option value="AC">俄通收<@uiLabel text="storeExpress.moreweightparcel" /></option><!--俄通收超重包裹  -->
+					       </select>
+							
+							<input name="" type="button" value="<@uiLabel text='storeExpress.measurementfee' />" 
+							class="button_long" onclick="acount(this);"/> <!-- 计算运费 -->
+						</li>
+					</ul>
+				</form>
+				<div class="fl"></div>
+			</div>
+
+			<div class="table_div" id="logisticsInformation"
+				style="display: none;">
+				
+				<table width="100%" border="0" id="logisticsTable" cellspacing="0"
+					class="table2" cellpadding="0">
+					<tr class="tr_1">
+						<td width="100" align="center" valign="middle"><@uiLabel text="storeExpress.operation" /></td><!--操作  -->
+						<td width="17%" align="center" valign="middle"><@uiLabel text="storeExpress.logisticsmethod" /></td><!--物流方式  -->
+						<td width="17%" align="center" valign="middle"><@uiLabel text="storeExpress.transportation" /></td><!--运输时效  -->
+						<td width="17%" align="center" valign="middle"><@uiLabel text="storeExpress.submitstore" /></td><!--交货仓库  -->
+						<td width="17%" align="center" valign="middle"><@uiLabel text="storeExpress.freightpaid" /></td><!--运费折扣  -->
+						<td align="center" valign="middle" style="padding-right: 15px;"><@uiLabel text="storeExpress.preparefee" /></td><!--预算运费  -->
+					</tr>
+					<#list list.storeOrder.result as order>
+					<tr id="tr_warehose">
+							<td width="100" height="35" align="center" valign="middle"><input
+							name="chose" type="radio" id="chose${order.warehouse_id}" value="${order.warehouse_id}" /></td>
+						<td width="17%" height="35" align="center" valign="middle"><@uiLabel text="storeExpress.deliverstorereceive" /></td><!--仓库发货 -->
+						<td width="17%" id="limit${order.warehouse_id}" height="35"
+							align="center" valign="middle"></td>
+						<td width="17%" id="warehousename" height="35" align="center"
+							valign="middle">${order.warehouse_name}</td>
+						<td width="17%" height="35" align="center" valign="middle"><@uiLabel text="storeExpress.standerdfee" /></td><!--标准运费  -->
+						<td height="35" align="center" valign="middle"
+							style="padding-right: 15px;" id="fee${order.warehouse_id}"></td>
+					</tr>
+					</#list>
+				</table>
+				
+
+			</div>
+			<div class="fl"></div>
+			<div class="an" id="toNext" style="display: none;">
+				<input name="" type="button" class="button_long but1"
+					onclick="next()" value="<@uiLabel text='storeExpress.nextsendstoreinfo' />" /><!--下一步，填写发货信息 -->
+			</div>
+			<div class="fl"></div>
+		</div>
+		<div class="fl"></div>
+	</div>
+</body>
+<#include '/common/footer.html'/>

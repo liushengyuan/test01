@@ -1,0 +1,118 @@
+<#include '/admin/header.html' > 
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<div class="main">
+	<div class="buttonArea">
+		<div style="float:left;">
+		</div>
+		<span style="float: right;height:28px;"> 
+			<a href="javascript:void(0)" class="button b_fr" id="search" data-options="plain:true" onclick="searchStore()">搜索</a>&nbsp;&nbsp;
+			<input id="searchKeyword" class="input_text b_fr mr5" type="text" value="" size="30" placeholder="请输入店名称或银行卡号" name="searchKeyWord" />
+			审核状态：<select id="isEnable" class="inputSelect valid" style="width: 145px; margin-right: 10px;" >
+				<option value="-2">---所有---</option> 
+				<option value="0" selected="selected">待审核</option>
+				<option value="1">通过</option>
+				<option value="2" >不通过</option>
+				<#-- <option value="-1">审核未通过</option> -->
+			</select>
+		</span>
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="storeform">
+			<table class="easyui-datagrid"
+				data-options="url:'${ctx}/b2b2c/admin/sellercard!store_listJson.do',pageList: [5,10,15,20],pageSize:${pageSize},fitColumns:'true'" pagination="true" width="width" id="storedata">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true,width:100"></th>
+						<th  data-options="field:'recondid',width:20" formatter="formatStoreId">记录ID</th>
+						<th  data-options="field:'login_name',width:50">注册邮箱</th>
+				   	 	<th  data-options="field:'store_name',width:50">店铺名称</th>
+				   	 	<th  data-options="field:'card_holder',width:50">持卡人</th>
+				   	 	<th  data-options="field:'card_num',width:100">银行卡号</th>
+				   	 	<#-- <th  data-options="field:'parent_store',width:100" formatter="formatParentStore">店铺归属</th> -->
+				   	 	<#-- <th  data-options="field:'store_region',width:100">所在地</th> -->
+				   	 	<th  data-options="field:'is_enable',width:60" formatter="formatCheck">银行卡状态</th>
+				   	 	<th  data-options="field:'status',width:40" formatter="formatDisabled">审核状态</th>
+				   	 	<th  data-options="field:'check_time',width:100" formatter="formatChecktime">审核时间</th>
+				   	 	<#-- <th  data-options="field:'check_description',width:100" formatter="formatCheck">审核理由</th> -->
+				   	 	<th  data-options="field:'action',width:100"  formatter="formatAction">操作</th>
+					</tr>
+				</thead>
+			</table>
+			
+		</form>
+	</div>
+</div>
+
+<div id="divdia"></div>
+
+<script type="text/javascript">
+function formatAction (value,row,index){
+	if(row.is_enable==0){
+		val="<a href='javascript:void(0);'  onclick='setStatus(1,"+row.is_enable+","+row.id+")' title='通过'>启用银行卡</a>&nbsp;&nbsp;||&nbsp;&nbsp;<a href='javascript:void(0);' onclick='setStatus(2,"+row.is_enable+","+row.id+")' title='不通过'>审核不通过</a>";
+	}else if(row.is_enable==1){
+		val="<a href='javascript:void(0);'  onclick='setStatus(1,"+row.is_enable+","+row.id+")' title='通过'>禁用银行卡</a>&nbsp;&nbsp;||&nbsp;&nbsp;<a href='javascript:void(0);' onclick='setStatus(2,"+row.is_enable+","+row.id+")' title='不通过'>审核不通过</a>";
+	}
+	if(row.status!=0){
+		val=""
+	}
+	return val;
+}
+function formatDisabled(value,row,index){
+	if(value=="-1"){
+		return "不通过";
+	}else if(value=="0"){
+		return "待审核";
+	}else if(value=="1"){
+		return "通过";
+	}else{
+		return "无请求";
+	}
+}
+function formatStoreId(value,row,index){
+	return row.id;
+}
+/* function formatParentStore(value,row,index){
+	if(value=="0")
+		return "独立店铺";
+	if(value=="1")
+		return "青云商城"
+} */
+function formatChecktime(value, row, index) {
+	if(row.status=="1" || row.status=="-1"){
+		return getFormatDateByLong(value, "yyyy-MM-dd hh:mm:ss");
+	}else{
+		return "";
+	}
+	
+}
+function formatCheck(value,row,index){
+	if(value=="1")
+		return "启用";
+	if(value=="0")
+		return "禁用"
+}
+function setStatus(status,isEnable,id){
+	$.ajax({
+		url:'${ctx}/b2b2c/admin/sellercard!editCardStatus.do',
+		data:'status='+status+"&isEnable="+isEnable+"&id="+id,
+		dataType:"json",
+		success:function(result){
+			alert(result.message);
+			$('#storedata').datagrid('reload');
+		},
+		error:function(result){
+			alert(result.message);
+		}
+	});
+}
+function searchStore(){
+	var searchKeyword = $("#searchKeyword").val();
+	var isEnable=$("#isEnable").val();
+	$("#storedata").datagrid('load', {
+		isEnable:isEnable,
+		keyMainWord:searchKeyword,
+		page:1
+   });
+}
+</script>
+<#include '/admin/footer.html' >

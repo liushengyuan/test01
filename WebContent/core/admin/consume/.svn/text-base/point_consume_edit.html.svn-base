@@ -1,0 +1,30 @@
+<style>
+.inputWidth {
+	width : 50px;
+}
+</style>
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel">
+		<form id="editConsumeForms" method="post" class="validate">
+			<table width="100%">
+				<tr>
+					<th>${consume.consume_num}积分消费时抵押 </th>
+					<td>
+					<input class="easyui-numberbox input_text inputWidth" type="text"
+						value="${(consume.consume_amount).toString()}" name="consume.consume_amount" data-options="required:true,precision:2"></input>
+					<#if consume.consume_currency?? >
+						<#if consume.consume_currency == 'CNY' >
+							人民币
+						<#elseif consume.consume_currency == 'RUB' >
+							卢布
+						<#else>
+							${consume.consume_currency}
+						</#if>
+					</#if>
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" name="consume.consume_id" value="${consume.consume_id}">
+		</form>
+	</div>
+</div>

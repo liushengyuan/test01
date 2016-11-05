@@ -1,0 +1,92 @@
+<#include '/admin/header.html' >
+<script language="JavaScript" src="${staticserver }/js/admin/Tab.js"></script>
+<style>
+.main .contentTab ul li.contentTabS {
+padding: 0px 35px;
+ border-top: 0px  ; 
+font-weight: normal;
+}
+.contentTab ul .contentTabS, .contentTab ul .contentTabN:hover, .contentTab .active {
+ border-top: 0px ; 
+background: #FFF;
+font-weight: bold;
+float: left;
+cursor: pointer;
+}
+.main {
+background-color: #FFF;
+ padding:  0px ; 
+margin: 0px;
+}
+</style>
+<script type="text/javascript">
+	$(function() {
+		$(".seeting_input .contentTab>ul>li").click(function() {
+			var tabid = $(this).attr("tabid");
+			$(".seeting_input .contentTab>ul>li").removeClass("contentTabS");
+			$(this).addClass("contentTabS");
+			$(".tab-page .tab-panel").hide();
+			$(".tab-panel[tabid=" + tabid + "]").show();
+		});
+		$("#saveSetting").click(function() {
+			$.Loading.show("正在保存，请稍后");
+			var savebtn = $("#saveSetting");
+			var disabled = savebtn.hasClass("l-btn-disabled");
+			if (!disabled) {
+				$("#saveSetting").linkbutton("disable");
+				var options = {
+					url : "setting!save.do?ajax=yes",
+					type : "POST",
+					dataType : 'json',
+					success : function(result) {
+						if (result.result == 1) {
+							$.Loading.success(result.message);
+							
+						}else{
+							$.Loading.error(result.message);
+						}
+						$("#saveSetting").linkbutton("enable");
+					},
+					error : function(e) {
+						$.Loading.error("出现错误 ，请重试");
+						$("#saveSetting").linkbutton("enable");
+					}
+				};
+				$('#settingForm').ajaxSubmit(options);
+			}else{
+				$.Loading.hide();
+				$("#saveSetting").linkbutton("enable");
+			}
+		});
+	});
+</script>
+
+<div class="main">
+		<form method="post" name="theForm" id="settingForm">
+			<div style="display: block;" class="seeting_input">
+				<div class="tab-bar" style="position: relative;">
+					<div class="contentTab" style="background-color: transparent;">
+						<ul class="tab">
+							<#list tabs?keys as key >
+							<#if key==20>
+							<li tabid="20" <#if key==20> class="contentTabS"</#if> >
+								${tabs.get(key)}</li></#if>  </#list>
+						</ul>
+					</div>
+				</div>
+				<div >
+					<div class="tab-page" style="background-color: white;">
+						<#list htmls? keys as key><#if key==20>
+						<div tabid="20" <#if key==20> class="contentTabS"</#if> 
+							class="tab-panel">${htmls.get(key)}</div></#if> 
+						</#list>
+					</div>
+				</div>
+				
+			</div>
+		</form>
+		<div class="buttonWrap" align="center" style="background-color: white;padding-bottom: 10px;">
+			<a href="javascript:;" id="saveSetting" class="easyui-linkbutton">保存 </a>
+		</div>
+</div>
+<#include '/admin/footer.html' >

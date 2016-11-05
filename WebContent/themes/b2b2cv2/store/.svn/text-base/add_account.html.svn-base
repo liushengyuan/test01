@@ -1,0 +1,84 @@
+<#include '/store/store_header.html' />
+
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+<div class="path">
+			<span style="color:#999;"><@uiLabel text="addAccounnt.yourlocation" />：</span><!-- 您的位置 -->
+			<span>></span>
+			<a href="withdrawal_account.html"><@uiLabel text="addAccounnt.money" /></a><span>></span><@uiLabel text="addAccounnt.add" /><!-- 资金账户管理 --><!-- 添加银行卡 -->
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;"><@uiLabel text="addAccounnt.add" /></a><!-- 添加银行卡 -->
+					</li>
+				</ul>
+			</div>
+		<div class="groupbuy_form">
+		<form id="seller_info" class="seller_info">
+			<dl>
+				<dt><@uiLabel text="addAccounnt.name" />：</dt><!-- 持卡人姓名 -->
+        				<dd>
+				          	<p>
+				            	<input  type="text" class="text w400" name="accountName"   isrequired="true" />
+				          	</p>
+          					<p class="hint"><@uiLabel text="addAccounnt.name" /></p><!-- 持卡人姓名 -->
+        				</dd>
+			</dl>
+			<dl>
+				<dt><@uiLabel text="addAccounnt.number" />：</dt><!-- 银行卡号 -->
+        				<dd>
+				          	<p>
+				            	<input  type="text" class="text w400" name="accountNumber"   isrequired="true" />
+				          	</p>
+          					<p class="hint"><@uiLabel text="addAccounnt.number" /></p><!-- 银行卡号 -->
+        				</dd>
+			</dl>
+			<dl>
+				<dt><@uiLabel text="addAccounnt.bankName" />：</dt><!-- 银行名称 -->
+        				<dd> 
+				          	<p>
+				            	<input  type="text" class="text w400" name="bank_name"  isrequired="true" />
+				          	</p>
+          					<p class="hint"><@uiLabel text="addAccounnt.information" /></p><!-- 银行信息（如：中国工商银行北京丰台支行） -->
+        				</dd>
+			</dl>
+			<dl class="bottom">
+			        	<dt>&nbsp;</dt>
+			        	<dd>
+							<input type="button" id="add" value="<@uiLabel text='addAccounnt.addtwo' />" class="submit to_save"/><!-- 添加-->
+			        	</dd>
+			      	</dl>
+
+		</form>
+	</div>
+</div>
+</div>
+<script type="text/javascript">
+
+$(function(){
+	
+	$("#add").click(function(){
+		
+		 var options = {
+				url : "${ctx}/api/b2b2c/withdrawAccount!addAccount.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					if(data.result==1){
+						location.href="${ctx}/store/withdrawal_account.html";
+					}
+				},
+				error : function(data) {
+					alert(data.message);
+				}
+			};
+		$("#seller_info").ajaxSubmit(options); 
+	});
+	
+})
+
+</script>

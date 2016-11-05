@@ -1,0 +1,73 @@
+<#include '/store/store_header.html' /> <#assign logisticsTag =
+newTag("logisticsTag")> <#assign logistics =logisticsTag()> <#assign
+warehouseInfTag = newTag("warehouseInfTag")> <#assign warehouseIfn =
+warehouseInfTag('{"warehouse_id":"${logistics.warehouse_id}"}')>
+<link type="text/css" rel="stylesheet"
+	href="${ctx}/themes/b2b2cv2/css/logistics.css" />
+<script>
+	window.onload = function() {
+		var trackingNumber = getQueryString("ship_no");
+		$("#productCode").attr("value","${productCode}");
+		var productCode = $("#productCode").val();
+		document.getElementById("referenceNumber").innerHTML = trackingNumber;
+		if(productCode=="A3" || productCode=="A2" || productCode=="A5"){
+			document.getElementById("download").href = "http://label.ruston.cc/orderprint/1CF7CD6D264C10582BCFC61E61234920/"
+				+ trackingNumber + "?printMode=v&printWhich=all"
+		}else if(productCode=="AE" || productCode=="AF" || productCode=="AC"){
+			document.getElementById("download").href = "http://label.ruston.cc/orderprint/17497EFD9A51316A601C4E10E0820D5D/"
+				+ trackingNumber + "?printMode=v&printWhich=all"
+		}
+		
+	}
+	function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null)
+			return unescape(r[2]);
+		return null;
+	}
+</script>
+
+<body>
+	<input name="productCode2" id="productCode" type="hidden" />
+	<div class="logi_main">
+		<!--标题-->
+		<div class="logi_title">
+			<h2><@uiLabel text="successfulOne.applicationsuccessful"/></h2><!-- 申请成功 -->
+			<ul class="ul_bj3">
+				<li><@uiLabel text="successfulOne.selectlogisticssolution" /></li><!--选择物流方案  -->
+				<li><@uiLabel text="successfulOne.goodsinfowrite" /></li><!--货物信息填写  -->
+				<li class="li_colo"><@uiLabel text="successfulOne.applicationsuccessful" /></li><!--申请成功  -->
+			</ul>
+		</div>
+		<div class="fl"></div>
+		<!--内容-->
+		<div class="logi_content">
+			<div class="logi_cess">
+				<div class="logi_cess">
+				<div class="cess_a">
+
+				<!--恭喜！俄速通发货申请成功！ -->                                   <!--物流编号  -->
+				<@uiLabel text="successfulOne.congradulationssuccess" /><br /><@uiLabel text="successfulOne.logisticsnumber"/>:<a id="referenceNumber"></a><a href="#"
+						id="download" target="_blank">（<@uiLabel text="successfulOne.download" />）</a><!--（点击下载面单）  -->
+
+
+				</div>
+				<div class="cess_b">
+					<h2><@uiLabel text="successfulOne.sendgoodspossible"/>${warehouseIfn.warehouse_name}</h2><!--请您尽快将货物发往  -->
+					<!--仓库地址  -->                                                                                                                                                                          <!-- 邮编 -->
+					<h2><@uiLabel text="successfulOne.storageaddress"/>：${warehouseIfn.shipperStateOrProvince}&nbsp;${warehouseIfn.shipperCity}&nbsp;${warehouseIfn.shipperAddress}&nbsp;&nbsp;<@uiLabel text="successfulOne.email" />：${warehouseIfn.shipperPostCode}</h2>
+				</div>
+				<div class="cess_b">
+				      
+					<h2><@uiLabel text="successfulOne.feedbackcontent" />。</h2> <!--请您尽快将货物发往指定仓库，收到货物后，俄速通将反馈您最终的国际物流运费。  -->
+					<p>
+						<font color="red"><@uiLabel text="successfulOne.canclesendstorage" />。</font><!--运费将从您的平台账户余额中扣除，如果您需要取消发货，请尽快联系俄速通.  -->
+					</p>
+				</div>
+			</div>
+		</div>
+		<div class="fl"></div>
+	</div>
+</body>
+<#include '/common/footer.html'/>

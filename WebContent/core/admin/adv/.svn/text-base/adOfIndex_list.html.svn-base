@@ -1,0 +1,163 @@
+<#include '/admin/header.html' >
+<div class="main">
+	<div class="buttonArea">
+<!-- 		<a href="javascript:void(0)" class="button blueButton" -->
+<!-- 			onclick="append()">添加</a> <a href="javascript:void(0)" class="button" -->
+<!-- 			onclick="del()">删除</a> -->
+	</div>
+	<div class="shadowBoxWhite tableDiv">
+		<form id="advIndexform">
+			<table class="easyui-datagrid"
+				data-options="url:'adv!adIndexJson.do',pageList: [10,15,19,30],pageSize:10,fitColumns:'true',onLoadSuccess:inits"
+				pagination="true" id="adIndexvdata">
+				<thead>
+					<tr>
+						<th data-options="field:'adindex_id',checkbox:true"></th>
+						<th data-options="field:'adindex_url',width:200">图片地址</th>
+						<th data-options="field:'adindex_disable',width:200"
+							formatter="formatIsclose">状态</th>
+						<th data-options="field:'action',width:100,align:'center'"
+							formatter="formatOperation">操作</th>
+					</tr>
+				</thead>
+			</table>
+		</form>
+		<div id="divdia" style="display: none;"></div>
+	</div>
+</div>
+<script type="text/javascript">
+	function append(id) {
+		var map = {}; // Map map = new HashMap();
+		map["href"] = "adv!editAdIndex.do?adIndexId=" + id;
+		map["formId"] = "#editForm";
+		map["url"] = "adv!editAdIndexJson.do?ajax=yes";
+		map["title"] = "修改广告";
+		map["loadshow"] = "正在修改......";
+		
+		map["divDialog"] = "#divdia";
+		map["gridreload"] = "#adIndexvdata";
+
+		addDialog(map);
+	}
+	function addDialog(map) {
+		$(map["divDialog"]).show();
+		$(map["divDialog"]).dialog({
+			left : 150,
+			top : 50,
+			title : map["title"],
+			width : 800,
+			height : 500,
+			closed : false,
+			cache : false,
+			href : map["href"],
+			modal : true,
+			buttons : [ {
+				text : '保存',
+				iconCls : 'icon-ok',
+				handler : function() {
+					var savebtn = $(this);
+	　　				var disabled=savebtn.hasClass("l-btn-disabled");
+	　　				if(!disabled){
+						submitForm(map,savebtn);
+					}
+				}
+			}, {
+				text : '清空',
+				handler : function() {
+					clearForm(map);
+				}
+			} ]
+		});
+	}
+	function submitForm(map,savebtn) {
+		var formflag = $(map["formId"]).form().form('validate');
+		if (formflag) {
+			$.Loading.show(map["loadshow"]);
+			savebtn.linkbutton("disable");
+			var options = {
+				url : map["url"],
+				type : "POST",
+				dataType : 'json',
+				success : function(result) {
+					if (result.result == 1) {
+						$(map["divDialog"]).dialog('close');
+						$(map["gridreload"]).datagrid('reload');
+						$.Loading.success(result.message);
+					}
+					if (result.result == 0) {
+						$.Loading.error(result.message);
+					}
+					savebtn.linkbutton("enable");
+				},
+				error : function(e) {
+					$.Loading.error("出现错误 ，请重试");
+					savebtn.linkbutton("enable");
+				}
+			};
+			$(map["formId"]).ajaxSubmit(options);
+		}
+	}
+
+	function clearForm(map) {
+		$(map["formId"]).form('clear');
+	}
+	function formatOperation(value, row, index) {
+		var val = "<a class='edit' title='修改' href='javascript:void(0);' onclick='append("
+				+ row.adindex_id + ")' ></a>";
+		return val;
+	}
+	function formatIsclose(value, row, index) {
+		var val;
+		if (value == 1) {
+			val = '已开启&nbsp;<input type="button" class="stop button" advid="'+row.adindex_id+'" value="停用" />';
+		} else {
+			val = '已停用&nbsp;<input type="button" class="start button" advid="'+row.adindex_id+'" value="开启" />';
+		}
+		return val;
+	}
+	function inits() {
+		$(".stop").click(function(){
+			var advid=$(this).attr("advid");
+			$.Loading.show('正在停用广告，请稍侯...');
+			$.ajax({
+				url:"/core/admin/adv!modifyAdIndexStatus.do",
+				data:{'adIndexId':advid,'adIndexDisable':0},
+				type:"POST",
+				dataType : "json",
+				success:function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+					}else{
+						$.Loading.error(result.message);
+					}
+					$("#adIndexvdata").datagrid('reload');
+				},
+				error:function() {
+					$.Loading.error("出现错误 ，请重试");
+				}
+			});
+		});
+		$(".start").click(function(){
+			var advid=$(this).attr("advid");
+			$.Loading.show('正在启用广告，请稍侯...');
+			$.ajax({
+				url:"/core/admin/adv!modifyAdIndexStatus.do",
+				data:{'adIndexId':advid,'adIndexDisable':1},
+				type:"POST",
+				dataType : "json",
+				success:function(result) {
+					if(result.result==1){
+						$.Loading.success(result.message);
+					}else{
+						$.Loading.error(result.message);
+					}
+					$("#adIndexvdata").datagrid('reload');
+				},
+				error:function() {
+					$.Loading.error("出现错误 ，请重试");
+				}
+			});
+		});
+	}
+</script>
+<#include '/admin/footer.html' >

@@ -1,0 +1,134 @@
+<#include '/admin/header.html' >
+<link href="${ctx}/adminthemes/default/css/dialog.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/adminthemes/new/css/global.css" rel="stylesheet" type="text/css" />
+<link href="${ctx}/adminthemes/new/css/main.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<#assign dateFormat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign permssion = "com.enation.app.base.core.directive.PermssionDirective"?new()>
+<style>
+.searchAdvancedS{
+background-color: #FDEA7A;
+}
+
+</style>
+
+
+<div style="display: block;" class="main">
+    <input type="hidden" id="metalid" value="${goods.meta_keywords!''}"> 
+		<#-- <span>产品翻译：</span> -->
+		<form id="gridform" method="post">
+			<input type="hidden" name="goodsId" value="${goodsId}"/>
+			<strong><h3 style="font-weight:bold">商品名称:&nbsp;&nbsp;&nbsp;<span style="font-weight:normal">${goods.name!''}</span></span></h3></strong>
+			<#-- <input class="input_text" type="text" value="${goods.name!''}" readonly="readonly" 
+			 name="goodsname" size="60"  style="height:30px;" /> --><br><br> 
+			<h3><strong>中文名称:</strong></h3><input class="input_text" type="text" name="addTranslation" id="addTranslation" size="60"  value="${goods.name_ru!''}"  style="height:30px;"><br> <br>
+			<#if keywordsLogs.original_metal_keywords??>
+			<h3><strong>俄文关键字:<span style="font-weight:normal">&nbsp;&nbsp;&nbsp;${keywordsLogs.original_metal_keywords!''}</span></strong></h3>
+			<#else>
+			<h3><strong>俄文关键字:<span style="font-weight:normal">&nbsp;&nbsp;&nbsp;${goods.meta_keywords!''}</span></strong></h3>
+			</#if>
+			<#-- <input class="input_text" type="text" name="china_keyword" id="china_keyword" size="60" value="${goods.meta_keywords!''}"  style="height:30px;" > --><br> <br> 
+			<h3><strong>中文关键字:</strong></h3><input  type="hidden" name="ru_keyword" id="ru_keyword" size="60" value="${goods.ru_keyword!''}"  style="height:30px;" >
+			                        <input  type="hidden" name="ru_keyword_metal" id="ru_keyword_metal" size="60" value="${goods.ru_keyword!''}"  style="height:30px;" >
+			                        <#if keywordsLogs.original_metal_keywords??>
+			                        <input disabled="disabled" type="text" class="input_text"  name="metaKeyword" datatype="string" value="${keywordsLogs.original_metal_keywords!''}" />
+                                    <#else>
+                                    <input disabled="disabled" type="text" class="input_text"  name="metaKeyword" datatype="string" value="${goods.meta_keywords!''}" />
+                                    </#if>
+                                    <input type="text" class="input_text" id="metaKeyword" datatype="string" value="${goods.meta_keywords!''}" />
+                                    <!-- <input type="text" class="input_text" name="metaKeyword" datatype="string" value=""/>
+                                    <input type="text" class="input_text" name="metaKeyword" datatype="string" value=""/>
+                                    <input type="text" class="input_text" name="metaKeyword" datatype="string" value=""/> -->
+			<br><br>
+			<#if keywordsLogs.original_metal_keywords??>
+			   <#if keywordsLogs.update_keywords_ru==keywordsLogs.original_metal_keywords>
+			   <#else>
+			   <h3><strong>后台补充后关键字:<input disabled="disabled" type="text" class="input_text"  name="metaKeyword" datatype="string" value="${keywordsLogs.update_keywords_ru!''}" /></span></strong></h3>  
+			   </#if>
+            </#if>                     
+			<h3><strong>中文商品详情:</strong></h3>		
+			<#-- <div id="ncGoodsIntro" class="content bd" style="" disabled="disabled">
+	                   <div class="default" disabled="disabled">${goods.intro!''}</div> 
+	                  
+			 </div> -->
+			 <textarea id="zh_content" rows="8" cols="100" disabled="disabled" >${goods.intro!''}<br/></textarea>
+			<br>
+			<h3><strong>俄文商品详情:</strong></h3><textarea id="ru_content" name="ru_content"  
+			cols="100" rows="8" style="width: 98%; height: 300px;"> <#if goods.ru_content??>
+																	   ${goods.ru_content!''}
+																	<#else>
+																	   ${goods.intro!''}
+																	</#if></textarea>
+																	<br/>
+			<input type="button" id="goodsinput" value="提交" class="button b_fr" style="position:absolute;margin-left:500px;">
+			<br/>
+			<br/>
+		</form>
+	
+</div>
+<script type="text/javascript">
+ /*   var editor = null;
+    window.onload = function(){
+        editor = CKEDITOR.replace('ru_content'); //参数‘content’是textarea元素的name属性值，而非id属性值
+   }
+ */
+ $(function(){
+	$('#zh_content' ).ckeditor();	
+	$('#ru_content' ).ckeditor();
+	//保存商品翻译
+	$("#goodsinput").click(function() {
+		var meta_keywords = "";
+		/* $("input[name='metaKeyword']").each(function( i , n){
+			if($(n).val()!=""){
+				if(n>1){
+					if(n=0){
+						meta_keywords += $(n).val();
+					}else if(n=1){
+						meta_keywords += $(n).val();
+					}else{
+						meta_keywords += $(n).val()+ ",";
+					}
+				}else{
+					meta_keywords += $(n).val()+ ",";
+				}
+			}
+		}); */
+		metaKeyword=$("#metaKeyword").val();
+		$("#ru_keyword").val(metaKeyword);
+		var ru_t_name=$.trim($("#addTranslation").val());
+		var ru_t_text=$.trim($("#ru_content").val());
+		if(ru_t_name==""){
+			alert("中文名称不能为空！");
+			return false;
+		}
+		if(ru_t_text==""){
+			alert("俄文商品详细不能为空！");
+			return false;
+		}
+		$.Loading.show("正在保存请稍后..");
+		var options = {
+			url : "${ctx}/b2b2c/admin/storeGoods!add_translat.do?ajax=yes",
+			type : "POST",
+			dataType : "json",
+			success : function(result) {
+				$.Loading.success(result.message);
+				if (result.result == 1) {
+					window.location.href = "${ctx}/b2b2c/admin/storeGoods!list.do";
+				}
+			},
+			error : function(e) {
+				$.Loading.error("翻译保存失败");
+				//$("#goodsinput").linkbutton("enable");
+			}
+		};
+		$('#gridform').ajaxSubmit(options);
+
+	});
+ });	
+ 
+</script>
+<#include '/admin/footer.html' >
+
+
+

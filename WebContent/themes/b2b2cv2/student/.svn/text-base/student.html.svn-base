@@ -1,0 +1,188 @@
+<!-- 获取学生信息标签 -->
+<#include '/store/store_header.html' />
+<script  src="${ctx}/themes/b2b2cv2/js/My97DatePicker/WdatePicker.js"  ></script>
+<#assign studentList=newTag("studentListTag")>
+<#assign storeGoods=studentList()>
+<form id="studentForm" action="" method="post">
+	<div style="text-align: left;" >
+		<span>请输入你查找的用户名:</span>
+		<input type="text" name="name" id="nameId" value=""/>
+		<input type="button"   id="querystudentId" value="查询"/>
+		<input type="button"   id="deletestudentId" value="删除"/>
+		<input type="button"   id="test" value="测试"/>
+		<input type="button" onclick="javascript:exportstud();"   id="export" value="导出"/>
+	</div>
+	<div>
+	<table class="s_orderlist"  id="tableId"  cellpadding="0" cellspacing="0">
+  		<thead>
+  			<tr class="">
+  				<th  width="20%">学号</th>
+  				<th  width="20%">姓名</th>
+  				<th  width="20%">年龄</th>
+  				<th  width="20%">成绩</th>
+  				<th  width="20%">选择<a id="checkId" href="javascript:;" onclick="checkAll();return false;">全选</a></th>
+  			</tr>
+  		</thead>
+  		<tbody  id="dataBody">
+  		<#list storeGoods as student>
+  			<tr style="background: white;">
+  				<td ><a href="/student/addStudent.html?id=${student.id}" style="color: red;">${student.id}</a></td>
+  				<td >${student.name}</td>
+  				<td>${student.age}</td>
+  				<td >${student.score}</td>
+  				<td ><input type="checkBox" id="student_${student.id}" name="studentName" value="${student.id}"/></td>
+  			</tr>
+  		</#list>
+  		</tbody>
+  	</table>
+
+  	
+  	</div>
+</form>
+  	<a id="studId" onmousedown="mouseMove()">学生</a>
+<script>
+	
+	//查询
+	$(function(){
+		alert("abc");
+		$("tr:odd","#dataBody").attr("style:background","yello");
+		
+		$("#querystudentId").click(function(){
+			var name=$("#nameId").val();
+			location.href="/student/student.html?name="+name;
+		});
+		$("#test").click(function(){
+			/* var oNewWin = window.open("addstudent.html","null","height=200,width=200,top=0,left=0,toolbar=no,status=no,resizable=no,scrollable=no");
+			oNewWin.moveTo(0,0);
+			oNewWin.resizeTo(400,400); */
+			$("#studId").css("background","red");
+
+		});
+	})
+	function mouseMove(){
+		alert(history.length);
+	}
+	//全选
+	function checkAll(){
+		if($("#dataBody").find(":checkbox").length!=$("#dataBody").find(":checked").length){
+			$("#dataBody").find(":checkbox").attr("checked",true);
+		}else{
+			$("#dataBody").find(":checkbox").attr("checked",false);
+		}
+	}
+	
+	function exportstud(){
+		var checkboxs=$("#dataBody").find("input[type='checkbox']:checked");
+		if($("#dataBody").find("input[type='checkbox']:checked").length<1){
+			alert("请选择要导出的学生！");
+			return;
+		}else{
+			var propertys = ids(checkboxs);
+			$.ajax({
+				url : "${ctx}/api/b2b2c/student!export.do?ajax=yes",
+				data: {"ids":propertys}
+			})
+			//location.href=ctx+"/student/exportStud.html?ids="+propertys;
+		}
+	}
+	
+	//删除
+	$("#deletestudentId").click(function(){
+		var checkboxs=$("#dataBody").find("input[type='checkbox']:checked");
+		if($("#dataBody").find("input[type='checkbox']:checked").length<1){
+			alert("请选择要删除的学生！");
+			return;
+		}else{
+			/* var ids=[];
+			$(":checkBox[checked]").each(function(){
+				var id = this.value;
+				if(id)
+					ids.push(id);
+			})
+			alert(ids.toString()); */
+			 var propertys = ids(checkboxs);
+			$.ajax({
+				url : "${ctx}/api/b2b2c/student!deletestudent.do?ajax=yes",
+				data: {"ids":propertys},
+				type : "POST",
+				dataType : "json",
+				success : function(result){
+					if(result){
+							if(result.result==1){
+								alert(result.message);
+								location.href="student.html";
+							}else{
+								alert(result.message);
+							}
+						}else{
+							alert("返回值为null");
+						}	
+					},
+				error : function(e){
+					alert("程序出错！");
+				}
+			}) 
+		       
+		}
+	})
+	//输出所选的对象id字符串
+	function ids(object){
+		 var propertys = "";
+		for (var i = 0, ci; ci = object[i]; i++) {
+            if (i > 0) {
+                propertys += ",";
+            }
+            propertys += ci.value;
+        }
+		return propertys;
+	}
+	//导出学生信息
+	function exportToExcel(){
+		var curTbl = document.getElementById("tableId");
+		var oXL;
+		try{
+			oXL = new ActiveXObject("Excel.Application");
+			
+		}catch(e){
+			alert("无法启动Excel");
+			return false;
+		}
+		var  oWB = oXL.Workbooks.Add();
+		var oSheet = oWB.ActiveSheet;
+		var sel = document.body.createTextRange();
+		sel.moveToElementText(curTbl);
+		sel.select();
+		sel.execCommand("Copy");
+		oSheet.paste();
+		oXL.Visible = true;
+		var fname=oXL.Application.GetSaveAsFilename("将table导出到excel.xls","ExcelSpreadsheets(*.xls),*.xls");
+		oWB.SaveAs(fname);
+		oWB.close();
+		oXL.Quit();
+	}
+	
+	function exportToExcel2(){
+		var curTbl = document.getElementById("tableId");
+		var oXL;
+		try{
+			oXL = new ActiveXObject("Excel.Application");
+		}catch(e){
+			alert("无法启动Excel");
+			return false;
+		}
+		var  oWB = oXL.Workbooks.Add();
+		var oSheet = oWB.ActiveSheet;
+		var lenr = curTbl.rows.length;
+		for(i=0;i<lenr;i++){
+			var lenc = curTbl.rows(i).cells.length-1;
+			for(j=0;j<lenc;j++){
+				oSheet.Cells(i+1,j+1).value = curTbl.rows(i).cells(j).innerText;
+			}
+		}
+		
+		
+		oXL.Visible = true;
+		
+	}
+</script>
+

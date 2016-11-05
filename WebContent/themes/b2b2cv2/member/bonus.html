@@ -1,0 +1,226 @@
+<#if locale=="zh">
+    <#assign  title="我的优惠券" />
+ <#elseif locale=="ru">
+     <#assign title="Я купон" />
+ </#if>
+<#include 'member_header.html' />
+<link type="text/css" rel="stylesheet" href="${ctx}/themes/b2b2cv2/css/youhui.css" />
+<!-- 获得会员优惠券列表标签 -->
+<#assign b2b2cMemberBonusListTag = newTag("b2b2cMemberBonusListTag")>
+<!-- 调用会员优惠券列表标签 -->
+<#assign bonusresult = b2b2cMemberBonusListTag()>
+
+<#assign bonuslist = bonusresult.bonusList>
+<div class="member_center">
+	<div class="favorite_title">
+		<ul>
+			<li class="selected"><a href="bonus.html"><span><@uiLabel text="member.MyCoupons" /></span></a></li>
+		</ul>
+	</div>
+	<div class="youhui_main">
+	<div class="coupon-items">
+	  <#if bonuslist?size gt 0 >
+	      <#list bonuslist as mb>
+	         <#if mb.type_money gt 0 && mb.type_money lt 50>
+	            <#if mb.order_sn?? && mb.order_id?? && mb.used==1>
+							 <div class="coupon-item coupon-item-e">
+						<#else>
+							 <div class="coupon-item coupon-item-j">
+						</#if>
+	            
+	         <#elseif mb.type_money  gte 50 && mb.type_money lt 200>
+	           <#if mb.order_sn?? && mb.order_id?? && mb.used==1>
+							 <div class="coupon-item coupon-item-e">
+						<#else>
+							 <div class="coupon-item coupon-item-d">
+						</#if>
+	         </#if>
+	        <div class="c-type">
+	            <div class="c-price">
+	                <strong>￥${mb.type_money!''}</strong>
+	            </div>
+	            <div class="c-limit">
+	                【消费满&nbsp;${mb.min_goods_amount!''}元&nbsp;可用】
+	            </div>
+	            <div class="c-time"><@dateformat time="${mb.active_start_time?c}" pattern="yyyy-MM-dd"/>--<@dateformat time="${mb.active_end_time?c}" pattern="yyyy-MM-dd"/></div>
+	            <div class="c-type-top"></div>
+	            <div class="c-type-bottom"></div>
+	        </div>
+
+	      
+	            <div class="c-range">
+	                <div class="range-item">
+	                    <span class="label">券&nbsp;&nbsp;编&nbsp;&nbsp;号：</span>
+	                    <span class="txt">${mb.recognition!''}</span>
+	                </div>
+                 <#if mb.sendplat==0>
+	                <div class="range-item">
+	                <span class="label">品类限制：</span>
+	                <span title="仅可购买指定商品" class="txt">仅限购买俄罗斯馆商品</span>
+	                </div>
+	                <#elseif mb.sendplat==1>
+	                <div class="range-item">
+	                <span class="label">品类限制：</span>
+	                <span title="仅可购买指定商品" class="txt">仅限购买龙江产物商品</span>
+	                </div>
+	                <#elseif mb.sendplat==-1>
+	                 <div class="range-item">
+	                <span class="label">品类限制：</span>
+	                <span title="仅可购买指定商品" class="txt">可购买所有商品</span>
+	                </div>
+	                <#elseif mb.sendplat==2>
+	                  <div class="range-item">
+	                <span class="label">品类限制：</span>
+	                <span title="仅可购买指定商品" class="txt">仅限购买澳大利亚馆商品</span>
+	                </div>
+	                <#elseif mb.sendplat==3>
+	                  <div class="range-item">
+	                <span class="label">品类限制：</span>
+	                <span title="仅可购买指定商品" class="txt">仅限购买新西兰馆商品</span>
+	                </div>
+	                <#elseif mb.sendplat==4>
+	                  <div class="range-item">
+	                <span class="label">品类限制：</span>
+	                <span title="仅可购买指定商品" class="txt">仅限购买韩国馆商品</span>
+	                </div>
+	                <#elseif mb.sendplat==5>
+	                <div class="range-item">
+	                <span class="label">品类限制：</span>
+	                <span title="仅可购买指定商品" class="txt">仅限购买德国馆商品</span>
+	                </div>
+					</#if>
+	                <div class="range-item">
+	                <span class="label">平台限制：</span>
+	                <span title="全平台" class="txt">限pc端使用</span>
+	                </div>
+	                <div class="range-item">
+	                <span class="label">使用状态：</span>
+	                <span title="使用状态" class="txt">
+		                <#if mb.order_sn?? && mb.order_id?? && mb.used==1>
+							已使用
+						<#else>
+								未使用
+						</#if>
+					</span>
+	                </div>
+					
+	                <div class="range-item">
+	                    <span class="label">&nbsp;&nbsp;</span>
+	                    <span class="txt">&nbsp;&nbsp;</span>
+	                </div>
+	            </div>
+	            <div class="op-btns">
+	                <#if mb.order_sn?? && mb.order_id?? && mb.used==1>
+	                     <#if mb.type_money gt 0 && mb.type_money lt 50>
+						 <a  style="margin-top:53px;" target="_blank" class="btn" href="javascript:void(0)"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;">已使用</span><b></b></a>
+				          <#elseif mb.type_money  gte 50 && mb.type_money lt 200>
+						 <a  style="margin-top:53px;" target="_blank" class="btn" class="btn" href="javascript:void(0)"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;">已使用</span><b></b></a>
+				          </#if>
+					<#else>
+					      <#if mb.min_goods_amount gt 0 && mb.min_goods_amount lt 50>
+					            <#if mb.min_goods_amount gt 0 && mb.min_goods_amount lt 5>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=_5&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#elseif mb.min_goods_amount gte 5 && mb.min_goods_amount lt 10>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=5_10&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#elseif mb.min_goods_amount gte 10 && mb.min_goods_amount lt 20>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=10_20&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#elseif mb.min_goods_amount gte 20 && mb.min_goods_amount lt 50>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=20_50&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#elseif mb.min_goods_amount gte 50 && mb.min_goods_amount lt 100>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=50_100&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#elseif mb.min_goods_amount gte 100 && mb.min_goods_amount lt 200>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=100_200&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#elseif mb.min_goods_amount gte 200 && mb.min_goods_amount lt 500>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=200_500&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#else>
+					              <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top:53px;" target="_blank" class="btn" href="../../goods_list.html"><span class="txt" style="text-align: center;font-size: 19px;line-height: 20px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            </#if>
+						 
+				          <#elseif mb.min_goods_amount  gte 50 && mb.min_goods_amount lt 500>
+				             <#if mb.min_goods_amount gt 0 && mb.min_goods_amount lt 5>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=_5&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#elseif mb.min_goods_amount gte 5 && mb.min_goods_amount lt 10>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=5_10&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#elseif mb.min_goods_amount gte 10 && mb.min_goods_amount lt 20>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top:53px;" target="_blank" class="btn" href="../../goods_list.html?price=10_20&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#elseif mb.min_goods_amount gte 20 && mb.min_goods_amount lt 50>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=20_50&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#elseif mb.min_goods_amount gte 50 && mb.min_goods_amount lt 100>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=50_100&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#elseif mb.min_goods_amount gte 100 && mb.min_goods_amount lt 200>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=100_200&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#elseif mb.min_goods_amount gte 200 && mb.min_goods_amount lt 500>
+					            <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html?price=200_500&search=goods"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            <#else>
+					              <a clstag="pageclick|keycount|coupon_new_201509238|14" style="margin-top: 53px;" target="_blank" class="btn" href="../../goods_list.html"><span class="txt" style="text-align: center;font-size: 19px;line-height: 26px;display: inline-block;margin-top: 4px;" >立即使用</span><b></b></a>
+					            </#if>
+				          </#if>
+				    </#if>
+	            </div>
+	       
+	        <div onclick="conformDo(this,'5757010603','32378877','078ADA5','zhangxiuyan1125');" class="c-del"></div>
+	        <#if mb.data==1>
+	           <div class="overdue-site"></div>
+	        </#if>     
+	    </div>
+	      </#list>
+	    </#if>
+</div>
+<div class="clear"></div>
+</div>
+	<!-- 优惠券明细 -->
+		<div class="point_list" style="display: none;">
+			<#if bonuslist?size gt 0 >
+			<table  style="width:100%" cellspacing="0" cellpadding="0">
+				<tr>
+					<!--<th class="title">优惠券类型</th>-->
+					<th class="date"><@uiLabel text="member.bonusname" /></th>
+					<th class="date"><@uiLabel text="member.RMBAmount" /></th>
+					<#--<th class="date"><@uiLabel text="member.RoubleAmount" /></th>-->
+					<th class="date"><@uiLabel text="member.MinimumOrderRMBAmount" /></th>
+					<#--<th class="date"><@uiLabel text="member.MinimumOrderRoubleAmount" /></th>-->
+					<th class="date"><@uiLabel text="member.ExpirationTime" /></th>
+					<th class="date"><@uiLabel text="member.UseState" /></th>
+				</tr>
+				<#list bonuslist as mb>
+			        <tr >
+				        <td>${mb.type_name!''}</td>
+				        <td >￥${mb.type_money!''}</td>
+				       <#-- <td >${mb.type_money_ru!''}p.</td>-->
+				       <td>￥${mb.min_goods_amount!''}</td>
+				       <#--<td>￥${mb.min_goods_amount_ru!''}p.</td>-->
+				        <#if mb.use_end_date??>
+							<td><@dateformat time="${mb.use_end_date?c}" pattern="yyyy-MM-dd"/></td>
+						<#else>
+							<td><td>
+						</#if>
+						<td>
+							<#if mb.order_sn??>
+								已使用
+							<#else>
+								<#if mb.used==1>
+									已使用
+								<#else>
+									未使用
+								</#if>
+							</#if>
+						</td>
+				      </tr>
+			    </#list>    
+			</table>
+			
+			<div class="pager_border">
+				<@pager pageno="${bonusresult.page}" pagesize="${bonusresult.pageSize}" totalcount="${bonusresult.totalCount}" />
+				<div class="clear"></div>
+			</div>
+			<#else>
+				<div class="empty" ><@uiLabel text="member.DonotHaveCoupon" /></div>
+			</#if>
+	</div>
+	<div class="clear"></div>
+</div>
+<div class="clear"></div>
+</div>
+</div>
+<#include '../common/footer.html'/>
+

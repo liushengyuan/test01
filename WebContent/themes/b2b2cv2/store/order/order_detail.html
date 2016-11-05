@@ -1,0 +1,560 @@
+<#include '/store/store_header.html' />
+<#if locale=="zh">
+<script  src="${ctx}/themes/b2b2cv2/js/Order.js"  ></script>
+<#elseif locale=="ru">
+<script  src="${ctx}/themes/b2b2cv2/js/Order_ru.js"  ></script>
+</#if>
+<!-- 该商品是否在秒伤活动内 -->
+<#assign showGoodSkillTag= newTag("showGoodSkillTag")>
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("storeOrderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+<!--用户地址标签-->
+<#assign myMemberAddressTag = newTag("myMemberAddressTag")>
+<#assign memberAddress = myMemberAddressTag('{"address_id":"${orderDetail.address_id}"}')>
+<!--  订单状态 -->
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<!--创建“订单货物列表”标签-->
+<#assign orderItemListTag = newTag("orderItemListTag")>
+<!--调用“订单货物列表”标签，并传递参数-->
+<#assign orderItemList = orderItemListTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 创建“发票标签” -->
+<#assign receiptTag = newTag("receiptTag")>
+<!-- 调用发票标签 -->
+<#assign orderreceipt = receiptTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 获得商品META（快递、运费）信息 -->
+<#assign orderMetaTag = newTag("orderMetaTag")>
+<!-- 调用商品META（快递、运费）信息 -->
+<#assign orderMeta = orderMetaTag("{'orderid':${orderDetail.order_id}}")>
+<!-- 获取订单状态标签 -->
+<#assign orderStautsTag = newTag("orderStautsTag")>
+<!-- 调用订单状态标签 -->
+<#assign orderState = orderStautsTag()>   
+<!-- 获取订单店铺信息 -->
+<#assign storeDetailTag=newTag("myStoreDetailTag")/>
+<#assign storeDetail=storeDetailTag("{'type':'order','store_id':'${orderDetail.store_id}'}")>
+<div class="store_center">
+	<#include '../left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;"><@uiLabel text="memberOrderDetail.yourLocation"/>：</span><!--您的位置  -->
+			<span>></span>
+			<a href="javascript:void(0)"><@uiLabel text="memberOrderDetail.jiaoyiguanli"/></a><span>></span><@uiLabel text="memberOrderDetail.dingdanxiangxi"/><!--交易管理  --><!--订单详细 -->
+		</div>
+		<input type="hidden" value="${order_state!''}" class="left_selected">
+		<div class="store_right_main">
+	<div class="order_detail">
+		<div class="order_intro">
+			<input type="hidden" value="${orderDetail.order_id}" id="orderId"/>
+			<h1><@uiLabel text="memberOrderDetail.dingdanxinxi"/></h1><!--订单信息  -->
+			<div class="detail_list">
+				<dl>
+					<dt><@uiLabel text="memberOrderDetail.shouhuodizhi"/>：</dt><!--收货地址  -->
+					<dd style="word-break: break-all; word-wrap:break-word;">${memberAddress.province!''}-${memberAddress.city!''}-${memberAddress.addr!''}</dd>
+				</dl>
+				<dl>
+					<dt><@uiLabel text="memberOrderDetail.shouhuoren"/>:</dt><!--收货人  -->
+					<dd>
+						${orderDetail.ship_name!''}
+					</dd>
+				</dl>
+				<dl>
+					<dt><@uiLabel text="memberOrderDetail.zip"/>：</dt><!-- 邮政编码 -->
+					<dd>
+						${orderDetail.ship_zip!''}
+					</dd>
+				</dl>
+				<dl>
+					<dt><@uiLabel text="memberOrderDetail.lianxidianhua"/>：</dt><!--联系电话  -->
+					<dd>
+						<#if orderDetail.ship_mobile?exists && orderDetail.ship_mobile != ''>
+							${orderDetail.ship_mobile!''}
+						<#else>
+							<#if orderDetail.ship_tel?exists && orderDetail.ship_tel != ''>
+								${orderDetail.ship_tel!''}
+							</#if>
+						</#if>
+					</dd>
+				</dl>
+				<dl class="online">
+					<dt><@uiLabel text="memberOrderDetail.dingdanbianhao"/>：</dt><!--订单编号  -->
+					<dd>${orderDetail.sn}</dd>
+				</dl>
+				<dl>
+					<dt><@uiLabel text="memberOrderDetail.fukuanfangshi"/>：</dt><!--付款方式  -->
+					<dd>${orderDetail.payment_name!''}</dd>
+				</dl>
+				<dl>
+					<dt><@uiLabel text="index.NeedToPay" />：</dt>
+					<dd><#if orderDetail.currency=="CNY">
+							${orderDetail.need_pay_money?string.currency}
+						<#elseif orderDetail.currency=="RUB">
+							${orderDetail.need_pay_money!0.00}р.
+						</#if>
+					</dd>
+				</dl>
+				<dl>
+					<dt>优惠金额：</dt>
+					<dd><#if orderDetail.currency=="CNY">
+							${orderDetail.discount?string.currency}
+						<#elseif orderDetail.currency=="RUB">
+							${orderDetail.discount!0.00}р.
+						</#if>
+					</dd>
+				</dl>
+				<#if orderDetail.ship_status==3>
+					<#if orderDetail.logi_name ?? && orderDetail.logi_name =="Ruston">
+						<dl>
+							<dt><@uiLabel text="memberOrderDetail.yundanhao"/>：</dt><!-- 运单号 -->
+							<dd><a href="javascript:queryLogistics()" id="download" target="_blank" style="text-decoration:underline;"><font color="#00f">${orderDetail.ship_no!''}</font></a></dd>
+						</dl> 
+					<#elseif orderDetail.logi_name ?? && orderDetail.logi_name =="SF">
+						<dl>
+							<dt><@uiLabel text="memberOrderDetail.yundanhao"/>：</dt><!-- 运单号 -->
+							<dd><a href="javascript:queryLogisticsSF()" id="download" target="_blank" style="text-decoration:underline;"><font color="#00f">${orderDetail.ship_no!''}</font></a></dd>
+						</dl> 
+					<#else>
+						<dl>
+							<dt><@uiLabel text="memberOrderDetail.yundanhao"/>：</dt><!-- 运单号 -->
+							<dd>${orderDetail.ship_no!''}</dd>
+						</dl>
+					</#if>
+				</#if>
+				<dl>
+					<dt><@uiLabel text="memberOrderDetail.xiadanshijian"/>：</dt><!--下单时间  -->
+					<dd><@dateformat time="${orderDetail.create_time?c}" pattern="yyyy-MM-dd HH:mm"/></dd>
+				</dl>
+			</div>
+		</div>
+		<div class="intro_staus">
+			<#if !orderDetail.isCod && orderDetail.pay_status==orderState.PAY_CONFIRM && orderDetail.ship_status==orderState.SHIP_NO || orderDetail.isCod && orderDetail.status==orderState.ORDER_NOT_PAY && orderDetail.ship_status==orderState.SHIP_NO>
+<#-- 				<#include 'ship_info.html'/> -->
+				<#else>
+			<div class="orderdetail">
+				<i class="<#if orderDetail.status==8>order_no<#else> order_ok</#if>"></i>
+				<@uiLabel text="memberOrderDetail.dingdanzhuangtai"/>：<!--订单状态  -->
+				<#if orderDetail.isCod && orderDetail.status == orderState.ORDER_COMPLETE && orderDetail.pay_status==orderState.PAY_NO> 
+     				<@orderstatus status="${orderState.ORDER_ROG}" type="order" />
+     			<#else>
+      				<@orderstatus status="${orderDetail.status}" type="order" />
+      			</#if>	
+			</div>	
+			<ul>
+			 	<li>1、<@uiLabel text="memberOrderDetail.dingdanfuyan"/>：${orderDetail.remark!''}</li><!--订单附言  -->
+                <li>2、<@uiLabel text="memberOrderDetail.fahuoshijian"/>：
+                	<#if orderDetail.ship_time?? >
+               			 <@dateformat time="${orderDetail.ship_time}" pattern="yyyy-MM-dd HH:mm"/>
+                 	<#else>
+                 		${orderDetail.ship_day!''}
+                 	</#if>
+                 </li><!--发货时间  -->
+               	<li>3、<@uiLabel text="memberOrderDetail.fapiaotaitou"/>：${orderreceipt.title!'无'}</li><!-- 发票抬头 -->
+               	<li>4、<@uiLabel text="memberOrderDetail.fapiaoneirong"/>：${orderreceipt.content!'无'}</li><!--发票内容  -->
+			</ul>
+			</#if>
+			
+				<div class="order_help">
+					<#if orderDetail.status==orderState.ORDER_NOT_CONFIRM>
+						<a class="order-btn3"  href="javascript:void(0);" name="operation" action="confirm"><@uiLabel text="memberOrderDetail.querendingdan"/></a><!-- 确认订单 -->
+						<a class="order-btn3"  href="javascript:void(0);" name="editOrderInfo"><@uiLabel text="memberOrderDetail.xiugaishoujianrenxinxi"/></a><!--修改收件人信息  -->
+						<a class="order-btn3"  href="javascript:void(0);" name="editOrderPrice"><@uiLabel text="memberOrderDetail.tiaozhengjiage"/></a><!--调整价格  -->
+					</#if>
+<!-- 					<#if orderDetail.isCod && orderDetail.status == orderState.ORDER_ROG && orderDetail.pay_status==orderState.PAY_NO||!orderDetail.isCod && orderDetail.status == orderState.ORDER_NOT_PAY>  -->
+<!-- 						<a class="order-btn3"  href="javascript:void(0);" name="operation" action="pay">确定付款</a> -->
+<!-- 					</#if> -->
+				</div>
+		</div>
+	</div>
+	<!-- 流程图 -->
+	<div class="flow ">
+		<div class="status${orderDetail.status} no_arrive_order"></div>
+	</div>
+	<!-- 商品列表 -->
+	<div class="detail_goodslist">
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th class="dt1" colspan="2"><@uiLabel text="index.PortalUserProductName" /></th>	
+					<th class="dt2"><@uiLabel text="index.PortalUserProductsPrice" /></th>	
+					<th class="dt3"><@uiLabel text="index.PortalUserProductsNumber" /></th>	
+					<th class="dt4"><@uiLabel text="index.PortalUserPaySubtotals" /></th>	
+					<th class="dt5"><@uiLabel text="index.PortalUserPayStatus" /></th>	
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="d1" colspan="5" style="padding:0px;border-bottom:0px none;">
+						<table>
+						<#list orderItemList as item>
+							<tr>
+								<td >
+									<a target="_blank" href="/goods-${item.goods_id}.html">
+										<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+									</a>	
+								</td>
+								<td style="text-align:left;">
+									<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+									<#assign product = goodsBaseDataTag("{'goodsid':"+item.goods_id+"}")>
+									<a target="_blank" href="/goods-${item.goods_id}.html">
+									<#-- ${item.name_ru} -->
+									<#if locale=="zh">
+                           				<#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+							                         <#if showGoodSkill?size  gt   0>
+							                            <#list showGoodSkill as a>
+							                               <#if a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+							                              ${product.name!""}<span ><a style="margin-left: 15px;font-size: 11px;color: red" style="margin-left: 15px;font-size: 15px;color: red" href="../seckill20160701/seckill0701.html">(秒杀商品)</a></span>
+							                              </#if>
+							                            </#list>
+							                         <#else>
+							                            ${product.name!""}
+							                         </#if>
+                           			<#elseif locale=="ru">
+                           				${product.name_ru!""}
+                           			</#if>
+                           			<#if item.addon?exists>
+                                		<#assign data=item.addon?eval />
+                                		<#if data??>
+                                		(<span>
+                                		<#list data as spec>
+                                		<#if locale=="zh">
+                                			${spec.name}:
+                            			<#elseif locale=="ru">
+                                			${spec.name_ru}:
+                            			</#if>
+                            			<em style="color:#ED7108">
+                            			<#if locale=="zh">
+                                			${spec.value}
+                            			<#elseif locale=="ru">
+                                			${spec.value_ru!''}
+                            			</#if>
+                            			</em>,
+                                		</#list>
+                                		)
+                                		</#if>
+                                	</#if>
+									<#-- <#if item.other?? >(${item.other!''})</#if> -->
+									</a>	
+								</td>
+								<td style="width:100px;">
+								<!-- 	${item.price?string.currency} -->
+									<#if item.currency=="CNY">
+										            <#assign showGoodSkill = showGoodSkillTag("{'goods_id':${item.goods_id}}")>
+						                         <#if showGoodSkill?size  gt   0>
+							                           <#list showGoodSkill as a>
+							                           			<#if a.start_time lt a.nowtime  && a.nowtime lt a.end_time>
+							                           			<span style="text-decoration: line-through;font-family: Meiryo;font-size: 11px;color: red" >(原价：&yen;${a.original_price})</span>
+							                           			</br><span style="font-size: 11px;color: red;width:110px;line-height: 20px;display: block;">秒杀价：${item.price?string.currency}</span>
+							                           			 </#if>	
+							                           </#list>
+						                         <#else>
+						                           ${item.price?string.currency}
+						                        </#if>
+									<#elseif item.currency=="RUB">
+										${item.price!0.00}р.
+									</#if>
+								</td>
+								<td style="width:100px;">
+									${item.num}
+								</td>
+								<td style="width:100px;">
+								<#-- 	${(item.num * item.price)?string.currency} -->
+									<#if item.currency=="CNY">
+										￥${(item.num * item.price)!0.00}
+									<#elseif item.currency=="RUB">
+										${(item.num * item.price)!0.00}р.
+									</#if>
+								</td>
+							</tr>
+						</#list>
+						</table>
+					</td>
+					<td class="d2">
+						<#-- <@orderstatus status="${orderDetail.status}" type="order" /> -->
+						<#if locale=="zh">
+							<@orderstatus status="${orderDetail.status}" type="order" />
+						</#if>
+						<#if locale=="ru">
+							<#-- <#if orderDetail.status=-7>Есть замену</#if>
+							<#if orderDetail.status=-4>Применить для замены</#if>
+							<#if orderDetail.status=-3>Возвращает применения</#if>
+							<#if orderDetail.status=-2>возвращение</#if>
+							<#if orderDetail.status=-1>возврат</#if>
+							<#if orderDetail.status=0>В ожидании оплаты</#if>
+							<#if orderDetail.status=1>Платные быть подтверждены</#if>
+							<#if orderDetail.status=2>платный</#if>
+							<#if orderDetail.status=5>Поставляется</#if>
+							<#if orderDetail.status=6>Он Прием</#if>
+							<#if orderDetail.status=7>Завершен</#if>
+							<#if orderDetail.status=8>Отменен</#if>
+							<#if orderDetail.status=4>неотправленный</#if>
+							<#if orderDetail.status=9>Заказать в силу</#if>
+							<#if orderDetail.status=3>Выбор в</#if>
+							<#if orderDetail.status=-6>Мент отвергается</#if>
+							<#if orderDetail.status=-5>Вернуться отвергается</#if> -->
+							<#-- 订单状态新翻译-->
+							<#if orderDetail.status=-7>Уже заменен</#if>
+							<#if orderDetail.status=-4>Попросить замену</#if>
+							<#if orderDetail.status=-3>Попросить вернуть деньги</#if>
+							<#if orderDetail.status=-2>Возврат товара</#if>
+							<#if orderDetail.status=-1>Возврат денег</#if>
+							<#if orderDetail.status=0>Подтвержден</#if>
+							<#if orderDetail.status=1>В ожидании подтверждения оплаты</#if>
+							<#if orderDetail.status=2>Уже оплачен</#if>
+							<#if orderDetail.status=5>Уже отправлен</#if>
+							<#if orderDetail.status=6>Заказ получен</#if>
+							<#if orderDetail.status=7>Завершен</#if>
+							<#if orderDetail.status=8>Отменен</#if>
+							<#if orderDetail.status=4>В ожидании отправки</#if>
+							<#if orderDetail.status=9>Заказа в силе</#if>
+							<#if orderDetail.status=3>Заказ в стадии подготовки</#if>
+							<#if orderDetail.status=-6>Отказано в замене</#if>
+							<#if orderDetail.status=-5>Отказано в возврате денег</#if>
+						</#if>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+		</div>
+	</div>
+</div>		
+
+<script type="text/javascript">
+$(function(){
+	//订单操作
+	$("a[name='operation']").click(function(){
+		var action= $(this).attr("action");
+		var orderId=$("#orderId").val();
+		var url="";
+		if(action=="pay"){
+			showPay();
+			return false;
+		}else{
+			url="${ctx}/api/store/storeOrder!"+action+".do?orderId="+orderId
+		}
+		$.ajax({
+	    	type:"POST",
+	    	url:url ,
+	        dataType: "json",
+	        success: function(data){
+	        		alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+	        },error:function(e){
+				alert("<@uiLabel text='memberOrderDetail.pleaseTryAgain'/>");// 出现错误请重试       	
+	        }
+	    });
+	});
+	//修改订单信息
+	$("a[name='editOrderInfo']").click(function(){
+			dialog = $.dialog({
+				title : "<@uiLabel text='memberOrderDetail.xiugaishoujianrenxinxi'/>",//修改收件人信息
+				width : 475,
+				height : 312,
+				lock : true,
+				min : false,
+				max : false
+			});
+			$.ajax({
+				url : "orderInfo.html?ordersn="+${ordersn},
+				success : function(html) {
+					dialog.content(html);
+					dialog.button([ {
+						name : '<@uiLabel text="memberOrderDetail.change"/>',//修改
+						callback : function() {
+							ok();
+							return false;
+						}
+					}]);
+				},
+				error : function() {
+					$.alert("<@uiLabel text='memberOrderDetail.pleaseTryAgain'/>");//出现错误，请重试
+				},
+				cache : false
+			});	
+	});
+	$("a[name='editOrderPrice']").click(function(){
+		dialog = $.dialog({
+			title : "<@uiLabel text='memberOrderDetail.tiaozhengjiage'/>",//调整价格
+			lock : true,
+			min : false,
+			max : false
+		});
+		$.ajax({
+			url : "orderPriceInfo.html?ordersn="+${ordersn},
+			success : function(html) {
+				dialog.content(html);
+				dialog.button([ {
+					name : '<@uiLabel text="memberOrderDetail.change"/>',//修改
+					callback : function() {
+						editPrice();
+						return false;
+					}
+				}]);
+			},
+			error : function() {
+				$.alert("<@uiLabel text='memberOrderDetail.pleaseTryAgain'/>");//出现错误，请重试
+			},
+			cache : false
+		});	
+	});
+	$("input[name='ship']").click(function(){
+		var shipping_id=$(this).attr("logi_id");
+		var shipNo=$("input[name='shipNo'][logi_id="+shipping_id+"]").val();
+		if(shipNo==""){
+			$.Loading.message("<@uiLabel text='memberOrderDetail.fillInTheCourierNumber'/>");//请填写快递单号
+			return false;
+		}
+		 $.ajax({
+			dataType:"json",
+			type:"post",
+			url:"${ctx}/api/store/storeOrder!ship.do",
+			data:"order_id="+${orderDetail.order_id}+"&shipNos="+shipNo+"&shipping_id="+shipping_id,
+			success:function(json){
+				alert(json.message);
+				if(json.result==1){
+					location.reload();
+				}
+			},
+			error:function(){
+				alert("<@uiLabel text='memberOrderDetail.pleaseTryAgain'/>");//出现意外错误
+			}
+		}); 
+	});
+})
+//提交修改收件人信息
+function ok(){
+	//判断手机格式
+	if($("#ship_mobile").val()!=""){
+		 var tel = $("#ship_mobile").val();
+		 var reg = /^0?1[3|4|5|8][0-9]\d{8}$/;
+		 if(reg.test(tel)==false){
+			 $.Loading.message("<@uiLabel text='memberOrderDetail.shoujigeshiyouwu'/>");//手机格式错误
+			 return false;
+		 }
+	}
+	//判断真是姓名
+	if($("#ship_name").val()==""){
+		$.Loading.message("<@uiLabel text='memberOrderDetail.xingmingbunengweikong'/>");//姓名不能为空
+		return false;
+	}
+	if(isNaN($("#ship_zip").val())!==false){
+		$.Loading.message("<@uiLabel text='memberOrderDetail.youbianbixiweichunshuzi'/>");//邮编必须为纯数字
+		return false;
+	}
+	var options = {
+			url : "${ctx}/api/store/storeOrder!saveConsigee.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {	
+				alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function(e) {
+				alert("<@uiLabel text='memberOrderDetail.pleaseTryAgain'/>");//出现错误 ，请重试
+			}
+		};
+	$("#orderInfo").ajaxSubmit(options);
+}
+function editPrice(){
+	var options = {
+			url : "${ctx}/api/store/storeOrder!savePrice.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+				alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function(e) {
+				alert("<@uiLabel text='memberOrderDetail.pleaseTryAgain'/>");//出现错误 ，请重试
+			}
+		};
+	$("#orderPriceForm").ajaxSubmit(options);
+}
+function pay(){
+	var options = {
+			url : "${ctx}/api/store/storeOrder!pay.do",
+			type : "POST",
+			dataType : 'json',
+			success : function(data) {
+				alert(data.message);
+				if(data.result==1){
+					location.reload();
+				}
+			},
+			error : function(e) {
+				alert("<@uiLabel text='memberOrderDetail.pleaseTryAgain'/>");//出现错误 ，请重试
+			}
+		};
+	$("#payForm").ajaxSubmit(options);
+}
+function showRogInfo(logino,logicode){
+ 	$("#store_content").load('${ctx}/api/shop/order!orderKuaidi.do?ajax=yes&logino='+logino+'&code='+logicode,function(){});
+}
+function showPay(){
+	dialog = $.dialog({
+		title : "<@uiLabel text='memberOrderDetail.dingdanfukuan'/>",//订单付款
+		width : 475,
+		height : 312,
+		lock : true,
+		min : false,
+		max : false
+	});
+	$.ajax({
+		url : "pay.html?ordersn="+${ordersn},
+		success : function(html) {
+			dialog.content(html);
+			dialog.button([ {
+				name : '<@uiLabel text="memberOrderDetail.jiesuan"/>',//结算
+				callback : function() {
+					pay();
+					return false;
+				}
+			}]);
+		},
+		error : function() {
+			$.alert("<@uiLabel text='memberOrderDetail.pleaseTryAgain'/>");//出现错误请重试
+		},
+		cache : false
+	});	
+}
+//打印发货单
+function printShip(){
+	$.ajax({
+		url:"${ctx}/b2b2c/admin/storeOrderPrint!shipScript.do?order_id=${orderDetail.order_id}",
+		success:function(json){
+			 LODOP=getLodop(document.getElementById('LODOP_OB'),document.getElementById('LODOP_EM') );
+			 LODOP.PRINT_INIT("<@uiLabel text='memberOrderDetail.fahuodiandayin'/>");//发货单打印
+			 LODOP.SET_PRINT_PAGESIZE(1,2400,1400,"");
+			 eval(json);
+			 LODOP.PRINT();
+		},error : function(e) {
+	 		alert("<@uiLabel text='memberOrderDetail.pleaseTryAgain'/>");//出现错误 ，请重试
+		}
+	});
+}
+
+	function queryLogistics(){
+		window.location.href = "logisticsInf.html?ship_no=${orderDetail.ship_no!''}&order_id=${orderDetail.order_id}";
+	}
+	function queryLogisticsSF(){
+		window.location.href = "successful2sf.html?ship_no=${orderDetail.ship_no!''}&order_id=${orderDetail.sn}";
+	}
+</script>
+	<script>
+		$(function(){
+			var leftselect = $(".left_selected").val();
+			if(leftselect=="wait_ship"){
+				selectMenu(1);
+			}else{
+				selectMenu(0);
+			}
+		})
+	</script>
+<#include '/common/footer.html'/>

@@ -1,0 +1,181 @@
+<#include 'member_header.html' />
+<#if locale=="zh">
+<script  src="${ctx}/themes/b2b2cv2/js/Order.js"  ></script>
+<#elseif locale=="ru">
+<script  src="${ctx}/themes/b2b2cv2/js/Order_ru.js"  ></script>
+</#if>
+
+<!--创建“订单详细”标签-->
+<#assign orderDetailTag = newTag("storeOrderDetailTag")>
+<!--调用“订单详细”标签，并传递参数-->
+<#assign orderDetail = orderDetailTag('{"ordersn":"${ordersn}"}')>
+<!--  订单状态 -->
+<#assign orderstatus= "com.enation.app.shop.core.taglib.OrderStatusDirectiveModel"?new()>
+<!--创建“订单货物列表”标签-->
+<#assign orderItemListTag = newTag("orderItemListTag")>
+<!--调用“订单货物列表”标签，并传递参数-->
+<#assign orderItemList = orderItemListTag('{"orderid":"${orderDetail.order_id}"}')>
+<!-- 获取订单店铺信息 -->
+<#assign routeTag=newTag("routeTag") />
+<#assign routelist = routeTag('{"mailno":"${orderDetail.ship_no!0}"}') >
+<#assign routeRuTag=newTag("routeRuTag") /> 
+<#assign routeRulist = routeRuTag('{"mailno":"${orderDetail.ship_no!0}"}') >
+<#assign storeDetailTag=newTag("myStoreDetailTag")/>
+<#assign storeDetail=storeDetailTag("{'type':'order','store_id':'${orderDetail.store_id}'}")>
+<div class="store_center" style="float:right;width:980px;"s>
+	
+	<div id="sotre_right_content" class="sotre_right_content">
+		
+		<div class="store_right_main">
+	<div class="order_detail"  > 
+		<div class="order_intro" style="width: 100%;" >
+			<input type="hidden" value="${orderDetail.order_id}" id="orderId"/>
+			<h1>物流信息</h1>
+			<div class="detail_list">
+				<dl>
+					<dt><@uiLabel text="memberOrderDetail.yundanhao"/>：</dt><!-- 运单号 -->
+					<dd>${orderDetail.ship_no!''}</dd>
+				</dl>
+				<dl>
+					<dt>物流公司：</dt>
+					<dd>${orderDetail.logi_name!''}</dd>
+				</dl>
+				<#if orderDetail.ship_send_address??>
+					<dl>
+						<dt>发货地址：</dt>
+						<dd style="word-break: break-all; word-wrap:break-word;">
+						${orderDetail.ship_send_area!''}&nbsp;${orderDetail.ship_send_address!''}&nbsp;
+						${orderDetail.ship_send_zip!''}&nbsp;&nbsp;&nbsp;&nbsp;
+						<strong>${orderDetail.ship_send_name!''}&nbsp;&nbsp;&nbsp;&nbsp;${orderDetail.ship_send_tel!''}</strong>
+						</dd>
+					</dl>
+				</#if>
+				<dl>
+					<dt><@uiLabel text="memberOrderDetail.shouhuodizhi"/>：</dt><!--收货地址  -->
+					<dd style="word-break: break-all; word-wrap:break-word;">
+					${orderDetail.shipping_area!''}-${orderDetail.ship_addr!''}&nbsp;
+					${orderDetail.ship_zip!''}&nbsp;&nbsp;&nbsp;&nbsp;
+					<strong>
+					${orderDetail.ship_name!''}&nbsp;&nbsp;&nbsp;&nbsp;
+					<#if orderDetail.ship_tel?? && orderDetail.ship_tel != ''  >
+						${orderDetail.ship_tel}
+					<#else>
+						${orderDetail.ship_mobile!''}
+					</#if>
+					</strong>
+					</dd>
+				</dl>
+			</div>
+		</div>
+	</div> 
+<!-- 物流轨迹预留 -->
+	<div>
+	<!--顺丰轨迹 -->
+	<#if routelist?exists &&routelist?size gt 0>
+		<#list routelist as route >
+			<div>${route.accept_time!''}</div>
+			<div>${route.accept_address!''}</div>
+			<div>${route.remark!''}</div>
+			<br>
+		</#list>
+	</#if>  
+	<!--俄速通轨迹 -->
+	<#if routeRulist?exists &&routeRulist?size gt 0>
+		<#list routeRulist as routeru >
+			<div>${routeru.occur_date!''}</div>
+			<div>${routeru.occur_address!''}</div>
+			<div>${routeru.track_content!''}</div>
+			<br>
+			<!--  <div>${routeru.track_code!''}</div>-->
+		</#list>
+	</#if> 
+	</div>
+	<!-- 商品列表 -->
+	<div class="detail_goodslist">
+		<table cellpadding="0" cellspacing="0">
+			<thead>
+				<tr>
+					<th class="dt1" colspan="2"><@uiLabel text="index.PortalUserProductName" /></th>	
+					<th class="dt2"><@uiLabel text="index.PortalUserProductsPrice" /></th>	
+					<th class="dt3"><@uiLabel text="index.PortalUserProductsNumber" /></th>	
+					<th class="dt4"><@uiLabel text="index.PortalUserPaySubtotals" /></th>	
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="d1" colspan="5" style="padding:0px;border-bottom:0px none;">
+						<table>
+						<#list orderItemList as item>
+							<tr>
+								<td >
+									<a target="_blank" href="/goods-${item.goods_id}.html">
+										<img height="50" src="${item.image!''}"  style="cursor: pointer;" />
+									</a>	
+								</td>
+								<td style="text-align:left;">
+									<#assign goodsBaseDataTag = newTag("goodsBaseDataTag")>
+									<#assign product = goodsBaseDataTag("{'goodsid':"+item.goods_id+"}")>
+									<a target="_blank" href="/goods-${item.goods_id}.html">
+									<#-- ${item.name_ru} -->
+									<#if locale=="zh">
+                           				${product.name!''}
+                           			<#elseif locale=="ru">
+                           				${product.name_ru!""}
+                           			</#if>
+                           			<#if item.addon?exists>
+                                		<#assign data=item.addon?eval />
+                                		<#if data??>
+                                		(<span>
+                                		<#list data as spec>
+                                		<#if locale=="zh">
+                                			${spec.name}:
+                            			<#elseif locale=="ru">
+                                			${spec.name_ru}:
+                            			</#if>
+                            			<em style="color:#ED7108">
+                            			<#if locale=="zh">
+                                			${spec.value}
+                            			<#elseif locale=="ru">
+                                			${spec.value_ru!''}
+                            			</#if>
+                            			</em>,
+                                		</#list>
+                                		)
+                                		</#if>
+                                	</#if>
+									<#-- <#if item.other?? >(${item.other!''})</#if> -->
+									</a>	
+								</td>
+								<td style="width:100px;">
+								<!-- 	${item.price?string.currency} -->
+									<#if item.currency=="CNY">
+										￥${item.price!0.00}
+									<#elseif item.currency=="RUB">
+										${item.price!0.00}р.
+									</#if>
+								</td>
+								<td style="width:100px;">
+									${item.num}
+								</td>
+								<td style="width:100px;">
+								<#-- 	${(item.num * item.price)?string.currency} -->
+									<#if item.currency=="CNY">
+										￥${(item.num * item.price)!0.00}
+									<#elseif item.currency=="RUB">
+										${(item.num * item.price)!0.00}р.
+									</#if>
+								</td>
+							</tr>
+						</#list>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+		</div>
+	</div>
+</div>		
+
+
+<#include '/common/footer.html'/>

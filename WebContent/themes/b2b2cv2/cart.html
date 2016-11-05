@@ -1,0 +1,56 @@
+<#if locale=="zh">
+	<#assign  title="购物车" />
+<#elseif locale=="ru">
+	<#assign  title="Корзина" />
+</#if>
+<#include 'common/header.html' />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/cart.css" />
+<#if locale=="zh">
+   <script  src="${ctx}/themes/b2b2cv2/js/Cart.js" ></script>
+<#elseif locale=="ru">
+   <script  src="${ctx}/themes/b2b2cv2/js/Cart_ru.js" ></script>
+</#if>
+<div class="flow_path">
+	<!--<div class="cart_logo">
+		<a href="${ctx}/index.html"><@image src="${staticserver}/images/logo.gif" class="pngFix" style="width:150px;height:40px;" /></a>
+	</div>-->
+	<div class="site_logo" id="index_logo">
+			<!--<a href="${ctx}/"><@image src="${logo}" class="pngFix" style="width:150px;height:40px;" /></a> -->
+			<a href="${ctx}/"><image src="${ctx}/statics/images/logo-1x.png" class="pngFix" style="width:150px;height:40px;" /></a>
+		</div>
+	<div class="flow_pathlist">
+		<ul>
+			<li class="selected">
+				<i class="process1"></i>
+				<span></span>
+				<p><@uiLabel text="goods.MyShoppingCart" /></p>
+				<strong></strong>
+			</li>
+			<li class="">
+				<i class="process2"></i>
+				<span></span>
+				<p style="color:red;"><@uiLabel text="goods.FillCheck" /></p>
+				<strong></strong>
+			</li>
+			<li class="">
+				<i class="process3"></i>
+				<span></span>
+				<p style="color:red;"><@uiLabel text="goods.OrdersSubmittedSuccessfully" /></p>
+				<strong></strong>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="cart_wrapper">
+	<div class="cart_pointout">
+		<h1><@uiLabel text="goods.MyShoppingCart" /></h1>
+		<h2><@uiLabel text="goods.ShoppingCartStatus" /></h2>
+	</div>
+	<div class="goods_list">
+		<#include 'cart/cart_item.html' />
+	</div>
+</div>
+
+<div class="clear"></div>
+
+<#include 'common/footer.html'/>

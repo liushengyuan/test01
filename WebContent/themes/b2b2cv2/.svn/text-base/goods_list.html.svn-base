@@ -1,0 +1,808 @@
+<#include 'common/header.html' />
+<#include 'common/reception_header.html'/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/layout.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/goods_list.css" />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/index_search.css"/>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.raty.min.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/waypoints.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/search_category_menu.js"></script>
+<script src="${ctx}/themes/b2b2cv2/js/search_goods.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/class_area_array.js" ></script>
+<script src="${ctx}/themes/b2b2cv2/js/jquery.datalazyload.js" ></script>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/homesearch.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/home_news.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/home_country.css"/>
+<style>
+ .advisory {
+    color: #fff;
+    margin-right: 10px;
+}
+ .advisory a {
+    background-color: #9D9D9D;
+    border: 1px solid #CCC;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    padding: 3px 10px;
+    text-align: center;
+    vertical-align: top;
+    font-weight: normal;
+    text-decoration:none;
+}
+.pro-seller a {
+    text-decoration:none;
+}
+
+.pro-title a:hover{color:#000;} 
+.pro-title a:visited{color:#000;}
+
+</style>
+<#-- 创建搜索标签 -->
+<#assign searchSelectorCatTag= newTag("searchSelectorCatTag") >
+<#-- url-->
+<#assign getParameterTag = newTag("getParameterTag")>
+<#assign getPara= getParameterTag()>
+
+<#assign searchSelectorCat = searchSelectorCatTag() >
+<#-- 创建选择器标签 -->
+<#assign searchSelectorTag= newTag("searchSelectorTag") >
+
+<#-- 获取选择器 -->
+<#assign goodsSelector = searchSelectorTag() >
+
+<#-- 创建商品搜索标签 -->
+<#assign goodsSearchTag= newTag("goodsSearchTag") >
+<#-- 获取搜索结果 -->
+<#assign webpage = goodsSearchTag('{"pageSize":16}') >
+
+<#-- 各种选中的选择器 -->
+<#assign selected_prop= goodsSelector.selected_prop >
+<#assign selected_cat= goodsSelector.selected_cat >
+<#assign selected_brand= goodsSelector.selected_brand >
+<#assign selected_price= goodsSelector.selected_price![] >
+<#assign selected_keyword= goodsSelector.selected_keyword!'' >
+<#assign selected_brandlist= goodsSelector.selected_brandlist!'' >
+
+<#-- 各种未选中的选择器 -->
+<#assign propMap= goodsSelector.prop >
+<#assign catList= goodsSelector.cat >
+<#assign brantrist= goodsSelector.brand >
+<#assign sortList= goodsSelector.sort![] >
+<#assign priceList= goodsSelector.price![] >
+<#assign brandList= goodsSelector.brandlist![] >
+<#include 'common/toup.html' />
+<div style="height:40px; background:#fff; border-bottom:2px solid #aa1e2b;">
+	<div class="grid" style="height:40px;line-height:40px">
+	<#if locale=="zh">
+		<span class="ao_leim" id="show"><@uiLabel text="index.AllItem" />
+			<div class="categories-main" id="categories-main" style="display: block;position: absolute;z-index:9999; border:none; width:225px;display: none;">
+                    <#list goodsCat.cat_tree as cat>
+                        <div class="categories-list-box fenlei_div">
+                            <dl data-role="first-menu" class="cl-item cl-item-electronics">
+                                <#if cat_index==0>
+                                <dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_a.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>素颜霜&nbsp;/&nbsp;</i>
+											<i>阿玛尼唇釉&nbsp;/&nbsp;</i>
+											<i>VANT</i>
+										</p>
+                                	</a>
+                                </dt>
+                                <#elseif cat_index==1>
+                                	<dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_b.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>进口零食&nbsp;/&nbsp;</i>
+											<i>代餐奶昔</i>
+										</p>
+                                	</a>
+                                	</dt>
+                                	<#elseif cat_index==2>
+                                	<dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_c.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>奶粉&nbsp;/&nbsp;</i>
+											<i>纸尿裤&nbsp;/&nbsp;</i>
+											<i>铁锌钙</i>
+										</p>
+                                	</a>
+                                	</dt>
+                                	<#elseif cat_index==3>
+                                	<dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_d.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>运动鞋&nbsp;/&nbsp;</i>
+											<i>箱包&nbsp;/&nbsp;</i>
+											<i>女装</i>
+										</p>
+                                	</a>
+                                	</dt>
+                                	<#elseif cat_index==4>
+                                	<dt class="cate-name">
+                                	<a href="#" class="fenlei_a country_a" style="left:0;">
+                                		<h2 class="feilei_tit">
+											<em class="icon-mei">
+											<img src="${ctx}/themes/b2b2cv2/images/news_ico_e.png">
+											</em>
+											${cat.name}
+										</h2>
+										<p>
+											<i>净水饮水/ </i>
+											<i>烹饪锅具</i>
+										</p>
+                                	</a>
+                                	</dt>
+                                </#if>
+                                <dd data-role="first-menu-main" class="sub-cate sub_catea">
+
+                                    <div class="sub-cate-main">
+                                        <#if cat.hasChildren>
+                                            <#assign children2=cat.children />
+                                            <#list children2 as cat2>
+                                                <dl data-role="two-menu" class="sub-cate-items">
+                                                    <dt>
+                                                        <a href="${ctx}/goods_list.html?cat=${cat.cat_id}_${cat2.cat_id}">
+                                                       <!--  ${cat.name } -->
+                                                        <#if locale=="zh">
+                                                        
+                                                        	<font style="color:#${cat2.font_color!''}"> 
+                                 	  						${cat2.name}
+                                 	  						</font> 
+                                 						<#elseif locale=="ru">
+                                 	  						${cat2.name_ru!''}
+                                 						</#if>
+                                                        </a>
+                                                    </dt>
+                                                    <br/>
+                                                    <#if cat2.hasChildren >
+                                                        <#assign children3=cat2.children />
+                                                      <dd style="position: relative;/* left:-120px; */">
+	                                                        <#list children3 as cat3>
+	                                                                <a href="${ctx}/goods_list.html?cat=${cat.cat_id}_${cat2.cat_id}_${cat3.cat_id}">
+	                                                                <!-- ${cat3.name} -->
+	                                                               	<#if locale=="zh">
+	                                                               	<font style="color:#${cat3.font_color!''}"> 
+	                                 	  								${cat3.name}
+	                                 	  								</font>
+	                                 							  	<#elseif locale=="ru">
+	                                 	  						 		${cat3.name_ru!''}
+	                                 								</#if>
+	                                                                </a>
+	                                                        </#list>
+                                                        </dd>
+                                                    </#if>
+                                                </dl>
+                                            </#list>
+                                        </#if>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </#list>
+                    </div>
+		</span>
+		<span style=" font-size:14px;padding-left:10px">
+			<a href="${ctx}/index.html" style="color:#aa1e2b;text-decoration:none; font-weight:bold;" >&nbsp;&nbsp;首页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/longjiang_list.html?is_belong=1" style="text-decoration:none;" >龙江物产&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/russa_list.html?is_belong=0" style="text-decoration:none;" >俄罗斯馆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/australia_list.html?is_belong=2" style="text-decoration:none;">澳大利亚馆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/newzealand_list.html?is_belong=3" style="text-decoration:none;" >新西兰馆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/korea_list.html?is_belong=4" style="text-decoration:none;" >韩国馆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="${ctx}/germany_list.html?is_belong=5" style="text-decoration:none;" >德国馆&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+			<a href="http://www.trade-ease.ru/" target="_blank" title="前往俄罗斯网站" style="float: right;" ><img style="width: 38px;height: 25px;margin-top: 7px;border:1px solid  #EEEEE0;" src="${ctx}/themes/b2b2cv2/images/els.jpg"></a>
+			<a href="http://www.tradeease.net/" target="_blank" title="前往中国网站"  style="float: right;margin-right:20px;"><img style="width: 38px;height: 25px;margin-top: 7px;border:1px solid  #EEEEE0;" src="${ctx}/themes/b2b2cv2/images/china.jpg"></a>
+		</span>
+		<#elseif locale=="ru">
+			<span style="width:220px;height:40px;padding:13px 65px 12px 65px;background:#ad2633;font-weight:bold;font-size: 150%;color:#fff"><@uiLabel text="index.AllItem" /></span>
+			
+			<span style=" font-size:14px;font-family:Lucida Sans Unicode;padding-left:15px">
+			<a href="${ctx}/qingyun/qingyun_store.html" ><@uiLabel text="index.Albatron" /></a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="${ctx}/yabaolu/yabaolu_store.html" ><@uiLabel text="apply.YaBaoLuShop" /></a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="${ctx}/helpc-33-50.html" ><@uiLabel text="index.DeliverGoods" />&nbsp&nbsp&nbsp</a>
+			<a href="${ctx}/helpc-33-49.html" >&nbsp&nbsp&nbsp<@uiLabel text="index.Pay" />&nbsp</a>
+			<a href="${ctx}/helpc-33-52.html" >&nbsp&nbsp&nbsp&nbsp&nbsp<@uiLabel text="index.Refund" />&nbsp</a>
+			</span>
+		</#if>
+		</div>
+	  
+<div class="clear" style="clear: both;"></div>
+<div class="goodslist_nav" style="clear: both;">
+	<div class="breadcrumb wrapper" style="clear: both;">
+    	<span>
+    		<a href="index.html"><@uiLabel text="index.PortalHome" /></a>
+    	</span>
+    	<span class="arrow">&gt;</span>
+
+		<div class="goods_selected_all">
+			<#if selected_cat?size gt 0>
+			<div class="have_chosen have_chosen_cat">
+				<ul class="have_chosen_goods top_have_chosen_goods">
+					<#list selected_cat as selector >
+						<li class="have_chosen_goods_list <#if selector_index == 0>cur</#if><#if !selector_has_next> last</#if>" rel="<#if !selector_has_next> last</#if>">
+							<#if locale=="zh">
+                       <span class=""><a href="${selector.url!''}" >${selector.name!''}</a></span>
+					<#elseif locale=="ru">
+                       <span class=""><a href="${selector.url!''}" >${selector.name_ru!''}</a></span>
+					</#if>
+							
+							<i class="chosen_cat_middle"></i>
+							<b></b>
+							<div class="ul_border" style="display:none;"></div>
+							<ul style="display:none;" class="goods_list_other">
+								<#list  selector.otherOptions as  other >
+									<li>
+									<#if locale=="zh">
+										<a href="${other.url!''}" >${other.name!''}</a>
+										<#elseif locale=="ru">
+										<a href="${other.url!''}" >${other.name_ru!''}</a>
+										</#if>
+									</li>
+								</#list>
+							</ul>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+			
+			<#if selected_prop?size gt 0>
+			<div class="have_chosen">
+				<ul class="have_chosen_goods other_same">
+					<#list selected_prop as selector >
+						<#if selector_index lt 1>
+						<li class="have_chosen_goods_list">
+							<span class="goodssearch_cat"><a href="${selector.url!''}" class="dddd">${selector.name}：${selector.value}<strong></strong></a></span>
+						</li>
+						</#if>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+			<#if selected_brand?size gt 0>
+			<div class="have_chosen">
+				<ul class="have_chosen_goods other_same">
+					<#list selected_brand as selector >
+						<li class="have_chosen_goods_list">
+							<span class="goodssearch_cat"><a href="${selector.url!''}" >${selector.name}<strong></strong></a><#if selected_cat?size gt 0></#if></span>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+			<#if selected_price?size gt 0>
+			<div class="have_chosen">
+				<ul class="have_chosen_goods other_same" >
+					<#list selected_price as selector >
+						<li class="have_chosen_goods_list">
+							<span class="goodssearch_cat"><a href="${selector.url!''}" >${selector.name}<strong></strong></a></span>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+			<#if selected_brandlist?size gt 0>
+			<div class="have_chosen">
+				<ul class="have_chosen_goods other_same" >
+					<#list selected_brandlist as selector >
+						<li class="have_chosen_goods_list">
+							<span class="goodssearch_cat"><a href="${selector.url!''}" >
+							<#if selector.name?number==1>
+							       龙江物产
+							<#elseif selector.name?number==0>
+							   俄罗斯馆
+							<#elseif selector.name?number==2>
+							 澳大利亚馆
+						    <#elseif selector.name?number==3>
+						           新西兰馆
+						    <#elseif selector.name?number==4>
+						           韩国馆
+						    <#elseif selector.name?number==5>
+						           德国馆
+						    </#if>
+							<strong></strong></a></span>
+						</li>
+					</#list>
+				</ul>
+			</div>
+			</#if>
+			<#if selected_keyword?has_content>
+				<div class="have_chosen">
+                    <ul class="have_chosen_goods other_same">
+                        <li class="have_chosen_goods_list">
+							<span><a href="javascript:void(0);">${selected_keyword!''}</a></span>
+                            <#--<span class="goodssearch_cat"><a href="${selector.url!''}" >${selector.name}<strong></strong></a><#if selected_cat?size gt 0></#if></span>-->
+                        </li>
+                    </ul>
+				</div>
+			</#if>
+		</div>
+	</div>
+</div>
+<div style="width:1200px;height:1px;margin:0px auto;clear:both;"></div>
+<div class="goods_clear"></div>
+<!-- 新版检索html -->
+<div class="goodssearch_new">
+<!--  已选择 &ndash;&gt; -->
+<#if brantrist?exists && brantrist?size gt 0>
+	<table class="wait_select">
+		<tr>
+			<th>按品牌：</th>
+			<td>
+				<ul class="brand_goods_search">
+					<#list brantrist as selector >
+					   <#if getPara.brand??>
+					     <#if getPara.brand==selector.name>
+						    <li class="cat_brand_img"><a href="${selector.url!''}"  ><span style="display: none;" >${selector.name}</span><@image src="${selector.value!''}" style="border: 1px solid red;" /></a></li>
+						 <#else>
+				           <li class="cat_brand_img"><a href="${selector.url!''}" ><span style="display: none;" >${selector.name}</span><@image src="${selector.value!''}" /></a></li>
+						 </#if>
+					    <#else>
+					      <li class="cat_brand_img"><a href="${selector.url!''}" ><span style="display: none;" >${selector.name}</span><@image src="${selector.value!''}" /></a></li>
+					    </#if>	    
+					</#list>
+				</ul>
+				<span class="brand_goods_search_more">更多</span>
+			</td>
+		</tr>
+	</table>
+</#if>	
+<script>
+		$("#show").hover(function(){
+			$("#categories-main").css("display", "block");
+		},
+		function(){
+			$("#categories-main").css("display", "none");
+		})
+		$("#categories-main").mouseover(function(){
+			$("#categories-main").show();
+		})
+		$("#categories-main").mouseleave(function(){
+			$("#categories-main").hide();
+		})
+	$(function(){
+		$(".brand_goods_search_more").click(function(){
+			var listhidden = $(this).attr("class");
+			if(listhidden=="brand_goods_search_more"){
+				$(this).prev().css("height","auto");
+				$(this).removeClass("brand_goods_search_more");
+				$(this).addClass("brand_goods_search_more1");
+				$(this).text("收起");
+			}else{
+				$(this).prev().css("height","52px");
+				$(this).removeClass("brand_goods_search_more1");
+				$(this).addClass("brand_goods_search_more");
+				$(this).text("更多");
+			}
+
+		})	
+	})
+</script>
+<#if catList?exists && catList?size gt 0>
+	<table class="wait_select">
+		<tr>
+			<th>按分类：</th>
+			<td>
+				<ul>
+					<#list catList as selector >
+						<li><a href="${selector.url!''}" >${selector.name}</a></li>
+					</#list>
+				</ul>
+			</td>
+		</tr>
+	</table>
+</#if>	
+<#if priceList?exists && priceList?size gt 0>
+	<table class="wait_select">
+		<tr>
+			<th>按价格：</th>
+			<td>
+				<ul>
+					<#list priceList as selector >
+						<#if getPara.price??>
+					     <#if getPara.price==selector.name>
+						    <li><a href="${selector.url!''}" style="color: red">${selector.name}</a></li>
+						 <#else>
+						    <li><a href="${selector.url!''}" >${selector.name}</a></li>
+						 </#if>
+					   <#else>
+						 <li><a href="${selector.url!''}" >${selector.name}</a></li>
+						</#if> 
+					</#list>
+				</ul>
+			</td>
+		</tr>
+	</table>
+</#if>	
+<#if brandList?exists && brandList?size gt 0>
+	<table class="wait_select">
+		<tr>
+			<th>按馆：</th>
+			<td>
+				<ul>
+					<#list brandList as selector >
+					   <#if getPara.brandlist??>
+					     <#if getPara.brandlist==selector.name>
+						    <li><a href="${selector.url!''}" style="color: red">${selector.name}</a></li>
+						 <#else>
+						    <li><a href="${selector.url!''}" >${selector.name}</a></li>
+						 </#if>
+					   <#else>
+						 <li><a href="${selector.url!''}" >${selector.name}</a></li>
+						</#if> 
+					</#list>
+				</ul>
+			</td>
+		</tr>
+	</table>
+</#if>	
+</div>
+<script>
+		$(function(){
+			//搜索结果
+			$(".top_have_chosen_goods .have_chosen_goods_list").mouseover(function(){
+				var ulwidth = $(this).width()
+				var ulwidth_white = parseInt(ulwidth)+parseInt("30");
+				var ulborder_width = parseInt(ulwidth)+parseInt("141")   //减去ul的2像素边框
+				$(".top_have_chosen_goods .have_chosen_goods_list").find(".goods_list_other").hide();
+				$(".top_have_chosen_goods .have_chosen_goods_list").find(".ul_border").hide();
+				$(this).find(".goods_list_other").show();
+				$(this).find(".ul_border").show();
+				$(this).find(".goods_list_other").css("width",ulborder_width);
+				$(this).find(".ul_border").css("width",ulwidth_white);
+				$(this).css({"border":"1px solid #e4393e","border-bottom":"0px none"});
+			})
+			
+			$(".top_have_chosen_goods .have_chosen_goods_list").mouseleave(function(){
+				$(this).find(".goods_list_other").hide();
+				$(this).find(".ul_border").hide();
+				$(this).css("border","1px solid #ccc");
+			})
+
+			
+			//等待搜索品牌悬停
+			$(".cat_brand_img").mouseover(function(){
+				$(this).find("img").hide();
+				$(this).find("span").show();
+				$(this).css({"border":"2px solid #e4393e","padding":"1px"});
+			})
+			$(".cat_brand_img").mouseleave(function(){
+				$(this).find("img").show();
+				$(this).find("span").hide();
+				$(this).css({"border":"1px solid #ccc","padding":"2px"});
+			})
+		})
+	</script>
+
+
+<div class="container wrapper" >
+	<div class="left">
+		<div>
+        <h1><@uiLabel text="goods.FeaturedProducts" /></h1>
+			       <!--  <#assign goodsListTag = newTag("goodsListTag")>
+        <#if locale="zh">
+				    <#assign goodsList=goodsListTag("'tagid':'1','goodsnum':'5'")>
+        <#elseif locale="ru">
+			        <#assign goodsList=goodsListTag("'tagid':'7','goodsnum':'5'")>
+        </#if> -->
+	
+        <ul class="goods_list_comment">
+      <#if searchSelectorCat? size gt 0>
+		<#list searchSelectorCat.commond as goods>
+			<#if goods_index lte 3>
+                <li>
+                	<#assign goodsName = "" />
+                	<#if locale=="zh">
+                		<#assign goodsName = goods.name!"" />
+                	<#elseif locale=="ru">
+                		<#assign goodsName = goods.name_ru!"" />
+                	</#if>
+                    <div class="goodslist_pic">
+                        <a target="_blank" title="${goodsName}"  href="${ctx}/goods-${goods.goods_id}.html">
+							<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goodsName}" />
+                        </a>
+                    </div>
+                    <h2><a target="_blank" title="${goodsName}" href="${ctx}/goods-${goods.goods_id}.html"><@substring	title="${goodsName}" length="28" dot="..." /></a></h2>
+                    <h3>
+                   <!--  ${goods.price?string.currency} -->
+                    	<#if locale=="zh">
+                           	￥${goods.price!''}
+                        <#elseif locale=="ru">
+                            ${goods.price_ru!''}р.
+                        </#if>
+                    </h3>
+                </li>
+			</#if>
+		</#list>
+		<#else>
+		   <#assign goodsListTag = newTag("goodsListTag")>
+        <#if locale="zh">
+				    <#assign goodsList=goodsListTag("'tagid':'1','goodsnum':'5'")>
+        <#elseif locale="ru">
+			        <#assign goodsList=goodsListTag("'tagid':'7','goodsnum':'5'")>
+        </#if>
+          <#list goodsList as goods>
+			<#if goods_index lte 3>
+                <li>
+                	<#assign goodsName = "" />
+                	<#if locale=="zh">
+                		<#assign goodsName = goods.name!"" />
+                	<#elseif locale=="ru">
+                		<#assign goodsName = goods.name_ru!"" />
+                	</#if>
+                    <div class="goodslist_pic">
+                        <a target="_blank" title="${goodsName}"  href="${ctx}/goods-${goods.goods_id}.html">
+							<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goodsName}" />
+                        </a>
+                    </div>
+                    <h2><a target="_blank" title="${goodsName}" href="${ctx}/goods-${goods.goods_id}.html"><@substring	title="${goodsName}" length="28" dot="..." /></a></h2>
+                    <h3>
+                   <!--  ${goods.price?string.currency} -->
+                    	<#if locale=="zh">
+                           	￥${goods.price!''}
+                        <#elseif locale=="ru">
+                            ${goods.price_ru!''}р.
+                        </#if>
+                    </h3>
+                </li>
+			</#if>
+		</#list>
+		</#if>
+        </ul>
+		</div>
+		<div style="margin-top: 10px;border-top: 1px solid #ccc;">
+        <h1><@uiLabel text="goods.GuessYouLike" /></h1>
+        <!-- 	<#assign goodsListTag = newTag("goodsListTag")>
+        <#if locale=="zh">
+	        <#assign goodsList=goodsListTag("'tagid':'2','goodsnum':'5'")>
+        <#elseif locale="ru">
+	        <#assign goodsList=goodsListTag("'tagid':'8','goodsnum':'5'")>
+        </#if> -->
+
+        <ul class="goods_list_comment">
+       <#if searchSelectorCat? size gt 0>
+		<#list searchSelectorCat.view as goods>
+			<#if goods_index lte 3>
+                <li>
+                	<#assign goodsName2 = "" />
+                	<#if locale=="zh">
+                		<#assign goodsName2 = goods.name!"" />
+                	<#elseif locale=="ru">
+                		<#assign goodsName2 = goods.name_ru!"" />
+                	</#if>
+                    <div class="goodslist_pic">
+                        <a target="_blank" title="${goodsName2}" href="${ctx}/goods-${goods.goods_id}.html">
+							<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goodsName2}" />
+                        </a>
+                    </div>
+                    <h2><a target="_blank" title="${goodsName2}" href="${ctx}/goods-${goods.goods_id}.html"><@substring	title="${goodsName2}" length="28" dot="..." /></a></h2>
+                    <h3>
+                    	<!-- ${goods.price?string.currency} -->
+                    	<#if locale=="zh">
+                           	￥${goods.price!''}
+                        <#elseif locale=="ru">
+                            ${goods.price_ru!''}р.
+                        </#if>
+                    </h3>
+                </li>
+			</#if>
+		</#list>
+	<#else>
+	    <#assign goodsListTag = newTag("goodsListTag")>
+        <#if locale=="zh">
+	        <#assign goodsList=goodsListTag("'tagid':'2','goodsnum':'5'")>
+        <#elseif locale="ru">
+	        <#assign goodsList=goodsListTag("'tagid':'8','goodsnum':'5'")>
+        </#if>
+	   <#list goodsList as goods>
+			<#if goods_index lte 3>
+                <li>
+                	<#assign goodsName2 = "" />
+                	<#if locale=="zh">
+                		<#assign goodsName2 = goods.name!"" />
+                	<#elseif locale=="ru">
+                		<#assign goodsName2 = goods.name_ru!"" />
+                	</#if>
+                    <div class="goodslist_pic">
+                        <a target="_blank" title="${goodsName2}" href="${ctx}/goods-${goods.goods_id}.html">
+							<@image class="scrollLoading" src="${goods.thumbnail!''}" alt="${goodsName2}" />
+                        </a>
+                    </div>
+                    <h2><a target="_blank" title="${goodsName2}" href="${ctx}/goods-${goods.goods_id}.html"><@substring	title="${goodsName2}" length="28" dot="..." /></a></h2>
+                    <h3>
+                    	<!-- ${goods.price?string.currency} -->
+                    	<#if locale=="zh">
+                           	￥${goods.price!''}
+                        <#elseif locale=="ru">
+                            ${goods.price_ru!''}р.
+                        </#if>
+                    </h3>
+                </li>
+			</#if>
+		</#list>
+	</#if>
+        </ul>
+        </div>
+	</div>
+	
+  	<div class="right" id="result">
+  		<div class="shop_list" >
+      		<nav class="goods_bar">
+        		<div class="sorting_goods"> <span><@uiLabel text="goods.SortBy" />：</span>
+        		<ul>
+        			<#list sortList as selector >
+						<li><a href="${selector.url!''}" <#if selector.isSelected>class="selected ${selector.value}"</#if> ><#if locale=="zh">
+   ${selector.name!''}
+<#elseif locale=="ru">
+   ${selector.name_ru!''}
+</#if></a></li>
+					</#list>
+		     	</ul>
+        		</div>
+      		</nav>
+      		<!-- 商品列表循环  -->
+			<div  class="mod bestselling-area" id="weekly-bestsellings">
+					<div class="mod-box" style="background:none;">
+						<div class="ui-slidebox util-clearfix" data-widget-cid="widget-39">
+							<div class="ui-slidebox-wrap">
+								<div class="ui-slidebox-container">
+									<div class="ui-slidebox-slider" data-role="slider" style="margin-left: 0px; width:auto;">
+										<ul id="sellingGoodsRoll">
+											<#if webpage.result?size gt 0 >
+											<#list webpage.result as goods>
+												<li class="selling_ul_li">
+													<div class="wb-item">						
+														<div class="wb-info">
+															<a  href="${ctx}/goods-${goods.goods_id}.html" title="<#if locale=="zh">${goods.name}<#elseif locale=="ru">${goods.name_ru!""}</#if>">
+																<div class="nnnn-img" style=" display:block;position:relative;">
+																	<#if locale=="zh">
+																		<@image class="scrollLoading" src="${goods.thumbnail!''}" title="${goods.name!''}"  style="display:block;position:absolute;margin-top:25px;"/>
+																	<#elseif locale=="ru">
+																		<@image class="scrollLoading" src="${goods.thumbnail!''}" title="${goods.name_ru!''}"  style="display:block;position:absolute;margin-top:25px;"/>
+																	</#if>
+																</div>
+															</a>
+															<a  href="${ctx}/goods-${goods.goods_id}.html" title="<#if locale=="zh">${goods.name}<#elseif locale=="ru">${goods.name_ru!""}</#if>">
+																<div class="wb-title" style="margin-left:0;">
+																	<#if locale=="zh">
+																       <@substring	title="${goods.name!''}" length="22" dot="..." />	
+																	<#elseif locale=="ru">
+																		${goods.name_ru!""}
+																	</#if>
+																</div>
+															</a>
+															<a  href="${ctx}/home.html?show_c=1&store_id=${goods.store_id}" title="${goods.store_name!''}"><font style="color: #F60;"> <@substring title="${goods.store_name!''}" length="26" dot="..." /></font></a>
+															<div class="cost" style="margin-left:0;">
+																<b class="notranslate">
+																	<ul class="pricewrap">
+																		<li class="price" style="height:auto; font-size:16px;">
+																		<span style="font-size:16px;">
+																		<#if locale=="zh">
+																			￥${goods.price!''}
+																			</span> / 件</li>
+																		<#elseif locale=="ru">
+																			${goods.price_ru!''}р.
+																			</span> / Штука</li>
+																		</#if>
+																	</ul>
+																	<ul class="attribute">
+																	  <#assign goodsBaseDataTag= newTag("goodsBaseDataTag") >
+									                                  <#-- 调用标签获取商品基本信息 -->
+									                                 <#assign goods= goodsBaseDataTag("'goodsid':${goods.goods_id!0}") >
+									                                 <#-- 商品所产生的运费规则 -->
+									                                 <#assign goodsLogisModelTag= newTag("goodsLogisModelTag") >
+									                                 <#assign goodsLogisModel= goodsLogisModelTag("{'freightType':${goods.freightType!'1'},'goods_weight':${goods.weight!0},'goods_id':${goods.goods_id}}") >           
+																		<li class="freeico" style="height:auto;">
+																		<span class="free">
+																		<#list goodsLogisModel as logis>
+																		    运费:
+																			<#if logis.validatedays??>
+																				<span id="freightprice" style="">
+																					<#if logis_index == 0>
+																                    	<#if logis.freightprice==0>
+																                    		Free shipping
+																                    	<#else>
+																                    		 <#if locale=="zh">
+																                    	     &yen;${logis.freightprice!0.0}
+																                    	   <#elseif locale=="ru">
+																                    	    	${logis.freightprice!0.0}p.
+																                    	   </#if>
+																                    	</#if>
+																					</#if>
+																				</span> 
+																			<input type="hidden" id="myModelId" value="${logis.freight_id}">
+																			<#else>
+																			<span id="freightprice" style="">
+																			<input type="hidden" id="myModelId" value="${logis.freight_id}">
+																				<#if logis_index == 0>
+																						<#if logis.freightprice==0>
+																							<#if locale=="zh">
+																								Free shipping
+																							<#elseif locale=="ru">
+																								Бесплатная доставка
+																							</#if>
+																						<#elseif logis.freight_id==-1>
+								                                                          <#if locale=="zh">
+								                    	                                 &yen;${logis.freightprice!0.0}
+								                    	                                 <#elseif locale=="ru">
+								                    	                                  ${logis.freightprice!0.0}p.
+								                    	                                   </#if>		
+																						<#else>
+																							<#if locale=="zh">
+																								&yen;${logis.freightprice!0.0}
+																							<#elseif locale=="ru">
+																								${logis.freightprice!0.0}p.
+																							</#if>
+																						</#if>
+																				   </#if>
+																				</span>
+																			</#if>
+																		</#list>
+																		</span> 
+																		</li>
+																	</ul>
+																</b>
+															</div>
+														</div>
+													
+													</div>
+												</li>
+											</#list>
+										</#if>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<div>
+		<@pager pageno="${webpage.currentPageNo!'1'}" pagesize="${webpage.pageSize}" totalcount="${webpage.totalCount}" />
+	</div>
+	</div>
+</div>
+<script>
+    $(function () {
+        $(".categories-list-box dl").hoverDelay();
+    });
+</script>
+<script type="text/javascript">
+(function (category) {
+    category.fn.hoverDelay = function () {
+        return this.each(function () {
+            $(this).mouseenter(function () {
+                $(this).addClass("cl-item-unfold").siblings().removeClass("cl-item-unfold");
+            }).mouseleave(function () {
+                $(this).removeClass("cl-item-unfold");
+            })
+        })
+    }
+})(jQuery);
+</script>
+<#include 'common/footer.html'/>

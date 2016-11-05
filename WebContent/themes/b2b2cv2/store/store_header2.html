@@ -1,0 +1,512 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<#assign headerTag = newTag("headerTag") /> <#assign header
+	=headerTag() /> <#if title??>
+	<title>${title}-${header.title}</title> <#else>
+	<title>${header.title}</title> </#if> <#if keywords??>
+	<meta name="keywords" content="${keywords!''}">
+		<#else>
+		<meta name="keywords" content="${header.keywords!''}">
+			</#if> <#if description??>
+			<meta name="description" content="${description!''}">
+				<#else>
+				<meta name="description" content="${header.description!''}">
+					</#if>
+					<meta http-equiv="X-UA-Compatible" content="IE=8"></meta>
+
+					<script>
+						var member = "${member!''}";
+						var loginDialog;
+						var ctx = "${ctx}";
+						var app_path = "${ctx}";
+					</script>
+
+					<#if site.icofile?exists>
+					<link href="${site.icofile}" rel="shortcut icon">
+						</#if> <#-- 引入国际化模板函数 --> <#assign uiLabel =
+						"com.enation.framework.directive.I18nDirectiveModel"?new()>
+						<link rel="stylesheet" type="text/css"
+							href="${ctx}/themes/b2b2cv2/css/base.css" />
+						<link rel="stylesheet" type="text/css"
+							href="${ctx}/themes/b2b2cv2/css/default.css" />
+						<link rel="stylesheet" type="text/css"
+							href="${ctx}/themes/b2b2cv2/css/store.css" />
+
+
+						<script src="${ctx}/themes/b2b2cv2/js/jquery.js"></script>
+						<script src="${ctx}/themes/b2b2cv2/js/lhgdialog.js"></script>
+						<script src="${ctx}/themes/b2b2cv2/js/common.js"></script>
+						<script src="${ctx}/themes/b2b2cv2/js/shop.js"></script>
+						<script src="${ctx}/themes/b2b2cv2/js/jquery.ui.js"></script>
+						<script src="${ctx}/themes/b2b2cv2/js/index.js"></script>
+						<#if locale=="zh">
+                        <script src="${ctx}/themes/b2b2cv2/js/jquery.validate.js"></script>
+						<#elseif locale=="ru">
+	                        <script src="${ctx}/themes/b2b2cv2/js/jquery.validate_ru.js"></script>
+						</#if>
+						<script src="${ctx}/themes/b2b2cv2/js/jquery.form-3.51.js"></script>
+						<#--<script src="${ctx}/themes/b2b2cv2/js/CartBar.js"></script>
+						--> <script src="${ctx}/themes/b2b2cv2/js/jquery.blockUI.js"></script>
+						<script src="${ctx}/themes/b2b2cv2/js/LoginDialog.js"></script>
+						<script src="${ctx}/themes/b2b2cv2/js/jquery.cookie.js"></script>
+						<script src="${ctx}/themes/b2b2cv2/js/perfect-scrollbar.min.js"></script>
+						<script src="${ctx}/themes/b2b2cv2/js/jquery.mousewheel.js"></script>
+						<script src="${ctx}/themes/b2b2cv2/js/waypoints.js"></script>
+						<script src="${ctx}/themes/b2b2cv2/js/jquery.poshytip.min.js"></script>
+						<script
+							src="${ctx}/themes/default/js/My97DatePicker/WdatePicker.js"></script>
+						<script type="text/javascript">
+							var ctx = "${ctx}";
+							$(function() {
+								$("#logout")
+										.click(
+												function() {
+													$
+															.ajax({
+																url : "${ctx}/api/shop/member!logout.do?ajax=yes",
+																dataType : "json",
+																cache : false, //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。
+																success : function(
+																		result) {
+																	if (result.result == 1) {
+																		//$.alert(result.message);
+																		location.href = "${ctx}/index.html";
+																	} else {
+																		$
+																				.alert(result.message);
+																	}
+																	$.Loading
+																			.hide();
+																},
+																error : function() {
+																	$.Loading
+																			.hide();
+																	$
+																			.alert("出错了:(");
+																}
+															});
+													return false;
+												});
+
+								$(".quick-menu dl").hover(function() {
+									$(this).addClass("hover");
+								}, function() {
+									$(this).removeClass("hover");
+								});
+							})
+						</script>
+</head>
+<body>
+	<#assign checkB2b2cMemberTag=newTag("checkB2b2cMemberTag")> 
+	<#assign storeMember=checkB2b2cMemberTag()> 
+	<#if storeMember.store_id??>
+		<!-- 获取店铺信息  -->
+		<#assign myStoreDetailTag=newTag("myStoreDetailTag")/> 
+		<#assign myStoreDetail=myStoreDetailTag()>
+		<!-- 获取当前登录会员信息 -->
+		<#assign memberInfoTag=newTag("memberInfoTag")/> 
+		<#assign curMemberDetail=memberInfoTag()>
+		<!-- 获取当前店铺的关键字和主营类别信息 -->
+		<#assign myStoreFeatureDetail=newTag("myStoreFeatureDetailTag")/>
+		<#assign curStoreFeature=myStoreFeatureDetail("{'store_id':"+myStoreDetail.store_id+"}")>
+	</#if>
+	<script type="text/javascript">
+		var ctx = "${ctx}";
+		$(function() {
+			$("#logout").click(function() {
+				$.ajax({
+					url : "${ctx}/api/shop/member!logout.do?ajax=yes",
+					dataType : "json",
+					cache : false, //清楚缓存，暂时测试，如果产生冲突，请优先考虑是否是这条语句。
+					success : function(result) {
+						if (result.result == 1) {
+							//$.alert(result.message);
+							location.href = "${ctx}/index.html";
+						} else {
+							$.alert(result.message);
+						}
+						$.Loading.hide();
+					},
+					error : function() {
+						$.Loading.hide();
+						$.alert("出错了:(");
+					}
+				});
+				return false;
+			});
+
+			$(".quick-menu dl").hover(function() {
+				$(this).addClass("hover");
+			}, function() {
+				$(this).removeClass("hover");
+			});
+		})
+function changeLocale(locale){
+    $.ajax({
+        url:"${ctx}/i18n/locale!setLocale.do?locale=" + locale ,
+        dataType:"json",
+        success:function(){
+            $.Loading.hide();
+            location.reload();
+        },
+        error:function(){
+            $.Loading.hide();
+        }
+    });
+}
+	</script>
+	<div id="toplink">
+		<div class="container" style="position: relative;">
+			<ul id="sys-links">
+				<li><a target="_blank" href="${ctx}/index.html"><i
+						class="i-home"></i><span><@uiLabel text="index.WebHomePage" /></span>
+				</a>
+				</li>
+				<li><a target="_blank" href="${ctx}/help-34-72.html"><i
+						class="i-help"></i><span><@uiLabel text="index.RuleCenter" /></span>
+				</a>
+				</li>
+				<#if storeMember.is_store?? && storeMember.is_store==1 && myStoreDetail.disabled == 1> 
+				<li><a href="${ctx}/store/order/StoreOrder.html?order_state=all"><i class="i-account"></i><span><@uiLabel text="index.MyOrder" /></span>
+				</a>
+				</li>
+				<li><a target="_blank"
+					href="${ctx}/home.html?show_c=1&store_id=${storeMember.store_id!0}">
+						<span><@uiLabel text="index.MyShop" /></span>
+				</a>
+				</li>
+				<li><a href="${ctx}/store/security.html"><i
+						class="i-pwd"></i><span><@uiLabel text="inedx.ModifyPassword" /></span>
+				</a>
+				</li>
+				
+				<#else>
+				<li><a href="${ctx}/store/business_center.html?menu=store_index"><i class="i-account"></i><span><@uiLabel text="index.MyOrder" /></span>
+				</a>
+				</li>
+				<li><a target="_blank"
+					href="${ctx}/store/business_center.html?menu=store_index">
+						<span><@uiLabel text="index.MyShop" /></span>
+				</a>
+				</li>
+				<li><a href="${ctx}/store/business_center.html?menu=store_index"><i
+						class="i-pwd"></i><span><@uiLabel text="inedx.ModifyPassword" /></span>
+				</a>
+				</li>
+				
+				</#if>
+			</ul>
+
+			<#if member?? >
+			<script type="text/javascript">
+				var isLogin = true;
+			</script>
+			<div id="sys-infor">
+				<span><@uiLabel text="index.PortalHello" /><strong>${member.name!} </strong>
+				</span> <a id="logout" href="javascript:void(0);">[<@uiLabel text="index.PortalDropout" />]</a>
+			</div>
+			<#else>
+			<script type="text/javascript">
+				var isLogin = false;
+			</script>
+			<div id="sys-infor">
+				<a href="${ctx}/login.html">[<@uiLabel text="index.PortalLogin" />]</a> <a href="${ctx}/register.html">[<@uiLabel text="index.PortalRegister" />]</a>
+			</div>
+			</#if>
+			<div id="site-logo">
+				<a title="" href="${ctx}/store/business_center.html?menu=store_index"></a>
+				<h1 ><@uiLabel text="inedx.BusinessCenter" /></h1>
+			</div>
+		</div>
+	</div>
+	<#if storeMember.is_store??> <#if storeMember.is_store==1 &&
+	myStoreDetail.disabled == 1>
+	<div class="store">
+		<div class="store_title">
+			<div class="store_phone">
+				<!-- 顶部菜单 -->
+				<div class="store_title_menu">
+					<dl>
+						<dt class="a_store_index">
+							<a href="${ctx}/store/business_center.html?menu=store_index"><@uiLabel text="index.PortalHome" /></a>
+						</dt>
+					</dl>
+<#--					<dl>
+						<dt class="">商品</dt>
+						<dd>
+							<ul>
+								<li><a target="_blank"
+									href="${ctx}/goods/select_cat.html?menu=store_goods">商品发布</a></li>
+								<li><a
+									href="${ctx}/goods/store_goods_list.html?market_enable=1&menu=store_goods">出售中的商品</a>
+								</li>
+								<li><a
+									href="${ctx}/goods/store_goods_list.html?menu=store_goods">仓库中的商品</a>
+								</li>
+								<li><a href="${ctx}/goods/goods_cat.html?menu=store_goods">分类管理</a>
+								</li>
+								<li><a href="${ctx}/goods/goodsTags.html?menu=store_goods">标签列表</a>
+								</li>
+							</ul>
+						</dd>
+					</dl>
+					<dl>
+						<dt>交易管理</dt>
+						<dd>
+							<ul>
+								<li><a
+									href="${ctx}/store/order/StoreOrder.html?order_state=all&menu=transaction">订单管理</a>
+								</li>
+								<li><a
+									href="${ctx}/store/order/StoreOrder.html?order_state=wait_ship&menu=transaction">待发货订单</a>
+								</li>
+								<li><a
+									href="${ctx}/store/sellback/sellback_list.html?status=0&menu=transaction">退货申请</a>
+								</li>
+								<!-- 		
+									<li>
+										<a href="${ctx}/transaction/ship_list.html">发货设置</a>
+									</li>
+							 		&ndash;&gt;
+								<li><a
+									href="${ctx}/store/ship/transaction/transport.html?menu=transaction">物流工具</a>
+								</li>
+								<li><a
+									href="${ctx}/store/comment/StoreEvaluateList.html?replyStatus=0&menu=transaction">评价管理</a>
+								</li>
+							</ul>
+						</dd>
+					</dl>
+					<dl>
+						<dt>促销管理</dt>
+						<dd>
+							<ul>
+								<li><a
+									href="${ctx}/store/bonus/bonus_list.html?menu=promotion">优惠券管理</a>
+								</li>
+								<li><a
+									href="${ctx}/store/groupbuy/groupbuy_list.html?menu=promotion">团购管理</a>
+								</li>
+							</ul>
+						</dd>
+					</dl>
+					<dl>
+						<dt>店铺设置</dt>
+						<dd>
+							<ul>
+								<li><a target="_blank"
+									href="${ctx}/home.html?show_c=1&store_id=${(storeMember.store_id)!0}&menu=store">我的店铺</a>
+								</li>
+								<li><a href="${ctx}/store/storeInfo.html?menu=store">店铺设置</a>
+								</li>
+								<li><a href="${ctx}/store/auth.html?menu=store">店铺认证设置</a>
+								</li>
+								<li><a href="${ctx}/store/store_slide.html?menu=store">店铺幻灯片设置</a>
+								</li>
+								<li><a
+									href="${ctx}/store/navigation/store_navigation.html?menu=store">导航管理</a>
+								</li>
+							</ul>
+						</dd>
+					</dl>
+					<dl>
+						<dt>客服管理</dt>
+						<dd>
+							<ul>
+								<li><a
+									href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">咨询管理</a>
+								</li>
+							</ul>
+						</dd>
+					</dl>-->
+<#--					<dl>
+						<dt>报表管理</dt>
+						<dd>
+							<ul>
+								<li><a href="${ctx}/store/cart_item.html">购物车商品</a>
+								</li>
+								<li><a
+									href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">购物车弃购商品</a>
+								</li>
+								<li><a
+									href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">商品销售额列表</a>
+								</li>
+								<li><a
+									href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">商品销售量列表</a>
+								</li>
+								<li><a
+									href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">我的买家列表</a>
+								</li>
+							</ul>
+						</dd>
+					</dl>-->
+					<dl>
+						<dt><@uiLabel text="seller.ProductManager" /></dt>
+						<dd>
+							<ul>
+								<li><a target="_blank"
+									href="${ctx}/goods/select_cat.html?menu=store_goods"><@uiLabel text="seller.AddProduct" /></a></li>
+								<li><a
+									href="${ctx}/goods/goods_list.html?menu=store_goods"><@uiLabel text="seller.ProductList" /></a>
+								</li>
+                                <li><a href="${ctx}/goods/goodsTags.html?menu=store_goods"><@uiLabel text="seller.TagList" /></a>
+                                </li>
+							</ul>
+						</dd>
+					</dl>
+                    <dl>
+                        <dt><@uiLabel text="seller.TradeManager" /></dt>
+                        <dd>
+                            <ul>
+                                <li><a
+                                        href="${ctx}/store/order/StoreOrder.html?order_state=all&menu=transaction"><@uiLabel text="seller.OrderList" /></a>
+                                </li>
+                                <li><a
+									href="${ctx}/store/sellback/sellback_list.html?status=0&menu=transaction"><@uiLabel text="seller.BackApplyList" /></a>
+								</li>
+                                <li><a
+                                        href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server"><@uiLabel text="seller.CustomerConsult" /></a>
+                                </li>
+                                <li><a
+                                        href="${ctx}/store/comment/StoreEvaluateList.html?replyStatus=0&menu=transaction"><@uiLabel text="seller.GoodsEvaluate" /></a>
+                                </li>
+                               <#-- <li><a
+                                        href="${ctx}/store/bill/store_bill.html?menu=transaction">结算管理</a>
+                                </li>-->
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><@uiLabel text="seller.ShopManager" /></dt>
+                        <dd>
+                            <ul>
+                                <li><a href="${ctx}/store/storeInfo.html?menu=store"><@uiLabel text="seller.ShopInfoManager" /></a>
+                                </li>
+
+                                <li><a href="${ctx}/store/seller_info.html"><@uiLabel text="seller.KeeperInfoManager" /></a>
+                                </li>
+                                <li><a href="${ctx}/store/store_slide.html?menu=store"><@uiLabel text="seller.ShopSlideSet" /></a>
+								</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><@uiLabel text="seller.InsideLetter" /></dt>
+                        <dd>
+                            <ul>
+                                <li><a href="${ctx}/store/seller_message_send.html"><@uiLabel text="seller.HasBeenLetter" /></a>
+                                </li>
+
+                                <li><a href="${ctx}/store/seller_message_accept.html"><@uiLabel text="seller.ReceivedLetter" /></a>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><@uiLabel text="seller.AccountManager" /></dt>
+                        <dd>
+                            <ul>
+                            	<li><a href="${ctx}/store/withdrawal_account.html"><@uiLabel text="seller.BankManager" /></a>
+           						 </li>
+                                <li>
+                               		 <a href="${ctx}/store/query_my_account.html"><@uiLabel text="seller.MyAccount" /></a>
+                                </li>
+								<li>
+									<a href="${ctx}/store/query_account_details.html"><@uiLabel text="seller.AccountDetail" /></a>
+                                </li>
+                                <li>
+									<a href="${ctx}/store/query_trade.html"><@uiLabel text="seller.LoanDetail" /></a>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                    <dl>
+                        <dt><@uiLabel text="seller.ExpressManager" /></dt>
+                       <!--  <dd>
+                            <ul>
+                                <li><a href="${ctx}/store/address.html"><@uiLabel text="seller.BackAddressManager" /></a>
+                                </li>
+                                <li><a href="${ctx}/store/address.html">发货地址管理</a>
+                                </li>
+
+                                <li><a
+                                        href="${ctx}/store/ship/transaction/transport.html?menu=transaction">物流管理</a>
+                                </li>
+                            </ul>
+                        </dd> -->
+                         <dl>
+                        <dt>物流管理</dt>
+                        <dd>
+                            <ul>
+                              <li><a href="${ctx}/store/address.html">地址管理</a></li>
+                                  <li><a href="${ctx}/store/express/express_list.html"><@uiLabel text="sellerCenter.ProviderManager" /></a></li>
+                               <li><a href="${ctx}/store/logispricemodel.html">运费模板管理</a></li>
+                               <li><a href="${ctx}/store/order/express_price.html">物流方案查询</a></li>
+                            </ul>
+                        </dd>
+                    </dl> 
+                    </dl>
+
+                    <dl>
+                        <dt><@uiLabel text="seller.AccountCenter" /></dt>
+                        <dd>
+                            <ul>
+                                <li><a href="${ctx}/store/security.html"><@uiLabel text="seller.ModifyPassword" /></a>
+                                </li>
+                          <!--       <li><a href="${ctx}/store/mail_edit.html">修改邮箱</a> -->
+                                </li>
+<!--                                 <li><a -->
+<!--                                         href="${ctx}/store/comment/StoreConsultList.html?replyStatus=0&menu=server">身份验证</a> -->
+<!--                                 </li> -->
+                            </ul>
+                        </dd>
+                    </dl>
+                    
+                     <dl>
+                        <dt><@uiLabel text="seller.CashAccountManager" /></dt>
+                        <dd>
+                            <ul>
+                                <li><a href="${ctx}/store/withdrawal.html"><@uiLabel text="seller.AcountQuery" /></a>
+                                </li>
+                                <#-- <li><a href="${ctx}/store/withdrawal_edit.html">账户提现填写管理</a>
+                                </li> -->
+                                 <li><a href="${ctx}/store/withdrawal_detail.html">账户提现明细</a>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+ <#--                    <dl>
+                        <dt>审核管理</dt>
+                        <dd>
+                            <ul>
+                                <li><a href="${ctx}/store/witddrawal_audit.html">帐户提现审核</a>
+                                </li>
+                                
+                                 <li><a href="${ctx}/store/AllWithdrawal.html">全部帐户提现明细</a>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl> -->
+				</div>
+			</div>
+		</div>
+	</div>
+	</#if> </#if>
+	<!-- 悬停显示下拉菜单 -->
+	<script>
+		$(function() {
+			$(".store_title_menu dl dt").mouseover(function() {
+				$(".store_title_menu dl dt").removeClass("hover")
+				$(".store_title_menu dl dd").hide();
+				$(this).addClass("hover")
+				$(this).next("dd").show();
+			})
+			//鼠标移出
+			$(".store_title_menu dl").mouseleave(function() {
+				$(".store_title_menu dl dt").removeClass("hover")
+				$(".store_title_menu dl dd").hide();
+			})
+		})
+	</script>

@@ -1,0 +1,24 @@
+<div class="main" style="background-color: white;">
+	<div class="easyui-panel" style="border-style: none;">
+		<form id="addConsumeForm" method="post" class="validate">
+			<table>
+				<tr>
+					<th>币种：</th>
+					<td>
+						<select name="consume.consume_currency" style="width: 100px;" >
+							<option value="CNY" >人民币</option>
+							<option value="RUB" >卢布</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>抵押比值：</th>
+					<td>
+						<input class="easyui-numberbox input_text" type="text"
+						id="name" name="consume.consume_amount" data-options="required:true,precision:2"></input>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

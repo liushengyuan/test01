@@ -1,0 +1,22 @@
+<#if member?? >
+					<script type="text/javascript">var isLogin= true;</script>
+					 <@uiLabel text="index.PortalHello" />
+					<span>
+						<a href="${ctx}/member/member.html">${member.name}</a>
+					</span>
+					，<@uiLabel text="index.PortalWelcome" />
+					<a alt="首页" title="首页" href="${ctx}/index.html"><@uiLabel text="index.PortalMultistore" /></a>
+					<span>
+						[<a id="logout" href="javascript:void(0);"><@uiLabel text="index.PortalDropout" /></a>]
+					</span>
+				<#else>
+					<script type="text/javascript">var isLogin= false;</script>
+					<@uiLabel text="index.PortalHello" />，<@uiLabel text="index.PortalWelcome" /> 
+					<a href="${ctx}/index.html" title="首页" alt="首页"><@uiLabel text="index.PortalMultistore" /></a>
+					<span>
+						[<a href="${ctx}/login.html"><@uiLabel text="index.PortalLogin" /></a>]
+					</span> 
+					<span>
+						[<a href="${ctx}/register.html"><@uiLabel text="index.PortalRegister" /></a>]
+					</span> 
+				</#if>

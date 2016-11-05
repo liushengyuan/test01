@@ -1,0 +1,530 @@
+<#include '/store/store_header.html' />
+<link rel="stylesheet" type="text/css" href="${ctx}/themes/b2b2cv2/css/uploadify.css" />
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.uploadify.min.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/ckeditor.js"></script>
+<script type="text/javascript" src="${ctx}/editor/ckeditor362/adapters/jquery.js"></script>
+<!-- 调用地区标签 -->
+<#assign regionSelect = "com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<#assign myStoreDetailTag=newTag("myStoreDetailTag")/> 
+<#assign store=myStoreDetailTag()>
+<!-- 获取当前店铺的关键字和主营类别信息 -->
+<#assign myStoreFeatureDetail=newTag("myStoreFeatureDetailTag")/>
+<#assign curStoreFeature=myStoreFeatureDetail("{'store_id':"+store.store_id+"}")>
+<div class="store_center">
+	<#include '/store/left_menu.html' />
+	<div id="sotre_right_content" class="sotre_right_content">
+		<div class="path">
+			<span style="color:#999;"><@uiLabel text="sellerAccount.Location"/>：</span>
+			<span>></span>
+			<a href="#"><@uiLabel text="seller.ShopManager"/></a><span>></span><@uiLabel text="seller.ShopInfoManager"/>
+			
+		</div>
+		<div class="store_right_main">
+			<div class="tabmenu">
+				<ul class="tab pngFix">
+					<li class="active">
+						<a href="javascript:;"><@uiLabel text="sellerStoreInfo.storeSetDatail"/></a><!-- 店铺设置 -->
+					</li>
+				</ul>
+			</div>
+			<!-- 店铺设置 -->
+			<div class="groupbuy_form">
+				<form id="storeInfo" class="validate">
+					<input type="hidden" name="store_id" value="${store.store_id!''}"/>
+			      	
+					<dl>
+						<dt class="required">
+							<em class="pngFix"></em><@uiLabel text="apply.ApplyShopName"/>：
+						</dt>
+						<dd>
+							<p>
+								<input type="text" name="store_name" class="text w400"
+									isrequired="true" dataType="string" autocomplete="off"
+									value="${store.store_name!''}" fun="checkStoreName" readonly="readonly" />
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShopNameMaxChar"/>
+							</p>
+							<!-- <p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShopNameDoNotChi"/>
+							</p> -->
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShopNameNotModify"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShopNameNotRepeat"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShopNameNotAgainstRaw"/>
+							</p>
+
+						</dd>
+					</dl>
+
+					<dl>
+						<dt class="required">
+							<em class="pngFix"></em><@uiLabel text="apply.Extension"/>：
+						</dt>
+						<dd>
+							<p>
+								<textarea id="store_banner" type="text" name="store_banner"
+									size="60" rows="5" isrequired="true"
+									maxlength="50" cols="62" onkeyup="showInputLength(1)">${store.store_banner!''}</textarea>
+								&nbsp;(<@uiLabel text="apply.InputWord"/><@uiLabel text="sellerAccount.Location"/>:<span id="briefSpan">0</span>)<!-- apply.InputWord -->
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ExtenMaxChar"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ExtenFeature"/>
+							</p>
+							<!-- <p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ExtenFreeTran"/>
+							</p> -->
+						</dd>
+					</dl>
+					<dl>
+						<dt class="required">
+							<em class="pngFix"></em><@uiLabel text="apply.ShopIntro"/>：
+						</dt>
+						<dd>
+							<p>
+								<textarea type="text" name="store_description"
+									id="store_description" rows="5" isrequired="true"
+									 maxlength="300" cols="62"
+									onkeyup="showInputLength(2)">${store.description!''}</textarea>
+								&nbsp;(<@uiLabel text="apply.InputWord"/>:<span id="briefSpan1">0</span>)
+							</p>
+						</dd>
+					</dl>
+<#-- 					<dl>
+				        <dt>QQ：</dt>
+				        <dd>
+				       		<p>
+				         		<input type="text" name="qq" value="${store.qq!''}" isrequired="true"/>
+				         	</p>	
+				         	<p class="hint">设置店铺的客服QQ<@uiLabel text="sellerStoreInfo.storeSetQQ"/></p>
+				        </dd>
+					</dl>-->
+					<dl>
+						<dt>
+							<em class="pngFix"></em><@uiLabel text="apply.ShopKeyWord"/>：
+						</dt>
+						<dd>
+							<p>
+							<table id="tableCont" style="margin:0;" cellspacing="0">
+
+								<tbody>
+									<tr>
+										<td><input type="text" style="height: 20px;" name="productFeature_description"
+											value="${curStoreFeature.featureName_0!''}"></td>
+										<td><input type="text" style="height: 20px;" name="productFeature_description"
+											value="${curStoreFeature.featureName_1!''}"></td>
+										<td><input type="text" style="height: 20px;" name="productFeature_description"
+											value="${curStoreFeature.featureName_2!''}"></td>
+									</tr>
+									<tr class="background_tr">
+										<td><input type="text" style="height: 20px;" name="productFeature_description"
+											value="${curStoreFeature.featureName_3!''}"></td>
+										<td><input type="text" style="height: 20px;" name="productFeature_description"
+											value="${curStoreFeature.featureName_4!''}"></td>
+										<td><input type="text" style="height: 20px;" name="productFeature_description"
+											value="${curStoreFeature.featureName_5!''}"></td>
+									</tr>
+									<tr id="hiddenFeatureTr_5" class="background_tr"
+										<#if !curStoreFeature.featureName_6??> style="display:
+										none;"</#if>>
+										<td><input type="text" style="height: 20px;" name="productFeature_description"
+						value="${curStoreFeature.featureName_6!''}"></td>
+					<td><input type="text" style="height: 20px;" name="productFeature_description"
+						value="${curStoreFeature.featureName_7!''}"></td>
+					<td><input type="text" style="height: 20px;" name="productFeature_description"
+						value="${curStoreFeature.featureName_8!''}"></td>
+				</tr>
+									<tr id="hiddenFeatureTr_8" class="background_tr"
+										<#if !curStoreFeature.featureName_6??> style="display:
+										none;"</#if>>
+										<td><input type="text" name="productFeature_description"
+						value="${curStoreFeature.featureName_9!''}"></td>
+					<td><input type="text" style="height: 20px;" name="productFeature_description"
+						value="${curStoreFeature.featureName_10!''}"></td>
+					<td><input type="text" style="height: 20px;" name="productFeature_description"
+						value="${curStoreFeature.featureName_11!''}"></td>
+				</tr>
+									<tr id="hiddenFeatureTr_11" class="background_tr"
+										style="display: none;">
+									</tr>
+								</tbody>
+							</table>
+							<a id="aShowFeature"<#if
+								!curStoreFeature.featureName_6??>status="show"
+								href="javascript:hideFeature();"><@uiLabel text="apply.KeyWordAddMore"/></a><#else>status="hidden"
+							href="javascript:hideFeature();"><@uiLabel text="apply.KeyWordHied"/></a></#if>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.KeyWordMaxChar"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.KeyWordTips"/>
+							</p>
+						</dd>
+					</dl>
+					<dl>
+						<dt>
+							<em class="pngFix"></em><@uiLabel text="apply.ProductType"/>：
+						</dt>
+						<dd>
+							<p>
+							<table id="tableContTo" style="margin:0;" cellspacing="0">
+
+								<tbody>
+									<tr>
+										<td><input type="text" style="height: 20px;" name="productCategore_description"
+											value="${curStoreFeature.categoreName_0!''}"></td>
+										<td><input type="text" style="height: 20px;" name="productCategore_description"
+											value="${curStoreFeature.categoreName_1!''}"></td>
+										<td><input type="text" style="height: 20px;" name="productCategore_description"
+											value="${curStoreFeature.categoreName_2!''}"></td>
+									</tr>
+									<tr class="background_tr">
+										<td><input type="text" style="height: 20px;" name="productCategore_description"
+											value="${curStoreFeature.categoreName_3!''}"></td>
+										<td><input type="text" style="height: 20px;" name="productCategore_description"
+											value="${curStoreFeature.categoreName_4!''}"></td>
+										<td><input type="text" style="height: 20px;" name="productCategore_description"
+											value="${curStoreFeature.categoreName_5!''}"></td>
+									</tr>
+									<tr id="hiddenCategoryTr_" class="background_tr"
+										<#if !curStoreFeature.categoreName_6??>style="display:
+										none;"</#if>>
+										<td><input type="text" style="height: 20px;" name="productCategore_description"
+						value="${curStoreFeature.categoreName_6!''}"></td>
+					<td><input type="text" style="height: 20px;" name="productCategore_description"
+						value="${curStoreFeature.categoreName_7!''}"></td>
+					<td><input type="text" style="height: 20px;" name="productCategore_description"
+						value="${curStoreFeature.categoreName_8!''}"></td>
+				</tr>
+									<tr id="hiddenCategoryTr_" class="background_tr"
+										<#if !curStoreFeature.categoreName_6??>style="display:
+										none;"</#if>>
+										<td><input type="text" style="height: 20px;" name="productCategore_description"
+						value="${curStoreFeature.categoreName_9!''}"></td>
+					<td><input type="text" style="height: 20px;" name="productCategore_description"
+						value="${curStoreFeature.categoreName_10!''}"></td>
+					<td><input type="text" style="height: 20px;" name="productCategore_description"
+						value="${curStoreFeature.categoreName_11!''}"></td>
+				</tr>
+									<tr id="hiddenCategoryTr_" class="background_tr"
+										style="display: none;">
+									</tr>
+								</tbody>
+							</table>
+							<a id="aShowCategory"<#if !curStoreFeature.categoreName_6??>
+								status="show" href="javascript:hideCategory();"><@uiLabel text="apply.KeyWordAddMore"/></a><#else>status="hidden"
+							href="javascript:hideCategory();"><@uiLabel text="apply.KeyWordHied"/></a></#if>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShopProductType"/>
+							</p>
+							<p class="hint">
+								<b>·</b>&nbsp;<@uiLabel text="apply.ShoptProductTips"/>
+							</p>
+						</dd>
+					</dl>
+					<dl>
+						<dt><@uiLabel text="apply.ShopLogo"/>：</dt>
+						<dd>
+							<p>
+								<#if store.store_logo?? &&store.store_logo!=''>
+									<@image src="${store.store_logo!''}" id="img_store_logo" width="130" height="120" />
+								<#else>
+									<img src="${ctx}/themes/b2b2c/images/storelogo.png" id="img_store_logo" height="120" width="130">
+								</#if>
+							</p>
+							<p>
+								<input type="file" id="store_logo" status="store_logo" text="<@uiLabel text='storeInfo.shangchuanlogo'/>"/><!--上传Logo  -->
+								<input type="hidden" name="store_logo" value="${store.store_logo!''}"  id="fs_store_logo"  />
+							</p>
+							<p class="hint"><@uiLabel text="sellerStoreInfo.showStoreLogo"/></p>
+						</dd>
+					</dl>
+	<table>
+					<#if store.store_type==1 >
+	 		<tr>
+				<td><@uiLabel text="apply.CardHolderName"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_name!''}" readonly="readonly" >
+				</td>
+			</tr>	 		
+	 		<tr>
+				<td><@uiLabel text="apply.CardHolderType"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="<#if store.prove_type==1><@uiLabel text="apply.IDCard"/>
+				<#elseif store.prove_type==2><@uiLabel text="apply.Passpord"/>
+   				<#elseif store.prove_type==3><@uiLabel text="apply.OtherIDCard"/>
+				</#if>" readonly="readonly" >
+				</td>
+				<td><@uiLabel text="apply.CardHolderNumber"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.id_number!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td><@uiLabel text="apply.PersonalBankAccount"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.bank_account_number!''}" readonly="readonly" >
+				</td>
+				<td><@uiLabel text="apply.BankOnlineName"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.bank_region!''}" readonly="readonly" style="width: 300px;">
+				</td>
+			</tr>
+			<tr>
+					<td><@uiLabel text="apply.IDCardFace"/>：</td>
+					<td>
+						<img src="${store.id_img!''}" style="width:300px;height:200px">
+					</td>
+					<td><@uiLabel text="apply.IDCardOpposite"/>：</td>
+					<td>
+						<img src="${store.reverse_id_img!''}" style="width:300px;height:200px">
+					</td>
+				</tr>
+			<tr>
+				<td><@uiLabel text="apply.BankCardFace"/>：</td>
+					<td>
+						<img src="${store.bcard_img!''}" style="width:300px;height:200px">
+					</td>
+			</tr>
+			</#if>
+		<#if store.store_type==2 >
+			<tr>
+				<td><@uiLabel text="apply.CompanyName"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.company_name!''}" readonly="readonly" >
+				</td>
+				<td><@uiLabel text="apply.LicenseNo"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.registration_number!''}" readonly="readonly" >
+				</td>
+				<!--  <td>公司法人：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.enterprise_legal!''}" disabled="disabled" >
+				</td>-->
+			</tr>
+			<tr>
+				<td><@uiLabel text="apply.BankAccount"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.bank_account_number!''}" readonly="readonly" >
+				</td>
+				<td><@uiLabel text="apply.BankOnlineName"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.bank_region!''}" readonly="readonly" style="width: 300px;">
+				</td>
+			</tr>
+			<tr>
+				<td><@uiLabel text="apply.LianNumber"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.bank_code!''}" readonly="readonly" >
+				</td>
+				<td><@uiLabel text="apply.CompanyFixedNumber"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.tel!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td><@uiLabel text="apply.FinanceContact"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_name!''}" readonly="readonly" >
+				</td>
+				<td><@uiLabel text="apply.FinanceCertType"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="<#if store.prove_type==1><@uiLabel text="apply.IDCard"/>
+				<#elseif store.prove_type==2><@uiLabel text="apply.Passpord"/>
+   				<#elseif store.prove_type==3><@uiLabel text="apply.OtherIDCard"/>
+				</#if>" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td><@uiLabel text="apply.FinanceIDCard"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.id_number!''}" readonly="readonly" >
+				</td>
+				<td><@uiLabel text="apply.FinancePhone"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_mobile!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td><@uiLabel text="apply.BusContactPerson"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_name2!''}" readonly="readonly" >
+				</td>
+				<td><@uiLabel text="apply.BusContactNumber"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_mobile2!''}" readonly="readonly" >
+				</td>
+			</tr>
+			<tr>
+				<td><@uiLabel text="apply.EmergencyPerson"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_name3!''}" readonly="readonly" >
+				</td>
+				<td><@uiLabel text="apply.EmergencyNumber"/>：</td>
+				<td>
+					<input class="input_text" type="text" value="${store.prove_mobile3!''}" readonly="readonly" >
+				</td>
+			</tr>
+		<!--<tr>
+				<td>注册地址：</td>
+				<td  colspan="3">
+					<label>${store.attr!''}</label>
+				</td>
+			</tr>  -->
+			<tr>
+					<td><@uiLabel text="apply.ShopLicense"/>：</td>
+					<td>
+						<img src="${store.license_img!''}" style="width:300px;height:200px">
+					</td>
+					<td><@uiLabel text="apply.OpenProve"/>：</td>
+					<td>
+						<img src="${store.prove_img!''}" style="width:300px;height:200px">
+					</td>
+				</tr>
+				<!--  <tr>
+					<td>银行卡正面：</td>
+					<td>
+						<img src="${store.bcard_img!''}" style="width:100px;height:100px">
+					</td>
+				</tr>-->
+			</#if>
+		</table>
+					<dl class="bottom">
+			        	<dt>&nbsp;</dt>
+			        	<dd>
+							<input type="button" id="update" value="<@uiLabel text='sellerStoreInfo.moditySaveStore'/>" class="submit to_save"/>
+			        	</dd>
+			      	</dl>
+				</form>
+			</div>
+		</div>
+	</div>	
+</div>
+
+
+<script type="text/javascript">
+var app_path="${ctx}";
+$(function(){
+	$('#description').ckeditor();
+	$("#update").click(function(){
+		if(!$("#storeInfo").checkall())
+			return false;
+		var options = {
+				url : "${ctx}/api/b2b2c/storeApi!edit.do?ajax=yes",
+				type : "POST",
+				dataType : 'json',
+				success : function(data) {	
+					alert(data.message);
+					if(data.result==1)
+						location.href="business_center.html?menu=store_index";
+				},
+				error : function(e) {
+					alert("<@uiLabel text='storeEvaluateList.chuxiancuowuqingchongshi'/>");//出现错误 ，请重试
+				}
+			};
+		$("#storeInfo").ajaxSubmit(options);
+	});
+	window.onload=function(){
+		bindFileEvent($("#store_logo"));
+		//bindFileEvent($("#store_banner"));
+	}
+})
+function bindFileEvent(obj){
+	var status=$(obj).attr("status");
+	var text=$(obj).attr("text");
+	$(obj).uploadify({
+		'buttonText':text,		//显示文字
+		'fileObjName':'image',		//文件对象名称
+									//上传文件大小限制 'fileSizeLimit':'100KB',
+		'fileTypeDesc': '<@uiLabel text="storeInfo.choose"/>',//允许上传的文件类型的描述，在弹出的文件选择框里会显示 //请选择
+		'fileTypeExts': '*.gif; *.jpg; *.png',//允许上传的文件类型，限制弹出文件选择框里能选择的文件 
+		'uploader' : '${ctx}/api/base/upload-image.do?subFolder=store',
+		'swf'      : '${ctx}/themes/b2b2cv2/uploadify.swf',
+		'height':'30',				//高度
+		'width':'80',
+		'multi':false,				//是否支持多文件上传
+		'progressData':'percentage',//设置文件上传时显示的数据
+		'uploadLimit':1,
+		'onFallback':function(){				//falsh兼容
+			alert("<@uiLabel text='storeInfo.mafanleflash'/>!");//麻烦了，不兼容falsh
+		},							
+		'onUploadSuccess':function(file,data,response){
+			var img =jQuery.parseJSON(data);
+			$("#fs_"+status).val(img.fsimg);
+			$("#img_"+status).attr("src",img.img);
+		},
+		'onSelectError':function(file,errorCode,errorMsg){
+			if(errorCode==SWFUpload.QUEUE_ERROR.INVALID_FILETYPE){
+				this.queueData.errorMsg="<@uiLabel text='storeInfo.realformat'/>";//请上传正确的格式
+			}
+		}
+	});
+}
+function checkTel(){
+	//var tel=$("input[name='store.tel']");
+	//var reg=/^(\(\d{3,4}\)|\d{3,4}-)?\d{7,8}(-\d{1,4})?$/;
+	//if(!reg.test(tel)){
+	//	alert("bushidianhua")
+	//	 reg=/^1[3|4|5|8|7][0-9]{9}$/;
+	//	 if(!reg.test(tel)){
+	//		 alert("fuck!")
+	//		return "请输入正确的联系方式";
+	//	 }else return true;
+	// }
+	//else return true;
+	return true;
+}
+function showInputLength() {
+    var s = storeInfo.store_banner.value.length;
+    var s1 = storeInfo.store_description.value.length;
+    document.getElementById("briefSpan").innerHTML = s;
+    document.getElementById("briefSpan1").innerHTML = s1;
+    if (s > 50) {
+        document.getElementById("briefSpan").style.color = "red";
+    }
+    if (s1 > 300) {
+        document.getElementById("briefSpan1").style.color = "red";
+    }
+}
+function hideFeature(){
+    var status = $("#aShowFeature").attr("status");
+    if(status == "show"){
+        $("#tableCont").find("tr[id^='hiddenFeatureTr_']").show();
+        $("#tableCont").find("tr[id^='hiddenFeatureTr_'] input").val("");
+        $("#aShowFeature").attr("status" , "hidden");
+        $("#aShowFeature").text("<@uiLabel text='storeInfo.hide'/>");//隐藏
+    }else{
+        $("#tableCont").find("tr[id^='hiddenFeatureTr_']").hide();
+        $("#aShowFeature").attr("status" , "show");
+        $("#aShowFeature").text("<@uiLabel text='storeInfo.addmore'/>");//添加更多
+    }
+}
+function hideCategory(){
+    var status = $("#aShowCategory").attr("status");
+    if(status == "show"){
+        $("#tableContTo").find("tr[id^='hiddenCategoryTr_']").show();
+        $("#tableCont").find("tr[id^='hiddenFeatureTr_'] input").val("");
+        $("#aShowCategory").attr("status" , "hidden");
+        $("#aShowCategory").text("<@uiLabel text='storeInfo.hide'/>");//隐藏
+    }else{
+        $("#tableContTo").find("tr[id^='hiddenCategoryTr_']").hide();
+        $("#aShowCategory").attr("status" , "show");
+        $("#aShowCategory").text("<@uiLabel text='storeInfo.addmore'/>");//添加更多
+    }
+}
+</script>
+	<script>
+		$(function(){
+				selectMenu(1);
+		})
+	</script>
+<#include '/common/seller_footer.html' />

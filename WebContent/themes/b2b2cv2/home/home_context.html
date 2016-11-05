@@ -1,0 +1,214 @@
+<#assign dateformat="com.enation.framework.directive.DateformateDirective"?new()>
+<#assign regionSelectDirective="com.enation.app.shop.core.tag.regions.RegionSelectDirective"?new()>
+<!-- 引入幻灯片JS -->
+<script type="text/javascript" src="${ctx}/themes/b2b2cv2/js/jquery.flexslider-min.js"></script>
+
+<!--[if lt IE 9]><script src="${ctx}/themes/b2b2c/js/html5.js"></script><![endif]-->
+<script type='text/javascript' src='${ctx}/themes/b2b2cv2/js/store_common.js'></script>
+<script type='text/javascript' src='${ctx}/themes/b2b2cv2/js/slider.js'></script>
+<!-- 绑定幻灯片事件 -->
+<script type="text/javascript">
+$(window).load(function() {
+	$('.flexslider').flexslider();
+});
+</script>
+<!-- 右侧 -->
+<div class="store_goods_main">
+	<#assign storeSlideListTag= newTag("storeSlideListTag2") > 
+	<#assign storeSlideList=storeSlideListTag("{'storeid':${store_id!0}}")!''> 
+	<#if storeSlideList?size!=0>
+	<div class="flexslider">
+		<ul class="slides">
+			<#list storeSlideList as sl>
+			<li><a target="_blank" href="${sl.silde_url!''}"><@image src="${sl.img!''}" /></a></li>
+			</#list>
+		</ul>
+	</div>
+	</#if> 
+<#-- 	
+	<#assign storeSlideListTag=newTag("storeSlideListTag") > 
+	<#assign storeSlideList=storeSlideListTag("{'storeid':${store_id!0}}")!''> 
+-->
+</div>
+<div class="layout">
+	<div class="layout_sub">
+		<div class="layout_goods_hot">
+			<div class="layout_title">
+				<span><@uiLabel text="index.BestSelling" /></span>
+
+			</div>
+			<div class="layout_body">
+				<ul class="goods_item_list">
+					<#-- 创建标签商品标签 --> 
+					<#assign storeTagsGoodsTag=newTag("storeTagsGoodsTag") > <#-- 查询标签商品列表 -->
+					<#assign storeTagsGoods=storeTagsGoodsTag("{'mark':'hot','storeid':${store_id!0},'num':5}")!''>
+					<#if storeTagsGoods?size!=0> 
+					<#list storeTagsGoods.list as st>
+						<#assign goodsName2 = "" /> 
+						<#if locale=="zh"> 
+						<#assign goodsName2= st.name!"" /> 
+						<#elseif locale=="ru"> 
+						<#assign goodsName2 =st.name_ru!"" /> 
+						</#if>
+							<li class="goods_item">
+								<div class="img">
+									<a href="goods-${st.goods_id}.html" title="${st.name}">
+										<@image src="${st.thumbnail!''}" width="50" height="50" alt="${goodsName2}" title="${goodsName2}" /> 
+									</a>
+								</div>
+								<div class="detail">
+									<div class="prod_name">
+										<a href="goods-${st.goods_id}.html" title="${st.name}">
+											<@substring title="${goodsName2}" length="40" dot="..." /> 
+										</a>
+									</div>
+									<div class="price">
+										<span class="notranslate"> <!--          ${st.price!0} -->
+											<#if locale=="zh">
+											 ￥${st.price!0.00} 
+											 <#elseif locale=="ru">
+											${st.price_ru!0.00}р. 
+											</#if> 
+										</span>
+									</div>
+								</div>
+							</li>
+						</#list>
+					</#if> 
+				</ul>
+			</div>
+		</div>
+		<div class="layout_goods_recommend">
+			<div class="layout_title">
+				<span><@uiLabel text="home.RecommendGoods" /></span>
+
+			</div>
+			<div class="layout_body">
+				<ul class="goods_item_list">
+					<#-- 创建标签商品标签 --> <#assign storeTagsGoodsTag=newTag("storeTagsGoodsTag") > <#-- 查询标签商品列表 -->
+					<#assign storeTagsGoods=storeTagsGoodsTag("{'mark':'recommend','storeid':${store_id!0},'num':5}")!''>
+					<#if storeTagsGoods?size!=0> 
+						<#list storeTagsGoods.list as st>
+							<#assign goodsName3 = "" /> 
+							<#if locale=="zh"> 
+								<#assign goodsName3= st.name!"" /> 
+								<#elseif locale=="ru"> 
+								<#assign goodsName3 =st.name_ru!"" /> 
+							</#if>
+							<li class="goods_item">
+								<div class="img">
+									<a href="goods-${st.goods_id}.html" title="${st.name}"><#--st.thumbnail -->
+										<@image src="${st.thumbnail!''}" width="50" height="50" alt="${goodsName3}" title="${goodsName3}" /> </a>
+								</div>
+								<div class="detail">
+									<div class="prod_name">
+										<a href="goods-${st.goods_id}.html" title="${st.name}"> 
+										<@substring title="${goodsName3}" length="40" dot="..." /> </a>
+									</div>
+									<div class="price">
+										<span class="notranslate"> <!--  ${st.price!0} --> <#if
+											locale=="zh"> ￥${st.price!0.00} <#elseif locale=="ru">
+											${st.price_ru!0.00}р. </#if> </span>
+									</div>
+								</div>
+							</li> 
+						</#list> 
+					</#if>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="layout_main">
+		<!-- 查询工具 -->
+		<div class="store_tools">
+			<ul>
+				<!-- 搜索 -->
+				<li class="store_tools_s">
+					<div class="content">
+						<form id="" name="searchShop" method="get" action="#">
+							<input type="hidden" name="act" value="show_store" /> 
+							<input type="hidden" name="op" value="goods_all" /> 
+							<input type="hidden" name="id" value="4" /> 
+							<span><@uiLabel text="home.KeyWord" />：</span> 
+							<input type="text" class="w90" name="goods_keyword" id="goods_keyword" value="${keyword!''}"/>
+							<span><@uiLabel text="home.Price" />：</span> 
+							<input type="text" class="w30" name="s_price" id="s_price" value="${start_price!''}"/> <span>-</span> 
+							<input type="text" class="w30" name="e_price" id="e_price" value="${end_price!''}"/> 
+							<a href="javascript:void(0);" onclick="searchGoods();"><@uiLabel text="index.Searchfor" /></a>
+						</form>
+					</div>
+				</li>
+				<!-- 客服 -->
+				<li><a href="${ctx}/home.html?show_c=4&store_id=${store_id!0}"
+					style="background: #84cfb0">
+					<@uiLabel text="home.StoreOtherGoods" /></a>
+				</li>
+
+
+				<!-- 收藏本店 -->
+				<li><a href="javascript:void(0);" onclick="collect_store(${store_id!0},this,'store_collect');" class="btn" style="background: #fab34b">
+					<i></i>
+					<@uiLabel text="index.PortalFavoriteCf" />(${store.store_collect!0})
+					</a>
+				</li>
+				<!-- 查看其他商品 -->
+			</ul>
+		</div>
+
+		<#assign storeSearchGoodsListTag=newTag("storeSearchGoodsListTag")>
+		<#assign goodsList=storeSearchGoodsListTag("{'storeid':${store_id!0},'keyword':'${keyword!''}','start_price':'${start_price!''}','end_price':'${end_price!''}','stc_id':${stc_id!0},'key':${key!0},'order':'${order!''}','num':12}")>
+		<div class="layout_goods_list">
+			<ul class="layout_goods_all">
+				<#list goodsList.storegoods.result as gl> <#assign goodsName = "" />
+					<#if locale=="zh"> 
+					<#assign goodsName = gl.name!"" /> 
+					<#elseif locale=="ru"> 
+					<#assign goodsName = gl.name_ru!"" /> 
+					</#if>
+					<li><a href="goods-${gl.goods_id}.html" class="goodslist_img" style="height:310px;weight:310px;display:table-cell;vertical-align:middle;">
+							<@image src="${gl.big!''}" alt="${goodsName}"
+							title="${goodsName}" style="display: inline;" /> </a>
+						<h2>
+							<a target="_blank" href="goods-${gl.goods_id}.html"><@substring
+								title="${goodsName}" length="80" dot="..." /></a>
+						</h2>
+						<h3>
+							<span><@uiLabel text="home.Price" />：</span><b> <!--  ¥${gl.price!0.00} --> <#if
+								locale=="zh"> ￥${gl.price!0.00} <#elseif locale=="ru">
+								${gl.price_ru!0.00}р. </#if> </b><a target="_blank"
+								href="goods-${gl.goods_id}.html"><i></i></a>
+						</h3>
+						<div class="goods_list_color" style="display: none;"></div>
+					</li> 
+				</#list>
+			</ul>
+			<@pager pageno="${goodsList.page!'1'}"
+			pagesize="${goodsList.pageSize}" totalcount="${goodsList.totalCount}"/>
+		</div>
+	</div>
+</div>
+<script>
+function searchGoods(){
+	var goods_keyword = $("input[name='goods_keyword']").val();
+	var start_price = $("input[name='s_price']").val();
+	var end_price = $("input[name='e_price']").val();
+	var temp=/^\d+(\.\d+)?$/;
+	if(start_price || end_price){
+		if(!temp.test(start_price) || !temp.test(end_price)){
+			alert("<@uiLabel text='goods.zhenquedejiage' />");
+	        return false;
+		}
+	}
+	window.location.href = "home.html?show_c=1&store_id=${store_id}&keyword="+goods_keyword+"&start_price="+start_price+"&end_price="+end_price;
+}
+/*$(function(){
+    $(".layout_goods_all li").mouseover(function(){
+        $(".layout_goods_all li .goods_list_color").hide();
+        $(this).find(".goods_list_color").show();
+    })
+    $(".layout_goods_all li").mouseleave(function(){
+        $(".layout_goods_all li .goods_list_color").hide();
+    })
+})*/
+</script>
+</aside>
